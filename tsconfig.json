@@ -1,0 +1,5 @@
+{
+    "compilerOptions": {
+        "noErrorTruncation": true // helps displaying more non-error hover hints (counterintuitively)
+    }
+}
