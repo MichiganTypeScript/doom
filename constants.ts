@@ -1,6 +1,6 @@
-export type Pixel_000 = '  ';
-export type Pixel_050 = '▒▒';
-export type Pixel_100 = '██';
+export type Pixel_000 = ' ';
+export type Pixel_050 = '▒';
+export type Pixel_100 = '█';
 
 /**
  * generated with ramda:
