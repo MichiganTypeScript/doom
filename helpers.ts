@@ -32,16 +32,6 @@ export type Fill<
   ? _Acc
   : Fill<Count, [..._Acc, `${_Acc['length']}`]>;
 
-export type Table<
-  Columns extends number,
-  Rows extends number,
-  Blank extends string,
-  _ColumnFill extends string[] = Fill<Columns>,
-  _RowFill extends string = Row<Rows, Blank>,
-> = {
-  [C in _ColumnFill[number]]: _RowFill
-};
-
 type PadAZero<Input extends string[]> =
   Input extends [
     infer Head extends string,
@@ -76,7 +66,7 @@ type MakeStringRows<
         >;
 
 /** Table, but with precalculated rows */
-export type TablePrecalc<
+export type CreateCanvas<
   Rows extends number,
   Columns extends number,
   Blank extends string,
@@ -160,9 +150,23 @@ export type SetPixel<
 
 export type Pixel = readonly [row: number, column: number, value: string];
 
+/** this is hardcoded because it's more efficient and we know that every game frame will have at least a single line (which starts at `00`) and that supporting beyond 5 digits would put us well past 8k footage which is (lol) currently beyond the scope of this project so we can bound between 1 and 5 digits safely */
+export type GetColumnKeyLength<Frame extends GameFrame> =
+  Frame['00'] extends string
+  ? 2
+  : Frame['000'] extends string
+    ? 3
+    : Frame['0000'] extends string
+      ? 4
+      : Frame['00000'] extends string
+        ? 5
+        : never;
+
 export type SetPixels<
   T extends Pixel[],
   Frame extends GameFrame,
+
+  _ColumnKeyLength extends number = GetColumnKeyLength<Frame>,
 > =
   T extends [
     infer Head extends Pixel,
@@ -172,10 +176,11 @@ export type SetPixels<
       Rest,
       SetPixel<
         Frame,
-        LeftPadWithZeros<2, Head[0]>,
+        LeftPadWithZeros<_ColumnKeyLength, Head[0]>,
         Head[1],
         Head[2]
-      >
+      >,
+      _ColumnKeyLength
     >
   : Frame;
 
