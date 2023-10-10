@@ -189,6 +189,16 @@ export type RepeatCharacters<T extends string> =
   ? `${Char}${Char}${RepeatCharacters<Rest>}`
   : '';
 
-export type DisplayFrame<Frame extends GameFrame> = {
-  [Row in keyof Frame]: RepeatCharacters<Frame[Row]>
-}
+export type DisplayFrame<
+  Frame extends GameFrame,
+  Message extends string | null = null
+> =
+  (
+    Message extends null
+    ? {}
+    : {
+        0: Message
+      }
+  ) & {
+    [Row in keyof Frame]: RepeatCharacters<Frame[Row]>
+  }

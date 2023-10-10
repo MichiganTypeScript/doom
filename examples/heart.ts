@@ -17,9 +17,8 @@ type Frame1 = SetPixels<[
   [5, 4, M],
 ], Frame0>;
 
-type DisplayFrame0 = DisplayFrame<Frame0>;
-type DisplayFrame1 = DisplayFrame<Frame1>;
-
+type DisplayFrame0 = DisplayFrame<Frame0, "Frame 0">;
+type DisplayFrame1 = DisplayFrame<Frame1, "Frame 1">;
 
 /////////////
 // For another example: here's a hardcoded frame
@@ -35,4 +34,4 @@ type HardcodedFrame = {
   "07": `${A}${A}${A}${A}${A}${A}${A}${A}${A}`
 };
 
-type HardcodedDisplay = DisplayFrame<HardcodedFrame>;
+type HardcodedDisplay = DisplayFrame<HardcodedFrame, "Hardcoded Frame">;

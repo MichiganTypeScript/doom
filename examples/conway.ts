@@ -116,8 +116,8 @@ const animateGrid = async (
 };
 
 const main = async () => {
-  const rows = 10;
-  const columns = 10;
+  const rows = 20;
+  const columns = 20;
   const frame = {
     rows,
     columns,
