@@ -1,5 +1,3 @@
-import { Pixel_100 } from "./constants";
-
 /** can be optimized later with the ${s}${s}${s}${s}${s} trick */
 export type StringToTuple<Input extends string> =
   Input extends `${Input[0]}${infer Rest}`
