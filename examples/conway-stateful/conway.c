@@ -10,8 +10,7 @@ typedef int bool;
 #define COLUMNS 20
 
 #define A ' '
-#define M '▒'
-#define Z '█'
+#define Z 'X'
 
 typedef bool Cell;
 typedef Cell Row[COLUMNS];
