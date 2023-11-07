@@ -1,0 +1,10 @@
+[package]
+name = "wast_parser"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+wasm-printer = "0.1.22"
+wast = "67.0.0"
