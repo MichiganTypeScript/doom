@@ -5,4 +5,4 @@ type add<
   $b extends number
 > = Numbers.Add<$a, $b>;
 
-export type program = Call<add<1, 2>>
+export type program = Call<add<1, 2>>;

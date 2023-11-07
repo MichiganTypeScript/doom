@@ -4,5 +4,6 @@ dictionaryDefinitions: []
 dictionaries: []
 words:
   - hotscript
+  - instrs
 ignoreWords: []
 import: []

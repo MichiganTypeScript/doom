@@ -1,5 +1,8 @@
 extern crate wast;
 
+mod source_code;
+
+use source_code::SourceCode;
 use std::fs;
 use wast::{
     core::{Instruction, ModuleField, ModuleKind},
@@ -14,121 +17,131 @@ fn clear_output_file() {
     fs::write(OUTPUT_PATH, "").unwrap();
 }
 
-fn doit(wat: String) -> String {
+fn wat_to_dts(wat: String) -> String {
     let buf = parser::ParseBuffer::new(&wat).unwrap();
     let parsed_wat = parser::parse::<Wat>(&buf).unwrap();
 
-    let mut output = String::from("");
-    // temporary, but doesn't hurt anyone
-    let imports = "import { Numbers, Call } from 'hotscript';";
-    output += imports;
-    output += "\n";
+    let mut source = SourceCode::new();
 
     if let wast::Wat::Module(module) = parsed_wat {
-        if let ModuleKind::Text(fields) = module.kind {
-            output += "\n";
-            for field in fields {
-                match field {
-                    ModuleField::Func(func) => {
-                        if let Some(id) = func.id {
-                            output += "type ";
-                            output += id.name();
-                        }
-
-                        let mut param_names: Vec<String> = Vec::new();
-                        if let Some(ref func_type) = func.ty.inline {
-                            for (param_id, _, _) in func_type.params.iter() {
-                                if let Some(p) = param_id {
-                                    param_names.push(format!("${}", p.name()));
-                                }
+        match module.kind {
+            ModuleKind::Binary(_) => {
+                panic!("WebAssembly Binary is not supported.  Only WebAssembly Text.");
+            }
+            ModuleKind::Text(fields) => {
+                for field in fields {
+                    match field {
+                        ModuleField::Func(func) => {
+                            let mut name = "asdf";
+                            if let Some(id) = func.id {
+                                name = id.name();
                             }
 
-                            if !func_type.params.is_empty() {
-                                output += "<";
-                                output += "\n";
-                                output += &param_names
-                                    .iter()
-                                    .map(|name| format!("  {} extends number", name))
-                                    .collect::<Vec<_>>()
-                                    .join(",\n");
-                                output += "\n";
-                                output += ">";
-                            }
+                            let mut generics = "".to_string();
+                            let mut definition = "".to_string();
+                            let exported = false;
 
-                            output += " = ";
-                            // dbg!(func_types);
-                        }
-
-                        match func.kind {
-                            wast::core::FuncKind::Import(_imp) => {}
-                            wast::core::FuncKind::Inline {
-                                locals: _,
-                                expression,
-                            } => {
-                                for instruction in expression.instrs.iter() {
-                                    match instruction {
-                                        Instruction::I32Add => {
-                                            output += "Numbers.Add<";
-                                            output += param_names.get(0).unwrap();
-                                            output += ", ";
-                                            output += param_names.get(1).unwrap();
-                                            output += ">;"
-                                        }
-                                        Instruction::ArrayCopy(_) => {}
-                                        _ => {}
+                            let mut param_names: Vec<String> = Vec::new();
+                            if let Some(ref func_type) = func.ty.inline {
+                                for (param_id, _, _) in func_type.params.iter() {
+                                    if let Some(p) = param_id {
+                                        param_names.push(format!("${}", p.name()));
                                     }
-                                    // dbg!(instruction);
                                 }
+
+                                if !func_type.params.is_empty() {
+                                    generics += "<";
+                                    generics += "\n";
+                                    generics += &param_names
+                                        .iter()
+                                        .map(|name| format!("  {} extends number", name))
+                                        .collect::<Vec<_>>()
+                                        .join(",\n");
+                                    generics += "\n";
+                                    generics += ">";
+                                }
+
+                                // dbg!(func_types);
                             }
-                        }
-                        output += "\n";
-                        // dbg!(func);
-                    }
-                    ModuleField::Global(global) => {
-                        output += "\n";
-                        output += "export type ";
 
-                        // TODO: handle multiple exports for the same name
-                        let id = global.exports.names.first().unwrap();
-                        output += id;
-                        output += " = ";
+                            match func.kind {
+                                wast::core::FuncKind::Import(_imp) => {}
+                                wast::core::FuncKind::Inline {
+                                    locals: _,
+                                    expression,
+                                } => {
+                                    for instruction in expression.instrs.iter() {
+                                        match instruction {
+                                            Instruction::I32Add => {
+                                                source.add_import("hotscript", "Numbers");
 
-                        match global.kind {
-                            wast::core::GlobalKind::Import(_import) => {}
-                            wast::core::GlobalKind::Inline(expression) => {
-                                let mut args: Vec<String> = Vec::new();
-
-                                for instruction in expression.instrs.iter() {
-                                    match instruction {
-                                        Instruction::I32Const(i32_const) => {
-                                            args.push(i32_const.to_string());
-                                        }
-                                        Instruction::Call(id) => {
-                                            output += "Call<";
-
-                                            if let Index::Id(id) = id {
-                                                output += id.name();
-                                                output += "<"
+                                                definition += "Numbers.Add<";
+                                                definition += param_names.get(0).unwrap();
+                                                definition += ", ";
+                                                definition += param_names.get(1).unwrap();
+                                                definition += ">"
                                             }
-
-                                            output += &args.join(", ");
-                                            output += ">"; // end the call args
-
-                                            output += ">"; // end the `Call`
+                                            Instruction::ArrayCopy(_) => {}
+                                            _ => {}
                                         }
-                                        _ => {}
+                                        // dbg!(instruction);
                                     }
                                 }
                             }
-                        }
 
-                        // dbg!(global);
-                    }
-                    ModuleField::Export(export) => {
-                        dbg!(export);
-                    }
-                    other => {
-                        dbg!(other);
+                            source.add_type(name, generics, definition, exported);
+
+                            // dbg!(func);
+                        }
+                        ModuleField::Global(global) => {
+                            // TODO: handle multiple exports for the same name
+                            let name = global.exports.names.first().unwrap().to_string();
+
+                            let generics = "".to_string();
+                            let mut definition = "".to_string();
+                            let exported = true;
+
+                            match global.kind {
+                                wast::core::GlobalKind::Import(_import) => {}
+                                wast::core::GlobalKind::Inline(expression) => {
+                                    let mut args: Vec<String> = Vec::new();
+
+                                    for instruction in expression.instrs.iter() {
+                                        match instruction {
+                                            Instruction::I32Const(i32_const) => {
+                                                args.push(i32_const.to_string());
+                                            }
+                                            Instruction::Call(id) => {
+                                                source.add_import("hotscript", "Call");
+
+                                                definition += "Call<";
+
+                                                if let Index::Id(id) = id {
+                                                    definition += id.name();
+                                                    definition += "<"
+                                                }
+
+                                                definition += &args.join(", ");
+                                                definition += ">"; // end the call args
+
+                                                definition += ">"; // end the `Call`
+                                            }
+                                            _ => {}
+                                        }
+                                    }
+                                }
+                            }
+
+                            source.add_type(name, generics, definition, exported);
+
+                            // dbg!(global);
+                        }
+                        ModuleField::Export(export) => {
+                            dbg!(export);
+                        }
+                        other => {
+                            dbg!(other);
+                        }
                     }
                 }
             }
@@ -136,20 +149,16 @@ fn doit(wat: String) -> String {
 
         // dbg!(module);
     }
-    output
+
+    source.to_string()
 }
 
 fn main() {
     let current_dir = std::env::current_dir().unwrap();
     let wat_path = current_dir.join("src/code.wat");
     let wat = fs::read_to_string(wat_path).unwrap();
-
-    println!("{wat}");
-
+    let output = wat_to_dts(wat);
     clear_output_file();
-
-    let output = doit(wat);
-
     fs::write(OUTPUT_PATH, output).unwrap();
 }
 
@@ -167,19 +176,21 @@ mod tests {
 
         for entry in test_files.flatten() {
             if entry.path().is_file() {
-                let test_file_path = entry.path();
-                let test_file_name = test_file_path.file_name().unwrap();
+                let wat_path = entry.path();
+                let file_is_wat = wat_path
+                    .file_name()
+                    .unwrap()
+                    .to_string_lossy()
+                    .ends_with(".wat");
 
-                if test_file_name.to_string_lossy().ends_with(".wat") {
-                    let expected_output_path = test_file_path.with_extension("d.ts");
+                if file_is_wat {
+                    let wat = fs::read_to_string(&wat_path).unwrap();
+                    let actual = wat_to_dts(wat);
 
-                    let input_data = fs::read_to_string(&test_file_path).unwrap();
+                    let expected_output_path = wat_path.with_extension("d.ts");
+                    let expected = fs::read_to_string(&expected_output_path).unwrap();
 
-                    let actual_output_data = doit(input_data);
-
-                    let expected_output_data = fs::read_to_string(&expected_output_path).unwrap();
-
-                    assert_eq!(actual_output_data, expected_output_data);
+                    assert_eq!(actual, expected);
                 }
             }
         }
