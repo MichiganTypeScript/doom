@@ -1,0 +1,109 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "add",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "add",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Num(
+                                        0,
+                                        Span {
+                                            offset: 100,
+                                        },
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32Add,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        None,
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 127,
+                    },
+                    id: Some(
+                        "program",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "program",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1,
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                Call(
+                                    Id(
+                                        "add",
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+        ],
+    ),
+}

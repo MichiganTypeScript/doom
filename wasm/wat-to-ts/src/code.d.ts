@@ -1,9 +1,8 @@
 import { Numbers, Call } from 'hotscript';
 
 type add<
-  $a extends number,
+  i_0 extends number,
   $b extends number
-> = Numbers.Add<$a, $b>;
+> = Numbers.Add<i_0, $b>;
 
 export type program = Call<add<1, 2>>;
-//          ^?
