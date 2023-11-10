@@ -38,6 +38,10 @@ fn format_index_name(index: usize) -> String {
     format!("i_{index}")
 }
 
+fn format_call_id<I: Into<String>>(id: I) -> String {
+    format!("${}", id.into())
+}
+
 enum ElementAccess {
     ByIndex(usize),
     // ByName(String),
@@ -57,39 +61,32 @@ fn get_element(collection: &[Option<String>], access: ElementAccess) -> Option<S
     }
 }
 
+#[derive(Debug)]
 pub struct SourcePrinter {
-    indent_level: usize,
-    indent: String,
-    lines: Vec<String>,
+    pub lines: Vec<(usize, String)>,
 }
 
 impl SourcePrinter {
     pub fn new() -> Self {
+        SourcePrinter { lines: Vec::new() }
+    }
+
+    pub fn from_string<C: Into<String>>(content: C) -> Self {
         SourcePrinter {
-            indent_level: 1,
-            indent: String::from("  "), // 2 spaces for each level
-            lines: Vec::new(),
+            lines: content
+                .into()
+                .lines()
+                .map(|line| (1, line.to_string()))
+                .collect(),
         }
     }
 
-    pub fn line(&mut self, content: &str) {
-        let indentation = self.indent.repeat(self.indent_level);
-        let indented_line = format!("{indentation}{content}");
-        self.lines.push(indented_line);
+    pub fn line<C: Into<String>>(&mut self, indent: usize, content: C) {
+        self.lines.push((indent, content.into()));
     }
 
-    pub fn increase_indent(&mut self) {
-        self.indent_level += 1;
-    }
-
-    pub fn decrease_indent(&mut self) {
-        if self.indent_level > 0 {
-            self.indent_level -= 1;
-        }
-    }
-
-    pub fn get_lines(&self) -> Vec<String> {
-        self.lines.clone()
+    pub fn lines(&mut self, lines: &mut Vec<(usize, String)>) {
+        self.lines.append(lines);
     }
 
     pub fn clear(&mut self) {
@@ -105,112 +102,180 @@ impl Default for SourcePrinter {
 
 impl fmt::Display for SourcePrinter {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        for line in &self.lines {
-            writeln!(f, "{}", line)?;
+        for (indent, line) in &self.lines {
+            let indentation = "  ".repeat(*indent);
+            writeln!(f, "{indentation}{line}")?;
         }
         Ok(())
     }
 }
 
-fn handle_instructions(
-    source: &mut SourceCode,
-    instructions: &[Instruction<'_>],
-    locals: &[Option<String>],
-) -> String {
-    let mut stack: Vec<String> = Vec::new();
+fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]) -> String {
+    let mut stack: Vec<SourcePrinter> = Vec::new();
 
-    let mut source_printer = SourcePrinter::new();
+    // let mut source_printer = SourcePrinter::new();
 
     for instruction in instructions.iter() {
         dbg!(&stack);
         dbg!(&instruction);
+        // dbg!(&source_printer);
 
         match instruction {
-            Instruction::LocalGet(local) => match local {
-                Index::Id(id) => {
-                    stack.push("$".to_string() + id.name());
-                }
-                Index::Num(num, _) => {
-                    stack.push(format_index_name(*num as usize));
-                }
-            },
+            Instruction::LocalGet(local) => {
+                let value = match local {
+                    Index::Id(id) => "$".to_string() + id.name(),
+                    Index::Num(num, _) => format_index_name(*num as usize),
+                };
+                stack.push(SourcePrinter::from_string(value));
+            }
             Instruction::If(_block) => {
-                let condition_pop = stack.pop().unwrap();
-                let condition = format!("{condition_pop} extends true\n");
-                stack.push(condition);
+                let mut condition_pop = stack.pop().unwrap();
+
+                // Get a mutable reference to the last line
+                if let Some((_, last)) = condition_pop.lines.last_mut() {
+                    *last += " extends true";
+                } else {
+                    panic!("can't get final thing")
+                }
+
+                stack.push(condition_pop);
             }
             Instruction::Else(_) => {
-                let then_side_pop = stack.pop().unwrap();
-                let then_side = format!("\n? {then_side_pop}");
-                stack.push(then_side);
+                let mut then_side_pop = stack.pop().unwrap();
+                if let Some((_, first)) = then_side_pop.lines.first_mut() {
+                    *first = "? ".to_string() + first;
+                } else {
+                    panic!("can't get then side pop")
+                }
+                stack.push(then_side_pop);
             }
             Instruction::End(_) => {
-                let else_side_pop = stack.pop().unwrap();
+                let mut else_side = stack.pop().unwrap();
+                if let Some((_, first)) = else_side.lines.first_mut() {
+                    *first = ": ".to_string() + first;
+                } else {
+                    panic!("can't get else side pop")
+                }
 
-                let else_side = format!("\n: {else_side_pop}");
-                let then_side = stack.pop().unwrap();
-                let condition = stack.pop().unwrap();
+                let mut then_side = stack.pop().unwrap();
+                let mut condition = stack.pop().unwrap();
 
-                let if_context = format!("{condition}{then_side}{else_side}");
-                stack.push(if_context);
+                condition.lines(&mut then_side.lines);
+                condition.lines(&mut else_side.lines);
+
+                stack.push(condition);
             }
             Instruction::I32Add => {
                 source.add_import("hotscript", "Call");
                 source.add_import("hotscript", "Numbers");
-                dbg!(locals);
 
                 // let lhs = &get_element(locals, ElementAccess::ByIndex(0)).unwrap();
                 // let rhs = &get_element(locals, ElementAccess::ByIndex(1)).unwrap();
 
-                let rhs = stack.pop().unwrap();
-                let lhs = stack.pop().unwrap();
+                let rhs = stack.pop().unwrap().lines;
+                let mut lhs = stack.pop().unwrap().lines;
 
-                source_printer.line("Call<Numbers.Add<");
-                source_printer.increase_indent();
-                source_printer.line(format!("{lhs},").as_str());
-                source_printer.line(&rhs);
-                source_printer.decrease_indent();
-                source_printer.line(">>");
+                let mut source_printer = SourcePrinter::new();
+
+                let base_indent = lhs.first().unwrap().0;
+                source_printer.line(base_indent, "Call<Numbers.Add<");
+
+                if let Some((_, line)) = lhs.last_mut() {
+                    // add a comma to separate the argument
+                    *line += ",";
+                } else {
+                    panic!("Can't add a comma because something went wrong with lhs");
+                }
+                for l in &lhs {
+                    source_printer.line(l.0 + 1, &l.1);
+                }
+
+                for r in rhs {
+                    source_printer.line(r.0 + 1, r.1.to_string());
+                }
+                source_printer.line(base_indent, ">>");
+
+                stack.push(source_printer);
             }
             Instruction::I32GeS => {
                 source.add_import("hotscript", "Call");
                 source.add_import("hotscript", "Numbers");
 
-                let rhs = &stack.pop().unwrap();
-                let lhs = &stack.pop().unwrap();
+                let rhs = &stack.pop().unwrap().lines;
+                let lhs = &stack.pop().unwrap().lines;
 
-                source_printer.line("Call<Numbers.GreaterThanOrEqual<");
-                source_printer.increase_indent();
-                source_printer.line(format!("{lhs},").as_str());
-                source_printer.line(rhs);
-                source_printer.decrease_indent();
-                source_printer.line(">>");
-                stack.push(source_printer.to_string());
-                source_printer.clear();
-            }
-            Instruction::F32Const(num) => {
-                stack.push(format!("{:?}", num));
-            }
-            Instruction::F64Const(num) => {
-                stack.push(format!("{:?}", num));
-            }
-            Instruction::I32Const(num) => {
-                stack.push(num.to_string());
-            }
-            Instruction::I64Const(num) => {
-                stack.push(num.to_string());
-            }
-            Instruction::Call(id) => {
-                let mut definition = "".to_string();
-                if let Index::Id(id) = id {
-                    definition += id.name();
-                    definition += "<" // start the call args
+                let indent = rhs.first().unwrap().0;
+
+                let mut source_printer = SourcePrinter::new();
+
+                source_printer.line(indent, "Call<Numbers.GreaterThanOrEqual<");
+
+                for l in lhs {
+                    source_printer.line(indent + 1, format!("{},", l.1));
+                }
+                for r in rhs {
+                    source_printer.line(indent + 1, r.1.to_string());
                 }
 
-                definition += &stack.join(", ");
-                definition += ">"; // end the call args
+                source_printer.line(indent, ">>");
+                stack.push(source_printer);
+            }
+            Instruction::F32Const(num) => {
+                stack.push(SourcePrinter::from_string(format!("{:?}", num)));
+            }
+            Instruction::F64Const(num) => {
+                stack.push(SourcePrinter::from_string(format!("{:?}", num)));
+            }
+            Instruction::I32Const(num) => {
+                stack.push(SourcePrinter::from_string(num.to_string()));
+            }
+            Instruction::I64Const(num) => {
+                stack.push(SourcePrinter::from_string(num.to_string()));
+            }
+            Instruction::Call(id) => {
+                let actual_id = match id {
+                    Index::Id(i) => format_call_id(i.name()),
+                    Index::Num(num, _span) => format_index_name(*num as usize),
+                };
+                let print_id = match id {
+                    Index::Id(i) => i.name().to_string(),
+                    Index::Num(num, _span) => format_index_name(*num as usize),
+                };
 
-                source_printer.line(&definition);
+                if let Some(td) = source.types.get(&actual_id) {
+                    let indent = 1;
+                    let mut source_printer = SourcePrinter::new();
+
+                    source_printer.line(indent, format!("{print_id}<"));
+
+                    let mut temp = vec![];
+                    for (index, _) in td.generics.iter().enumerate() {
+                        let sp = stack.pop().unwrap();
+                        let mut lines: Vec<(usize, String)> = sp
+                            .lines
+                            .iter()
+                            .map(|line| (line.0 + 1, line.1.clone()))
+                            .collect();
+
+                        // we're going to reverse the temp list after this loop block, so what this is effectively saying is "add a comma at the last line of all expressions except the last one" because (unfortunately) trailing commas in TS arguments are not allowed).
+                        if index != 0 {
+                            let last_line = lines.last_mut().unwrap();
+                            last_line.1 = format!("{},", last_line.1);
+                        }
+                        temp.push(lines);
+                    }
+
+                    temp.reverse();
+                    for mut t in temp {
+                        source_printer.lines(&mut t);
+                    }
+
+                    source_printer.line(indent, ">");
+                    stack.push(source_printer);
+                } else {
+                    dbg!(source);
+                    panic!("can't find id in Call: {actual_id}");
+                }
             }
 
             _ => {
@@ -218,7 +283,9 @@ fn handle_instructions(
             }
         }
     }
-    source_printer.to_string()
+
+    let expr = stack.pop().unwrap();
+    expr.to_string()
 }
 
 fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
@@ -266,7 +333,7 @@ fn handle_module_field_func(source: &mut SourceCode, field: &Func) {
             locals: _,
             expression,
         } => {
-            definition = handle_instructions(source, &expression.instrs, &param_names);
+            definition = handle_instructions(source, &expression.instrs);
         }
     }
 
@@ -285,7 +352,7 @@ fn handle_module_field_global(source: &mut SourceCode, field: &Global) {
     match &field.kind {
         wast::core::GlobalKind::Import(_import) => {}
         wast::core::GlobalKind::Inline(expression) => {
-            definition = handle_instructions(source, &expression.instrs, &[]);
+            definition = handle_instructions(source, &expression.instrs);
         }
     }
 
@@ -373,10 +440,10 @@ mod tests {
                 continue;
             }
 
-            // focus
-            if file_name != "if-expr.wat" {
-                continue;
-            }
+            // // focus
+            // if file_name != "add.wat" {
+            //     continue;
+            // }
 
             let wat = fs::read_to_string(&wat_path).unwrap();
 

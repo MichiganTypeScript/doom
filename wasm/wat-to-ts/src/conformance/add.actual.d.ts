@@ -15,6 +15,9 @@ export type add<
 > = $add<$a, $b>
 
 type $program =
-  add<1, 2>
+  add<
+    1,
+    2
+  >
 
 export type program = $program

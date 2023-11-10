@@ -6,17 +6,17 @@ pub type Imports = IndexMap<String, IndexSet<String>>;
 
 #[derive(Debug)]
 pub struct TypeDefinition {
-    name: String,
-    generics: Vec<(String, String)>,
-    body: String,
+    pub name: String,
+    pub generics: Vec<(String, String)>,
+    pub body: String,
 }
 
 pub type TypeDefinitions = IndexMap<String, TypeDefinition>;
 
 pub struct SourceCode {
-    imports: Imports,
-    types: TypeDefinitions,
-    exports: HashMap<String, Vec<String>>,
+    pub imports: Imports,
+    pub types: TypeDefinitions,
+    pub exports: HashMap<String, Vec<String>>,
 }
 
 impl fmt::Debug for SourceCode {

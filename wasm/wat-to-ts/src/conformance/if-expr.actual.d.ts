@@ -6,13 +6,12 @@ type $ifexpr<
 > =
   Call<Numbers.Add<
     $n,
-      Call<Numbers.GreaterThanOrEqual<
-    $control,
-    0
-  >> extends true
-
-? 1
-: -1
+    Call<Numbers.GreaterThanOrEqual<
+      $control,
+      0
+    >> extends true
+    ? 1
+    : -1
   >>
 
 export type ifexpr<
