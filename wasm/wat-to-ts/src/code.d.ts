@@ -1,8 +1,9 @@
 import { Numbers, Call } from 'hotscript';
 
-type add<
-  i_0 extends number,
-  $b extends number
-> = Numbers.Add<i_0, $b>;
+type ifexpr<
+  $n extends number,
+  $control extends number
+> = Call<Numbers.GreaterThanOrEqual<control, 0>> extends true
 
-export type program = Call<add<1, 2>>;
+? 1
+: -1Call<Numbers.Add<$n, $control>>;

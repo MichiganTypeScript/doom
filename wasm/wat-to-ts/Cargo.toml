@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 indexmap = "2.1.0"
+pretty_assertions = "1.4.0"
 wasm-printer = "0.1.22"
 wast = "67.0.0"

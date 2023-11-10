@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{collections::HashMap, fmt};
 
 use indexmap::{IndexMap, IndexSet};
 
@@ -7,9 +7,8 @@ pub type Imports = IndexMap<String, IndexSet<String>>;
 #[derive(Debug)]
 pub struct TypeDefinition {
     name: String,
-    generics: String,
+    generics: Vec<(String, String)>,
     body: String,
-    exported: bool,
 }
 
 pub type TypeDefinitions = IndexMap<String, TypeDefinition>;
@@ -17,6 +16,7 @@ pub type TypeDefinitions = IndexMap<String, TypeDefinition>;
 pub struct SourceCode {
     imports: Imports,
     types: TypeDefinitions,
+    exports: HashMap<String, Vec<String>>,
 }
 
 impl fmt::Debug for SourceCode {
@@ -32,7 +32,7 @@ impl ToString for SourceCode {
         for (package, imports) in &self.imports {
             things.push(
                 format!(
-                    "import {{ {} }} from '{}';",
+                    "import {{ {} }} from '{}'",
                     imports.iter().cloned().collect::<Vec<String>>().join(", "),
                     package
                 )
@@ -45,9 +45,46 @@ impl ToString for SourceCode {
         }
 
         for (_name, ty) in &self.types {
-            let export = if ty.exported { "export " } else { "" };
-            let name = format!("type {}{} = ", ty.name, ty.generics);
-            things.push(format!("{}{}{};\n", export, name, ty.body).to_string())
+            let type_key = &&ty.name;
+            let mut generics = "".to_string();
+
+            if !ty.generics.is_empty() {
+                generics += "<";
+                generics += "\n";
+                generics += &ty
+                    .generics
+                    .iter()
+                    .map(|(name, extends)| format!("  {name} extends {extends}"))
+                    .collect::<Vec<_>>()
+                    .join(",\n");
+                generics += "\n";
+                generics += ">";
+            }
+
+            let name = format!("type {type_key}{generics} =\n");
+
+            things.push(format!("{}{}", name, ty.body).to_string());
+
+            if let Some(exports) = self.exports.get(*type_key) {
+                for export in exports {
+                    let mut passed_generics = "".to_string();
+
+                    if !ty.generics.is_empty() {
+                        passed_generics = format!(
+                            "<{}>",
+                            &ty.generics
+                                .iter()
+                                .map(|(name, _extends)| name.to_string())
+                                .collect::<Vec<_>>()
+                                .join(", ")
+                        );
+                    }
+                    let export_section =
+                        format!("export type {export}{generics} = {type_key}{passed_generics}\n");
+
+                    things.push(export_section);
+                }
+            }
         }
 
         things.join("\n")
@@ -59,6 +96,7 @@ impl SourceCode {
         SourceCode {
             imports: Imports::new(),
             types: TypeDefinitions::new(),
+            exports: HashMap::new(),
         }
     }
 
@@ -67,12 +105,11 @@ impl SourceCode {
         entry.insert(import.into());
     }
 
-    pub fn add_type<N: Into<String>, G: Into<String>, D: Into<String>>(
+    pub fn add_type<N: Into<String>, G: Into<Vec<(String, String)>>, D: Into<String>>(
         &mut self,
         name: N,
         generics: G,
         definition: D,
-        exported: bool,
     ) {
         let name = name.into();
         if self.types.contains_key(&name) {
@@ -84,9 +121,36 @@ impl SourceCode {
                 body: definition.into(),
                 generics: generics.into(),
                 name,
-                exported,
             },
         );
+    }
+
+    pub fn add_export<S: Into<String>, E: Into<String>>(&mut self, source: S, export: E) {
+        let source_key = source.into();
+
+        if let Some(existing) = self.exports.get_mut(&source_key) {
+            existing.push(export.into());
+        } else {
+            self.exports.insert(source_key, vec![export.into()]);
+        }
+
+        // let source_name = source.into();
+        // let export_name = export.into();
+
+        // if let Some(original) = self.types.get_mut(&source_name) {
+        //     let thing = format!("export type {export_name} =\n");
+
+        //     self.types.insert(
+        //         export_name.clone(),
+        //         TypeDefinition {
+        //             body: "".into(),
+        //             generics: "".into(),
+        //             name: thing,
+        //         },
+        //     );
+        // } else {
+        //     panic!("Type not found for export: {}", source_name);
+        // }
     }
 }
 
@@ -116,8 +180,8 @@ mod tests {
         source.add_import("package1", "import2");
 
         let expected = [
-            "import { import1, import2 } from 'package1';",
-            "import { import3 } from 'package2';",
+            "import { import1, import2 } from 'package1'",
+            "import { import3 } from 'package2'",
         ]
         .map(|line| format!("{line}\n"))
         .join("");
@@ -128,13 +192,13 @@ mod tests {
     #[test]
     fn test_add_type() {
         let mut source = SourceCode::new();
-        source.add_type("IsTruthy", "", "(x: string) => boolean", false);
+        source.add_type("$isFalsey", vec![], "(x: string) => boolean");
 
         // TODO, this is not really a good test of the values, it's testing printing
 
         assert_eq!(
             source.to_string(),
-            "type IsTruthy = (x: string) => boolean;\n"
+            "type $isFalsey =\n(x: string) => boolean"
         );
 
         // // Adding the same type name should panic
@@ -148,11 +212,17 @@ mod tests {
     fn test_to_string() {
         let mut source = SourceCode::new();
 
-        source.add_type("IsTruthy", "<T extends string>", "(x: T) => boolean", false);
-        source.add_type("Multiply", "", "(a: number, b: number) => number", true);
+        source.add_type(
+            "$isTruthy",
+            [(String::from("T"), String::from("string"))],
+            "(x: T) => boolean",
+        );
+        source.add_type("$multiply", vec![], "(a: number, b: number) => number");
+        source.add_export("$multiply", "multiply");
 
-        let expected = "type IsTruthy<T extends string> = (x: T) => boolean;\n\n\
-                        export type Multiply = (a: number, b: number) => number;\n";
+        let expected = "type $isTruthy<\n  T extends string\n> =\n(x: T) => boolean\n\
+                        type $multiply =\n(a: number, b: number) => number\n\
+                        export type multiply = $multiply\n";
         assert_eq!(source.to_string(), expected);
     }
 }

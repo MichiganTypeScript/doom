@@ -1,6 +1,6 @@
 Module {
     span: Span {
-        offset: 179,
+        offset: 1,
     },
     id: None,
     name: None,
@@ -9,15 +9,15 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 334,
+                        offset: 11,
                     },
                     id: Some(
-                        "ifexpr",
+                        "add",
                     ),
                     name: None,
                     exports: InlineExport {
                         names: [
-                            "ifexpr",
+                            "add",
                         ],
                     },
                     kind: Inline {
@@ -26,46 +26,13 @@ Module {
                             instrs: [
                                 LocalGet(
                                     Id(
-                                        "n",
+                                        "a",
                                     ),
                                 ),
                                 LocalGet(
                                     Id(
-                                        "control",
+                                        "b",
                                     ),
-                                ),
-                                I32Const(
-                                    0,
-                                ),
-                                I32GeS,
-                                If(
-                                    BlockType {
-                                        label: None,
-                                        label_name: None,
-                                        ty: TypeUse {
-                                            index: None,
-                                            inline: Some(
-                                                FunctionType {
-                                                    params: [],
-                                                    results: [
-                                                        I32,
-                                                    ],
-                                                },
-                                            ),
-                                        },
-                                    },
-                                ),
-                                I32Const(
-                                    1,
-                                ),
-                                Else(
-                                    None,
-                                ),
-                                I32Const(
-                                    -1,
-                                ),
-                                End(
-                                    None,
                                 ),
                                 I32Add,
                             ],
@@ -78,14 +45,14 @@ Module {
                                 params: [
                                     (
                                         Some(
-                                            "n",
+                                            "a",
                                         ),
                                         None,
                                         I32,
                                     ),
                                     (
                                         Some(
-                                            "control",
+                                            "b",
                                         ),
                                         None,
                                         I32,
@@ -97,6 +64,43 @@ Module {
                             },
                         ),
                     },
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 131,
+                    },
+                    id: Some(
+                        "program",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "program",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1,
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                Call(
+                                    Id(
+                                        "add",
+                                    ),
+                                ),
+                            ],
+                        },
+                    ),
                 },
             ),
         ],
