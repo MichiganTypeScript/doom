@@ -1,26 +1,23 @@
-import { Call, Numbers } from "hotscript";
+import { Call, Numbers } from 'hotscript'
 
-export type ifexpr<
-  $n extends number,
-  $control extends number
-> =
-  $ifexpr<
-    $n,
-    $control
-  >;
 type $ifexpr<
   $n extends number,
   $control extends number
 > =
   Call<Numbers.Add<
-      $n,
-      Call<Numbers.GreaterThanOrEqual<
-        $control,
-        0
-      >> extends true
-      ? 1
-      : -1
-    >>;
+    $n,
+    Call<Numbers.GreaterThanOrEqual<
+      $control,
+      0
+    >> extends true
+    ? 1
+    : -1
+  >>;
+
+export type ifexpr<
+  $n extends number,
+  $control extends number
+> = $ifexpr<$n, $control>
 
 type a = ifexpr<10, 2>;
 //   ^?

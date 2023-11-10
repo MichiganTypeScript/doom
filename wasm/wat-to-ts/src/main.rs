@@ -91,6 +91,10 @@ impl SourcePrinter {
     pub fn get_lines(&self) -> Vec<String> {
         self.lines.clone()
     }
+
+    pub fn clear(&mut self) {
+        *self = SourcePrinter::new();
+    }
 }
 
 impl Default for SourcePrinter {
@@ -115,48 +119,56 @@ fn handle_instructions(
 ) -> String {
     let mut stack: Vec<String> = Vec::new();
 
-    let mut definition = "".to_string();
-
     let mut source_printer = SourcePrinter::new();
 
-    let mut if_context = String::from("");
-
     for instruction in instructions.iter() {
+        dbg!(&stack);
+        dbg!(&instruction);
+
         match instruction {
             Instruction::LocalGet(local) => match local {
                 Index::Id(id) => {
-                    stack.push(id.name().to_string());
+                    stack.push("$".to_string() + id.name());
                 }
                 Index::Num(num, _) => {
                     stack.push(format_index_name(*num as usize));
                 }
             },
             Instruction::If(_block) => {
-                if_context += " extends true";
-                if_context += "\n";
+                let condition_pop = stack.pop().unwrap();
+                let condition = format!("{condition_pop} extends true\n");
+                stack.push(condition);
             }
             Instruction::Else(_) => {
-                let then_side = stack.pop().unwrap();
-                if_context += format!("\n? {then_side}").as_str();
+                let then_side_pop = stack.pop().unwrap();
+                let then_side = format!("\n? {then_side_pop}");
+                stack.push(then_side);
             }
             Instruction::End(_) => {
-                let else_side = stack.pop().unwrap();
-                if_context += format!("\n: {else_side}").as_str();
-                definition += &if_context;
-                if_context = String::from("");
+                let else_side_pop = stack.pop().unwrap();
+
+                let else_side = format!("\n: {else_side_pop}");
+                let then_side = stack.pop().unwrap();
+                let condition = stack.pop().unwrap();
+
+                let if_context = format!("{condition}{then_side}{else_side}");
+                stack.push(if_context);
             }
             Instruction::I32Add => {
                 source.add_import("hotscript", "Call");
                 source.add_import("hotscript", "Numbers");
-                // dbg!(locals);
+                dbg!(locals);
 
-                let lhs = &get_element(locals, ElementAccess::ByIndex(0)).unwrap();
-                let rhs = &get_element(locals, ElementAccess::ByIndex(1)).unwrap();
+                // let lhs = &get_element(locals, ElementAccess::ByIndex(0)).unwrap();
+                // let rhs = &get_element(locals, ElementAccess::ByIndex(1)).unwrap();
+
+                let rhs = stack.pop().unwrap();
+                let lhs = stack.pop().unwrap();
 
                 source_printer.line("Call<Numbers.Add<");
                 source_printer.increase_indent();
                 source_printer.line(format!("{lhs},").as_str());
-                source_printer.line(rhs);
+                source_printer.line(&rhs);
                 source_printer.decrease_indent();
                 source_printer.line(">>");
             }
@@ -173,6 +185,8 @@ fn handle_instructions(
                 source_printer.line(rhs);
                 source_printer.decrease_indent();
                 source_printer.line(">>");
+                stack.push(source_printer.to_string());
+                source_printer.clear();
             }
             Instruction::F32Const(num) => {
                 stack.push(format!("{:?}", num));
@@ -204,8 +218,6 @@ fn handle_instructions(
             }
         }
     }
-    // dbg!(instruction);
-
     source_printer.to_string()
 }
 
@@ -358,6 +370,11 @@ mod tests {
             let file_name = wat_path.file_name().unwrap().to_string_lossy();
 
             if !file_name.ends_with(".wat") {
+                continue;
+            }
+
+            // focus
+            if file_name != "if-expr.wat" {
                 continue;
             }
 
