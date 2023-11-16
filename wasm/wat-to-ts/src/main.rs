@@ -1,9 +1,13 @@
 extern crate wast;
 
 mod source_code;
+mod source_printer;
+mod utils;
+
+use source_printer::SourcePrinter;
 
 use source_code::SourceCode;
-use std::{fmt, fs, vec};
+use std::{fs, vec};
 use wast::{
     core::{Export, Func, Global, Instruction, ModuleField, ModuleKind},
     parser,
@@ -11,114 +15,17 @@ use wast::{
     Wat,
 };
 
+use crate::utils::{count_instructions, format_call_id, format_index_name};
+
 #[macro_use]
 extern crate pretty_assertions;
-
-macro_rules! dbg_dump_file {
-    ($expr:expr, $filename:expr) => {{
-        let mut file_path = std::env::current_dir().unwrap();
-        file_path.push($filename);
-
-        let file_source = format!("{:#?}", $expr);
-        let _ = fs::write(&file_path, &file_source);
-        // println!("{}", $filename);
-        // println!("{}", file_source);
-    }};
-}
-
-// struct InstructionContext<'a> {
-//     locals: Vec<Local<'a>>,
-// }
-
-// impl<'a> InstructionContext<'a> {
-//     fn get(&self, )
-// }
-
-fn format_index_name(index: usize) -> String {
-    format!("i_{index}")
-}
-
-fn format_call_id<I: Into<String>>(id: I) -> String {
-    format!("${}", id.into())
-}
-
-enum ElementAccess {
-    ByIndex(usize),
-    // ByName(String),
-}
-
-fn get_element(collection: &[Option<String>], access: ElementAccess) -> Option<String> {
-    match access {
-        // ElementAccess::ByName(name) => collection
-        //     .iter()
-        //     .find(|item| item.as_ref() == Some(&name))
-        //     .cloned()
-        //     .flatten(),
-        ElementAccess::ByIndex(index) => match collection.get(index) {
-            Some(Some(inner_string)) => Some(inner_string.clone()),
-            _ => Some(format_index_name(index)),
-        },
-    }
-}
-
-#[derive(Debug)]
-pub struct SourcePrinter {
-    pub lines: Vec<(usize, String)>,
-}
-
-impl SourcePrinter {
-    pub fn new() -> Self {
-        SourcePrinter { lines: Vec::new() }
-    }
-
-    pub fn from_string<C: Into<String>>(content: C) -> Self {
-        SourcePrinter {
-            lines: content
-                .into()
-                .lines()
-                .map(|line| (1, line.to_string()))
-                .collect(),
-        }
-    }
-
-    pub fn line<C: Into<String>>(&mut self, indent: usize, content: C) {
-        self.lines.push((indent, content.into()));
-    }
-
-    pub fn lines(&mut self, lines: &mut Vec<(usize, String)>) {
-        self.lines.append(lines);
-    }
-
-    pub fn clear(&mut self) {
-        *self = SourcePrinter::new();
-    }
-}
-
-impl Default for SourcePrinter {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-impl fmt::Display for SourcePrinter {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        for (indent, line) in &self.lines {
-            let indentation = "  ".repeat(*indent);
-            writeln!(f, "{indentation}{line}")?;
-        }
-        Ok(())
-    }
-}
 
 fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]) -> String {
     let mut stack: Vec<SourcePrinter> = Vec::new();
 
-    // let mut source_printer = SourcePrinter::new();
-
     for instruction in instructions.iter() {
         dbg!(&stack);
         dbg!(&instruction);
-        // dbg!(&source_printer);
 
         match instruction {
             Instruction::LocalGet(local) => {
@@ -129,36 +36,21 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
                 stack.push(SourcePrinter::from_string(value));
             }
             Instruction::If(_block) => {
-                let mut condition_pop = stack.pop().unwrap();
-
-                // Get a mutable reference to the last line
-                if let Some((_, last)) = condition_pop.lines.last_mut() {
-                    *last += " extends true";
-                } else {
-                    panic!("can't get final thing")
-                }
-
+                let mut condition_pop = stack.pop().expect("If");
+                condition_pop.append_to_last_line(" extends true");
                 stack.push(condition_pop);
             }
             Instruction::Else(_) => {
-                let mut then_side_pop = stack.pop().unwrap();
-                if let Some((_, first)) = then_side_pop.lines.first_mut() {
-                    *first = "? ".to_string() + first;
-                } else {
-                    panic!("can't get then side pop")
-                }
+                let mut then_side_pop = stack.pop().expect("Else");
+                then_side_pop.prepent_to_first_line("? ");
                 stack.push(then_side_pop);
             }
             Instruction::End(_) => {
-                let mut else_side = stack.pop().unwrap();
-                if let Some((_, first)) = else_side.lines.first_mut() {
-                    *first = ": ".to_string() + first;
-                } else {
-                    panic!("can't get else side pop")
-                }
+                let mut else_side = stack.pop().expect("End else_side pop");
+                else_side.prepent_to_first_line(": ");
 
-                let mut then_side = stack.pop().unwrap();
-                let mut condition = stack.pop().unwrap();
+                let mut then_side = stack.pop().expect("End then_side pop");
+                let mut condition = stack.pop().expect("End condition pop");
 
                 condition.lines(&mut then_side.lines);
                 condition.lines(&mut else_side.lines);
@@ -169,68 +61,74 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
                 source.add_import("hotscript", "Call");
                 source.add_import("hotscript", "Numbers");
 
-                // let lhs = &get_element(locals, ElementAccess::ByIndex(0)).unwrap();
-                // let rhs = &get_element(locals, ElementAccess::ByIndex(1)).unwrap();
+                let mut rhs = stack.pop().expect("I32Add rhs pop");
+                let mut lhs = stack.pop().expect("I32Add lsh pop");
 
-                let rhs = stack.pop().unwrap().lines;
-                let mut lhs = stack.pop().unwrap().lines;
+                let mut sp = SourcePrinter::new();
 
-                let mut source_printer = SourcePrinter::new();
+                let indent = lhs.lines.first().expect("I32Add base_indent").indent;
+                sp.line(indent, "Call<Numbers.Add<");
 
-                let base_indent = lhs.first().unwrap().0;
-                source_printer.line(base_indent, "Call<Numbers.Add<");
+                lhs.append_to_last_line(",");
 
-                if let Some((_, line)) = lhs.last_mut() {
-                    // add a comma to separate the argument
-                    *line += ",";
-                } else {
-                    panic!("Can't add a comma because something went wrong with lhs");
-                }
-                for l in &lhs {
-                    source_printer.line(l.0 + 1, &l.1);
-                }
+                lhs.increase_indent();
+                sp.lines(&mut lhs.lines);
 
-                for r in rhs {
-                    source_printer.line(r.0 + 1, r.1.to_string());
-                }
-                source_printer.line(base_indent, ">>");
+                rhs.increase_indent();
+                sp.lines(&mut rhs.lines);
 
-                stack.push(source_printer);
+                sp.line(indent, ">>");
+
+                stack.push(sp);
             }
             Instruction::I32GeS => {
                 source.add_import("hotscript", "Call");
                 source.add_import("hotscript", "Numbers");
 
-                let rhs = &stack.pop().unwrap().lines;
-                let lhs = &stack.pop().unwrap().lines;
+                let mut rhs = stack.pop().expect("I32GeS rhs pop");
+                let mut lhs = stack.pop().expect("I32GeS lsh pop");
 
-                let indent = rhs.first().unwrap().0;
+                let mut sp = SourcePrinter::new();
 
-                let mut source_printer = SourcePrinter::new();
+                let indent = rhs.lines.first().expect("I32GeS indent").indent;
+                sp.line(indent, "Call<Numbers.GreaterThanOrEqual<");
 
-                source_printer.line(indent, "Call<Numbers.GreaterThanOrEqual<");
+                lhs.increase_indent();
+                lhs.map_lines(|text| format!("{text},"));
+                sp.lines(&mut lhs.lines);
 
-                for l in lhs {
-                    source_printer.line(indent + 1, format!("{},", l.1));
-                }
-                for r in rhs {
-                    source_printer.line(indent + 1, r.1.to_string());
-                }
+                rhs.increase_indent();
+                sp.lines(&mut rhs.lines);
 
-                source_printer.line(indent, ">>");
-                stack.push(source_printer);
+                sp.line(indent, ">>");
+                stack.push(sp);
             }
-            Instruction::F32Const(num) => {
-                stack.push(SourcePrinter::from_string(format!("{:?}", num)));
-            }
-            Instruction::F64Const(num) => {
-                stack.push(SourcePrinter::from_string(format!("{:?}", num)));
+            Instruction::F64Const(raw_bits) => {
+                let float_value = f64::from_bits(raw_bits.bits).to_string();
+
+                stack.push(SourcePrinter::from_string(float_value));
             }
             Instruction::I32Const(num) => {
                 stack.push(SourcePrinter::from_string(num.to_string()));
             }
             Instruction::I64Const(num) => {
                 stack.push(SourcePrinter::from_string(num.to_string()));
+            }
+            Instruction::F64Neg => {
+                source.add_import("hotscript", "Call");
+                source.add_import("hotscript", "Numbers");
+
+                let mut operands = stack.pop().expect("F64Neg lines");
+                let indent = operands.lines.first().expect("F64Neg indent").indent;
+                operands.increase_indent();
+
+                let mut sp = SourcePrinter::new();
+
+                sp.line(indent, "Call<Numbers.Negate<");
+                sp.lines(&mut operands.lines);
+                sp.line(indent, ">>");
+
+                stack.push(sp);
             }
             Instruction::Call(id) => {
                 let actual_id = match id {
@@ -244,34 +142,30 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
 
                 if let Some(td) = source.types.get(&actual_id) {
                     let indent = 1;
-                    let mut source_printer = SourcePrinter::new();
+                    let mut sp = SourcePrinter::new();
 
-                    source_printer.line(indent, format!("{print_id}<"));
+                    sp.line(indent, format!("{print_id}<"));
 
                     let mut temp = vec![];
                     for (index, _) in td.generics.iter().enumerate() {
-                        let sp = stack.pop().unwrap();
-                        let mut lines: Vec<(usize, String)> = sp
-                            .lines
-                            .iter()
-                            .map(|line| (line.0 + 1, line.1.clone()))
-                            .collect();
+                        let mut sp = stack.pop().expect("Call sp");
+
+                        sp.increase_indent();
 
                         // we're going to reverse the temp list after this loop block, so what this is effectively saying is "add a comma at the last line of all expressions except the last one" because (unfortunately) trailing commas in TS arguments are not allowed).
                         if index != 0 {
-                            let last_line = lines.last_mut().unwrap();
-                            last_line.1 = format!("{},", last_line.1);
+                            sp.append_to_last_line(",");
                         }
-                        temp.push(lines);
+                        temp.push(sp.lines);
                     }
 
                     temp.reverse();
                     for mut t in temp {
-                        source_printer.lines(&mut t);
+                        sp.lines(&mut t);
                     }
 
-                    source_printer.line(indent, ">");
-                    stack.push(source_printer);
+                    sp.line(indent, ">");
+                    stack.push(sp);
                 } else {
                     dbg!(source);
                     panic!("can't find id in Call: {actual_id}");
@@ -284,7 +178,7 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
         }
     }
 
-    let expr = stack.pop().unwrap();
+    let expr = stack.pop().expect("the stack was totally empty");
     expr.to_string()
 }
 
@@ -378,7 +272,7 @@ fn handle_module_field(source: &mut SourceCode, field: &ModuleField) {
 
         _other => {
             // dbg!(other);
-            // panic!("not implemented module field");
+            panic!("not implemented module field");
         }
     }
 }
@@ -390,7 +284,10 @@ fn wat_to_dts(wat: String, dump_path: &str) -> SourceCode {
     let mut source = SourceCode::new();
 
     if let wast::Wat::Module(ref module) = parsed_wat {
-        dbg_dump_file!(module, dump_path);
+        let counter = count_instructions(module);
+
+        let dump = format!("{:#?}\n\n\n\n\n{:#?}", module, counter);
+        dbg_dump_file!(dump, dump_path);
 
         match &module.kind {
             ModuleKind::Binary(_) => {

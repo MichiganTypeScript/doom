@@ -1,0 +1,50 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "main",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                F64Const(
+                                    Float64 {
+                                        bits: 4621819117588971520,
+                                    },
+                                ),
+                                F64Neg,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: None,
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "F64Const": 1,
+    "F64Neg": 1,
+}

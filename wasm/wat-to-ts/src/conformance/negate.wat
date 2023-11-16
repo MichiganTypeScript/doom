@@ -1,0 +1,6 @@
+(module
+  (func $main
+    f64.const 10 ;; load a number onto the stack
+    f64.neg ;; negate the values
+  )
+)

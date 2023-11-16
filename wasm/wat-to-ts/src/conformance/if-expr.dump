@@ -102,3 +102,16 @@ Module {
         ],
     ),
 }
+
+
+
+
+{
+    "LocalGet": 2,
+    "I32Const": 3,
+    "Else": 1,
+    "I32Add": 1,
+    "If": 1,
+    "I32GeS": 1,
+    "End": 1,
+}
