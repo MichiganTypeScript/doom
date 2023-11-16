@@ -6,7 +6,7 @@ mod utils;
 
 use source_type::SourceType;
 
-use source_file::{GenericParameter, SourceFile};
+use source_file::{GenericConstraint, GenericParameter, SourceFile};
 use std::{fs, vec};
 use wast::{
     core::{Export, Func, Global, Instruction, ModuleField, ModuleKind},
@@ -15,12 +15,26 @@ use wast::{
     Wat,
 };
 
-use crate::utils::{count_instructions, format_call_id, format_index_name};
+use crate::utils::{count_instructions, format_call_id, format_index_name, format_local};
+
+#[derive(Debug, Clone)]
+pub struct Statement {
+    pub name: String,
+    pub constraint: GenericConstraint,
+    pub stack: SourceType,
+}
+
+const RESULT_SENTINEL: &str = "RESULT";
 
 #[macro_use]
 extern crate pretty_assertions;
 
-fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]) -> String {
+fn handle_instructions(
+    source: &mut SourceFile,
+    instructions: &[Instruction<'_>],
+) -> Vec<Statement> {
+    let mut statements: Vec<Statement> = Vec::new();
+
     let mut stack: Vec<SourceType> = Vec::new();
 
     for instruction in instructions.iter() {
@@ -29,11 +43,20 @@ fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]
 
         match instruction {
             Instruction::LocalGet(local) => {
-                let value = match local {
-                    Index::Id(id) => "$".to_string() + id.name(),
-                    Index::Num(num, _) => format_index_name(*num as usize),
-                };
-                stack.push(SourceType::from_string(value));
+                let value = format_local(local);
+                stack.push(SourceType::from_string(value, GenericConstraint::None));
+            }
+            Instruction::LocalSet(local) => {
+                // `_` before a name means it's a local
+                let name = format_local(local);
+                let value = stack.pop().expect("LocalSet pop");
+                let constraint = value.constraint;
+
+                statements.push(Statement {
+                    name,
+                    stack: value,
+                    constraint,
+                })
             }
             Instruction::If(_block) => {
                 let mut condition_pop = stack.pop().expect("If");
@@ -64,7 +87,7 @@ fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]
                 let mut rhs = stack.pop().expect("I32Add rhs pop");
                 let mut lhs = stack.pop().expect("I32Add lsh pop");
 
-                let mut st = SourceType::new();
+                let mut st = SourceType::new(GenericConstraint::Number);
 
                 let indent = lhs.lines.first().expect("I32Add base_indent").indent;
                 st.line(indent, "Call<Numbers.Add<");
@@ -88,7 +111,7 @@ fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]
                 let mut rhs = stack.pop().expect("I32GeS rhs pop");
                 let mut lhs = stack.pop().expect("I32GeS lsh pop");
 
-                let mut st = SourceType::new();
+                let mut st = SourceType::new(GenericConstraint::Number);
 
                 let indent = rhs.lines.first().expect("I32GeS indent").indent;
                 st.line(indent, "Call<Numbers.GreaterThanOrEqual<");
@@ -106,13 +129,22 @@ fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]
             Instruction::F64Const(raw_bits) => {
                 let float_value = f64::from_bits(raw_bits.bits).to_string();
 
-                stack.push(SourceType::from_string(float_value));
+                stack.push(SourceType::from_string(
+                    float_value,
+                    GenericConstraint::Number,
+                ));
             }
             Instruction::I32Const(num) => {
-                stack.push(SourceType::from_string(num.to_string()));
+                stack.push(SourceType::from_string(
+                    num.to_string(),
+                    GenericConstraint::Number,
+                ));
             }
             Instruction::I64Const(num) => {
-                stack.push(SourceType::from_string(num.to_string()));
+                stack.push(SourceType::from_string(
+                    num.to_string(),
+                    GenericConstraint::Number,
+                ));
             }
             Instruction::F64Neg => {
                 source.add_import("hotscript", "Call");
@@ -122,7 +154,7 @@ fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]
                 let indent = operands.lines.first().expect("F64Neg indent").indent;
                 operands.increase_indent();
 
-                let mut st = SourceType::new();
+                let mut st = SourceType::new(GenericConstraint::Number);
 
                 st.line(indent, "Call<Numbers.Negate<");
                 st.lines(&mut operands.lines);
@@ -143,7 +175,7 @@ fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]
                 if let Some(td) = source.types.get(&actual_id) {
                     // dbg!(td);
                     let indent = 0; // probably a bug to not get this from somewhere actual.  oh well.
-                    let mut st = SourceType::new();
+                    let mut st = SourceType::new(GenericConstraint::Number);
 
                     st.line(indent, format!("{print_id}<"));
 
@@ -179,7 +211,14 @@ fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]
     }
 
     let expr = stack.pop().expect("the stack was totally empty");
-    expr.to_string()
+
+    statements.push(Statement {
+        name: RESULT_SENTINEL.to_string(),
+        stack: expr,
+        constraint: GenericConstraint::None,
+    });
+
+    statements
 }
 
 fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
@@ -198,7 +237,7 @@ fn handle_module_field_func(source: &mut SourceFile, field: &Func) {
             .name();
 
     let mut generics = vec![];
-    let mut definition = "".to_string();
+    let mut statements = vec![];
 
     let mut param_names: Vec<Option<String>> = Vec::new();
     if let Some(ref func_type) = field.ty.inline {
@@ -227,11 +266,11 @@ fn handle_module_field_func(source: &mut SourceFile, field: &Func) {
             locals: _,
             expression,
         } => {
-            definition = handle_instructions(source, &expression.instrs);
+            statements = handle_instructions(source, &expression.instrs);
         }
     }
 
-    source.add_type(&name, generics, definition);
+    source.add_type(&name, generics, statements);
 
     for export in field.exports.names.iter() {
         source.add_export(&name, *export);
@@ -241,17 +280,17 @@ fn handle_module_field_func(source: &mut SourceFile, field: &Func) {
 }
 
 fn handle_module_field_global(source: &mut SourceFile, field: &Global) {
-    let mut definition = "".to_string();
+    let mut statements = vec![];
 
     match &field.kind {
         wast::core::GlobalKind::Import(_import) => {}
         wast::core::GlobalKind::Inline(expression) => {
-            definition = handle_instructions(source, &expression.instrs);
+            statements = handle_instructions(source, &expression.instrs);
         }
     }
 
     let name = "$".to_string() + field.id.unwrap().name();
-    source.add_type(&name, vec![], definition);
+    source.add_type(&name, vec![], statements);
 
     for export in field.exports.names.iter() {
         source.add_export(&name, *export);
@@ -359,7 +398,7 @@ mod tests {
             let source = wat_to_dts(wat, &dump_path);
             let actual = source.to_string();
 
-            let expected_output_path = wat_path.with_extension("d.ts");
+            let expected_output_path = wat_path.with_extension("expected.d.ts");
             let expected = fs::read_to_string(&expected_output_path).unwrap();
 
             let actual_path = wat_path.with_extension("actual.d.ts");

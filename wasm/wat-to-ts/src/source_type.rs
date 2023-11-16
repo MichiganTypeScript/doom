@@ -1,6 +1,8 @@
 use std::fmt;
 
-#[derive(Debug)]
+use crate::source_file::GenericConstraint;
+
+#[derive(Debug, Clone)]
 pub struct SourceLine {
     pub indent: usize,
     pub text: String,
@@ -12,18 +14,23 @@ impl SourceLine {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SourceType {
+    pub constraint: GenericConstraint,
     pub lines: Vec<SourceLine>,
 }
 
 impl SourceType {
-    pub fn new() -> Self {
-        SourceType { lines: Vec::new() }
+    pub fn new(constraint: GenericConstraint) -> Self {
+        SourceType {
+            lines: Vec::new(),
+            constraint,
+        }
     }
 
-    pub fn from_string<C: Into<String>>(content: C) -> Self {
+    pub fn from_string<C: Into<String>>(content: C, constraint: GenericConstraint) -> Self {
         SourceType {
+            constraint,
             lines: content
                 .into()
                 .lines()
@@ -81,7 +88,7 @@ impl SourceType {
 
 impl Default for SourceType {
     fn default() -> Self {
-        Self::new()
+        Self::new(GenericConstraint::None)
     }
 }
 

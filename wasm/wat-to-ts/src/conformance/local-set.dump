@@ -6,45 +6,10 @@ Module {
     name: None,
     kind: Text(
         [
-            Import(
-                Import {
-                    span: Span {
-                        offset: 11,
-                    },
-                    module: "console",
-                    field: "log",
-                    item: ItemSig {
-                        span: Span {
-                            offset: 35,
-                        },
-                        id: Some(
-                            "log",
-                        ),
-                        name: None,
-                        kind: Func(
-                            TypeUse {
-                                index: None,
-                                inline: Some(
-                                    FunctionType {
-                                        params: [
-                                            (
-                                                None,
-                                                None,
-                                                I32,
-                                            ),
-                                        ],
-                                        results: [],
-                                    },
-                                ),
-                            },
-                        ),
-                    },
-                },
-            ),
             Func(
                 Func {
                     span: Span {
-                        offset: 62,
+                        offset: 11,
                     },
                     id: Some(
                         "main",
@@ -78,11 +43,6 @@ Module {
                                         "var",
                                     ),
                                 ),
-                                Call(
-                                    Id(
-                                        "log",
-                                    ),
-                                ),
                             ],
                         },
                     },
@@ -92,11 +52,6 @@ Module {
                     },
                 },
             ),
-            Start(
-                Id(
-                    "main",
-                ),
-            ),
         ],
     ),
 }
@@ -105,8 +60,7 @@ Module {
 
 
 {
+    "LocalGet": 1,
     "LocalSet": 1,
     "I32Const": 1,
-    "LocalGet": 1,
-    "Call": 1,
 }

@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 
-use wast::core::{Instruction, Module, ModuleField, ModuleKind};
+use wast::{
+    core::{Instruction, Module, ModuleField, ModuleKind},
+    token::Index,
+};
 
 #[macro_export]
 macro_rules! dbg_dump_file {
@@ -20,6 +23,13 @@ pub fn format_index_name(index: usize) -> String {
 
 pub fn format_call_id<I: Into<String>>(id: I) -> String {
     format!("${}", id.into())
+}
+
+pub fn format_local(local: &Index) -> String {
+    match local {
+        Index::Id(id) => "$".to_string() + id.name(),
+        Index::Num(num, _) => format_index_name(*num as usize),
+    }
 }
 
 pub fn count_instructions(module: &Module) -> HashMap<String, u32> {
