@@ -6,5 +6,5 @@ type $main<
   RESULT = $asdf
 > = RESULT;
 
-type x= $main;
+type x = $main;
 //   ^?

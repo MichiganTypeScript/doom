@@ -5,9 +5,47 @@ use indexmap::{IndexMap, IndexSet};
 pub type Imports = IndexMap<String, IndexSet<String>>;
 
 #[derive(Debug)]
+pub enum GenericConstraint {
+    Number,
+    #[allow(dead_code)] // we'll probably need this later hopefully
+    String,
+}
+
+impl fmt::Display for GenericConstraint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            GenericConstraint::Number => write!(f, "number"),
+            GenericConstraint::String => write!(f, "string"),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct GenericParameter {
+    pub constraint: GenericConstraint,
+    pub name: String,
+}
+
+impl GenericParameter {
+    #[allow(dead_code)] // we'll probably need this later hopefully
+    pub fn new_string<T: Into<String>>(name: T) -> Self {
+        GenericParameter {
+            constraint: GenericConstraint::String,
+            name: name.into(),
+        }
+    }
+    pub fn new_number<T: Into<String>>(name: T) -> Self {
+        GenericParameter {
+            constraint: GenericConstraint::Number,
+            name: name.into(),
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct TypeDefinition {
     pub name: String,
-    pub generics: Vec<(String, String)>,
+    pub generics: Vec<GenericParameter>,
     pub body: String,
 }
 
@@ -77,7 +115,9 @@ impl ToString for SourceFile {
                 generics = definition
                     .generics
                     .iter()
-                    .map(|(name, extends)| format!("\n  {name} extends {extends}"))
+                    .map(|GenericParameter { constraint, name }| {
+                        format!("\n  {name} extends {constraint}")
+                    })
                     .collect::<Vec<_>>()
             }
 
@@ -100,7 +140,7 @@ impl ToString for SourceFile {
                         passed_generics += &definition
                             .generics
                             .iter()
-                            .map(|(name, _extends)| "  ".to_string() + name)
+                            .map(|GenericParameter { name, .. }| "  ".to_string() + name)
                             .collect::<Vec<_>>()
                             .join(",\n")
                             .to_string();
@@ -134,7 +174,7 @@ impl SourceFile {
         entry.insert(import.into());
     }
 
-    pub fn add_type<N: Into<String>, G: Into<Vec<(String, String)>>, D: Into<String>>(
+    pub fn add_type<N: Into<String>, G: Into<Vec<GenericParameter>>, D: Into<String>>(
         &mut self,
         name: N,
         generics: G,
@@ -247,7 +287,7 @@ mod tests {
 
         source.add_type(
             "$isTruthy",
-            [(String::from("T"), String::from("string"))],
+            vec![GenericParameter::new_string("T")],
             "(x: T) => boolean",
         );
         source.add_type("$multiply", vec![], "(a: number, b: number) => number");

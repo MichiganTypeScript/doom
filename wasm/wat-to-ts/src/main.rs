@@ -6,7 +6,7 @@ mod utils;
 
 use source_type::SourceType;
 
-use source_file::SourceFile;
+use source_file::{GenericParameter, SourceFile};
 use std::{fs, vec};
 use wast::{
     core::{Export, Func, Global, Instruction, ModuleField, ModuleKind},
@@ -214,7 +214,7 @@ fn handle_module_field_func(source: &mut SourceFile, field: &Func) {
             generics = param_names
                 .iter()
                 .enumerate()
-                .map(|(index, name)| (get_param_name(index, name), "number".to_string()))
+                .map(|(index, name)| GenericParameter::new_number(get_param_name(index, name)))
                 .collect();
         }
 
