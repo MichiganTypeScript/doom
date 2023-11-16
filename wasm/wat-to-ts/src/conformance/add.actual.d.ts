@@ -2,22 +2,33 @@ import { Call, Numbers } from 'hotscript'
 
 type $add<
   $a extends number,
-  $b extends number
-> =
-  Call<Numbers.Add<
-    $a,
-    $b
-  >>
+  $b extends number,
+  RESULT =
+    Call<Numbers.Add<
+      $a,
+      $b
+    >>
+> = RESULT
 
 export type add<
   $a extends number,
-  $b extends number
-> = $add<$a, $b>
+  $b extends number,
+  RESULT =
+    $add<
+      $a,
+      $b
+    >
+> = RESULT
 
-type $program =
-  add<
-    1,
-    2
-  >
+type $program<
+  RESULT =
+    add<
+      1,
+      2
+    >
+> = RESULT
 
-export type program = $program
+export type program<
+  RESULT =
+    $program
+> = RESULT

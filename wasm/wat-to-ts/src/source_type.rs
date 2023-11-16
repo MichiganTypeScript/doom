@@ -13,21 +13,21 @@ impl SourceLine {
 }
 
 #[derive(Debug)]
-pub struct SourcePrinter {
+pub struct SourceType {
     pub lines: Vec<SourceLine>,
 }
 
-impl SourcePrinter {
+impl SourceType {
     pub fn new() -> Self {
-        SourcePrinter { lines: Vec::new() }
+        SourceType { lines: Vec::new() }
     }
 
     pub fn from_string<C: Into<String>>(content: C) -> Self {
-        SourcePrinter {
+        SourceType {
             lines: content
                 .into()
                 .lines()
-                .map(|line| SourceLine::new(1, line.to_string()))
+                .map(|line| SourceLine::new(0, line.to_string()))
                 .collect(),
         }
     }
@@ -79,13 +79,13 @@ impl SourcePrinter {
     }
 }
 
-impl Default for SourcePrinter {
+impl Default for SourceType {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl fmt::Display for SourcePrinter {
+impl fmt::Display for SourceType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         for SourceLine { indent, text } in &self.lines {
             let indentation = "  ".repeat(*indent);

@@ -1,6 +1,8 @@
 import { Call, Numbers } from 'hotscript'
 
-type $main =
-  Call<Numbers.Negate<
-    10
-  >>
+type $main<
+  RESULT =
+    Call<Numbers.Negate<
+      10
+    >>
+> = RESULT

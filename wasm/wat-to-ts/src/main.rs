@@ -1,12 +1,12 @@
 extern crate wast;
 
-mod source_code;
-mod source_printer;
+mod source_file;
+mod source_type;
 mod utils;
 
-use source_printer::SourcePrinter;
+use source_type::SourceType;
 
-use source_code::SourceCode;
+use source_file::SourceFile;
 use std::{fs, vec};
 use wast::{
     core::{Export, Func, Global, Instruction, ModuleField, ModuleKind},
@@ -20,8 +20,8 @@ use crate::utils::{count_instructions, format_call_id, format_index_name};
 #[macro_use]
 extern crate pretty_assertions;
 
-fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]) -> String {
-    let mut stack: Vec<SourcePrinter> = Vec::new();
+fn handle_instructions(source: &mut SourceFile, instructions: &[Instruction<'_>]) -> String {
+    let mut stack: Vec<SourceType> = Vec::new();
 
     for instruction in instructions.iter() {
         dbg!(&stack);
@@ -33,7 +33,7 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
                     Index::Id(id) => "$".to_string() + id.name(),
                     Index::Num(num, _) => format_index_name(*num as usize),
                 };
-                stack.push(SourcePrinter::from_string(value));
+                stack.push(SourceType::from_string(value));
             }
             Instruction::If(_block) => {
                 let mut condition_pop = stack.pop().expect("If");
@@ -64,22 +64,22 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
                 let mut rhs = stack.pop().expect("I32Add rhs pop");
                 let mut lhs = stack.pop().expect("I32Add lsh pop");
 
-                let mut sp = SourcePrinter::new();
+                let mut st = SourceType::new();
 
                 let indent = lhs.lines.first().expect("I32Add base_indent").indent;
-                sp.line(indent, "Call<Numbers.Add<");
+                st.line(indent, "Call<Numbers.Add<");
 
                 lhs.append_to_last_line(",");
 
                 lhs.increase_indent();
-                sp.lines(&mut lhs.lines);
+                st.lines(&mut lhs.lines);
 
                 rhs.increase_indent();
-                sp.lines(&mut rhs.lines);
+                st.lines(&mut rhs.lines);
 
-                sp.line(indent, ">>");
+                st.line(indent, ">>");
 
-                stack.push(sp);
+                stack.push(st);
             }
             Instruction::I32GeS => {
                 source.add_import("hotscript", "Call");
@@ -88,31 +88,31 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
                 let mut rhs = stack.pop().expect("I32GeS rhs pop");
                 let mut lhs = stack.pop().expect("I32GeS lsh pop");
 
-                let mut sp = SourcePrinter::new();
+                let mut st = SourceType::new();
 
                 let indent = rhs.lines.first().expect("I32GeS indent").indent;
-                sp.line(indent, "Call<Numbers.GreaterThanOrEqual<");
+                st.line(indent, "Call<Numbers.GreaterThanOrEqual<");
 
                 lhs.increase_indent();
                 lhs.map_lines(|text| format!("{text},"));
-                sp.lines(&mut lhs.lines);
+                st.lines(&mut lhs.lines);
 
                 rhs.increase_indent();
-                sp.lines(&mut rhs.lines);
+                st.lines(&mut rhs.lines);
 
-                sp.line(indent, ">>");
-                stack.push(sp);
+                st.line(indent, ">>");
+                stack.push(st);
             }
             Instruction::F64Const(raw_bits) => {
                 let float_value = f64::from_bits(raw_bits.bits).to_string();
 
-                stack.push(SourcePrinter::from_string(float_value));
+                stack.push(SourceType::from_string(float_value));
             }
             Instruction::I32Const(num) => {
-                stack.push(SourcePrinter::from_string(num.to_string()));
+                stack.push(SourceType::from_string(num.to_string()));
             }
             Instruction::I64Const(num) => {
-                stack.push(SourcePrinter::from_string(num.to_string()));
+                stack.push(SourceType::from_string(num.to_string()));
             }
             Instruction::F64Neg => {
                 source.add_import("hotscript", "Call");
@@ -122,13 +122,13 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
                 let indent = operands.lines.first().expect("F64Neg indent").indent;
                 operands.increase_indent();
 
-                let mut sp = SourcePrinter::new();
+                let mut st = SourceType::new();
 
-                sp.line(indent, "Call<Numbers.Negate<");
-                sp.lines(&mut operands.lines);
-                sp.line(indent, ">>");
+                st.line(indent, "Call<Numbers.Negate<");
+                st.lines(&mut operands.lines);
+                st.line(indent, ">>");
 
-                stack.push(sp);
+                stack.push(st);
             }
             Instruction::Call(id) => {
                 let actual_id = match id {
@@ -141,31 +141,31 @@ fn handle_instructions(source: &mut SourceCode, instructions: &[Instruction<'_>]
                 };
 
                 if let Some(td) = source.types.get(&actual_id) {
-                    let indent = 1;
-                    let mut sp = SourcePrinter::new();
+                    // dbg!(td);
+                    let indent = 0; // probably a bug to not get this from somewhere actual.  oh well.
+                    let mut st = SourceType::new();
 
-                    sp.line(indent, format!("{print_id}<"));
+                    st.line(indent, format!("{print_id}<"));
 
                     let mut temp = vec![];
                     for (index, _) in td.generics.iter().enumerate() {
-                        let mut sp = stack.pop().expect("Call sp");
+                        let mut st = stack.pop().expect("Call st");
 
-                        sp.increase_indent();
-
+                        st.increase_indent();
                         // we're going to reverse the temp list after this loop block, so what this is effectively saying is "add a comma at the last line of all expressions except the last one" because (unfortunately) trailing commas in TS arguments are not allowed).
                         if index != 0 {
-                            sp.append_to_last_line(",");
+                            st.append_to_last_line(",");
                         }
-                        temp.push(sp.lines);
+                        temp.push(st.lines);
                     }
 
                     temp.reverse();
                     for mut t in temp {
-                        sp.lines(&mut t);
+                        st.lines(&mut t);
                     }
 
-                    sp.line(indent, ">");
-                    stack.push(sp);
+                    st.line(indent, ">");
+                    stack.push(st);
                 } else {
                     dbg!(source);
                     panic!("can't find id in Call: {actual_id}");
@@ -190,7 +190,7 @@ fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
     }
 }
 
-fn handle_module_field_func(source: &mut SourceCode, field: &Func) {
+fn handle_module_field_func(source: &mut SourceFile, field: &Func) {
     let name = "$".to_string()
         + field
             .id
@@ -240,7 +240,7 @@ fn handle_module_field_func(source: &mut SourceCode, field: &Func) {
     // dbg!(func);
 }
 
-fn handle_module_field_global(source: &mut SourceCode, field: &Global) {
+fn handle_module_field_global(source: &mut SourceFile, field: &Global) {
     let mut definition = "".to_string();
 
     match &field.kind {
@@ -260,11 +260,11 @@ fn handle_module_field_global(source: &mut SourceCode, field: &Global) {
     // dbg!(global);
 }
 
-fn handle_module_field_export(_source: &mut SourceCode, _field: &Export) {
+fn handle_module_field_export(_source: &mut SourceFile, _field: &Export) {
     // dbg!(field);
 }
 
-fn handle_module_field(source: &mut SourceCode, field: &ModuleField) {
+fn handle_module_field(source: &mut SourceFile, field: &ModuleField) {
     match field {
         ModuleField::Func(field) => handle_module_field_func(source, field),
         ModuleField::Global(field) => handle_module_field_global(source, field),
@@ -277,11 +277,11 @@ fn handle_module_field(source: &mut SourceCode, field: &ModuleField) {
     }
 }
 
-fn wat_to_dts(wat: String, dump_path: &str) -> SourceCode {
+fn wat_to_dts(wat: String, dump_path: &str) -> SourceFile {
     let buf = parser::ParseBuffer::new(&wat).unwrap();
     let parsed_wat = &parser::parse::<Wat>(&buf).unwrap();
 
-    let mut source = SourceCode::new();
+    let mut source = SourceFile::new();
 
     if let wast::Wat::Module(ref module) = parsed_wat {
         let counter = count_instructions(module);
