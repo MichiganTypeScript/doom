@@ -73,7 +73,7 @@ pub fn create_type(
     generics: Vec<String>,
     statements: Vec<Statement>,
 ) -> String {
-    dbg!(exported, &name, &generics, &statements);
+    // dbg!(exported, &name, &generics, &statements);
 
     let export = if exported { "export " } else { "" };
 
@@ -123,8 +123,6 @@ impl ToString for SourceFile {
         if !lines.is_empty() {
             lines.push(String::from(""));
         }
-
-        dbg!(self);
 
         for (_name, definition) in &self.types {
             let type_key = &definition.name;

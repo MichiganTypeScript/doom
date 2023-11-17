@@ -7,5 +7,5 @@
   )
 
   ;; Export the function so it can be called from outside the module
-  (export "isZero" (func $isZero))
+  (export "isZeroExport" (func $isZero))
 )

@@ -57,7 +57,7 @@ Module {
                     span: Span {
                         offset: 371,
                     },
-                    name: "isZero",
+                    name: "isZeroExport",
                     kind: Func,
                     item: Id(
                         "isZero",

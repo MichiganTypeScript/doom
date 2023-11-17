@@ -7,7 +7,7 @@ mod utils;
 use source_type::SourceType;
 
 use source_file::{GenericConstraint, GenericParameter, SourceFile};
-use std::{fs, vec};
+use std::{collections::HashMap, fs, vec};
 use wast::{
     core::{Export, Func, Global, Instruction, ModuleField, ModuleKind},
     parser,
@@ -28,6 +28,38 @@ const RESULT_SENTINEL: &str = "RESULT";
 
 #[macro_use]
 extern crate pretty_assertions;
+
+fn hotscript_unary<N: Into<String> + Copy>(
+    source: &mut SourceFile,
+    stack: &mut Vec<SourceType>,
+    namespace: N,
+    method: N,
+) {
+    source.add_import("hotscript", "Call");
+    source.add_import("hotscript", namespace.into());
+
+    let mut operand = stack
+        .pop()
+        .unwrap_or_else(|| panic!("{} lines", &method.into()));
+
+    let indent = operand
+        .lines
+        .first()
+        .unwrap_or_else(|| panic!("{} indent", &method.into()))
+        .indent;
+    operand.increase_indent();
+
+    let mut st = SourceType::new(GenericConstraint::Number);
+
+    st.line(
+        indent,
+        format!("Call<{}.{}<", namespace.into(), method.into()),
+    );
+    st.lines(&mut operand.lines);
+    st.line(indent, ">>");
+
+    stack.push(st);
+}
 
 fn hotscript_binary<N: Into<String> + Copy>(
     source: &mut SourceFile,
@@ -73,8 +105,8 @@ fn handle_instructions(
     let mut stack: Vec<SourceType> = Vec::new();
 
     for instruction in instructions.iter() {
-        dbg!(&stack);
-        dbg!(&instruction);
+        // dbg!(&stack);
+        // dbg!(&instruction);
 
         // Order: I32, I64, F32, F64
 
@@ -99,7 +131,7 @@ fn handle_instructions(
                     GenericConstraint::Number,
                 ));
             }
-            // Instruction::F32Const
+            //Instruction::F32Const
             Instruction::F64Const(raw_bits) => {
                 let float_value = f64::from_bits(raw_bits.bits).to_string();
 
@@ -162,24 +194,32 @@ fn handle_instructions(
             | Instruction::F64Add => {
                 hotscript_binary(source, &mut stack, "Numbers", "Add");
             }
+            Instruction::I32Sub
+            | Instruction::I64Sub
+            | Instruction::F32Sub
+            | Instruction::F64Sub => {
+                hotscript_binary(source, &mut stack, "Numbers", "Sub");
+            }
+            Instruction::I32Mul
+            | Instruction::I64Mul
+            | Instruction::F32Mul
+            | Instruction::F64Mul => {
+                hotscript_binary(source, &mut stack, "Numbers", "Mul");
+            }
+            Instruction::I32DivS
+            | Instruction::I32DivU
+            | Instruction::I64DivS
+            | Instruction::I64DivU => {
+                hotscript_binary(source, &mut stack, "Numbers", "Div");
+            }
 
             ////// Floating Point Specific Instructions
             //////
-            Instruction::F64Neg => {
-                source.add_import("hotscript", "Call");
-                source.add_import("hotscript", "Numbers");
-
-                let mut operands = stack.pop().expect("F64Neg lines");
-                let indent = operands.lines.first().expect("F64Neg indent").indent;
-                operands.increase_indent();
-
-                let mut st = SourceType::new(GenericConstraint::Number);
-
-                st.line(indent, "Call<Numbers.Negate<");
-                st.lines(&mut operands.lines);
-                st.line(indent, ">>");
-
-                stack.push(st);
+            Instruction::F32Abs | Instruction::F64Abs => {
+                hotscript_unary(source, &mut stack, "Numbers", "Abs");
+            }
+            Instruction::F32Neg | Instruction::F64Neg => {
+                hotscript_unary(source, &mut stack, "Numbers", "Negate")
             }
 
             ////////////////////////////////////////////////
@@ -202,9 +242,9 @@ fn handle_instructions(
                     constraint,
                 })
             }
-            // Instruction::LocalTee()
-            // Instruction::GlobalGet()
-            // Instruction::GlobalSet()
+            //Instruction::LocalTee()
+            //Instruction::GlobalGet()
+            //Instruction::GlobalSet()
 
             ////////////////////////////////////////////////
             // Control Flow Instructions
@@ -213,7 +253,7 @@ fn handle_instructions(
             Instruction::Block(block) => {
                 dbg!(block);
             }
-            // Instruction::Br()
+            //Instruction::Br()
             Instruction::Call(index) => {
                 let actual_id = match index {
                     Index::Id(i) => format_call_id(i.name()),
@@ -255,7 +295,7 @@ fn handle_instructions(
                     panic!("can't find id in Call: {actual_id}");
                 }
             }
-            // Instruction::Drop
+            //Instruction::Drop
             Instruction::End(_) => {
                 let mut else_side = stack.pop().expect("End else_side pop");
                 else_side.prepent_to_first_line(": ");
@@ -281,11 +321,11 @@ fn handle_instructions(
                 then_side_pop.prepent_to_first_line("? ");
                 stack.push(then_side_pop);
             }
-            // Instruction::Loop()
-            // Instruction::Nop
-            // Instruction::Return
-            // Instruction::Select()
-            // Instruction::Unreachable
+            //Instruction::Loop()
+            //Instruction::Nop
+            //Instruction::Return
+            //Instruction::Select()
+            //Instruction::Unreachable
             _ => {
                 panic!("not implemented instruction {:#?}", instruction);
             }
@@ -315,18 +355,20 @@ fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
     }
 }
 
-fn handle_module_field_func(source: &mut SourceFile, field: &Func) {
+fn handle_module_field_func(source: &mut SourceFile, func: &Func, module_func_index: usize) {
+    dbg!(func);
+    dbg!(module_func_index);
     let name = "$".to_string()
-        + field
+        + func
             .id
-            .unwrap_or_else(|| panic!("need to implement no name funcs"))
+            .unwrap_or_else(|| panic!("need to implement no name funcs but it looks like I can skirt by without having to do any of it"))
             .name();
 
     let mut generics = vec![];
     let mut statements = vec![];
 
     let mut param_names: Vec<Option<String>> = Vec::new();
-    if let Some(ref func_type) = field.ty.inline {
+    if let Some(ref func_type) = func.ty.inline {
         for (param_id, _, _) in func_type.params.iter() {
             if let Some(p) = param_id {
                 param_names.push(Some(format!("${}", p.name())));
@@ -346,7 +388,7 @@ fn handle_module_field_func(source: &mut SourceFile, field: &Func) {
         // dbg!(func_types);
     }
 
-    match &field.kind {
+    match &func.kind {
         wast::core::FuncKind::Import(_imp) => {}
         wast::core::FuncKind::Inline {
             locals: _,
@@ -358,48 +400,85 @@ fn handle_module_field_func(source: &mut SourceFile, field: &Func) {
 
     source.add_type(&name, generics, statements);
 
-    for export in field.exports.names.iter() {
+    for export in func.exports.names.iter() {
         source.add_export(&name, *export);
     }
-
-    // dbg!(func);
 }
 
-fn handle_module_field_global(source: &mut SourceFile, field: &Global) {
+fn handle_module_field_global(source: &mut SourceFile, global: &Global) {
+    // dbg!(global);
     let mut statements = vec![];
 
-    match &field.kind {
+    match &global.kind {
         wast::core::GlobalKind::Import(_import) => {}
         wast::core::GlobalKind::Inline(expression) => {
             statements = handle_instructions(source, &expression.instrs);
         }
     }
 
-    let name = "$".to_string() + field.id.unwrap().name();
+    let name = "$".to_string() + global.id.unwrap().name();
     source.add_type(&name, vec![], statements);
 
-    for export in field.exports.names.iter() {
+    for export in global.exports.names.iter() {
         source.add_export(&name, *export);
     }
-
-    // dbg!(global);
 }
 
-fn handle_module_field_export(_source: &mut SourceFile, _field: &Export) {
-    // dbg!(field);
+fn handle_module_field_export(source: &mut SourceFile, export: &Export) {
+    // dbg!(export);
+    let export_name = export.name;
+    let local_name = format_index(&export.item);
+
+    source.add_export(local_name, export_name);
 }
 
-fn handle_module_field(source: &mut SourceFile, field: &ModuleField) {
-    match field {
-        ModuleField::Func(field) => handle_module_field_func(source, field),
-        ModuleField::Global(field) => handle_module_field_global(source, field),
-        ModuleField::Export(field) => handle_module_field_export(source, field),
+/*
+In WebAssembly, the index used to reference entities like functions, globals, or types is relative to the entire module, but it's specific to each kind of entity.
 
-        _other => {
-            // dbg!(other);
-            panic!("not implemented module field");
+Each category (functions, globals, types, etc.) has its own separate index space.
+
+This means that the first function in a module has index 0 in the function index space, the first global has index 0 in the global index space, and so on.
+
+Additionally, you can call a function by its index even if it has a name, which means we need to keep track if this shit at all times.  Ugg.
+*/
+fn handle_module_fields(source: &mut SourceFile, fields: &Vec<ModuleField>) {
+    let mut module_index: HashMap<&str, usize> = HashMap::new();
+
+    for field in fields {
+        // dbg!(field);
+
+        match field {
+            // ModuleFieldType(Type<'a>),
+            // ModuleFieldRec(Rec<'a>),
+            // ModuleFieldImport(Import<'a>), // TODO: imports can increase the module func index space
+            ModuleField::Func(func) => {
+                let count = module_index.entry("Func").or_insert(0);
+                handle_module_field_func(source, func, *count);
+                *count += 1;
+            }
+            // ModuleFieldTable(Table<'a>),
+            // ModuleFieldMemory(Memory<'a>),
+            ModuleField::Global(global) => {
+                let count = module_index.entry("Global").or_insert(0);
+                handle_module_field_global(source, global);
+                *count += 1;
+            }
+            ModuleField::Export(export) => {
+                // no known need for module_index addressing exports
+                handle_module_field_export(source, export);
+            }
+            // ModuleFieldStart(Index<'a>),
+            // ModuleFieldElem(Elem<'a>),
+            // ModuleFieldData(Data<'a>),
+            // ModuleFieldTag(Tag<'a>),
+            // ModuleFieldCustom(Custom<'a>),
+            _other => {
+                // dbg!(other);
+                panic!("not implemented module field");
+            }
         }
     }
+    dbg!(module_index);
 }
 
 fn wat_to_dts(wat: String, dump_path: &str) -> SourceFile {
@@ -419,9 +498,7 @@ fn wat_to_dts(wat: String, dump_path: &str) -> SourceFile {
                 panic!("WebAssembly Binary is not supported.  Only WebAssembly Text.");
             }
             ModuleKind::Text(fields) => {
-                for field in fields {
-                    handle_module_field(&mut source, field);
-                }
+                handle_module_fields(&mut source, fields);
             }
         }
     }
@@ -462,10 +539,10 @@ mod tests {
                 continue;
             }
 
-            // // focus
-            // if file_name != "add.wat" {
-            //     continue;
-            // }
+            // focus
+            if file_name != "subtract.wat" {
+                continue;
+            }
 
             // // skip
             // if file_name == "equal.wat" {

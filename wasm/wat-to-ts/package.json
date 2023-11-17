@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "compile:c-to-wasm": "emcc src/code.c -o src/code.wasm",
+    "compile:c-to-wasm": "emcc src/code.c -o src/code.wasm -g",
     "compile:wasm-to-wat": "wasm2wat src/code.wasm --output src/code.wat",
     "compile:c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
     "compile:wat-to-wasm": "wat2wasm src/code.wat --output src/code.wasm",

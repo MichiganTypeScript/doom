@@ -8,3 +8,11 @@ type $isZero<
       0
     >>
 > = RESULT
+
+export type isZeroExport<
+  $x extends number,
+  RESULT =
+    $isZero<
+      $x
+    >
+> = RESULT

@@ -1,0 +1,63 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "theOmniscient",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    10,
+                                ),
+                                I32Const(
+                                    3,
+                                ),
+                                I32Sub,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: None,
+                    },
+                },
+            ),
+            Export(
+                Export {
+                    span: Span {
+                        offset: 163,
+                    },
+                    name: "ziltoid",
+                    kind: Func,
+                    item: Id(
+                        "theOmniscient",
+                    ),
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "I32Const": 2,
+    "I32Sub": 1,
+}
