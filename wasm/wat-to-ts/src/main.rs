@@ -508,10 +508,10 @@ fn wat_to_dts(wat: String, dump_path: &str) -> SourceFile {
 
 fn main() {
     let current_dir = std::env::current_dir().unwrap();
-    let wat_path = current_dir.join("src/code.wat");
+    let wat_path = current_dir.join("src/debug/code.wat");
     let wat = fs::read_to_string(wat_path).unwrap();
-    let output = wat_to_dts(wat, "src/code.dump").to_string();
-    fs::write("src/code.d.ts", output).unwrap();
+    let output = wat_to_dts(wat, "src/debug/code.dump").to_string();
+    fs::write("src/debug/code.d.ts", output).unwrap();
 }
 
 #[cfg(test)]
@@ -540,9 +540,9 @@ mod tests {
             }
 
             // focus
-            if file_name != "subtract.wat" {
-                continue;
-            }
+            // if file_name != "subtract.wat" {
+            //     continue;
+            // }
 
             // // skip
             // if file_name == "equal.wat" {

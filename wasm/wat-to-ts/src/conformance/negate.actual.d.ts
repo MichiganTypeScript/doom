@@ -6,3 +6,8 @@ type $main<
       10
     >>
 > = RESULT
+
+export type main<
+  RESULT =
+    $main
+> = RESULT

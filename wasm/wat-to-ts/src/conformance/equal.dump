@@ -16,17 +16,23 @@ Module {
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "equal",
+                        ],
                     },
                     kind: Inline {
                         locals: [],
                         expression: Expression {
                             instrs: [
-                                I32Const(
-                                    10,
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
                                 ),
-                                I32Const(
-                                    2,
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
                                 ),
                                 I32Eq,
                             ],
@@ -34,7 +40,27 @@ Module {
                     },
                     ty: TypeUse {
                         index: None,
-                        inline: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [],
+                            },
+                        ),
                     },
                 },
             ),
@@ -46,6 +72,6 @@ Module {
 
 
 {
-    "I32Const": 2,
+    "LocalGet": 2,
     "I32Eq": 1,
 }

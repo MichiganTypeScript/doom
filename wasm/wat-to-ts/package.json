@@ -9,14 +9,16 @@
     "compile:wasm-to-wat": "wasm2wat src/code.wasm --output src/code.wat",
     "compile:c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
     "compile:wat-to-wasm": "wat2wasm src/code.wat --output src/code.wasm",
-    "test:wasm": "tsx src/test.ts"
+    "test:wasm": "tsx src/test.ts",
+    "test": "tsc --project tsconfig.test.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "hotscript": "^1.0.13",
-    "tsx": "^3.14.0",
-    "typescript": "^5.2.2"
+    "tsx": "^4.1.3",
+    "typescript": "^5.2.2",
+    "type-testing": "^0.2.0"
   }
 }

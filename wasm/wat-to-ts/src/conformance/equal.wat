@@ -1,9 +1,7 @@
 (module
-  (func $main
-    ;; load `10` and `2` onto the stack
-    i32.const 10
-    i32.const 2
-
-    i32.eq ;; check if `10` is equal to `2`
+  (func $main (export "equal")  (param $a i32) (param $b i32)
+    local.get $a
+    local.get $b
+    i32.eq
   )
 )
