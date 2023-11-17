@@ -43,6 +43,10 @@ Module {
                                         "var",
                                     ),
                                 ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
                             ],
                         },
                     },
@@ -60,7 +64,8 @@ Module {
 
 
 {
-    "LocalGet": 1,
+    "I32Const": 2,
     "LocalSet": 1,
-    "I32Const": 1,
+    "LocalGet": 1,
+    "I32Add": 1,
 }

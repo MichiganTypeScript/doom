@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use indexmap::IndexMap;
 use wast::{
     core::{Instruction, Module, ModuleField, ModuleKind},
     token::Index,
@@ -32,8 +33,8 @@ pub fn format_local(local: &Index) -> String {
     }
 }
 
-pub fn count_instructions(module: &Module) -> HashMap<String, u32> {
-    let mut counts = HashMap::new();
+pub fn count_instructions(module: &Module) -> IndexMap<String, u32> {
+    let mut counts = IndexMap::new();
 
     if let ModuleKind::Text(fields) = &module.kind {
         for field in fields {
@@ -1859,5 +1860,6 @@ pub fn count_instructions(module: &Module) -> HashMap<String, u32> {
         }
     }
 
+    counts.sort_by(|_k1, v1, _k2, v2| v2.cmp(v1));
     counts
 }

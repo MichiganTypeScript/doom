@@ -1,6 +1,11 @@
+import { Call, Numbers } from 'hotscript'
+
 type $main<
   $var extends number =
     10,
   RESULT =
-    $var
+    Call<Numbers.Add<
+      $var,
+      1
+    >>
 > = RESULT
