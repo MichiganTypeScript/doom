@@ -1,0 +1,77 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 138,
+                    },
+                    id: Some(
+                        "isZero",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "x",
+                                    ),
+                                ),
+                                I32Eqz,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "x",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Export(
+                Export {
+                    span: Span {
+                        offset: 371,
+                    },
+                    name: "isZero",
+                    kind: Func,
+                    item: Id(
+                        "isZero",
+                    ),
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 1,
+    "I32Eqz": 1,
+}

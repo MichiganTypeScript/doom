@@ -1,0 +1,51 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "main",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    10,
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                I32Eq,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: None,
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "I32Const": 2,
+    "I32Eq": 1,
+}

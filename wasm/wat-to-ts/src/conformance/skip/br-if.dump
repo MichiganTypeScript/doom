@@ -1,0 +1,203 @@
+Module {
+    span: Span {
+        offset: 0,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1,
+                    },
+                    id: Some(
+                        "foo",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [
+                            Local {
+                                id: None,
+                                name: None,
+                                ty: I32,
+                            },
+                        ],
+                        expression: Expression {
+                            instrs: [
+                                Block(
+                                    BlockType {
+                                        label: None,
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                Block(
+                                    BlockType {
+                                        label: None,
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                Block(
+                                    BlockType {
+                                        label: None,
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Num(
+                                        0,
+                                        Span {
+                                            offset: 167,
+                                        },
+                                    ),
+                                ),
+                                I32Eqz,
+                                BrIf(
+                                    Num(
+                                        0,
+                                        Span {
+                                            offset: 221,
+                                        },
+                                    ),
+                                ),
+                                LocalGet(
+                                    Num(
+                                        0,
+                                        Span {
+                                            offset: 282,
+                                        },
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Eq,
+                                BrIf(
+                                    Num(
+                                        1,
+                                        Span {
+                                            offset: 366,
+                                        },
+                                    ),
+                                ),
+                                I32Const(
+                                    7,
+                                ),
+                                LocalSet(
+                                    Num(
+                                        1,
+                                        Span {
+                                            offset: 467,
+                                        },
+                                    ),
+                                ),
+                                Br(
+                                    Num(
+                                        2,
+                                        Span {
+                                            offset: 491,
+                                        },
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                I32Const(
+                                    42,
+                                ),
+                                LocalSet(
+                                    Num(
+                                        1,
+                                        Span {
+                                            offset: 543,
+                                        },
+                                    ),
+                                ),
+                                Br(
+                                    Num(
+                                        1,
+                                        Span {
+                                            offset: 561,
+                                        },
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                I32Const(
+                                    99,
+                                ),
+                                LocalSet(
+                                    Num(
+                                        1,
+                                        Span {
+                                            offset: 605,
+                                        },
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Num(
+                                        1,
+                                        Span {
+                                            offset: 625,
+                                        },
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        None,
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "I32Const": 4,
+    "Block": 3,
+    "LocalGet": 3,
+    "LocalSet": 3,
+    "End": 3,
+    "BrIf": 2,
+    "Br": 2,
+    "I32Eqz": 1,
+    "I32Eq": 1,
+}

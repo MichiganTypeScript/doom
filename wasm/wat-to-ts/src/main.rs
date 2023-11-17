@@ -15,7 +15,7 @@ use wast::{
     Wat,
 };
 
-use crate::utils::{count_instructions, format_call_id, format_index_name, format_local};
+use crate::utils::{count_instructions, format_call_id, format_index, format_index_name};
 
 #[derive(Debug, Clone)]
 pub struct Statement {
@@ -29,6 +29,41 @@ const RESULT_SENTINEL: &str = "RESULT";
 #[macro_use]
 extern crate pretty_assertions;
 
+fn hotscript_binary<N: Into<String> + Copy>(
+    source: &mut SourceFile,
+    stack: &mut Vec<SourceType>,
+    namespace: N,
+    method: N,
+) {
+    source.add_import("hotscript", "Call");
+    source.add_import("hotscript", namespace.into());
+
+    let mut rhs = stack
+        .pop()
+        .unwrap_or_else(|| panic!("{} rhs pop", &method.into()));
+    let mut lhs = stack
+        .pop()
+        .unwrap_or_else(|| panic!("{} lhs pop", &method.into()));
+
+    let mut st = SourceType::new(GenericConstraint::Number);
+
+    let indent = rhs.lines.first().expect("I32GtS indent").indent;
+    st.line(
+        indent,
+        format!("Call<{}.{}<", namespace.into(), method.into()),
+    );
+
+    lhs.increase_indent();
+    lhs.map_lines(|text| format!("{text},"));
+    st.lines(&mut lhs.lines);
+
+    rhs.increase_indent();
+    st.lines(&mut rhs.lines);
+
+    st.line(indent, ">>");
+    stack.push(st);
+}
+
 fn handle_instructions(
     source: &mut SourceFile,
     instructions: &[Instruction<'_>],
@@ -41,99 +76,17 @@ fn handle_instructions(
         dbg!(&stack);
         dbg!(&instruction);
 
+        // Order: I32, I64, F32, F64
+
+        // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference
         match instruction {
-            Instruction::LocalGet(local) => {
-                let value = format_local(local);
-                stack.push(SourceType::from_string(value, GenericConstraint::None));
-            }
-            Instruction::LocalSet(local) => {
-                // `_` before a name means it's a local
-                let name = format_local(local);
-                let value = stack.pop().expect("LocalSet pop");
-                let constraint = value.constraint;
+            ////////////////////////////////////////////////
+            // Numeric Instructions
+            // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Numeric
+            ////////////////////////////////////////////////
 
-                statements.push(Statement {
-                    name,
-                    stack: value,
-                    constraint,
-                })
-            }
-            Instruction::If(_block) => {
-                let mut condition_pop = stack.pop().expect("If");
-                condition_pop.append_to_last_line(" extends true");
-                stack.push(condition_pop);
-            }
-            Instruction::Else(_) => {
-                let mut then_side_pop = stack.pop().expect("Else");
-                then_side_pop.prepent_to_first_line("? ");
-                stack.push(then_side_pop);
-            }
-            Instruction::End(_) => {
-                let mut else_side = stack.pop().expect("End else_side pop");
-                else_side.prepent_to_first_line(": ");
-
-                let mut then_side = stack.pop().expect("End then_side pop");
-                let mut condition = stack.pop().expect("End condition pop");
-
-                condition.lines(&mut then_side.lines);
-                condition.lines(&mut else_side.lines);
-
-                stack.push(condition);
-            }
-            Instruction::I32Add => {
-                source.add_import("hotscript", "Call");
-                source.add_import("hotscript", "Numbers");
-
-                let mut rhs = stack.pop().expect("I32Add rhs pop");
-                let mut lhs = stack.pop().expect("I32Add lsh pop");
-
-                let mut st = SourceType::new(GenericConstraint::Number);
-
-                let indent = lhs.lines.first().expect("I32Add base_indent").indent;
-                st.line(indent, "Call<Numbers.Add<");
-
-                lhs.append_to_last_line(",");
-
-                lhs.increase_indent();
-                st.lines(&mut lhs.lines);
-
-                rhs.increase_indent();
-                st.lines(&mut rhs.lines);
-
-                st.line(indent, ">>");
-
-                stack.push(st);
-            }
-            Instruction::I32GeS => {
-                source.add_import("hotscript", "Call");
-                source.add_import("hotscript", "Numbers");
-
-                let mut rhs = stack.pop().expect("I32GeS rhs pop");
-                let mut lhs = stack.pop().expect("I32GeS lsh pop");
-
-                let mut st = SourceType::new(GenericConstraint::Number);
-
-                let indent = rhs.lines.first().expect("I32GeS indent").indent;
-                st.line(indent, "Call<Numbers.GreaterThanOrEqual<");
-
-                lhs.increase_indent();
-                lhs.map_lines(|text| format!("{text},"));
-                st.lines(&mut lhs.lines);
-
-                rhs.increase_indent();
-                st.lines(&mut rhs.lines);
-
-                st.line(indent, ">>");
-                stack.push(st);
-            }
-            Instruction::F64Const(raw_bits) => {
-                let float_value = f64::from_bits(raw_bits.bits).to_string();
-
-                stack.push(SourceType::from_string(
-                    float_value,
-                    GenericConstraint::Number,
-                ));
-            }
+            ////// Constants
+            //////
             Instruction::I32Const(num) => {
                 stack.push(SourceType::from_string(
                     num.to_string(),
@@ -146,6 +99,72 @@ fn handle_instructions(
                     GenericConstraint::Number,
                 ));
             }
+            // Instruction::F32Const
+            Instruction::F64Const(raw_bits) => {
+                let float_value = f64::from_bits(raw_bits.bits).to_string();
+
+                stack.push(SourceType::from_string(
+                    float_value,
+                    GenericConstraint::Number,
+                ));
+            }
+
+            ////// Comparison
+            //////
+            Instruction::I32Eq | Instruction::I64Eq | Instruction::F32Eq | Instruction::F64Eq => {
+                hotscript_binary(source, &mut stack, "Numbers", "Equal");
+            }
+            Instruction::I32Eqz | Instruction::I64Eqz => {
+                stack.push(SourceType::from_string("0", GenericConstraint::Number));
+                hotscript_binary(source, &mut stack, "Numbers", "Equal");
+            }
+            Instruction::I32Ne | Instruction::I64Ne | Instruction::F32Ne | Instruction::F64Ne => {
+                hotscript_binary(source, &mut stack, "Numbers", "NotEqual");
+            }
+            Instruction::I32GtS
+            | Instruction::I32GtU
+            | Instruction::I64GtS
+            | Instruction::I64GtU
+            | Instruction::F32Gt
+            | Instruction::F64Gt => {
+                hotscript_binary(source, &mut stack, "Numbers", "GreaterThan");
+            }
+            Instruction::I32GeS
+            | Instruction::I32GeU
+            | Instruction::I64GeS
+            | Instruction::I64GeU
+            | Instruction::F32Ge
+            | Instruction::F64Ge => {
+                hotscript_binary(source, &mut stack, "Numbers", "GreaterThanOrEqual");
+            }
+            Instruction::I32LtS
+            | Instruction::I32LtU
+            | Instruction::I64LtS
+            | Instruction::I64LtU
+            | Instruction::F32Lt
+            | Instruction::F64Lt => {
+                hotscript_binary(source, &mut stack, "Numbers", "LessThan");
+            }
+            Instruction::I32LeS
+            | Instruction::I32LeU
+            | Instruction::I64LeS
+            | Instruction::I64LeU
+            | Instruction::F32Le
+            | Instruction::F64Le => {
+                hotscript_binary(source, &mut stack, "Numbers", "LessThanOrEqual");
+            }
+
+            ////// Arithmetic
+            //////
+            Instruction::I32Add
+            | Instruction::I64Add
+            | Instruction::F32Add
+            | Instruction::F64Add => {
+                hotscript_binary(source, &mut stack, "Numbers", "Add");
+            }
+
+            ////// Floating Point Specific Instructions
+            //////
             Instruction::F64Neg => {
                 source.add_import("hotscript", "Call");
                 source.add_import("hotscript", "Numbers");
@@ -162,12 +181,45 @@ fn handle_instructions(
 
                 stack.push(st);
             }
-            Instruction::Call(id) => {
-                let actual_id = match id {
+
+            ////////////////////////////////////////////////
+            // Variable Instructions
+            // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Variables
+            ////////////////////////////////////////////////
+            Instruction::LocalGet(index) => {
+                let value = format_index(index);
+                stack.push(SourceType::from_string(value, GenericConstraint::None));
+            }
+            Instruction::LocalSet(index) => {
+                // `_` before a name means it's a local
+                let name = format_index(index);
+                let value = stack.pop().expect("LocalSet pop");
+                let constraint = value.constraint;
+
+                statements.push(Statement {
+                    name,
+                    stack: value,
+                    constraint,
+                })
+            }
+            // Instruction::LocalTee()
+            // Instruction::GlobalGet()
+            // Instruction::GlobalSet()
+
+            ////////////////////////////////////////////////
+            // Control Flow Instructions
+            // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Control_flow
+            ////////////////////////////////////////////////
+            Instruction::Block(block) => {
+                dbg!(block);
+            }
+            // Instruction::Br()
+            Instruction::Call(index) => {
+                let actual_id = match index {
                     Index::Id(i) => format_call_id(i.name()),
                     Index::Num(num, _span) => format_index_name(*num as usize),
                 };
-                let print_id = match id {
+                let print_id = match index {
                     Index::Id(i) => i.name().to_string(),
                     Index::Num(num, _span) => format_index_name(*num as usize),
                 };
@@ -203,7 +255,37 @@ fn handle_instructions(
                     panic!("can't find id in Call: {actual_id}");
                 }
             }
+            // Instruction::Drop
+            Instruction::End(_) => {
+                let mut else_side = stack.pop().expect("End else_side pop");
+                else_side.prepent_to_first_line(": ");
 
+                let mut then_side = stack.pop().expect("End then_side pop");
+                let mut condition = stack.pop().expect("End condition pop");
+
+                condition.lines(&mut then_side.lines);
+                condition.lines(&mut else_side.lines);
+
+                stack.push(condition);
+            }
+            Instruction::BrIf(index) => {
+                dbg!(index);
+            }
+            Instruction::If(_block) => {
+                let mut condition_pop = stack.pop().expect("If");
+                condition_pop.append_to_last_line(" extends true");
+                stack.push(condition_pop);
+            }
+            Instruction::Else(_) => {
+                let mut then_side_pop = stack.pop().expect("Else");
+                then_side_pop.prepent_to_first_line("? ");
+                stack.push(then_side_pop);
+            }
+            // Instruction::Loop()
+            // Instruction::Nop
+            // Instruction::Return
+            // Instruction::Select()
+            // Instruction::Unreachable
             _ => {
                 panic!("not implemented instruction {:#?}", instruction);
             }
@@ -211,6 +293,10 @@ fn handle_instructions(
     }
 
     let expr = stack.pop().expect("the stack was totally empty");
+
+    if !stack.is_empty() {
+        panic!("stack is supposed to be empty by now");
+    }
 
     statements.push(Statement {
         name: RESULT_SENTINEL.to_string(),
@@ -378,6 +464,11 @@ mod tests {
 
             // // focus
             // if file_name != "add.wat" {
+            //     continue;
+            // }
+
+            // // skip
+            // if file_name == "equal.wat" {
             //     continue;
             // }
 

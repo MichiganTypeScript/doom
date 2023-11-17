@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use indexmap::IndexMap;
 use wast::{
     core::{Instruction, Module, ModuleField, ModuleKind},
@@ -26,8 +24,8 @@ pub fn format_call_id<I: Into<String>>(id: I) -> String {
     format!("${}", id.into())
 }
 
-pub fn format_local(local: &Index) -> String {
-    match local {
+pub fn format_index(index: &Index) -> String {
+    match index {
         Index::Id(id) => "$".to_string() + id.name(),
         Index::Num(num, _) => format_index_name(*num as usize),
     }
