@@ -1,8 +1,10 @@
 use indexmap::IndexMap;
 use wast::{
-    core::{Instruction, Module, ModuleField, ModuleKind},
+    core::{Instruction, Module, ModuleField, ModuleKind, ValType},
     token::Index,
 };
+
+use crate::source_file::TypeConstraint;
 
 #[macro_export]
 macro_rules! dbg_dump_file {
@@ -28,6 +30,15 @@ pub fn format_index(index: &Index) -> String {
     match index {
         Index::Id(id) => "$".to_string() + id.name(),
         Index::Num(num, _) => format_index_name(*num as usize),
+    }
+}
+
+pub fn map_valtype_to_typeconstraint(val_type: &ValType) -> TypeConstraint {
+    match *val_type {
+        ValType::F32 | ValType::F64 | ValType::I32 | ValType::I64 => TypeConstraint::Number,
+        ValType::Ref(_) | ValType::V128 => {
+            panic!("not a supported return type")
+        }
     }
 }
 

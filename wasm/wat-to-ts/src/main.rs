@@ -6,8 +6,9 @@ mod utils;
 
 use source_type::SourceType;
 
-use source_file::{GenericConstraint, GenericParameter, SourceFile};
+use source_file::{GenericParameter, SourceFile, TypeConstraint};
 use std::{collections::HashMap, fs, vec};
+use utils::map_valtype_to_typeconstraint;
 use wast::{
     core::{Export, Func, Global, Instruction, ModuleField, ModuleKind},
     parser,
@@ -20,8 +21,8 @@ use crate::utils::{count_instructions, format_call_id, format_index, format_inde
 #[derive(Debug, Clone)]
 pub struct Statement {
     pub name: String,
-    pub constraint: GenericConstraint,
-    pub stack: SourceType,
+    pub constraint: TypeConstraint,
+    pub source_types: Vec<SourceType>,
 }
 
 const RESULT_SENTINEL: &str = "RESULT";
@@ -34,6 +35,7 @@ fn hotscript_unary<N: Into<String> + Copy>(
     stack: &mut Vec<SourceType>,
     namespace: N,
     method: N,
+    result_type_constraint: TypeConstraint,
 ) {
     source.add_import("hotscript", "Call");
     source.add_import("hotscript", namespace.into());
@@ -49,7 +51,7 @@ fn hotscript_unary<N: Into<String> + Copy>(
         .indent;
     operand.increase_indent();
 
-    let mut st = SourceType::new(GenericConstraint::Number);
+    let mut st = SourceType::new(result_type_constraint);
 
     st.line(
         indent,
@@ -66,6 +68,7 @@ fn hotscript_binary<N: Into<String> + Copy>(
     stack: &mut Vec<SourceType>,
     namespace: N,
     method: N,
+    result_type_constraint: TypeConstraint,
 ) {
     source.add_import("hotscript", "Call");
     source.add_import("hotscript", namespace.into());
@@ -77,7 +80,7 @@ fn hotscript_binary<N: Into<String> + Copy>(
         .pop()
         .unwrap_or_else(|| panic!("{} lhs pop", &method.into()));
 
-    let mut st = SourceType::new(GenericConstraint::Number);
+    let mut st = SourceType::new(result_type_constraint);
 
     let indent = rhs.lines.first().expect("I32GtS indent").indent;
     st.line(
@@ -99,10 +102,11 @@ fn hotscript_binary<N: Into<String> + Copy>(
 fn handle_instructions(
     source: &mut SourceFile,
     instructions: &[Instruction<'_>],
-) -> Vec<Statement> {
+    result_type_constraints: Vec<TypeConstraint>,
+) -> (Vec<Statement>, Statement) {
     let mut statements: Vec<Statement> = Vec::new();
 
-    let mut stack: Vec<SourceType> = Vec::new();
+    let mut source_types: Vec<SourceType> = Vec::new();
 
     for instruction in instructions.iter() {
         // dbg!(&stack);
@@ -120,38 +124,53 @@ fn handle_instructions(
             ////// Constants
             //////
             Instruction::I32Const(num) => {
-                stack.push(SourceType::from_string(
+                source_types.push(SourceType::from_string(
                     num.to_string(),
-                    GenericConstraint::Number,
+                    TypeConstraint::Number,
                 ));
             }
             Instruction::I64Const(num) => {
-                stack.push(SourceType::from_string(
+                source_types.push(SourceType::from_string(
                     num.to_string(),
-                    GenericConstraint::Number,
+                    TypeConstraint::Number,
                 ));
             }
             //Instruction::F32Const
             Instruction::F64Const(raw_bits) => {
                 let float_value = f64::from_bits(raw_bits.bits).to_string();
 
-                stack.push(SourceType::from_string(
-                    float_value,
-                    GenericConstraint::Number,
-                ));
+                source_types.push(SourceType::from_string(float_value, TypeConstraint::Number));
             }
 
             ////// Comparison
             //////
             Instruction::I32Eq | Instruction::I64Eq | Instruction::F32Eq | Instruction::F64Eq => {
-                hotscript_binary(source, &mut stack, "Numbers", "Equal");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "Equal",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32Eqz | Instruction::I64Eqz => {
-                stack.push(SourceType::from_string("0", GenericConstraint::Number));
-                hotscript_binary(source, &mut stack, "Numbers", "Equal");
+                source_types.push(SourceType::from_string("0", TypeConstraint::Number));
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "Equal",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32Ne | Instruction::I64Ne | Instruction::F32Ne | Instruction::F64Ne => {
-                hotscript_binary(source, &mut stack, "Numbers", "NotEqual");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "NotEqual",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32GtS
             | Instruction::I32GtU
@@ -159,7 +178,13 @@ fn handle_instructions(
             | Instruction::I64GtU
             | Instruction::F32Gt
             | Instruction::F64Gt => {
-                hotscript_binary(source, &mut stack, "Numbers", "GreaterThan");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "GreaterThan",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32GeS
             | Instruction::I32GeU
@@ -167,7 +192,13 @@ fn handle_instructions(
             | Instruction::I64GeU
             | Instruction::F32Ge
             | Instruction::F64Ge => {
-                hotscript_binary(source, &mut stack, "Numbers", "GreaterThanOrEqual");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "GreaterThanOrEqual",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32LtS
             | Instruction::I32LtU
@@ -175,7 +206,13 @@ fn handle_instructions(
             | Instruction::I64LtU
             | Instruction::F32Lt
             | Instruction::F64Lt => {
-                hotscript_binary(source, &mut stack, "Numbers", "LessThan");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "LessThan",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32LeS
             | Instruction::I32LeU
@@ -183,7 +220,13 @@ fn handle_instructions(
             | Instruction::I64LeU
             | Instruction::F32Le
             | Instruction::F64Le => {
-                hotscript_binary(source, &mut stack, "Numbers", "LessThanOrEqual");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "LessThanOrEqual",
+                    TypeConstraint::Number,
+                );
             }
 
             ////// Arithmetic
@@ -192,34 +235,70 @@ fn handle_instructions(
             | Instruction::I64Add
             | Instruction::F32Add
             | Instruction::F64Add => {
-                hotscript_binary(source, &mut stack, "Numbers", "Add");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "Add",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32Sub
             | Instruction::I64Sub
             | Instruction::F32Sub
             | Instruction::F64Sub => {
-                hotscript_binary(source, &mut stack, "Numbers", "Sub");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "Sub",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32Mul
             | Instruction::I64Mul
             | Instruction::F32Mul
             | Instruction::F64Mul => {
-                hotscript_binary(source, &mut stack, "Numbers", "Mul");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "Mul",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::I32DivS
             | Instruction::I32DivU
             | Instruction::I64DivS
             | Instruction::I64DivU => {
-                hotscript_binary(source, &mut stack, "Numbers", "Div");
+                hotscript_binary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "Div",
+                    TypeConstraint::Number,
+                );
             }
 
             ////// Floating Point Specific Instructions
             //////
             Instruction::F32Abs | Instruction::F64Abs => {
-                hotscript_unary(source, &mut stack, "Numbers", "Abs");
+                hotscript_unary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "Abs",
+                    TypeConstraint::Number,
+                );
             }
             Instruction::F32Neg | Instruction::F64Neg => {
-                hotscript_unary(source, &mut stack, "Numbers", "Negate")
+                hotscript_unary(
+                    source,
+                    &mut source_types,
+                    "Numbers",
+                    "Negate",
+                    TypeConstraint::Number,
+                );
             }
 
             ////////////////////////////////////////////////
@@ -228,19 +307,20 @@ fn handle_instructions(
             ////////////////////////////////////////////////
             Instruction::LocalGet(index) => {
                 let value = format_index(index);
-                stack.push(SourceType::from_string(value, GenericConstraint::None));
+                source_types.push(SourceType::from_string(value, TypeConstraint::None));
             }
             Instruction::LocalSet(index) => {
                 // `_` before a name means it's a local
                 let name = format_index(index);
-                let value = stack.pop().expect("LocalSet pop");
+                let original = source_types.clone();
+                let value = source_types.pop().expect("LocalSet pop").clone();
                 let constraint = value.constraint;
 
                 statements.push(Statement {
                     name,
-                    stack: value,
+                    source_types: original,
                     constraint,
-                })
+                });
             }
             //Instruction::LocalTee()
             //Instruction::GlobalGet()
@@ -267,13 +347,13 @@ fn handle_instructions(
                 if let Some(td) = source.types.get(&actual_id) {
                     // dbg!(td);
                     let indent = 0; // probably a bug to not get this from somewhere actual.  oh well.
-                    let mut st = SourceType::new(GenericConstraint::Number);
+                    let mut st = SourceType::new(TypeConstraint::Number);
 
                     st.line(indent, format!("{print_id}<"));
 
                     let mut temp = vec![];
                     for (index, _) in td.generics.iter().enumerate() {
-                        let mut st = stack.pop().expect("Call st");
+                        let mut st = source_types.pop().expect("Call st");
 
                         st.increase_indent();
                         // we're going to reverse the temp list after this loop block, so what this is effectively saying is "add a comma at the last line of all expressions except the last one" because (unfortunately) trailing commas in TS arguments are not allowed).
@@ -289,7 +369,7 @@ fn handle_instructions(
                     }
 
                     st.line(indent, ">");
-                    stack.push(st);
+                    source_types.push(st);
                 } else {
                     dbg!(source);
                     panic!("can't find id in Call: {actual_id}");
@@ -297,29 +377,29 @@ fn handle_instructions(
             }
             //Instruction::Drop
             Instruction::End(_) => {
-                let mut else_side = stack.pop().expect("End else_side pop");
+                let mut else_side = source_types.pop().expect("End else_side pop");
                 else_side.prepent_to_first_line(": ");
 
-                let mut then_side = stack.pop().expect("End then_side pop");
-                let mut condition = stack.pop().expect("End condition pop");
+                let mut then_side = source_types.pop().expect("End then_side pop");
+                let mut condition = source_types.pop().expect("End condition pop");
 
                 condition.lines(&mut then_side.lines);
                 condition.lines(&mut else_side.lines);
 
-                stack.push(condition);
+                source_types.push(condition);
             }
             Instruction::BrIf(index) => {
                 dbg!(index);
             }
             Instruction::If(_block) => {
-                let mut condition_pop = stack.pop().expect("If");
+                let mut condition_pop = source_types.pop().expect("If");
                 condition_pop.append_to_last_line(" extends true");
-                stack.push(condition_pop);
+                source_types.push(condition_pop);
             }
             Instruction::Else(_) => {
-                let mut then_side_pop = stack.pop().expect("Else");
+                let mut then_side_pop = source_types.pop().expect("Else");
                 then_side_pop.prepent_to_first_line("? ");
-                stack.push(then_side_pop);
+                source_types.push(then_side_pop);
             }
             //Instruction::Loop()
             //Instruction::Nop
@@ -332,19 +412,31 @@ fn handle_instructions(
         }
     }
 
-    let expr = stack.pop().expect("the stack was totally empty");
-
-    if !stack.is_empty() {
-        panic!("stack is supposed to be empty by now");
-    }
-
-    statements.push(Statement {
+    let results = Statement {
+        constraint: TypeConstraint::None, // TODO: if there's just one then get the one, otherwise get the bunch
         name: RESULT_SENTINEL.to_string(),
-        stack: expr,
-        constraint: GenericConstraint::None,
-    });
+        source_types: result_type_constraints
+            .iter()
+            .map(|tc| {
+                let st = source_types
+                    .pop()
+                    .expect("constraints matched by remaining statements");
+                if *tc != st.constraint {
+                    panic!("non matching constraint");
+                }
+                st
+            })
+            .collect(),
+    };
 
-    statements
+    dbg!(
+        &result_type_constraints,
+        &statements,
+        &source_types,
+        &results
+    );
+
+    (statements, results)
 }
 
 fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
@@ -355,9 +447,9 @@ fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
     }
 }
 
-fn handle_module_field_func(source: &mut SourceFile, func: &Func, module_func_index: usize) {
+fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_index: usize) {
     dbg!(func);
-    dbg!(module_func_index);
+    // dbg!(module_func_index);
     let name = "$".to_string()
         + func
             .id
@@ -365,7 +457,8 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, module_func_in
             .name();
 
     let mut generics = vec![];
-    let mut statements = vec![];
+
+    let mut result_type_constraints: Vec<TypeConstraint> = vec![];
 
     let mut param_names: Vec<Option<String>> = Vec::new();
     if let Some(ref func_type) = func.ty.inline {
@@ -385,20 +478,27 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, module_func_in
                 .collect();
         }
 
+        result_type_constraints = func_type
+            .results
+            .to_vec()
+            .iter()
+            .map(map_valtype_to_typeconstraint)
+            .collect();
+
         // dbg!(func_types);
     }
 
-    match &func.kind {
-        wast::core::FuncKind::Import(_imp) => {}
+    let (statements, results) = match &func.kind {
+        wast::core::FuncKind::Import(_imp) => {
+            panic!("didn't implement FuncKind::Import")
+        }
         wast::core::FuncKind::Inline {
             locals: _,
             expression,
-        } => {
-            statements = handle_instructions(source, &expression.instrs);
-        }
-    }
+        } => handle_instructions(source, &expression.instrs, result_type_constraints),
+    };
 
-    source.add_type(&name, generics, statements);
+    source.add_type(&name, generics, statements, results);
 
     for export in func.exports.names.iter() {
         source.add_export(&name, *export);
@@ -407,17 +507,19 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, module_func_in
 
 fn handle_module_field_global(source: &mut SourceFile, global: &Global) {
     // dbg!(global);
-    let mut statements = vec![];
-
-    match &global.kind {
-        wast::core::GlobalKind::Import(_import) => {}
-        wast::core::GlobalKind::Inline(expression) => {
-            statements = handle_instructions(source, &expression.instrs);
+    let (statements, results) = match &global.kind {
+        wast::core::GlobalKind::Import(_import) => {
+            panic!("not implemented GlobalKind::Import")
         }
-    }
+        wast::core::GlobalKind::Inline(expression) => {
+            let result_type_constraint = map_valtype_to_typeconstraint(&global.ty.ty);
+
+            handle_instructions(source, &expression.instrs, vec![result_type_constraint])
+        }
+    };
 
     let name = "$".to_string() + global.id.unwrap().name();
-    source.add_type(&name, vec![], statements);
+    source.add_type(&name, vec![], statements, results);
 
     for export in global.exports.names.iter() {
         source.add_export(&name, *export);
@@ -478,7 +580,7 @@ fn handle_module_fields(source: &mut SourceFile, fields: &Vec<ModuleField>) {
             }
         }
     }
-    dbg!(module_index);
+    // dbg!(module_index);
 }
 
 fn wat_to_dts(wat: String, dump_path: &str) -> SourceFile {
@@ -489,7 +591,7 @@ fn wat_to_dts(wat: String, dump_path: &str) -> SourceFile {
 
     if let wast::Wat::Module(ref module) = parsed_wat {
         let counter = count_instructions(module);
-        dbg!(&counter);
+        // dbg!(&counter);
 
         let dump = format!("{:#?}\n\n\n\n\n{:#?}", module, counter);
         dbg_dump_file!(dump, dump_path);
@@ -541,7 +643,7 @@ mod tests {
             }
 
             // focus
-            // if file_name != "subtract.wat" {
+            // if file_name != "negate.wat" {
             //     continue;
             // }
 
@@ -563,6 +665,8 @@ mod tests {
                     .unwrap()
                     .to_owned()
             );
+
+            println!("\n\nTRYING WITH {}\n\n", &file_name);
 
             let source = wat_to_dts(wat, &dump_path);
             let actual = source.to_string();

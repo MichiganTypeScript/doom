@@ -1,5 +1,5 @@
 (module
-  (func $theOmniscient
+  (func $theOmniscient (result i32)
 
     ;; load `10` and `3` onto the stack
     i32.const 10

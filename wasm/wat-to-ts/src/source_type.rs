@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::source_file::GenericConstraint;
+use crate::source_file::TypeConstraint;
 
 #[derive(Debug, Clone)]
 pub struct SourceLine {
@@ -16,19 +16,19 @@ impl SourceLine {
 
 #[derive(Debug, Clone)]
 pub struct SourceType {
-    pub constraint: GenericConstraint,
+    pub constraint: TypeConstraint,
     pub lines: Vec<SourceLine>,
 }
 
 impl SourceType {
-    pub fn new(constraint: GenericConstraint) -> Self {
+    pub fn new(constraint: TypeConstraint) -> Self {
         SourceType {
             lines: Vec::new(),
             constraint,
         }
     }
 
-    pub fn from_string<C: Into<String>>(content: C, constraint: GenericConstraint) -> Self {
+    pub fn from_string<C: Into<String>>(content: C, constraint: TypeConstraint) -> Self {
         SourceType {
             constraint,
             lines: content
@@ -88,7 +88,7 @@ impl SourceType {
 
 impl Default for SourceType {
     fn default() -> Self {
-        Self::new(GenericConstraint::None)
+        Self::new(TypeConstraint::None)
     }
 }
 

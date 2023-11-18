@@ -2,31 +2,34 @@ use std::{collections::HashMap, fmt};
 
 use indexmap::{IndexMap, IndexSet};
 
-use crate::{source_type::SourceType, Statement, RESULT_SENTINEL};
+use crate::{
+    source_type::{SourceLine, SourceType},
+    Statement, RESULT_SENTINEL,
+};
 
 pub type Imports = IndexMap<String, IndexSet<String>>;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub enum GenericConstraint {
+pub enum TypeConstraint {
     None,
     Number,
     #[allow(dead_code)] // we'll probably need this later hopefully
     String,
 }
 
-impl fmt::Display for GenericConstraint {
+impl fmt::Display for TypeConstraint {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            GenericConstraint::None => write!(f, ""),
-            GenericConstraint::Number => write!(f, "number"),
-            GenericConstraint::String => write!(f, "string"),
+            TypeConstraint::None => write!(f, ""),
+            TypeConstraint::Number => write!(f, "number"),
+            TypeConstraint::String => write!(f, "string"),
         }
     }
 }
 
 #[derive(Debug)]
 pub struct GenericParameter {
-    pub constraint: GenericConstraint,
+    pub constraint: TypeConstraint,
     pub name: String,
 }
 
@@ -34,13 +37,13 @@ impl GenericParameter {
     #[allow(dead_code)] // we'll probably need this later hopefully
     pub fn new_string<T: Into<String>>(name: T) -> Self {
         GenericParameter {
-            constraint: GenericConstraint::String,
+            constraint: TypeConstraint::String,
             name: name.into(),
         }
     }
     pub fn new_number<T: Into<String>>(name: T) -> Self {
         GenericParameter {
-            constraint: GenericConstraint::Number,
+            constraint: TypeConstraint::Number,
             name: name.into(),
         }
     }
@@ -51,6 +54,7 @@ pub struct TypeDefinition {
     pub name: String,
     pub generics: Vec<GenericParameter>,
     pub statements: Vec<Statement>,
+    pub results: Statement,
 }
 
 pub type TypeDefinitions = IndexMap<String, TypeDefinition>;
@@ -71,9 +75,17 @@ pub fn create_type(
     exported: bool,
     name: String,
     generics: Vec<String>,
-    statements: Vec<Statement>,
+    statements: &mut Vec<Statement>,
+    mut results: Statement,
 ) -> String {
-    // dbg!(exported, &name, &generics, &statements);
+    dbg!(
+        "create type",
+        exported,
+        &name,
+        &generics,
+        &statements,
+        &results
+    );
 
     let export = if exported { "export " } else { "" };
 
@@ -82,20 +94,67 @@ pub fn create_type(
         g = generics.iter().map(|line| line.to_string() + ",").collect();
     }
 
+    // handle results
+    let has_multiple_returns = results.source_types.len() > 1;
+    if !has_multiple_returns {
+        statements.push(results);
+    } else {
+        let mut source_lines: Vec<SourceLine> = vec![SourceLine {
+            indent: 0,
+            text: "[".to_string(),
+        }];
+
+        results
+            .source_types
+            .iter_mut()
+            .rev()
+            .for_each(|source_type| {
+                let last = source_type
+                    .lines
+                    .last_mut()
+                    .expect("source type for result");
+                last.text += ",";
+
+                source_type.increase_indent();
+
+                source_lines.append(&mut source_type.lines);
+            });
+
+        source_lines.push(SourceLine {
+            indent: 0,
+            text: "]".to_string(),
+        });
+
+        let array_return = Statement {
+            constraint: TypeConstraint::None, // TODO: need to pass this along
+            name: RESULT_SENTINEL.to_string(),
+            source_types: vec![SourceType {
+                constraint: TypeConstraint::None, // TODO need to get this from somewhere
+                lines: source_lines,
+            }],
+        };
+        statements.push(array_return);
+    }
+
     let s = &statements
         .iter()
         .map(|statement| {
             let mut working = statement.clone();
-            let extends = if working.constraint != GenericConstraint::None {
+            let extends = if working.constraint != TypeConstraint::None {
                 " extends ".to_string() + &working.constraint.to_string()
             } else {
                 String::new()
             };
 
-            working.stack.increase_indent();
-            working.stack.increase_indent();
+            let mut working_stack = working
+                .source_types
+                .pop()
+                .expect("tried to pop a SourceType from statements but there wasn't one");
+
+            working_stack.increase_indent();
+            working_stack.increase_indent();
             let before_equals = "\n  ".to_string() + &working.name + &extends + " ";
-            let mut after_equals = "\n".to_string() + &working.stack.to_string();
+            let mut after_equals = "\n".to_string() + &working_stack.to_string();
             after_equals.pop();
             before_equals.to_string() + "=" + &after_equals
         })
@@ -138,11 +197,15 @@ impl ToString for SourceFile {
                     .collect::<Vec<_>>()
             }
 
+            let mut statements = definition.statements.clone();
+            let results = definition.results.clone();
+
             let name = create_type(
                 false,
                 type_key.clone(),
                 generics.clone(),
-                definition.statements.clone(),
+                &mut statements,
+                results,
             );
 
             lines.push(name);
@@ -169,11 +232,15 @@ impl ToString for SourceFile {
                         true,
                         export_name.to_string(),
                         generics.clone(),
-                        vec![Statement {
+                        &mut vec![],
+                        Statement {
                             name: RESULT_SENTINEL.to_string(),
-                            stack: SourceType::from_string(result, GenericConstraint::None),
-                            constraint: GenericConstraint::None,
-                        }],
+                            source_types: vec![SourceType::from_string(
+                                result,
+                                TypeConstraint::None,
+                            )],
+                            constraint: TypeConstraint::None,
+                        },
                     );
 
                     lines.push(export_section);
@@ -199,11 +266,12 @@ impl SourceFile {
         entry.insert(import.into());
     }
 
-    pub fn add_type<N: Into<String>, G: Into<Vec<GenericParameter>>>(
+    pub fn add_type<N: Into<String>>(
         &mut self,
         name: N,
-        generics: G,
+        generics: Vec<GenericParameter>,
         statements: Vec<Statement>,
+        results: Statement,
     ) {
         let name = name.into();
         if self.types.contains_key(&name) {
@@ -213,8 +281,9 @@ impl SourceFile {
             name.clone(),
             TypeDefinition {
                 statements,
-                generics: generics.into(),
+                generics,
                 name,
+                results,
             },
         );
     }
