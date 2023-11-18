@@ -489,6 +489,7 @@ fn wat_to_dts(wat: String, dump_path: &str) -> SourceFile {
 
     if let wast::Wat::Module(ref module) = parsed_wat {
         let counter = count_instructions(module);
+        dbg!(&counter);
 
         let dump = format!("{:#?}\n\n\n\n\n{:#?}", module, counter);
         dbg_dump_file!(dump, dump_path);

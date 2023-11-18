@@ -5,10 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "compile:c-to-wasm": "emcc src/code.c -o src/code.wasm -g",
-    "compile:wasm-to-wat": "wasm2wat src/code.wasm --output src/code.wat",
+    "compile:c-to-wasm": "emcc src/debug/code.c -o src/debug/code.wasm -g",
+    "compile:wasm-to-wat": "wasm2wat src/debug/code.wasm --output src/debug/code.wat",
     "compile:c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
-    "compile:wat-to-wasm": "wat2wasm src/code.wat --output src/code.wasm",
+    "compile:wat-to-wasm": "wat2wasm src/debug/code.wat --output src/debug/code.wasm",
     "test:wasm": "tsx src/test.ts",
     "test": "tsc --project tsconfig.test.json"
   },
