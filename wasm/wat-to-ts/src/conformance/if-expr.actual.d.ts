@@ -6,10 +6,10 @@ type $ifexpr<
   RESULT =
     Call<Numbers.Add<
       $n,
-      Call<Numbers.GreaterThanOrEqual<
+      (Call<Numbers.GreaterThanOrEqual<
         $control,
         0
-      >> extends true
+      >> extends true ? 1 : 0) extends 1
       ? 1
       : -1
     >>

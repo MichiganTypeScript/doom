@@ -36,6 +36,7 @@ fn hotscript_unary<N: Into<String> + Copy>(
     namespace: N,
     method: N,
     result_type_constraint: TypeConstraint,
+    is_predicate: bool,
 ) {
     source.add_import("hotscript", "Call");
     source.add_import("hotscript", namespace.into());
@@ -53,12 +54,24 @@ fn hotscript_unary<N: Into<String> + Copy>(
 
     let mut st = SourceType::new(result_type_constraint);
 
+    let predicate_prefix = if is_predicate { "(" } else { "" };
+    let predicate_suffix = if is_predicate {
+        " extends true ? 1 : 0)"
+    } else {
+        ""
+    };
+
     st.line(
         indent,
-        format!("Call<{}.{}<", namespace.into(), method.into()),
+        format!(
+            "{}Call<{}.{}<",
+            predicate_prefix,
+            namespace.into(),
+            method.into()
+        ),
     );
     st.lines(&mut operand.lines);
-    st.line(indent, ">>");
+    st.line(indent, format!(">>{predicate_suffix}"));
 
     stack.push(st);
 }
@@ -69,6 +82,7 @@ fn hotscript_binary<N: Into<String> + Copy>(
     namespace: N,
     method: N,
     result_type_constraint: TypeConstraint,
+    is_predicate: bool,
 ) {
     source.add_import("hotscript", "Call");
     source.add_import("hotscript", namespace.into());
@@ -83,9 +97,22 @@ fn hotscript_binary<N: Into<String> + Copy>(
     let mut st = SourceType::new(result_type_constraint);
 
     let indent = rhs.lines.first().expect("I32GtS indent").indent;
+
+    let predicate_prefix = if is_predicate { "(" } else { "" };
+    let predicate_suffix = if is_predicate {
+        " extends true ? 1 : 0)"
+    } else {
+        ""
+    };
+
     st.line(
         indent,
-        format!("Call<{}.{}<", namespace.into(), method.into()),
+        format!(
+            "{}Call<{}.{}<",
+            predicate_prefix,
+            namespace.into(),
+            method.into()
+        ),
     );
 
     lhs.increase_indent();
@@ -95,7 +122,7 @@ fn hotscript_binary<N: Into<String> + Copy>(
     rhs.increase_indent();
     st.lines(&mut rhs.lines);
 
-    st.line(indent, ">>");
+    st.line(indent, format!(">>{predicate_suffix}"));
     stack.push(st);
 }
 
@@ -151,6 +178,7 @@ fn handle_instructions(
                     "Numbers",
                     "Equal",
                     TypeConstraint::Number,
+                    true,
                 );
             }
             Instruction::I32Eqz | Instruction::I64Eqz => {
@@ -161,6 +189,7 @@ fn handle_instructions(
                     "Numbers",
                     "Equal",
                     TypeConstraint::Number,
+                    true,
                 );
             }
             Instruction::I32Ne | Instruction::I64Ne | Instruction::F32Ne | Instruction::F64Ne => {
@@ -170,6 +199,7 @@ fn handle_instructions(
                     "Numbers",
                     "NotEqual",
                     TypeConstraint::Number,
+                    true,
                 );
             }
             Instruction::I32GtS
@@ -184,6 +214,7 @@ fn handle_instructions(
                     "Numbers",
                     "GreaterThan",
                     TypeConstraint::Number,
+                    true,
                 );
             }
             Instruction::I32GeS
@@ -198,6 +229,7 @@ fn handle_instructions(
                     "Numbers",
                     "GreaterThanOrEqual",
                     TypeConstraint::Number,
+                    true,
                 );
             }
             Instruction::I32LtS
@@ -212,6 +244,7 @@ fn handle_instructions(
                     "Numbers",
                     "LessThan",
                     TypeConstraint::Number,
+                    true,
                 );
             }
             Instruction::I32LeS
@@ -226,6 +259,7 @@ fn handle_instructions(
                     "Numbers",
                     "LessThanOrEqual",
                     TypeConstraint::Number,
+                    true,
                 );
             }
 
@@ -241,6 +275,7 @@ fn handle_instructions(
                     "Numbers",
                     "Add",
                     TypeConstraint::Number,
+                    false,
                 );
             }
             Instruction::I32Sub
@@ -253,6 +288,7 @@ fn handle_instructions(
                     "Numbers",
                     "Sub",
                     TypeConstraint::Number,
+                    false,
                 );
             }
             Instruction::I32Mul
@@ -265,6 +301,7 @@ fn handle_instructions(
                     "Numbers",
                     "Mul",
                     TypeConstraint::Number,
+                    false,
                 );
             }
             Instruction::I32DivS
@@ -277,6 +314,7 @@ fn handle_instructions(
                     "Numbers",
                     "Div",
                     TypeConstraint::Number,
+                    false,
                 );
             }
 
@@ -289,6 +327,7 @@ fn handle_instructions(
                     "Numbers",
                     "Abs",
                     TypeConstraint::Number,
+                    false,
                 );
             }
             Instruction::F32Neg | Instruction::F64Neg => {
@@ -298,6 +337,7 @@ fn handle_instructions(
                     "Numbers",
                     "Negate",
                     TypeConstraint::Number,
+                    false,
                 );
             }
 
@@ -378,7 +418,7 @@ fn handle_instructions(
             //Instruction::Drop
             Instruction::End(_) => {
                 let mut else_side = source_types.pop().expect("End else_side pop");
-                else_side.prepent_to_first_line(": ");
+                else_side.prepend_to_first_line(": ");
 
                 let mut then_side = source_types.pop().expect("End then_side pop");
                 let mut condition = source_types.pop().expect("End condition pop");
@@ -393,12 +433,12 @@ fn handle_instructions(
             }
             Instruction::If(_block) => {
                 let mut condition_pop = source_types.pop().expect("If");
-                condition_pop.append_to_last_line(" extends true");
+                condition_pop.append_to_last_line(" extends 1");
                 source_types.push(condition_pop);
             }
             Instruction::Else(_) => {
                 let mut then_side_pop = source_types.pop().expect("Else");
-                then_side_pop.prepent_to_first_line("? ");
+                then_side_pop.prepend_to_first_line("? ");
                 source_types.push(then_side_pop);
             }
             //Instruction::Loop()

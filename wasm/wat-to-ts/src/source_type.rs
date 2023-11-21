@@ -68,7 +68,7 @@ impl SourceType {
             .collect();
     }
 
-    pub fn prepent_to_first_line(&mut self, content: &str) {
+    pub fn prepend_to_first_line(&mut self, content: &str) {
         if let Some(first_line) = self.lines.first_mut() {
             first_line.text = content.to_string() + &first_line.text;
         } else {
