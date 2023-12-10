@@ -682,7 +682,7 @@ mod tests {
                 continue;
             }
 
-            // focus
+            // // focus
             // if file_name != "negate.wat" {
             //     continue;
             // }
