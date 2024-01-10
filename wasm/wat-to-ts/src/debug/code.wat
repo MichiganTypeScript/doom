@@ -1,5 +1,6 @@
 (func $foo (param $x i32) (result i32)
   (local $result i32)
+
   (block $outer_block
     (block $middle_block
       (block $inner_block

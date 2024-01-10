@@ -1,13 +1,19 @@
 import { Call, Numbers } from 'hotscript'
 
+type Satisfies<Base, T extends Base> = T;
+type x = Satisfies<number, 2>;
+
+type Satisfies2<Base, T> = T extends Base ? T : never;
+type y = Satisfies2<number, 2>;
+
 type $main<
   $a extends number,
   $b extends number,
-  RESULT =
-    (Call<Numbers.Equal<
+  RESULT extends number =
+    Call<Numbers.Equal<
       $a,
       $b
-    >> extends true ? 1 : 0)
+    >>
 > = RESULT
 
 export type equal<

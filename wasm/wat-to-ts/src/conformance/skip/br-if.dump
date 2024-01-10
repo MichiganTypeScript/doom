@@ -21,7 +21,9 @@ Module {
                     kind: Inline {
                         locals: [
                             Local {
-                                id: None,
+                                id: Some(
+                                    "result",
+                                ),
                                 name: None,
                                 ty: I32,
                             },
@@ -30,7 +32,9 @@ Module {
                             instrs: [
                                 Block(
                                     BlockType {
-                                        label: None,
+                                        label: Some(
+                                            "outer_block",
+                                        ),
                                         label_name: None,
                                         ty: TypeUse {
                                             index: None,
@@ -40,7 +44,9 @@ Module {
                                 ),
                                 Block(
                                     BlockType {
-                                        label: None,
+                                        label: Some(
+                                            "middle_block",
+                                        ),
                                         label_name: None,
                                         ty: TypeUse {
                                             index: None,
@@ -50,7 +56,9 @@ Module {
                                 ),
                                 Block(
                                     BlockType {
-                                        label: None,
+                                        label: Some(
+                                            "inner_block",
+                                        ),
                                         label_name: None,
                                         ty: TypeUse {
                                             index: None,
@@ -59,28 +67,19 @@ Module {
                                     },
                                 ),
                                 LocalGet(
-                                    Num(
-                                        0,
-                                        Span {
-                                            offset: 167,
-                                        },
+                                    Id(
+                                        "x",
                                     ),
                                 ),
                                 I32Eqz,
                                 BrIf(
-                                    Num(
-                                        0,
-                                        Span {
-                                            offset: 221,
-                                        },
+                                    Id(
+                                        "inner_block",
                                     ),
                                 ),
                                 LocalGet(
-                                    Num(
-                                        0,
-                                        Span {
-                                            offset: 282,
-                                        },
+                                    Id(
+                                        "x",
                                     ),
                                 ),
                                 I32Const(
@@ -88,30 +87,21 @@ Module {
                                 ),
                                 I32Eq,
                                 BrIf(
-                                    Num(
-                                        1,
-                                        Span {
-                                            offset: 366,
-                                        },
+                                    Id(
+                                        "middle_block",
                                     ),
                                 ),
                                 I32Const(
                                     7,
                                 ),
                                 LocalSet(
-                                    Num(
-                                        1,
-                                        Span {
-                                            offset: 467,
-                                        },
+                                    Id(
+                                        "result",
                                     ),
                                 ),
                                 Br(
-                                    Num(
-                                        2,
-                                        Span {
-                                            offset: 491,
-                                        },
+                                    Id(
+                                        "outer_block",
                                     ),
                                 ),
                                 End(
@@ -121,19 +111,13 @@ Module {
                                     42,
                                 ),
                                 LocalSet(
-                                    Num(
-                                        1,
-                                        Span {
-                                            offset: 543,
-                                        },
+                                    Id(
+                                        "result",
                                     ),
                                 ),
                                 Br(
-                                    Num(
-                                        1,
-                                        Span {
-                                            offset: 561,
-                                        },
+                                    Id(
+                                        "outer_block",
                                     ),
                                 ),
                                 End(
@@ -143,22 +127,16 @@ Module {
                                     99,
                                 ),
                                 LocalSet(
-                                    Num(
-                                        1,
-                                        Span {
-                                            offset: 605,
-                                        },
+                                    Id(
+                                        "result",
                                     ),
                                 ),
                                 End(
                                     None,
                                 ),
                                 LocalGet(
-                                    Num(
-                                        1,
-                                        Span {
-                                            offset: 625,
-                                        },
+                                    Id(
+                                        "result",
                                     ),
                                 ),
                             ],
@@ -170,7 +148,9 @@ Module {
                             FunctionType {
                                 params: [
                                     (
-                                        None,
+                                        Some(
+                                            "x",
+                                        ),
                                         None,
                                         I32,
                                     ),
