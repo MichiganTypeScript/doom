@@ -343,12 +343,6 @@ pub fn count_instructions(module: &Module) -> IndexMap<String, u32> {
                             Instruction::BrOnCastFail(_) => {
                                 *counts.entry("BrOnCastFail".to_string()).or_insert(0) += 1
                             }
-                            Instruction::ExternInternalize => {
-                                *counts.entry("ExternInternalize".to_string()).or_insert(0) += 1
-                            }
-                            Instruction::ExternExternalize => {
-                                *counts.entry("ExternExternalize".to_string()).or_insert(0) += 1
-                            }
                             Instruction::I32Const(_) => {
                                 *counts.entry("I32Const".to_string()).or_insert(0) += 1
                             }
@@ -1861,8 +1855,13 @@ pub fn count_instructions(module: &Module) -> IndexMap<String, u32> {
                                 *counts
                                     .entry("I32x4RelaxedDotI8x16I7x16AddS".to_string())
                                     .or_insert(0) += 1
-                            } // ... handle other instruction types similarly // Handle or ignore other cases as needed
+                            }
+                            Instruction::AnyConvertExtern => {}
+                            Instruction::ExternConvertAny => {
+                                *counts.entry("ExternConvertAny".to_string()).or_insert(0) += 1
+                            }
                         }
+                        // ... handle other instruction types similarly // Handle or ignore other cases as needed
                     }
                 }
             }
