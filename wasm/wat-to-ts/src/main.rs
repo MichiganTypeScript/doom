@@ -453,7 +453,19 @@ fn handle_instructions(
             //Instruction::Loop()
             //Instruction::Nop
             //Instruction::Return
-            //Instruction::Select()
+            Instruction::Select(_select_types) => {
+                let condition = source_types.pop().expect("select 1");
+                let falsy = source_types.pop().expect("select2");
+                let truthy = source_types.pop().expect("select2");
+
+                let mut st = SourceType::new(TypeConstraint::Number);
+
+                st.line(0, format!("{} extends 0", condition.to_string().trim_end()));
+                st.line(0, format!("? {}", falsy.to_string().trim_end()));
+                st.line(0, format!(": {}", truthy.to_string().trim_end()));
+
+                source_types.push(st);
+            }
             //Instruction::Unreachable
             _ => {
                 panic!("not implemented instruction {:#?}", instruction);
@@ -691,10 +703,10 @@ mod tests {
                 continue;
             }
 
-            // // focus
-            // if file_name != "call.wat" {
-            //     continue;
-            // }
+            // focus
+            if file_name != "select.wat" {
+                continue;
+            }
 
             // // skip
             // if file_name == "equal.wat" {

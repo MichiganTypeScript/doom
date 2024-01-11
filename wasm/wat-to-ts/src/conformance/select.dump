@@ -1,0 +1,115 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "selectTrue",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "selectTrue",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    10,
+                                ),
+                                I32Const(
+                                    20,
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                Select(
+                                    SelectTypes {
+                                        tys: None,
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 134,
+                    },
+                    id: Some(
+                        "selectFalse",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "selectFalse",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    10,
+                                ),
+                                I32Const(
+                                    20,
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                Select(
+                                    SelectTypes {
+                                        tys: None,
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "I32Const": 6,
+    "Select": 2,
+}

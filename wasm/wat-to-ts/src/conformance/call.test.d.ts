@@ -1,4 +1,4 @@
-import { get42Plus1 } from "./call.expected.d.ts";
+import type { get42Plus1 } from "./call.actual.d.ts";
 import { Expect, Equal } from "type-testing";
 
 type testCases = [

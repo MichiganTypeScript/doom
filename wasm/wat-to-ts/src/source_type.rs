@@ -14,6 +14,7 @@ impl SourceLine {
     }
 }
 
+/// a SourceType is sorta like a fragment of code that's resolved and possible to be returned
 #[derive(Debug, Clone)]
 pub struct SourceType {
     pub constraint: TypeConstraint,
