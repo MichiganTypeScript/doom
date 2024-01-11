@@ -1,9 +1,11 @@
 use std::{collections::HashMap, fmt};
 
 use indexmap::{IndexMap, IndexSet};
+use wast::core::Local;
 
 use crate::{
-    source_type::{SourceLine, SourceType},
+    fragment::{Fragment, SourceLine},
+    utils::{format_call_id, map_valtype_to_typeconstraint},
     Statement, RESULT_SENTINEL,
 };
 
@@ -49,6 +51,16 @@ impl GenericParameter {
     }
 }
 
+impl From<&Local<'_>> for GenericParameter {
+    fn from(local: &Local) -> Self {
+        let name = local.id.expect("didn't get local name").name().to_string();
+        GenericParameter {
+            constraint: map_valtype_to_typeconstraint(&local.ty),
+            name: format_call_id(name),
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct TypeDefinition {
     /// the name of the type
@@ -68,7 +80,11 @@ pub type TypeDefinitions = IndexMap<String, TypeDefinition>;
 
 pub struct SourceFile {
     pub imports: Imports,
+
+    /// separate typescript type definitions for this type
     pub types: TypeDefinitions,
+
+    /// exports declared for this type
     pub exports: HashMap<String, Vec<String>>,
 }
 
@@ -102,7 +118,7 @@ pub fn create_type(
     }
 
     // handle results
-    let has_multiple_returns = results.source_types.len() > 1;
+    let has_multiple_returns = results.fragments.len() > 1;
     if !has_multiple_returns {
         statements.push(results);
     } else {
@@ -111,21 +127,14 @@ pub fn create_type(
             text: "[".to_string(),
         }];
 
-        results
-            .source_types
-            .iter_mut()
-            .rev()
-            .for_each(|source_type| {
-                let last = source_type
-                    .lines
-                    .last_mut()
-                    .expect("source type for result");
-                last.text += ",";
+        results.fragments.iter_mut().rev().for_each(|fragment| {
+            let last = fragment.lines.last_mut().expect("source type for result");
+            last.text += ",";
 
-                source_type.increase_indent();
+            fragment.increase_indent();
 
-                source_lines.append(&mut source_type.lines);
-            });
+            source_lines.append(&mut fragment.lines);
+        });
 
         source_lines.push(SourceLine {
             indent: 0,
@@ -135,7 +144,7 @@ pub fn create_type(
         let array_return = Statement {
             constraint: TypeConstraint::None, // TODO: need to pass this along
             name: RESULT_SENTINEL.to_string(),
-            source_types: vec![SourceType {
+            fragments: vec![Fragment {
                 constraint: TypeConstraint::None, // TODO need to get this from somewhere
                 lines: source_lines,
             }],
@@ -154,9 +163,9 @@ pub fn create_type(
             };
 
             let mut working_stack = working
-                .source_types
+                .fragments
                 .pop()
-                .expect("tried to pop a SourceType from statements but there wasn't one");
+                .expect("tried to pop a Fragment from statements but there wasn't one");
 
             working_stack.increase_indent();
             working_stack.increase_indent();
@@ -242,10 +251,7 @@ impl ToString for SourceFile {
                         &mut vec![],
                         Statement {
                             name: RESULT_SENTINEL.to_string(),
-                            source_types: vec![SourceType::from_string(
-                                result,
-                                TypeConstraint::None,
-                            )],
+                            fragments: vec![Fragment::from_string(result, TypeConstraint::None)],
                             constraint: TypeConstraint::None,
                         },
                     );

@@ -14,23 +14,23 @@ impl SourceLine {
     }
 }
 
-/// a SourceType is sorta like a fragment of code that's resolved and possible to be returned
+/// a fragment of code that's resolved and possible to be returned
 #[derive(Debug, Clone)]
-pub struct SourceType {
+pub struct Fragment {
     pub constraint: TypeConstraint,
     pub lines: Vec<SourceLine>,
 }
 
-impl SourceType {
+impl Fragment {
     pub fn new(constraint: TypeConstraint) -> Self {
-        SourceType {
+        Fragment {
             lines: Vec::new(),
             constraint,
         }
     }
 
     pub fn from_string<C: Into<String>>(content: C, constraint: TypeConstraint) -> Self {
-        SourceType {
+        Fragment {
             constraint,
             lines: content
                 .into()
@@ -87,13 +87,13 @@ impl SourceType {
     }
 }
 
-impl Default for SourceType {
+impl Default for Fragment {
     fn default() -> Self {
         Self::new(TypeConstraint::None)
     }
 }
 
-impl fmt::Display for SourceType {
+impl fmt::Display for Fragment {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         for SourceLine { indent, text } in &self.lines {
             let indentation = "  ".repeat(*indent);

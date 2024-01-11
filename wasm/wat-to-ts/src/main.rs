@@ -1,13 +1,15 @@
 extern crate wast;
 
+mod fragment;
 mod source_file;
-mod source_type;
+mod statement;
 mod utils;
 
-use source_type::SourceType;
+use fragment::Fragment;
 
 use source_file::{GenericParameter, SourceFile, TypeConstraint};
-use std::{collections::HashMap, fs, vec};
+use statement::Statement;
+use std::{collections::HashMap, fmt::Display, fs, vec};
 use utils::map_valtype_to_typeconstraint;
 use wast::{
     core::{Export, Func, Global, Instruction, ModuleField, ModuleKind},
@@ -18,13 +20,6 @@ use wast::{
 
 use crate::utils::{count_instructions, format_call_id, format_index, format_index_name};
 
-#[derive(Debug, Clone)]
-pub struct Statement {
-    pub name: String,
-    pub constraint: TypeConstraint,
-    pub source_types: Vec<SourceType>,
-}
-
 const RESULT_SENTINEL: &str = "RESULT";
 
 #[macro_use]
@@ -32,7 +27,7 @@ extern crate pretty_assertions;
 
 fn hotscript_unary<N: Into<String> + Copy>(
     source: &mut SourceFile,
-    stack: &mut Vec<SourceType>,
+    stack: &mut Vec<Fragment>,
     namespace: N,
     method: N,
     result_type_constraint: TypeConstraint,
@@ -52,7 +47,7 @@ fn hotscript_unary<N: Into<String> + Copy>(
         .indent;
     operand.increase_indent();
 
-    let mut st = SourceType::new(result_type_constraint);
+    let mut f = Fragment::new(result_type_constraint);
 
     let predicate_prefix = if is_predicate { "(" } else { "" };
     let predicate_suffix = if is_predicate {
@@ -61,7 +56,7 @@ fn hotscript_unary<N: Into<String> + Copy>(
         ""
     };
 
-    st.line(
+    f.line(
         indent,
         format!(
             "{}Call<{}.{}<",
@@ -70,15 +65,15 @@ fn hotscript_unary<N: Into<String> + Copy>(
             method.into()
         ),
     );
-    st.lines(&mut operand.lines);
-    st.line(indent, format!(">>{predicate_suffix}"));
+    f.lines(&mut operand.lines);
+    f.line(indent, format!(">>{predicate_suffix}"));
 
-    stack.push(st);
+    stack.push(f);
 }
 
-fn hotscript_binary<N: Into<String> + Copy>(
+fn hotscript_binary<N: Into<String> + Copy + Display>(
     source: &mut SourceFile,
-    stack: &mut Vec<SourceType>,
+    stack: &mut Vec<Fragment>,
     namespace: N,
     method: N,
     result_type_constraint: TypeConstraint,
@@ -94,9 +89,13 @@ fn hotscript_binary<N: Into<String> + Copy>(
         .pop()
         .unwrap_or_else(|| panic!("{} lhs pop", &method.into()));
 
-    let mut st = SourceType::new(result_type_constraint);
+    let mut f = Fragment::new(result_type_constraint);
 
-    let indent = rhs.lines.first().expect("I32GtS indent").indent;
+    let indent = rhs
+        .lines
+        .first()
+        .unwrap_or_else(|| panic!("{} indent", &method.into()))
+        .indent;
 
     let predicate_prefix = if is_predicate { "(" } else { "" };
     let predicate_suffix = if is_predicate {
@@ -105,35 +104,36 @@ fn hotscript_binary<N: Into<String> + Copy>(
         ""
     };
 
-    st.line(
+    f.line(
         indent,
         format!(
             "{}Call<{}.{}<",
             predicate_prefix,
             namespace.into(),
-            method.into()
+            &method.into()
         ),
     );
 
     lhs.increase_indent();
     lhs.map_lines(|text| format!("{text},"));
-    st.lines(&mut lhs.lines);
+    f.lines(&mut lhs.lines);
 
     rhs.increase_indent();
-    st.lines(&mut rhs.lines);
+    f.lines(&mut rhs.lines);
 
-    st.line(indent, format!(">>{predicate_suffix}"));
-    stack.push(st);
+    f.line(indent, format!(">>{predicate_suffix}"));
+    stack.push(f);
 }
 
 fn handle_instructions(
     source: &mut SourceFile,
     instructions: &[Instruction<'_>],
     result_type_constraints: Vec<TypeConstraint>,
+    generics: &mut Vec<GenericParameter>,
 ) -> (Vec<Statement>, Statement) {
     let mut statements: Vec<Statement> = Vec::new();
 
-    let mut source_types: Vec<SourceType> = Vec::new();
+    let mut fragments: Vec<Fragment> = Vec::new();
 
     for instruction in instructions.iter() {
         // dbg!(&stack);
@@ -151,13 +151,13 @@ fn handle_instructions(
             ////// Constants
             //////
             Instruction::I32Const(num) => {
-                source_types.push(SourceType::from_string(
+                fragments.push(Fragment::from_string(
                     num.to_string(),
                     TypeConstraint::Number,
                 ));
             }
             Instruction::I64Const(num) => {
-                source_types.push(SourceType::from_string(
+                fragments.push(Fragment::from_string(
                     num.to_string(),
                     TypeConstraint::Number,
                 ));
@@ -166,7 +166,7 @@ fn handle_instructions(
             Instruction::F64Const(raw_bits) => {
                 let float_value = f64::from_bits(raw_bits.bits).to_string();
 
-                source_types.push(SourceType::from_string(float_value, TypeConstraint::Number));
+                fragments.push(Fragment::from_string(float_value, TypeConstraint::Number));
             }
 
             ////// Comparison
@@ -174,7 +174,7 @@ fn handle_instructions(
             Instruction::I32Eq | Instruction::I64Eq | Instruction::F32Eq | Instruction::F64Eq => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "Equal",
                     TypeConstraint::Number,
@@ -182,10 +182,10 @@ fn handle_instructions(
                 );
             }
             Instruction::I32Eqz | Instruction::I64Eqz => {
-                source_types.push(SourceType::from_string("0", TypeConstraint::Number));
+                fragments.push(Fragment::from_string("0", TypeConstraint::Number));
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "Equal",
                     TypeConstraint::Number,
@@ -195,7 +195,7 @@ fn handle_instructions(
             Instruction::I32Ne | Instruction::I64Ne | Instruction::F32Ne | Instruction::F64Ne => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "NotEqual",
                     TypeConstraint::Number,
@@ -210,7 +210,7 @@ fn handle_instructions(
             | Instruction::F64Gt => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "GreaterThan",
                     TypeConstraint::Number,
@@ -225,7 +225,7 @@ fn handle_instructions(
             | Instruction::F64Ge => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "GreaterThanOrEqual",
                     TypeConstraint::Number,
@@ -240,7 +240,7 @@ fn handle_instructions(
             | Instruction::F64Lt => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "LessThan",
                     TypeConstraint::Number,
@@ -255,7 +255,7 @@ fn handle_instructions(
             | Instruction::F64Le => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "LessThanOrEqual",
                     TypeConstraint::Number,
@@ -271,7 +271,7 @@ fn handle_instructions(
             | Instruction::F64Add => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "Add",
                     TypeConstraint::Number,
@@ -284,7 +284,7 @@ fn handle_instructions(
             | Instruction::F64Sub => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "Sub",
                     TypeConstraint::Number,
@@ -297,7 +297,7 @@ fn handle_instructions(
             | Instruction::F64Mul => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "Mul",
                     TypeConstraint::Number,
@@ -310,7 +310,7 @@ fn handle_instructions(
             | Instruction::I64DivU => {
                 hotscript_binary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "Div",
                     TypeConstraint::Number,
@@ -323,7 +323,7 @@ fn handle_instructions(
             Instruction::F32Abs | Instruction::F64Abs => {
                 hotscript_unary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "Abs",
                     TypeConstraint::Number,
@@ -333,7 +333,7 @@ fn handle_instructions(
             Instruction::F32Neg | Instruction::F64Neg => {
                 hotscript_unary(
                     source,
-                    &mut source_types,
+                    &mut fragments,
                     "Numbers",
                     "Negate",
                     TypeConstraint::Number,
@@ -347,22 +347,29 @@ fn handle_instructions(
             ////////////////////////////////////////////////
             Instruction::LocalGet(index) => {
                 let value = format_index(index);
-                source_types.push(SourceType::from_string(value, TypeConstraint::None));
+                fragments.push(Fragment::from_string(value, TypeConstraint::None));
             }
             Instruction::LocalSet(index) => {
                 // `_` before a name means it's a local
                 let name = format_index(index);
-                let original = source_types.clone();
-                let value = source_types.pop().expect("LocalSet pop").clone();
-                let constraint = value.constraint;
+
+                // need to remove a generic parameter because we're about to set it (thereby no longer will it be a parameter, it's now a statement)
+                generics.retain(|generic| generic.name != name);
+
+                let original = fragments.clone();
+                let value = fragments.pop().expect("LocalSet pop").clone();
 
                 statements.push(Statement {
                     name,
-                    source_types: original,
-                    constraint,
+                    fragments: original,
+                    constraint: value.constraint,
                 });
             }
-            //Instruction::LocalTee()
+            Instruction::LocalTee(index) => {
+                let name = format_index(index);
+                let thing = Fragment::from_string(name, TypeConstraint::Number);
+                fragments.push(thing.clone());
+            }
             //Instruction::GlobalGet()
             //Instruction::GlobalSet()
 
@@ -391,34 +398,34 @@ fn handle_instructions(
                     // td.generics.length()
 
                     let indent = 0; // probably a bug to not get this from somewhere actual.  oh well.
-                    let mut st = SourceType::new(TypeConstraint::Number);
+                    let mut f = Fragment::new(TypeConstraint::Number);
 
                     if td.generics.is_empty() {
-                        st.line(indent, actual_id);
+                        f.line(indent, actual_id);
                     } else {
-                        st.line(indent, format!("{print_id}<"));
+                        f.line(indent, format!("{print_id}<"));
 
                         let mut temp = vec![];
                         for (index, _) in td.generics.iter().enumerate() {
-                            let mut st = source_types.pop().expect("Call st");
+                            let mut f = fragments.pop().expect("Call st");
 
-                            st.increase_indent();
+                            f.increase_indent();
                             // we're going to reverse the temp list after this loop block, so what this is effectively saying is "add a comma at the last line of all expressions except the last one" because (unfortunately) trailing commas in TS arguments are not allowed).
                             if index != 0 {
-                                st.append_to_last_line(",");
+                                f.append_to_last_line(",");
                             }
-                            temp.push(st.lines);
+                            temp.push(f.lines);
                         }
 
                         temp.reverse();
                         for mut t in temp {
-                            st.lines(&mut t);
+                            f.lines(&mut t);
                         }
 
-                        st.line(indent, ">");
+                        f.line(indent, ">");
                     }
 
-                    source_types.push(st);
+                    fragments.push(f);
                 } else {
                     dbg!(source);
                     panic!("can't find id in Call: {actual_id}");
@@ -426,47 +433,49 @@ fn handle_instructions(
             }
             //Instruction::Drop
             Instruction::End(_) => {
-                let mut else_side = source_types.pop().expect("End else_side pop");
+                let mut else_side = fragments.pop().expect("End else_side pop");
                 else_side.prepend_to_first_line(": ");
 
-                let mut then_side = source_types.pop().expect("End then_side pop");
-                let mut condition = source_types.pop().expect("End condition pop");
+                let mut then_side = fragments.pop().expect("End then_side pop");
+                let mut condition = fragments.pop().expect("End condition pop");
 
                 condition.lines(&mut then_side.lines);
                 condition.lines(&mut else_side.lines);
 
-                source_types.push(condition);
+                fragments.push(condition);
             }
             Instruction::BrIf(index) => {
                 dbg!(index);
             }
             Instruction::If(_block) => {
-                let mut condition_pop = source_types.pop().expect("If");
+                let mut condition_pop = fragments.pop().expect("If");
                 condition_pop.append_to_last_line(" extends 1");
-                source_types.push(condition_pop);
+                fragments.push(condition_pop);
             }
             Instruction::Else(_) => {
-                let mut then_side_pop = source_types.pop().expect("Else");
+                let mut then_side_pop = fragments.pop().expect("Else");
                 then_side_pop.prepend_to_first_line("? ");
-                source_types.push(then_side_pop);
+                fragments.push(then_side_pop);
             }
             //Instruction::Loop()
             //Instruction::Nop
             //Instruction::Return
             Instruction::Select(_select_types) => {
-                let condition = source_types.pop().expect("select 1");
-                let falsy = source_types.pop().expect("select2");
-                let truthy = source_types.pop().expect("select2");
+                let condition = fragments.pop().expect("select 1");
+                let falsy = fragments.pop().expect("select2");
+                let truthy = fragments.pop().expect("select2");
 
-                let mut st = SourceType::new(TypeConstraint::Number);
+                let mut f = Fragment::new(TypeConstraint::Number);
 
-                st.line(0, format!("{} extends 0", condition.to_string().trim_end()));
-                st.line(0, format!("? {}", falsy.to_string().trim_end()));
-                st.line(0, format!(": {}", truthy.to_string().trim_end()));
+                f.line(0, format!("{} extends 0", condition.to_string().trim_end()));
+                f.line(0, format!("? {}", falsy.to_string().trim_end()));
+                f.line(0, format!(": {}", truthy.to_string().trim_end()));
 
-                source_types.push(st);
+                fragments.push(f);
             }
-            //Instruction::Unreachable
+            Instruction::Unreachable => {
+                // Unreachable instructions can be skipped as far as I can tell (why do they even exist anyway?)
+            }
             _ => {
                 panic!("not implemented instruction {:#?}", instruction);
             }
@@ -476,26 +485,21 @@ fn handle_instructions(
     let results = Statement {
         constraint: TypeConstraint::None, // TODO: if there's just one then get the one, otherwise get the bunch
         name: RESULT_SENTINEL.to_string(),
-        source_types: result_type_constraints
+        fragments: result_type_constraints
             .iter()
             .map(|tc| {
-                let st = source_types
+                let f = fragments
                     .pop()
                     .expect("constraints matched by remaining statements");
-                if *tc != st.constraint {
+                if *tc != f.constraint {
                     panic!("non matching constraint");
                 }
-                st
+                f
             })
             .collect(),
     };
 
-    dbg!(
-        &result_type_constraints,
-        &statements,
-        &source_types,
-        &results
-    );
+    dbg!(&result_type_constraints, &statements, &fragments, &results);
 
     (statements, results)
 }
@@ -553,10 +557,18 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_i
         wast::core::FuncKind::Import(_imp) => {
             panic!("didn't implement FuncKind::Import")
         }
-        wast::core::FuncKind::Inline {
-            locals: _,
-            expression,
-        } => handle_instructions(source, &expression.instrs, result_type_constraints),
+        wast::core::FuncKind::Inline { locals, expression } => {
+            locals
+                .iter()
+                .for_each(|local| generics.push(GenericParameter::from(local)));
+
+            handle_instructions(
+                source,
+                &expression.instrs,
+                result_type_constraints,
+                &mut generics,
+            )
+        }
     };
 
     source.add_type(&name, generics, statements, results);
@@ -574,8 +586,12 @@ fn handle_module_field_global(source: &mut SourceFile, global: &Global) {
         }
         wast::core::GlobalKind::Inline(expression) => {
             let result_type_constraint = map_valtype_to_typeconstraint(&global.ty.ty);
-
-            handle_instructions(source, &expression.instrs, vec![result_type_constraint])
+            handle_instructions(
+                source,
+                &expression.instrs,
+                vec![result_type_constraint],
+                &mut vec![],
+            )
         }
     };
 
@@ -703,10 +719,10 @@ mod tests {
                 continue;
             }
 
-            // focus
-            if file_name != "select.wat" {
-                continue;
-            }
+            // // focus
+            // if file_name != "local-set.wat" {
+            //     continue;
+            // }
 
             // // skip
             // if file_name == "equal.wat" {
