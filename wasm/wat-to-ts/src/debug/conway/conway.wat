@@ -21,10 +21,10 @@
   (type (;19;) (func (param i32 i32 i32 i32 i32)))
   (type (;20;) (func (param f64) (result i64)))
   (type (;21;) (func (param i64 i64) (result f64)))
-  (import "wasi_snapshot_preview1" "proc_exit" (func $__wasi_proc_exit (type 3)))
-  (import "wasi_snapshot_preview1" "fd_write" (func $__wasi_fd_write (type 12)))
-  (import "wasi_snapshot_preview1" "fd_close" (func $__wasi_fd_close (type 1)))
-  (import "wasi_snapshot_preview1" "fd_seek" (func $__wasi_fd_seek (type 13)))
+  (func $__wasi_proc_exit (import "wasi_snapshot_preview1" "proc_exit") (type 3) (param i32))
+  (func $__wasi_fd_write (import "wasi_snapshot_preview1" "fd_write") (type 12) (param i32 i32 i32 i32) (result i32))
+  (func $__wasi_fd_close (import "wasi_snapshot_preview1" "fd_close") (type 1) (param i32) (result i32))
+  (func $__wasi_fd_seek (import "wasi_snapshot_preview1" "fd_seek") (type 13) (param i32 i64 i32 i32) (result i32))
   (func $__wasm_call_ctors (type 4)
     call $emscripten_stack_init
     call $init_pthread_self)
@@ -1281,7 +1281,7 @@
     global.set $__stack_pointer
     local.get 104
     return)
-  (func $_start (type 4)
+  (func $_start (export "_start") (type 4)
     block  ;; label = @1
       i32.const 1
       i32.eqz
@@ -1959,7 +1959,7 @@
   (func $__lockfile (type 1) (param i32) (result i32)
     i32.const 1)
   (func $__unlockfile (type 3) (param i32))
-  (func $__errno_location (type 2) (result i32)
+  (func $__errno_location (export "__errno_location") (type 2) (result i32)
     i32.const 2920)
   (func $__lock (type 3) (param i32))
   (func $__ofl_lock (type 2) (result i32)
@@ -6587,12 +6587,12 @@
     i64.and
     i64.or
     f64.reinterpret_i64)
-  (func $stackSave (type 2) (result i32)
+  (func $stackSave (export "stackSave") (type 2) (result i32)
     global.get $__stack_pointer)
-  (func $stackRestore (type 3) (param i32)
+  (func $stackRestore (export "stackRestore") (type 3) (param i32)
     local.get 0
     global.set $__stack_pointer)
-  (func $stackAlloc (type 1) (param i32) (result i32)
+  (func $stackAlloc (export "stackAlloc") (type 1) (param i32) (result i32)
     (local i32 i32)
     global.get $__stack_pointer
     local.get 0
@@ -6602,7 +6602,7 @@
     local.tee 1
     global.set $__stack_pointer
     local.get 1)
-  (func $emscripten_stack_init (type 4)
+  (func $emscripten_stack_init (export "emscripten_stack_init") (type 4)
     i32.const 5246000
     global.set $__stack_base
     i32.const 3112
@@ -6611,30 +6611,19 @@
     i32.const -16
     i32.and
     global.set $__stack_end)
-  (func $emscripten_stack_get_free (type 2) (result i32)
+  (func $emscripten_stack_get_free (export "emscripten_stack_get_free") (type 2) (result i32)
     global.get $__stack_pointer
     global.get $__stack_end
     i32.sub)
-  (func $emscripten_stack_get_base (type 2) (result i32)
+  (func $emscripten_stack_get_base (export "emscripten_stack_get_base") (type 2) (result i32)
     global.get $__stack_base)
-  (func $emscripten_stack_get_end (type 2) (result i32)
+  (func $emscripten_stack_get_end (export "emscripten_stack_get_end") (type 2) (result i32)
     global.get $__stack_end)
-  (table (;0;) 9 9 funcref)
-  (memory (;0;) 256 256)
+  (table (;0;) (export "__indirect_function_table") 9 9 funcref)
+  (memory (;0;) (export "memory") 256 256)
   (global $__stack_pointer (mut i32) (i32.const 5246000))
   (global $__stack_end (mut i32) (i32.const 0))
   (global $__stack_base (mut i32) (i32.const 0))
-  (export "memory" (memory 0))
-  (export "__indirect_function_table" (table 0))
-  (export "_start" (func $_start))
-  (export "__errno_location" (func $__errno_location))
-  (export "emscripten_stack_init" (func $emscripten_stack_init))
-  (export "emscripten_stack_get_free" (func $emscripten_stack_get_free))
-  (export "emscripten_stack_get_base" (func $emscripten_stack_get_base))
-  (export "emscripten_stack_get_end" (func $emscripten_stack_get_end))
-  (export "stackSave" (func $stackSave))
-  (export "stackRestore" (func $stackRestore))
-  (export "stackAlloc" (func $stackAlloc))
   (elem (;0;) (i32.const 1) func $__wasm_call_ctors $__emscripten_stdout_close $__stdio_write $__emscripten_stdout_seek $fmt_fp $pop_arg_long_double $__stdio_close $__stdio_seek)
   (data $.rodata (i32.const 1024) "-+   0X0x\00-0X+0X 0X-0x+0x 0x\00nan\00inf\00%c\00NAN\00INF\00.\00(null)\00Generation %d:\0a\00\00\00\00\00\00\00\00\19\00\0a\00\19\19\19\00\00\00\00\05\00\00\00\00\00\00\09\00\00\00\00\0b\00\00\00\00\00\00\00\00\19\00\11\0a\19\19\19\03\0a\07\00\01\00\09\0b\18\00\00\09\06\0b\00\00\0b\00\06\19\00\00\00\19\19\19\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\00\00\00\00\00\19\00\0a\0d\19\19\19\00\0d\00\00\02\00\09\0e\00\00\00\09\00\0e\00\00\0e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00\13\00\00\00\00\13\00\00\00\00\09\0c\00\00\00\00\00\0c\00\00\0c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\0f\00\00\00\04\0f\00\00\00\00\09\10\00\00\00\00\00\10\00\00\10\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00\11\00\00\00\00\11\00\00\00\00\09\12\00\00\00\00\00\12\00\00\12\00\00\1a\00\00\00\1a\1a\1a\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\1a\00\00\00\1a\1a\1a\00\00\00\00\00\00\09\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00\00\00\00\00\17\00\00\00\00\17\00\00\00\00\09\14\00\00\00\00\00\14\00\00\14\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\16\00\00\00\00\00\00\00\00\00\00\00\15\00\00\00\00\15\00\00\00\00\09\16\00\00\00\00\00\16\00\00\16\00\000123456789ABCDEF")
   (data $.data (i32.const 1584) "\05\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\04\00\00\00h\07\00\00\00\04\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\ff\ff\ff\ff\0a\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\000\06\00\00\00\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\b8\0b\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\c8\06\00\00"))
