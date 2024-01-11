@@ -51,9 +51,16 @@ impl GenericParameter {
 
 #[derive(Debug)]
 pub struct TypeDefinition {
+    /// the name of the type
     pub name: String,
+
+    /// any arguments
     pub generics: Vec<GenericParameter>,
+
+    /// the body of the type
     pub statements: Vec<Statement>,
+
+    /// a set of statements
     pub results: Statement,
 }
 

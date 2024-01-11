@@ -54,6 +54,7 @@ pub fn count_instructions(module: &Module) -> IndexMap<String, u32> {
                 } = &func.kind
                 {
                     for instr in expression.instrs.iter() {
+                        // https://webassembly.github.io/spec/core/exec/instructions.html
                         match instr {
                             Instruction::LocalGet(_) => {
                                 *counts.entry("LocalGet".to_string()).or_insert(0) += 1

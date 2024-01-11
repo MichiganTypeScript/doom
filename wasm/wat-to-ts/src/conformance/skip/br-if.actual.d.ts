@@ -1,11 +1,12 @@
 import { Call, Numbers } from 'hotscript'
 
-type $exampleFunction<
-  $x extends number =
-    5,
+export type $foo<
+  $x extends number,
   RESULT =
-    Call<Numbers.GreaterThan<
-      $x,
-      3
-    >>
+    (Call<Numbers.Equal<$x, 0>> extends true ? 1 : 0) extends 1
+    ? 42
+    : (Call<Numbers.Equal<$x, 1>> extends true ? 1 : 0) extends 1
+      ? 99
+      : 7
 > = RESULT
+

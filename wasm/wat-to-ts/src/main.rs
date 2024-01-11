@@ -373,7 +373,9 @@ fn handle_instructions(
             Instruction::Block(block) => {
                 dbg!(block);
             }
-            //Instruction::Br()
+            Instruction::Br(index) => {
+                dbg!(index);
+            }
             Instruction::Call(index) => {
                 let actual_id = match index {
                     Index::Id(i) => format_call_id(i.name()),
@@ -385,30 +387,37 @@ fn handle_instructions(
                 };
 
                 if let Some(td) = source.types.get(&actual_id) {
-                    // dbg!(td);
+                    dbg!(td);
+                    // td.generics.length()
+
                     let indent = 0; // probably a bug to not get this from somewhere actual.  oh well.
                     let mut st = SourceType::new(TypeConstraint::Number);
 
-                    st.line(indent, format!("{print_id}<"));
+                    if td.generics.is_empty() {
+                        st.line(indent, actual_id);
+                    } else {
+                        st.line(indent, format!("{print_id}<"));
 
-                    let mut temp = vec![];
-                    for (index, _) in td.generics.iter().enumerate() {
-                        let mut st = source_types.pop().expect("Call st");
+                        let mut temp = vec![];
+                        for (index, _) in td.generics.iter().enumerate() {
+                            let mut st = source_types.pop().expect("Call st");
 
-                        st.increase_indent();
-                        // we're going to reverse the temp list after this loop block, so what this is effectively saying is "add a comma at the last line of all expressions except the last one" because (unfortunately) trailing commas in TS arguments are not allowed).
-                        if index != 0 {
-                            st.append_to_last_line(",");
+                            st.increase_indent();
+                            // we're going to reverse the temp list after this loop block, so what this is effectively saying is "add a comma at the last line of all expressions except the last one" because (unfortunately) trailing commas in TS arguments are not allowed).
+                            if index != 0 {
+                                st.append_to_last_line(",");
+                            }
+                            temp.push(st.lines);
                         }
-                        temp.push(st.lines);
+
+                        temp.reverse();
+                        for mut t in temp {
+                            st.lines(&mut t);
+                        }
+
+                        st.line(indent, ">");
                     }
 
-                    temp.reverse();
-                    for mut t in temp {
-                        st.lines(&mut t);
-                    }
-
-                    st.line(indent, ">");
                     source_types.push(st);
                 } else {
                     dbg!(source);
@@ -683,7 +692,7 @@ mod tests {
             }
 
             // // focus
-            // if file_name != "negate.wat" {
+            // if file_name != "call.wat" {
             //     continue;
             // }
 
