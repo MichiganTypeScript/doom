@@ -1,4 +1,4 @@
-[](https://github.com/eliben/wasm-wat-samples)
+https://github.com/eliben/wasm-wat-samples
 
 
 

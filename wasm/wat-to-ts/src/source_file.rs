@@ -101,14 +101,14 @@ pub fn create_type(
     statements: &mut Vec<Statement>,
     mut results: Statement,
 ) -> String {
-    dbg!(
-        "create type",
-        exported,
-        &name,
-        &generics,
-        &statements,
-        &results
-    );
+    // dbg!(
+    //     "create type",
+    //     exported,
+    //     &name,
+    //     &generics,
+    //     &statements,
+    //     &results
+    // );
 
     let export = if exported { "export " } else { "" };
 

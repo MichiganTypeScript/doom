@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext"
+    "module": "NodeNext",
+    "strict": true,
+    "noEmit": true
   },
-  "include": ["src/conformance/*.actual.d.ts", "src/conformance/*.test.d.ts"]
+  "include": ["src/conformance/*.test.ts"]
 }

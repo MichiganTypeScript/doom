@@ -19,16 +19,3 @@ export type add<
       $b
     >
 > = RESULT
-
-type $program<
-  RESULT =
-    add<
-      1,
-      2
-    >
-> = RESULT
-
-export type program<
-  RESULT =
-    $program
-> = RESULT

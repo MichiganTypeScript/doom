@@ -9,7 +9,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 11,
+                        offset: 73,
                     },
                     id: Some(
                         "useLocalTee",
@@ -38,6 +38,11 @@ Module {
                                     ),
                                 ),
                                 LocalTee(
+                                    Id(
+                                        "y",
+                                    ),
+                                ),
+                                LocalGet(
                                     Id(
                                         "y",
                                     ),
@@ -75,7 +80,7 @@ Module {
 
 
 {
-    "LocalGet": 1,
+    "LocalGet": 2,
     "LocalTee": 1,
     "I32Add": 1,
 }

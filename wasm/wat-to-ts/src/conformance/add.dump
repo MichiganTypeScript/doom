@@ -66,43 +66,6 @@ Module {
                     },
                 },
             ),
-            Global(
-                Global {
-                    span: Span {
-                        offset: 131,
-                    },
-                    id: Some(
-                        "program",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "program",
-                        ],
-                    },
-                    ty: GlobalType {
-                        ty: I32,
-                        mutable: false,
-                    },
-                    kind: Inline(
-                        Expression {
-                            instrs: [
-                                I32Const(
-                                    1,
-                                ),
-                                I32Const(
-                                    2,
-                                ),
-                                Call(
-                                    Id(
-                                        "add",
-                                    ),
-                                ),
-                            ],
-                        },
-                    ),
-                },
-            ),
         ],
     ),
 }

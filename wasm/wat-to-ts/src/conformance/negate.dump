@@ -37,7 +37,7 @@ Module {
                             FunctionType {
                                 params: [],
                                 results: [
-                                    I64,
+                                    F64,
                                 ],
                             },
                         ),

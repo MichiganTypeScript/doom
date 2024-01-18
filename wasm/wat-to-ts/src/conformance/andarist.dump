@@ -1,0 +1,133 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "andarist",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "andarist",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [
+                            Local {
+                                id: Some(
+                                    "a",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                        ],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "x",
+                                    ),
+                                ),
+                                I32Const(
+                                    10,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                I32Const(
+                                    5,
+                                ),
+                                I32GtS,
+                                If(
+                                    BlockType {
+                                        label: None,
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                I32Const(
+                                    7,
+                                ),
+                                I32Add,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "x",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 4,
+    "I32Const": 4,
+    "I32Add": 3,
+    "LocalSet": 2,
+    "I32GtS": 1,
+    "If": 1,
+    "End": 1,
+}

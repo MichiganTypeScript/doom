@@ -129,9 +129,9 @@ fn handle_instructions(
     source: &mut SourceFile,
     instructions: &[Instruction<'_>],
     result_type_constraints: Vec<TypeConstraint>,
-    generics: &mut Vec<GenericParameter>,
+    locals: Vec<Statement>,
 ) -> (Vec<Statement>, Statement) {
-    let mut statements: Vec<Statement> = Vec::new();
+    let mut statements: Vec<Statement> = locals;
 
     let mut fragments: Vec<Fragment> = Vec::new();
 
@@ -353,22 +353,20 @@ fn handle_instructions(
                 // `_` before a name means it's a local
                 let name = format_index(index);
 
-                // need to remove a generic parameter because we're about to set it (thereby no longer will it be a parameter, it's now a statement)
-                generics.retain(|generic| generic.name != name);
-
-                let original = fragments.clone();
-                let value = fragments.pop().expect("LocalSet pop").clone();
-
-                statements.push(Statement {
-                    name,
-                    fragments: original,
-                    constraint: value.constraint,
+                statements.iter_mut().for_each(|statement| {
+                    if statement.name == name {
+                        let value = fragments.pop().expect("LocalSet pop").clone();
+                        statement.fragments = vec![value];
+                    }
                 });
             }
             Instruction::LocalTee(index) => {
                 let name = format_index(index);
-                let thing = Fragment::from_string(name, TypeConstraint::Number);
-                fragments.push(thing.clone());
+                statements.iter_mut().for_each(|statement| {
+                    if statement.name == name {
+                        statement.fragments = fragments.clone();
+                    }
+                });
             }
             //Instruction::GlobalGet()
             //Instruction::GlobalSet()
@@ -394,7 +392,7 @@ fn handle_instructions(
                 };
 
                 if let Some(td) = source.types.get(&actual_id) {
-                    dbg!(td);
+                    // dbg!(td);
                     // td.generics.length()
 
                     let indent = 0; // probably a bug to not get this from somewhere actual.  oh well.
@@ -499,7 +497,7 @@ fn handle_instructions(
             .collect(),
     };
 
-    dbg!(&result_type_constraints, &statements, &fragments, &results);
+    // dbg!(&result_type_constraints, &statements, &fragments, &results);
 
     (statements, results)
 }
@@ -513,7 +511,7 @@ fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
 }
 
 fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_index: usize) {
-    dbg!(func);
+    // dbg!(func);
     // dbg!(module_func_index);
     let name = "$".to_string()
         + func
@@ -558,15 +556,13 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_i
             panic!("didn't implement FuncKind::Import")
         }
         wast::core::FuncKind::Inline { locals, expression } => {
-            locals
-                .iter()
-                .for_each(|local| generics.push(GenericParameter::from(local)));
+            let func_locals = locals.iter().map(Statement::from).collect();
 
             handle_instructions(
                 source,
                 &expression.instrs,
                 result_type_constraints,
-                &mut generics,
+                func_locals,
             )
         }
     };
@@ -590,7 +586,7 @@ fn handle_module_field_global(source: &mut SourceFile, global: &Global) {
                 source,
                 &expression.instrs,
                 vec![result_type_constraint],
-                &mut vec![],
+                vec![],
             )
         }
     };
@@ -696,7 +692,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
+    use std::{fs, process::Command};
 
     use super::*;
 
@@ -719,17 +715,21 @@ mod tests {
                 continue;
             }
 
-            // // focus
+            // focus
             // if file_name != "local-set.wat" {
             //     continue;
             // }
 
-            // // skip
-            // if file_name == "equal.wat" {
-            //     continue;
-            // }
-
-            let wat = fs::read_to_string(&wat_path).unwrap();
+            // to skip files from the test suite, add them here
+            if [
+                "andarist", // andarist is blocked by needing a target implementation
+                "br-if",    // this one blocked by sheer force of will
+            ]
+            .iter()
+            .any(|&skip| file_name == format!("{skip}.wat"))
+            {
+                continue;
+            }
 
             let dump_path = format!(
                 "{}{}",
@@ -743,8 +743,24 @@ mod tests {
                     .to_owned()
             );
 
-            println!("\n\nTRYING WITH {}\n\n", &file_name);
+            // convert the .wat file to a .wasm file (also validates the .wat)
+            let output = Command::new("wat2wasm")
+                .arg(&wat_path)
+                .arg("--output")
+                .arg(wat_path.with_extension("wasm"))
+                .output()
+                .expect("failed to execute wat2wasm");
 
+            if !output.status.success() {
+                // Print the standard error output
+                let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
+                println!("wat2wasm failed for {}: {}", file_name, stderr);
+                panic!("wat2wasm conversion failed");
+            }
+
+            println!("running: {}", &file_name);
+
+            let wat = fs::read_to_string(&wat_path).unwrap();
             let source = wat_to_dts(wat, &dump_path);
             let actual = source.to_string();
 

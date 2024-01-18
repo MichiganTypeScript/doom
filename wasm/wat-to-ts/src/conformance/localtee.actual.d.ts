@@ -2,7 +2,8 @@ import { Call, Numbers } from 'hotscript'
 
 type $useLocalTee<
   $x extends number,
-  $y extends number,
+  $y extends number =
+    $x,
   RESULT =
     Call<Numbers.Add<
       $x,
@@ -12,10 +13,8 @@ type $useLocalTee<
 
 export type useLocalTee<
   $x extends number,
-  $y extends number,
   RESULT =
     $useLocalTee<
-      $x,
-      $y
+      $x
     >
 > = RESULT
