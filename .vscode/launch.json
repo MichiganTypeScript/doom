@@ -7,8 +7,37 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug",
-      "program": "${workspaceFolder}/<executable file>",
+      "name": "Debug executable 'wast_parser'",
+      "cargo": {
+        "args": [
+          "build",
+          "--bin=wast_parser",
+          "--package=wast_parser"
+        ],
+        "filter": {
+          "name": "wast_parser",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in executable 'wast_parser'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--bin=wast_parser",
+          "--package=wast_parser"
+        ],
+        "filter": {
+          "name": "wast_parser",
+          "kind": "bin"
+        }
+      },
       "args": [],
       "cwd": "${workspaceFolder}"
     }

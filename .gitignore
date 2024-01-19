@@ -1,2 +1,2 @@
-node_modules
-wasm/wat-to-ts/target/
+node_modules/
+target/

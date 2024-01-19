@@ -1,5 +1,5 @@
 [package]
-name = "wast_parser"
+name = "doom_but_typescript_types"
 version = "0.1.0"
 edition = "2021"
 

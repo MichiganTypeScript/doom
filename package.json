@@ -1,18 +1,31 @@
 {
-  "name": "doom",
+  "name": "doom-but-typescript-types",
   "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
   "scripts": {
     "conway-stateful:ts": "tsx examples/conway-stateful/conway.ts",
     "conway-stateless:ts": "tsx examples/conway-stateless/conway.ts",
     "conway-stateful:c": "gcc examples/conway-stateful/conway.c -o examples/conway-stateful/conway && examples/conway-stateful/conway",
-    "conway-stateless:c": "gcc examples/conway-stateless/conway.c -o examples/conway-stateless/conway && examples/conway-stateless/conway"
+    "conway-stateless:c": "gcc examples/conway-stateless/conway.c -o examples/conway-stateless/conway && examples/conway-stateless/conway",
+    "compile:c-to-wasm": "emcc src/debug/code.c -o src/debug/code.wasm -g",
+    "compile:wasm-to-wat": "wasm2wat src/debug/code.wasm --enable-code-metadata --inline-exports --inline-imports --disable-reference-types --generate-names --fold-exprs --output=src/debug/code.wat",
+    "compile:c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
+    "compile:wat-to-wasm": "wat2wasm src/debug/code.wat --output src/debug/code.wasm",
+    "test:wasm": "tsx src/test.ts",
+    "test": "tsc --project tsconfig.test.json && vitest",
+    "test:rust": "cargo test"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.8.10",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "tsx": "^3.14.0"
+    "@types/node": "^20.11.5",
+    "hotscript": "^1.0.13",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "type-testing": "^0.2.0",
+    "vitest": "^1.2.1"
   }
 }

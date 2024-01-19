@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "strict": true,
+    "noErrorTruncation": true // helps displaying more non-error hover hints (counterintuitively)
+  }
+}

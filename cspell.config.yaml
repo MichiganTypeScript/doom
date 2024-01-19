@@ -3,7 +3,12 @@ ignorePaths: []
 dictionaryDefinitions: []
 dictionaries: []
 words:
+  - andarist
+  - funcs
   - hotscript
+  - indexmap
   - instrs
+  - typeconstraint
+  - valtype
 ignoreWords: []
 import: []

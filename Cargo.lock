@@ -53,6 +53,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56254986775e3233ffa9c4d7d3faaf6d36a2c09d30b20687e9f88bc8bafc16c8"
 
 [[package]]
+name = "doom_but_typescript_types"
+version = "0.1.0"
+dependencies = [
+ "indexmap",
+ "pretty_assertions",
+ "regex",
+ "wasm-printer",
+ "wast",
+]
+
+[[package]]
 name = "equivalent"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -264,17 +275,6 @@ dependencies = [
  "memchr",
  "unicode-width",
  "wasm-encoder",
-]
-
-[[package]]
-name = "wast_parser"
-version = "0.1.0"
-dependencies = [
- "indexmap",
- "pretty_assertions",
- "regex",
- "wasm-printer",
- "wast",
 ]
 
 [[package]]
