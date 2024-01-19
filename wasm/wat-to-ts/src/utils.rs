@@ -1,10 +1,15 @@
+use std::fmt::Display;
+
 use indexmap::IndexMap;
 use wast::{
     core::{Instruction, Module, ModuleField, ModuleKind, ValType},
     token::Index,
 };
 
-use crate::source_file::TypeConstraint;
+use crate::{
+    fragment::Fragment,
+    source_file::{SourceFile, TypeConstraint},
+};
 
 #[macro_export]
 macro_rules! dbg_dump_file {
@@ -12,7 +17,7 @@ macro_rules! dbg_dump_file {
         let mut file_path = std::env::current_dir().unwrap();
         file_path.push($filename);
 
-        let _ = fs::write(&file_path, $expr);
+        let _ = std::fs::write(&file_path, $expr);
         // println!("{}", $filename);
         // println!("{}", file_source);
     }};
@@ -39,6 +44,114 @@ pub fn map_valtype_to_typeconstraint(val_type: &ValType) -> TypeConstraint {
         ValType::Ref(_) | ValType::V128 => {
             panic!("not a supported return type")
         }
+    }
+}
+
+pub fn hotscript_unary<N: Into<String> + Copy>(
+    source: &mut SourceFile,
+    stack: &mut Vec<Fragment>,
+    namespace: N,
+    method: N,
+    result_type_constraint: TypeConstraint,
+    is_predicate: bool,
+) {
+    source.add_import("hotscript", "Call");
+    source.add_import("hotscript", namespace.into());
+
+    let mut operand = stack
+        .pop()
+        .unwrap_or_else(|| panic!("{} lines", &method.into()));
+
+    let indent = operand
+        .lines
+        .first()
+        .unwrap_or_else(|| panic!("{} indent", &method.into()))
+        .indent;
+    operand.increase_indent();
+
+    let mut f = Fragment::new(result_type_constraint);
+
+    let predicate_prefix = if is_predicate { "(" } else { "" };
+    let predicate_suffix = if is_predicate {
+        " extends true ? 1 : 0)"
+    } else {
+        ""
+    };
+
+    f.line(
+        indent,
+        format!(
+            "{}Call<{}.{}<",
+            predicate_prefix,
+            namespace.into(),
+            method.into()
+        ),
+    );
+    f.lines(&mut operand.lines);
+    f.line(indent, format!(">>{predicate_suffix}"));
+
+    stack.push(f);
+}
+
+pub fn hotscript_binary<N: Into<String> + Copy + Display>(
+    source: &mut SourceFile,
+    stack: &mut Vec<Fragment>,
+    namespace: N,
+    method: N,
+    result_type_constraint: TypeConstraint,
+    is_predicate: bool,
+) {
+    source.add_import("hotscript", "Call");
+    source.add_import("hotscript", namespace.into());
+
+    let mut rhs = stack
+        .pop()
+        .unwrap_or_else(|| panic!("{} rhs pop", &method.into()));
+    let mut lhs = stack
+        .pop()
+        .unwrap_or_else(|| panic!("{} lhs pop", &method.into()));
+
+    let mut f = Fragment::new(result_type_constraint);
+
+    let indent = rhs
+        .lines
+        .first()
+        .unwrap_or_else(|| panic!("{} indent", &method.into()))
+        .indent;
+
+    let predicate_prefix = if is_predicate { "(" } else { "" };
+    let predicate_suffix = if is_predicate {
+        " extends true ? 1 : 0)"
+    } else {
+        ""
+    };
+
+    f.line(
+        indent,
+        format!(
+            "{}Call<{}.{}<",
+            predicate_prefix,
+            namespace.into(),
+            &method.into()
+        ),
+    );
+
+    lhs.increase_indent();
+    lhs.map_lines(|text| format!("{text},"));
+    f.lines(&mut lhs.lines);
+
+    rhs.increase_indent();
+    f.lines(&mut rhs.lines);
+
+    f.line(indent, format!(">>{predicate_suffix}"));
+    stack.push(f);
+}
+
+pub fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
+    if let Some(name) = maybe_name {
+        name.to_string()
+    } else {
+        format_index_name(index)
     }
 }
 

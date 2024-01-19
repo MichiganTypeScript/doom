@@ -6,8 +6,10 @@ use wast::core::Local;
 use crate::{
     fragment::{Fragment, SourceLine},
     utils::{format_call_id, map_valtype_to_typeconstraint},
-    Statement, RESULT_SENTINEL,
+    Statement,
 };
+
+pub const RESULT_SENTINEL: &str = "RESULT";
 
 pub type Imports = IndexMap<String, IndexSet<String>>;
 
