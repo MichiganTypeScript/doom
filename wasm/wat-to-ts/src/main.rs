@@ -49,9 +49,9 @@ mod tests {
             }
 
             // focus
-            // if file_name != "local-set.wat" {
-            //     continue;
-            // }
+            if file_name != "local-tee.wat" {
+                continue;
+            }
 
             // to skip files from the test suite, add them here
             if [

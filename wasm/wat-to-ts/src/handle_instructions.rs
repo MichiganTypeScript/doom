@@ -10,7 +10,7 @@ use crate::{
 pub fn handle_instructions(
     source: &mut SourceFile,
     instructions: &[Instruction<'_>],
-    result_type_constraints: Vec<TypeConstraint>,
+    result_type_constraint: TypeConstraint,
     locals: Vec<Statement>,
 ) -> (Vec<Statement>, Statement) {
     let mut statements: Vec<Statement> = locals;
@@ -229,7 +229,10 @@ pub fn handle_instructions(
             ////////////////////////////////////////////////
             Instruction::LocalGet(index) => {
                 let value = format_index(index);
-                fragments.push(Fragment::from_string(value, TypeConstraint::None));
+                fragments.push(Fragment::from_string(
+                    value,
+                    TypeConstraint::Number, // TODO: need to get this type constraint from somewhere
+                ));
             }
             Instruction::LocalSet(index) => {
                 // `_` before a name means it's a local
@@ -363,23 +366,12 @@ pub fn handle_instructions(
     }
 
     let results = Statement {
-        constraint: TypeConstraint::None, // TODO: if there's just one then get the one, otherwise get the bunch
+        constraint: result_type_constraint,
         name: RESULT_SENTINEL.to_string(),
-        fragments: result_type_constraints
-            .iter()
-            .map(|tc| {
-                let f = fragments
-                    .pop()
-                    .expect("constraints matched by remaining statements");
-                if *tc != f.constraint {
-                    panic!("non matching constraint");
-                }
-                f
-            })
-            .collect(),
+        fragments,
     };
 
-    // dbg!(&result_type_constraints, &statements, &fragments, &results);
+    // dbg!(&result_type_constraint, &statements, &fragments, &results);
 
     (statements, results)
 }

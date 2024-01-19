@@ -3,7 +3,7 @@ import { Call, Numbers } from 'hotscript'
 type $ifexpr<
   $n extends number,
   $control extends number,
-  RESULT =
+  RESULT extends number =
     Call<Numbers.Add<
       $n,
       (Call<Numbers.GreaterThanOrEqual<
@@ -18,7 +18,7 @@ type $ifexpr<
 export type ifexpr<
   $n extends number,
   $control extends number,
-  RESULT =
+  RESULT extends number =
     $ifexpr<
       $n,
       $control

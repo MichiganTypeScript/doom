@@ -1,7 +1,7 @@
 (module
   
   ;; The function returns the result of x + x (doubling x)
-  (func $useLocalTee (export "useLocalTee") (param $x i32) (result i32)
+  (func $useLocalTee (export "localTee") (param $x i32) (result i32)
     (local $y i32)  ;; declare a local variable $y
 
     local.get $x    ;; get the value of parameter $x

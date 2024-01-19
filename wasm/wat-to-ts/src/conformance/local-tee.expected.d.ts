@@ -4,16 +4,16 @@ type $useLocalTee<
   $x extends number,
   $y extends number =
     $x,
-  RESULT =
+  RESULT extends number =
     Call<Numbers.Add<
       $x,
       $y
     >>
 > = RESULT
 
-export type useLocalTee<
+export type localTee<
   $x extends number,
-  RESULT =
+  RESULT extends number =
     $useLocalTee<
       $x
     >

@@ -3,7 +3,7 @@ import { Call, Numbers } from 'hotscript'
 type $add<
   $a extends number,
   $b extends number,
-  RESULT =
+  RESULT extends number =
     Call<Numbers.Add<
       $a,
       $b
@@ -13,7 +13,7 @@ type $add<
 export type add<
   $a extends number,
   $b extends number,
-  RESULT =
+  RESULT extends number =
     $add<
       $a,
       $b

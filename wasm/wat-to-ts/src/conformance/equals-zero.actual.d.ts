@@ -2,7 +2,7 @@ import { Call, Numbers } from 'hotscript'
 
 type $isZero<
   $x extends number,
-  RESULT =
+  RESULT extends number =
     (Call<Numbers.Equal<
       $x,
       0
@@ -11,7 +11,7 @@ type $isZero<
 
 export type isZeroExport<
   $x extends number,
-  RESULT =
+  RESULT extends number =
     $isZero<
       $x
     >

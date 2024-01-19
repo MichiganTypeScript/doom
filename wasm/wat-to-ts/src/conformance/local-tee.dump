@@ -9,41 +9,45 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 131,
+                        offset: 73,
                     },
                     id: Some(
-                        "compute",
+                        "useLocalTee",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "localTee",
+                        ],
                     },
                     kind: Inline {
-                        locals: [],
+                        locals: [
+                            Local {
+                                id: Some(
+                                    "y",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                        ],
                         expression: Expression {
                             instrs: [
                                 LocalGet(
                                     Id(
-                                        "a",
+                                        "x",
+                                    ),
+                                ),
+                                LocalTee(
+                                    Id(
+                                        "y",
                                     ),
                                 ),
                                 LocalGet(
                                     Id(
-                                        "a",
+                                        "y",
                                     ),
                                 ),
-                                I64Add,
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                I32Mul,
+                                I32Add,
                             ],
                         },
                     },
@@ -54,38 +58,18 @@ Module {
                                 params: [
                                     (
                                         Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        I64,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
+                                            "x",
                                         ),
                                         None,
                                         I32,
                                     ),
                                 ],
                                 results: [
-                                    I64,
                                     I32,
                                 ],
                             },
                         ),
                     },
-                },
-            ),
-            Export(
-                Export {
-                    span: Span {
-                        offset: 382,
-                    },
-                    name: "compute",
-                    kind: Func,
-                    item: Id(
-                        "compute",
-                    ),
                 },
             ),
         ],
@@ -96,7 +80,7 @@ Module {
 
 
 {
-    "LocalGet": 4,
-    "I64Add": 1,
-    "I32Mul": 1,
+    "LocalGet": 2,
+    "LocalTee": 1,
+    "I32Add": 1,
 }

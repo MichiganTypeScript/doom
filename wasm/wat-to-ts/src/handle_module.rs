@@ -18,9 +18,10 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_i
 
     let mut generics = vec![];
 
-    let mut result_type_constraints: Vec<TypeConstraint> = vec![];
-
     let mut param_names: Vec<Option<String>> = Vec::new();
+
+    let mut result_type_constraint = TypeConstraint::None;
+
     if let Some(ref func_type) = func.ty.inline {
         for (param_id, _, _) in func_type.params.iter() {
             if let Some(p) = param_id {
@@ -38,12 +39,17 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_i
                 .collect();
         }
 
-        result_type_constraints = func_type
-            .results
-            .to_vec()
-            .iter()
-            .map(map_valtype_to_typeconstraint)
-            .collect();
+        if func_type.results.len() != 1 {
+            panic!("expecting every func to have a single return");
+        }
+
+        result_type_constraint = map_valtype_to_typeconstraint(
+            func_type
+                .results
+                .to_vec()
+                .first()
+                .unwrap_or_else(|| panic!("expecting at least one return type type")),
+        );
 
         // dbg!(func_types);
     }
@@ -58,7 +64,7 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_i
             handle_instructions(
                 source,
                 &expression.instrs,
-                result_type_constraints,
+                result_type_constraint,
                 func_locals,
             )
         }
@@ -79,12 +85,7 @@ fn handle_module_field_global(source: &mut SourceFile, global: &Global) {
         }
         wast::core::GlobalKind::Inline(expression) => {
             let result_type_constraint = map_valtype_to_typeconstraint(&global.ty.ty);
-            handle_instructions(
-                source,
-                &expression.instrs,
-                vec![result_type_constraint],
-                vec![],
-            )
+            handle_instructions(source, &expression.instrs, result_type_constraint, vec![])
         }
     };
 

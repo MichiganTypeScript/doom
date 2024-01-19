@@ -3,7 +3,7 @@ import { Call, Numbers } from 'hotscript'
 type $main<
   $var extends number =
     10,
-  RESULT =
+  RESULT extends number =
     Call<Numbers.Add<
       $var,
       1
@@ -11,6 +11,6 @@ type $main<
 > = RESULT
 
 export type main<
-  RESULT =
+  RESULT extends number =
     $main
 > = RESULT

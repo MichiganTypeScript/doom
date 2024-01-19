@@ -4,7 +4,7 @@ use indexmap::{IndexMap, IndexSet};
 use wast::core::Local;
 
 use crate::{
-    fragment::{Fragment, SourceLine},
+    fragment::Fragment,
     utils::{format_call_id, map_valtype_to_typeconstraint},
     Statement,
 };
@@ -75,7 +75,7 @@ pub struct TypeDefinition {
     pub statements: Vec<Statement>,
 
     /// a set of statements
-    pub results: Statement,
+    pub result: Statement,
 }
 
 pub type TypeDefinitions = IndexMap<String, TypeDefinition>;
@@ -101,7 +101,7 @@ pub fn create_type(
     name: String,
     generics: Vec<String>,
     statements: &mut Vec<Statement>,
-    mut results: Statement,
+    result: Statement,
 ) -> String {
     // dbg!(
     //     "create type",
@@ -120,39 +120,7 @@ pub fn create_type(
     }
 
     // handle results
-    let has_multiple_returns = results.fragments.len() > 1;
-    if !has_multiple_returns {
-        statements.push(results);
-    } else {
-        let mut source_lines: Vec<SourceLine> = vec![SourceLine {
-            indent: 0,
-            text: "[".to_string(),
-        }];
-
-        results.fragments.iter_mut().rev().for_each(|fragment| {
-            let last = fragment.lines.last_mut().expect("source type for result");
-            last.text += ",";
-
-            fragment.increase_indent();
-
-            source_lines.append(&mut fragment.lines);
-        });
-
-        source_lines.push(SourceLine {
-            indent: 0,
-            text: "]".to_string(),
-        });
-
-        let array_return = Statement {
-            constraint: TypeConstraint::None, // TODO: need to pass this along
-            name: RESULT_SENTINEL.to_string(),
-            fragments: vec![Fragment {
-                constraint: TypeConstraint::None, // TODO need to get this from somewhere
-                lines: source_lines,
-            }],
-        };
-        statements.push(array_return);
-    }
+    statements.push(result);
 
     let s = &statements
         .iter()
@@ -216,7 +184,7 @@ impl ToString for SourceFile {
             }
 
             let mut statements = definition.statements.clone();
-            let results = definition.results.clone();
+            let results = definition.result.clone();
 
             let name = create_type(
                 false,
@@ -253,8 +221,11 @@ impl ToString for SourceFile {
                         &mut vec![],
                         Statement {
                             name: RESULT_SENTINEL.to_string(),
-                            fragments: vec![Fragment::from_string(result, TypeConstraint::None)],
-                            constraint: TypeConstraint::None,
+                            fragments: vec![Fragment::from_string(
+                                result,
+                                definition.result.constraint,
+                            )],
+                            constraint: definition.result.constraint,
                         },
                     );
 
@@ -298,7 +269,7 @@ impl SourceFile {
                 statements,
                 generics,
                 name,
-                results,
+                result: results,
             },
         );
     }

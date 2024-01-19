@@ -1,7 +1,7 @@
 import { Call, Numbers } from 'hotscript'
 
 type $theOmniscient<
-  RESULT =
+  RESULT extends number =
     Call<Numbers.Sub<
       10,
       3
@@ -9,6 +9,6 @@ type $theOmniscient<
 > = RESULT
 
 export type ziltoid<
-  RESULT =
+  RESULT extends number =
     $theOmniscient
 > = RESULT

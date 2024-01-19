@@ -1,23 +1,23 @@
 type $selectTrue<
-  RESULT =
+  RESULT extends number =
     0 extends 0
     ? 20
     : 10
 > = RESULT
 
 export type selectTrue<
-  RESULT =
+  RESULT extends number =
     $selectTrue
 > = RESULT
 
 type $selectFalse<
-  RESULT =
+  RESULT extends number =
     1 extends 0
     ? 20
     : 10
 > = RESULT
 
 export type selectFalse<
-  RESULT =
+  RESULT extends number =
     $selectFalse
 > = RESULT

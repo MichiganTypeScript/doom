@@ -22,13 +22,14 @@ type $andarist<
       $a,
       7
     >>,
-  RESULT =
+  RESULT extends number =
+    // @ts-expect-error
     a_2
 > = RESULT
 
 export type andarist<
   $x extends number,
-  RESULT =
+  RESULT extends number =
     $andarist<
       $x
     >
