@@ -49,14 +49,14 @@ mod tests {
             }
 
             // focus
-            if file_name != "local-tee.wat" {
-                continue;
-            }
+            // if file_name != "local-tee.wat" {
+            //     continue;
+            // }
 
             // to skip files from the test suite, add them here
             if [
-                "andarist", // andarist is blocked by needing a target implementation
-                "br-if",    // this one blocked by sheer force of will
+                // "andarist", // andarist is blocked by needing a target implementation
+                "br-if", // this one blocked by sheer force of will
             ]
             .iter()
             .any(|&skip| file_name == format!("{skip}.wat"))

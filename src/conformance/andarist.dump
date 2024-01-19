@@ -9,7 +9,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 11,
+                        offset: 648,
                     },
                     id: Some(
                         "andarist",
@@ -21,15 +21,7 @@ Module {
                         ],
                     },
                     kind: Inline {
-                        locals: [
-                            Local {
-                                id: Some(
-                                    "a",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                        ],
+                        locals: [],
                         expression: Expression {
                             instrs: [
                                 LocalGet(
@@ -38,55 +30,26 @@ Module {
                                     ),
                                 ),
                                 I32Const(
+                                    12,
+                                ),
+                                I32Const(
                                     10,
                                 ),
-                                I32Add,
-                                LocalSet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
                                 LocalGet(
                                     Id(
-                                        "a",
+                                        "x",
                                     ),
                                 ),
                                 I32Const(
-                                    5,
+                                    -5,
                                 ),
                                 I32GtS,
-                                If(
-                                    BlockType {
-                                        label: None,
-                                        label_name: None,
-                                        ty: TypeUse {
-                                            index: None,
-                                            inline: None,
-                                        },
+                                Select(
+                                    SelectTypes {
+                                        tys: None,
                                     },
                                 ),
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                I32Const(
-                                    2,
-                                ),
                                 I32Add,
-                                LocalSet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                End(
-                                    None,
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
                                 I32Const(
                                     7,
                                 ),
@@ -123,11 +86,9 @@ Module {
 
 
 {
-    "LocalGet": 4,
     "I32Const": 4,
-    "I32Add": 3,
-    "LocalSet": 2,
+    "LocalGet": 2,
+    "I32Add": 2,
     "I32GtS": 1,
-    "If": 1,
-    "End": 1,
+    "Select": 1,
 }
