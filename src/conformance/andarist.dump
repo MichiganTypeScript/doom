@@ -9,7 +9,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 648,
+                        offset: 646,
                     },
                     id: Some(
                         "andarist",

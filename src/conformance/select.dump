@@ -31,7 +31,7 @@ Module {
                                     20,
                                 ),
                                 I32Const(
-                                    0,
+                                    1,
                                 ),
                                 Select(
                                     SelectTypes {
@@ -57,7 +57,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 134,
+                        offset: 246,
                     },
                     id: Some(
                         "selectFalse",
@@ -79,7 +79,7 @@ Module {
                                     20,
                                 ),
                                 I32Const(
-                                    1,
+                                    0,
                                 ),
                                 Select(
                                     SelectTypes {

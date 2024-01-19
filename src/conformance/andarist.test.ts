@@ -18,6 +18,6 @@ type testCases = [
   Expect<Equal<andarist<-5>, 12>>,
 
   // break
-  // Expect<Equal<andarist<-4>, 15>>,
-  // Expect<Equal<andarist<-3>, 16>>,
-]
+  Expect<Equal<andarist<-4>, 15>>,
+  Expect<Equal<andarist<-3>, 16>>,
+  ]

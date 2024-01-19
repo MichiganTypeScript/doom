@@ -1,6 +1,6 @@
 type $selectTrue<
   RESULT extends number =
-    0 extends 0
+    1 extends 0
     ? 20
     : 10
 > = RESULT
@@ -12,7 +12,7 @@ export type selectTrue<
 
 type $selectFalse<
   RESULT extends number =
-    1 extends 0
+    0 extends 0
     ? 20
     : 10
 > = RESULT

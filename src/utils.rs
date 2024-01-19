@@ -137,7 +137,7 @@ pub fn hotscript_binary<N: Into<String> + Copy + Display>(
     );
 
     lhs.increase_indent();
-    lhs.map_lines(|text| format!("{text},"));
+    lhs.append_to_last_line(","); // add comma to separate parameters (trailing commas in parameter lists are not valid in TypeScript, unfortunately)
     f.lines(&mut lhs.lines);
 
     rhs.increase_indent();

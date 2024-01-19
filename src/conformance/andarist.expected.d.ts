@@ -1,30 +1,20 @@
-import { Call, Numbers } from "hotscript";
+import { Call, Numbers } from 'hotscript'
 
 type $andarist<
   $x extends number,
-  $a extends number =
-    Call<Numbers.Add<
-      $x,
-      10
-    >>,
-  a_1 extends number = 
-    (Call<Numbers.GreaterThan<
-      $a,
-      5
-    >> extends true ? 0 : 1) extends 1
-    ? Call<Numbers.Add<
-        $a,
-        2
-      >>
-    : $a,
-  a_2 =
-    Call<Numbers.Add<
-      $a,
-      7
-    >>,
   RESULT extends number =
-    // @ts-expect-error
-    a_2
+    Call<Numbers.Add<
+      Call<Numbers.Add<
+        $x,
+        (Call<Numbers.GreaterThan<
+          $x,
+          -5
+        >> extends true ? 1 : 0) extends 0
+        ? 10
+        : 12
+      >>,
+      7
+    >>
 > = RESULT
 
 export type andarist<

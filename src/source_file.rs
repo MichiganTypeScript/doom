@@ -119,7 +119,7 @@ pub fn create_type(
         g = generics.iter().map(|line| line.to_string() + ",").collect();
     }
 
-    // handle results
+    // handle RESULT
     statements.push(result);
 
     let s = &statements

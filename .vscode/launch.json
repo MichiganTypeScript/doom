@@ -4,37 +4,37 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+    // {
+    //   "type": "lldb",
+    //   "request": "launch",
+    //   "name": "Debug executable 'doom_but_typescript_types'",
+    //   "cargo": {
+    //     "args": [
+    //       "build",
+    //       "--bin=doom_but_typescript_types",
+    //       "--package=doom_but_typescript_types"
+    //     ],
+    //     "filter": {
+    //       "name": "doom_but_typescript_types",
+    //       "kind": "bin"
+    //     }
+    //   },
+    //   "args": [],
+    //   "cwd": "${workspaceFolder}"
+    // },
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug executable 'wast_parser'",
-      "cargo": {
-        "args": [
-          "build",
-          "--bin=wast_parser",
-          "--package=wast_parser"
-        ],
-        "filter": {
-          "name": "wast_parser",
-          "kind": "bin"
-        }
-      },
-      "args": [],
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "type": "lldb",
-      "request": "launch",
-      "name": "Debug unit tests in executable 'wast_parser'",
+      "name": "Debug unit tests in executable 'doom_but_typescript_types'",
       "cargo": {
         "args": [
           "test",
           "--no-run",
-          "--bin=wast_parser",
-          "--package=wast_parser"
+          "--bin=doom_but_typescript_types",
+          "--package=doom_but_typescript_types"
         ],
         "filter": {
-          "name": "wast_parser",
+          "name": "doom_but_typescript_types",
           "kind": "bin"
         }
       },

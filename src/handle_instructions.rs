@@ -315,7 +315,7 @@ pub fn handle_instructions(
                 }
             }
             //Instruction::Drop
-            Instruction::End(_) => {
+            Instruction::End(_id) => {
                 let mut else_side = fragments.pop().expect("End else_side pop");
                 else_side.prepend_to_first_line(": ");
 
@@ -344,17 +344,19 @@ pub fn handle_instructions(
             //Instruction::Nop
             //Instruction::Return
             Instruction::Select(_select_types) => {
-                let condition = fragments.pop().expect("select 1");
-                let falsy = fragments.pop().expect("select2");
-                let truthy = fragments.pop().expect("select2");
+                let mut condition = fragments.pop().expect("select 1");
+                condition.append_to_last_line(" extends 0");
 
-                let mut f = Fragment::new(TypeConstraint::Number);
+                let mut falsy = fragments.pop().expect("select2");
+                falsy.prepend_to_first_line("? ");
 
-                f.line(0, format!("{} extends 0", condition.to_string().trim_end()));
-                f.line(0, format!("? {}", falsy.to_string().trim_end()));
-                f.line(0, format!(": {}", truthy.to_string().trim_end()));
+                let mut truthy = fragments.pop().expect("select3");
+                truthy.prepend_to_first_line(": ");
 
-                fragments.push(f);
+                condition.lines(&mut falsy.lines);
+                condition.lines(&mut truthy.lines);
+
+                fragments.push(condition);
             }
             Instruction::Unreachable => {
                 // Unreachable instructions can be skipped as far as I can tell (why do they even exist anyway?)

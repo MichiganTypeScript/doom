@@ -40,26 +40,15 @@ impl Fragment {
         }
     }
 
+    /// append a single line to this fragment
     pub fn line<C: Into<String>>(&mut self, indent: usize, content: C) {
         self.lines.push(SourceLine::new(indent, content.into()));
     }
 
+    /// append multiple `SourceLine`s to this fragment
     pub fn lines(&mut self, lines: &mut Vec<SourceLine>) {
         self.lines.append(lines);
     }
-
-    pub fn map_lines<F>(&mut self, transform: F)
-    where
-        F: Fn(&String) -> String,
-    {
-        for line in &mut self.lines {
-            line.text = transform(&line.text);
-        }
-    }
-
-    // pub fn clear(&mut self) {
-    //     *self = SourcePrinter::new();
-    // }
 
     pub fn increase_indent(&mut self) {
         self.lines = self
