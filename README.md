@@ -1,8 +1,10 @@
-# doom
+# Doom but in TypeScript Types
 
 ## Technical details
 
 Doom's resolution is 320x200.
+
+## Links
 
 https://diekmann.github.io/wasm-fizzbuzz/doom/
 
@@ -10,18 +12,13 @@ https://diekmann.github.io/wasm-fizzbuzz/doom/doom.wasm
 
 https://doom.fandom.com/wiki/Doom_source_code_files
 
-
-
 https://github.com/eliben/wasm-wat-samples
 
+## Progress
 
-
-```
-cargo test
-```
+### Done (69)
 
 ```ts
-// 69
 const currentlyImplemented = [
   "Block",
   "Br",
@@ -95,8 +92,11 @@ const currentlyImplemented = [
 ]
 ```
 
-Remaining: (46)
+### Remaining (46)
 
+Usage count (in Doom) is the number on the right
+
+```text
 BrTable: 4
 
 CallIndirect: 8
@@ -162,3 +162,16 @@ I64Xor: 2
 Loop: 58
 
 Return: 32
+```
+
+## Design decisions
+
+EVERY effort has been taken to not support something that Doom doesn't explicitly need.  This project is LASER-FUCKING-FOCUSED on Doom and nothing else (and, at the expense of all else).
+
+1. All instructions not explicitly needed by Doom
+2. multiple returns (Doom doesn't use).  this was actually implemented by accident (under the assumption that Doom needs it) and then removed when it was discovered that it doesn't need it (it is much simpler overall to not need to implement it).
+3. You can technically remove `param` and `result` declarations for a function and use a `type` declaration instead.  While that's a nice optimization, it isn't needed to run Doom and therefore the `type` declarations are all ignored.
+4. module field exports were implemented before I knew that there's an emcc flag to disable them.  so although that code wasn't technically removed (because it's so small) it is not a tested path anymore.
+5. Wherever possible, the folded expression variants are used (i.e. `if`, `select`, `block`, etc.).  There may be places where unfolded expressions are supported just because it's identical or almost identical in the parser library (wast), but it's not something being directly tested.
+6. Module-level declarations that aren't needed including: recursion groups, start, tag, custom, and more.
+7. unnamed types, funcs, or variables.  it's quite common in .wat files to omit the name (i.e. the thing starting with `$` for a declaration) but it's required for this program.  there's an emcc flag that will force this

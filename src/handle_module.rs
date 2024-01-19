@@ -118,38 +118,40 @@ pub fn handle_module_fields(source: &mut SourceFile, fields: &Vec<ModuleField>) 
     let mut module_index: HashMap<&str, usize> = HashMap::new();
 
     for field in fields {
-        // dbg!(field);
-
         match field {
-            // ModuleFieldType(Type<'a>),
-            // ModuleFieldRec(Rec<'a>),
-            // ModuleFieldImport(Import<'a>), // TODO: imports can increase the module func index space
             ModuleField::Func(func) => {
                 let count = module_index.entry("Func").or_insert(0);
                 handle_module_field_func(source, func, *count);
                 *count += 1;
             }
-            // ModuleFieldTable(Table<'a>),
-            // ModuleFieldMemory(Memory<'a>),
+
             ModuleField::Global(global) => {
                 let count = module_index.entry("Global").or_insert(0);
                 handle_module_field_global(source, global);
                 *count += 1;
             }
             ModuleField::Export(export) => {
-                // no known need for module_index addressing exports
+                // no known need for module_index addressing exports, but it was implemented early on accident and so I left it here.
                 handle_module_field_export(source, export);
             }
-            // ModuleFieldStart(Index<'a>),
-            // ModuleFieldElem(Elem<'a>),
-            // ModuleFieldData(Data<'a>),
-            // ModuleFieldTag(Tag<'a>),
-            // ModuleFieldCustom(Custom<'a>),
-            _other => {
-                // dbg!(other);
-                panic!("not implemented module field");
+            ModuleField::Table(_)
+            | ModuleField::Import(_)
+            | ModuleField::Memory(_)
+            | ModuleField::Elem(_)
+            | ModuleField::Data(_) => {
+                dbg!(field);
+                panic!("unintentionally not implemented module field");
+            }
+            ModuleField::Tag(_)
+            | ModuleField::Custom(_)
+            | ModuleField::Start(_)
+            | ModuleField::Rec(_) => {
+                dbg!(field);
+                panic!("intentionally not implemented module field");
+            }
+            ModuleField::Type(_) => {
+                // intentionally ignored
             }
         }
     }
-    // dbg!(module_index);
 }

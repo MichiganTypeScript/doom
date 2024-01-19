@@ -16,7 +16,9 @@ Module {
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "ziltoid",
+                        ],
                     },
                     kind: Inline {
                         locals: [],
@@ -43,18 +45,6 @@ Module {
                             },
                         ),
                     },
-                },
-            ),
-            Export(
-                Export {
-                    span: Span {
-                        offset: 176,
-                    },
-                    name: "ziltoid",
-                    kind: Func,
-                    item: Id(
-                        "theOmniscient",
-                    ),
                 },
             ),
         ],

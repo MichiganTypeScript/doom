@@ -4,10 +4,12 @@ dictionaryDefinitions: []
 dictionaries: []
 words:
   - andarist
+  - emcc
   - funcs
   - hotscript
   - indexmap
   - instrs
+  - Trunc
   - typeconstraint
   - valtype
 ignoreWords: []

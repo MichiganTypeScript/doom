@@ -1,12 +1,7 @@
 (module
-  (func $theOmniscient (result i32)
-
-    ;; load `10` and `3` onto the stack
-    i32.const 10
-    i32.const 3
-
-    i32.sub ;; subtract on number from the other
+  (func $theOmniscient (export "ziltoid") (result i32)
+    i32.const 10 ;; load 10 onto the stack
+    i32.const 3  ;; load 3 onto the stack
+    i32.sub      ;; subtract one number from the other
   )
-
-  (export "ziltoid" (func $theOmniscient))
 )

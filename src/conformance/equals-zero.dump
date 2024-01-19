@@ -16,7 +16,9 @@ Module {
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "isZeroExport",
+                        ],
                     },
                     kind: Inline {
                         locals: [],
@@ -50,18 +52,6 @@ Module {
                             },
                         ),
                     },
-                },
-            ),
-            Export(
-                Export {
-                    span: Span {
-                        offset: 371,
-                    },
-                    name: "isZeroExport",
-                    kind: Func,
-                    item: Id(
-                        "isZero",
-                    ),
                 },
             ),
         ],
