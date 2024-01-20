@@ -1,9 +1,6 @@
 use wast::core::Local;
 
-use crate::{
-    type_constraint::TypeConstraint,
-    utils::{format_call_id, map_valtype_to_typeconstraint},
-};
+use crate::{type_constraint::TypeConstraint, utils::format_call_id};
 
 #[derive(Debug, Clone)]
 pub struct GenericParameter {
@@ -31,7 +28,7 @@ impl From<&Local<'_>> for GenericParameter {
     fn from(local: &Local) -> Self {
         let name = local.id.expect("didn't get local name").name().to_string();
         GenericParameter {
-            constraint: map_valtype_to_typeconstraint(&local.ty),
+            constraint: TypeConstraint::from(&local.ty),
             name: format_call_id(name),
         }
     }

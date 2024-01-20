@@ -12,7 +12,7 @@ use crate::{
 };
 
 pub fn handle_instructions(
-    source: &mut SourceFile,
+    source: &SourceFile,
     instructions: &[Instruction<'_>],
     result_type_constraint: TypeConstraint,
     locals: Vec<Statement>,
@@ -244,7 +244,7 @@ pub fn handle_instructions(
 
                 statements.iter_mut().for_each(|statement| {
                     if statement.name == name {
-                        let value = fragments.pop().expect("LocalSet pop").clone();
+                        let value = fragments.pop().expect("LocalSet pop");
                         statement.fragments = vec![value];
                     }
                 });
@@ -283,9 +283,8 @@ pub fn handle_instructions(
                     Index::Num(num, _span) => format_index_name(*num as usize),
                 };
 
-                if let Some(td) = source.types.get(&actual_id) {
+                if let Some(td) = source.get_type(&actual_id) {
                     // dbg!(td);
-                    // td.generics.length()
 
                     let indent = 0; // probably a bug to not get this from somewhere actual.  oh well.
                     let mut f = Fragment::new(TypeConstraint::Number);

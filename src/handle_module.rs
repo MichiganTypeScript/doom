@@ -3,13 +3,13 @@ use crate::handle_instructions::handle_instructions;
 use crate::source_file::SourceFile;
 use crate::statement::Statement;
 use crate::type_constraint::TypeConstraint;
-use crate::utils::{get_param_name, map_valtype_to_typeconstraint};
+use crate::utils::get_param_name;
 use std::{collections::HashMap, vec};
 use wast::core::{Export, Func, Global, ModuleField};
 
 use crate::utils::format_index;
 
-fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_index: usize) {
+fn handle_module_field_func(source: &SourceFile, func: &Func, _module_func_index: usize) {
     // dbg!(func);
     // dbg!(module_func_index);
     let name = "$".to_string()
@@ -50,7 +50,7 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_i
         result_type_constraint = func_type
             .results
             .first()
-            .map_or(TypeConstraint::None, map_valtype_to_typeconstraint);
+            .map_or(TypeConstraint::None, TypeConstraint::from);
     }
 
     let (statements, results) = match &func.kind {
@@ -77,14 +77,14 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_i
     }
 }
 
-fn handle_module_field_global(source: &mut SourceFile, global: &Global) {
+fn handle_module_field_global(source: &SourceFile, global: &Global) {
     // dbg!(global);
     let (statements, results) = match &global.kind {
         wast::core::GlobalKind::Import(_import) => {
             panic!("not implemented GlobalKind::Import")
         }
         wast::core::GlobalKind::Inline(expression) => {
-            let result_type_constraint = map_valtype_to_typeconstraint(&global.ty.ty);
+            let result_type_constraint = TypeConstraint::from(&global.ty.ty);
             handle_instructions(source, &expression.instrs, result_type_constraint, vec![])
         }
     };
@@ -97,7 +97,7 @@ fn handle_module_field_global(source: &mut SourceFile, global: &Global) {
     }
 }
 
-fn handle_module_field_export(source: &mut SourceFile, export: &Export) {
+fn handle_module_field_export(source: &SourceFile, export: &Export) {
     // dbg!(export);
     let export_name = export.name;
     let local_name = format_index(&export.item);
@@ -114,7 +114,7 @@ This means that the first function in a module has index 0 in the function index
 
 Additionally, you can call a function by its index even if it has a name, which means we need to keep track if this shit at all times.  Ugg.
 */
-pub fn handle_module_fields(source: &mut SourceFile, fields: &Vec<ModuleField>) {
+pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
     let mut module_index: HashMap<&str, usize> = HashMap::new();
 
     for field in fields {

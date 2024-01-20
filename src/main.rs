@@ -6,6 +6,7 @@ mod handle_instructions;
 mod handle_module;
 mod source_file;
 mod statement;
+mod stats;
 mod type_constraint;
 mod type_definition;
 mod utils;

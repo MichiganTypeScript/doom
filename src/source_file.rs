@@ -1,4 +1,8 @@
-use std::{collections::HashMap, fmt};
+use std::{
+    cell::{Ref, RefCell},
+    collections::HashMap,
+    fmt,
+};
 
 use indexmap::{IndexMap, IndexSet};
 
@@ -10,17 +14,15 @@ use crate::{
     Statement,
 };
 
-pub type Imports = IndexMap<String, IndexSet<String>>;
-
 /// This represents is a literal TypeScript file that is the final build output of the program
 pub struct SourceFile {
-    pub imports: Imports,
+    imports: RefCell<IndexMap<String, IndexSet<String>>>,
 
     /// separate typescript type definitions for this type
-    pub types: TypeDefinitions,
+    types: RefCell<TypeDefinitions>,
 
     /// exports declared for this type
-    pub exports: HashMap<String, Vec<String>>,
+    exports: RefCell<HashMap<String, Vec<String>>>,
 }
 
 impl fmt::Debug for SourceFile {
@@ -33,7 +35,7 @@ impl ToString for SourceFile {
     fn to_string(&self) -> String {
         let mut lines: Vec<String> = vec![];
 
-        for (package, imports) in &self.imports {
+        for (package, imports) in self.imports.borrow().iter() {
             lines.push(
                 format!(
                     "import {{ {} }} from '{}'",
@@ -48,13 +50,14 @@ impl ToString for SourceFile {
             lines.push(String::from(""));
         }
 
-        for (_name, definition) in &self.types {
+        let types = self.types.borrow_mut();
+        for (_name, definition) in types.iter() {
             lines.push(definition.to_string());
 
             let type_key = &definition.name;
 
             // handle exports
-            if let Some(export_names) = self.exports.get(type_key) {
+            if let Some(export_names) = self.exports.borrow().get(type_key) {
                 for export_name in export_names {
                     let mut passed_generics = "".to_string();
 
@@ -98,29 +101,35 @@ impl ToString for SourceFile {
 impl SourceFile {
     pub fn new() -> Self {
         SourceFile {
-            imports: Imports::new(),
-            types: TypeDefinitions::new(),
-            exports: HashMap::new(),
+            imports: RefCell::new(IndexMap::new()),
+            types: RefCell::new(TypeDefinitions::new()),
+            exports: RefCell::new(HashMap::new()),
         }
     }
 
-    pub fn add_import<P: Into<String>, I: Into<String>>(&mut self, package: P, import: I) {
-        let entry = self.imports.entry(package.into()).or_default();
+    pub fn add_import<P: Into<String>, I: Into<String>>(&self, package: P, import: I) {
+        let mut imports = self.imports.borrow_mut();
+        let entry = imports.entry(package.into()).or_default();
         entry.insert(import.into());
     }
 
+    pub fn get_type(&self, type_id: &str) -> Option<Ref<TypeDefinition>> {
+        Ref::filter_map(self.types.borrow(), |types| types.get(type_id)).ok()
+    }
+
     pub fn add_type<N: Into<String>>(
-        &mut self,
+        &self,
         name: N,
         generics: Vec<GenericParameter>,
         statements: Vec<Statement>,
         result: Statement,
     ) {
         let name = name.into();
-        if self.types.contains_key(&name) {
+        let mut types = self.types.borrow_mut();
+        if types.contains_key(&name) {
             panic!("cannot replace type definitions {}", name);
         }
-        self.types.insert(
+        types.insert(
             name.clone(),
             TypeDefinition {
                 statements,
@@ -132,13 +141,14 @@ impl SourceFile {
         );
     }
 
-    pub fn add_export<S: Into<String>, E: Into<String>>(&mut self, source: S, export: E) {
+    pub fn add_export<S: Into<String>, E: Into<String>>(&self, source: S, export: E) {
         let source_key = source.into();
 
-        if let Some(existing) = self.exports.get_mut(&source_key) {
+        let mut exports = self.exports.borrow_mut();
+        if let Some(existing) = exports.get_mut(&source_key) {
             existing.push(export.into());
         } else {
-            self.exports.insert(source_key, vec![export.into()]);
+            exports.insert(source_key, vec![export.into()]);
         }
     }
 }

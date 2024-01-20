@@ -1,10 +1,6 @@
 use wast::core::Local;
 
-use crate::{
-    fragment::Fragment,
-    type_constraint::TypeConstraint,
-    utils::{format_call_id, map_valtype_to_typeconstraint},
-};
+use crate::{fragment::Fragment, type_constraint::TypeConstraint, utils::format_call_id};
 
 // a "Statement" in this sense is very similar to a statement in a programming language.  In TypeScript, though, the way to do "statements" is with generic parameters.  So that's what these are.
 #[derive(Debug, Clone)]
@@ -17,7 +13,7 @@ pub struct Statement {
 impl From<&Local<'_>> for Statement {
     fn from(local: &Local) -> Self {
         let name = local.id.expect("didn't get local name").name().to_string();
-        let constraint = map_valtype_to_typeconstraint(&local.ty);
+        let constraint = TypeConstraint::from(&local.ty);
         Statement {
             name: format_call_id(name),
             constraint,
