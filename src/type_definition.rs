@@ -63,8 +63,8 @@ impl ToString for TypeDefinition {
                     .pop()
                     .expect("tried to pop a Fragment from statements but there wasn't one");
 
-                working_stack.increase_indent();
-                working_stack.increase_indent();
+                working_stack.indent_lines();
+                working_stack.indent_lines();
                 let before_equals = "\n  ".to_string() + &working.name + &extends + " ";
                 let mut after_equals = "\n".to_string() + &working_stack.to_string();
                 after_equals.pop();

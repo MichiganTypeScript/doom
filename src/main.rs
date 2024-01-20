@@ -5,6 +5,7 @@ mod generic_parameter;
 mod handle_instructions;
 mod handle_module;
 mod source_file;
+mod source_line;
 mod statement;
 mod stats;
 mod type_constraint;

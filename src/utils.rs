@@ -53,28 +53,20 @@ pub fn hotscript_unary<N: Into<String> + Copy>(
         .first()
         .unwrap_or_else(|| panic!("{} indent", &method.into()))
         .indent;
-    operand.increase_indent();
+    operand.indent_lines();
 
     let mut fragment = Fragment::new(result_type_constraint);
 
-    let predicate_prefix = if is_predicate { "(" } else { "" };
-    let predicate_suffix = if is_predicate {
-        " extends true ? 1 : 0)"
-    } else {
-        ""
-    };
-
-    fragment.line(
+    fragment.push(
         indent,
-        format!(
-            "{}Call<{}.{}<",
-            predicate_prefix,
-            namespace.into(),
-            method.into()
-        ),
+        format!("Call<{}.{}<", namespace.into(), method.into()),
     );
-    fragment.lines(&mut operand.lines);
-    fragment.line(indent, format!(">>{predicate_suffix}"));
+    fragment.append(&mut operand.lines);
+    fragment.push(indent, ">>");
+
+    if is_predicate {
+        fragment.format_predicate();
+    }
 
     stack.push(fragment);
 }
@@ -105,31 +97,24 @@ pub fn hotscript_binary<N: Into<String> + Copy + Display>(
         .unwrap_or_else(|| panic!("{} indent", &method.into()))
         .indent;
 
-    let predicate_prefix = if is_predicate { "(" } else { "" };
-    let predicate_suffix = if is_predicate {
-        " extends true ? 1 : 0)"
-    } else {
-        ""
-    };
-
-    fragment.line(
+    fragment.push(
         indent,
-        format!(
-            "{}Call<{}.{}<",
-            predicate_prefix,
-            namespace.into(),
-            &method.into()
-        ),
+        format!("Call<{}.{}<", namespace.into(), &method.into()),
     );
 
-    lhs.increase_indent();
+    lhs.indent_lines();
     lhs.append_to_last_line(","); // add comma to separate parameters (trailing commas in parameter lists are not valid in TypeScript, unfortunately)
-    fragment.lines(&mut lhs.lines);
+    fragment.append(&mut lhs.lines);
 
-    rhs.increase_indent();
-    fragment.lines(&mut rhs.lines);
+    rhs.indent_lines();
+    fragment.append(&mut rhs.lines);
 
-    fragment.line(indent, format!(">>{predicate_suffix}"));
+    fragment.push(indent, ">>");
+
+    if is_predicate {
+        fragment.format_predicate();
+    }
+
     stack.push(fragment);
 }
 

@@ -1,18 +1,6 @@
 use std::fmt;
 
-use crate::type_constraint::TypeConstraint;
-
-#[derive(Debug, Clone)]
-pub struct SourceLine {
-    pub indent: usize,
-    pub text: String,
-}
-
-impl SourceLine {
-    fn new(indent: usize, text: String) -> Self {
-        SourceLine { indent, text }
-    }
-}
+use crate::{source_line::SourceLine, type_constraint::TypeConstraint};
 
 /// a fragment of code that's resolved and possible to be returned
 #[derive(Debug, Clone)]
@@ -35,26 +23,27 @@ impl Fragment {
             lines: content
                 .into()
                 .lines()
-                .map(|line| SourceLine::new(0, line.to_string()))
+                .map(|line| SourceLine::new(0, line))
                 .collect(),
         }
     }
 
-    /// append a single line to this fragment
-    pub fn line<C: Into<String>>(&mut self, indent: usize, content: C) {
-        self.lines.push(SourceLine::new(indent, content.into()));
+    /// add a single line to this fragment
+    pub fn push<C: AsRef<str>>(&mut self, indent: usize, content: C) {
+        self.lines.push(SourceLine::new(indent, content.as_ref()));
     }
 
-    /// append multiple `SourceLine`s to this fragment
-    pub fn lines(&mut self, lines: &mut Vec<SourceLine>) {
+    /// add multiple `SourceLine`s to this fragment
+    pub fn append(&mut self, lines: &mut Vec<SourceLine>) {
         self.lines.append(lines);
     }
 
-    pub fn increase_indent(&mut self) {
+    /// add a single indent level to all lines in this fragment
+    pub fn indent_lines(&mut self) {
         self.lines = self
             .lines
             .iter()
-            .map(|line| SourceLine::new(line.indent + 1, line.text.clone()))
+            .map(|line| SourceLine::new(line.indent + 1, &line.text))
             .collect();
     }
 
@@ -74,11 +63,10 @@ impl Fragment {
             panic!("Can't append to last line because something went wrong");
         }
     }
-}
 
-impl Default for Fragment {
-    fn default() -> Self {
-        Self::new(TypeConstraint::None)
+    pub fn format_predicate(&mut self) {
+        self.prepend_to_first_line("(");
+        self.append_to_last_line(" extends true ? 1 : 0)");
     }
 }
 

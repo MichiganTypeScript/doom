@@ -10,6 +10,20 @@ pub struct Statement {
     pub fragments: Vec<Fragment>,
 }
 
+impl Statement {
+    pub fn new<S: AsRef<str>>(
+        name: S,
+        constraint: TypeConstraint,
+        fragments: Vec<Fragment>,
+    ) -> Self {
+        Statement {
+            name: name.as_ref().to_string(),
+            constraint,
+            fragments,
+        }
+    }
+}
+
 impl From<&Local<'_>> for Statement {
     fn from(local: &Local) -> Self {
         let name = local.id.expect("didn't get local name").name().to_string();

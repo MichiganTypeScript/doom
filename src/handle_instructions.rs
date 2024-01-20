@@ -287,18 +287,18 @@ pub fn handle_instructions(
                     // dbg!(td);
 
                     let indent = 0; // probably a bug to not get this from somewhere actual.  oh well.
-                    let mut f = Fragment::new(TypeConstraint::Number);
+                    let mut f = Fragment::new(td.result.constraint);
 
                     if td.generics.is_empty() {
-                        f.line(indent, actual_id);
+                        f.push(indent, actual_id);
                     } else {
-                        f.line(indent, format!("{print_id}<"));
+                        f.push(indent, format!("{print_id}<"));
 
                         let mut temp = vec![];
                         for (index, _) in td.generics.iter().enumerate() {
                             let mut f = fragments.pop().expect("Call st");
 
-                            f.increase_indent();
+                            f.indent_lines();
                             // we're going to reverse the temp list after this loop block, so what this is effectively saying is "add a comma at the last line of all expressions except the last one" because (unfortunately) trailing commas in TS arguments are not allowed).
                             if index != 0 {
                                 f.append_to_last_line(",");
@@ -308,10 +308,10 @@ pub fn handle_instructions(
 
                         temp.reverse();
                         for mut t in temp {
-                            f.lines(&mut t);
+                            f.append(&mut t);
                         }
 
-                        f.line(indent, ">");
+                        f.push(indent, ">");
                     }
 
                     fragments.push(f);
@@ -328,8 +328,8 @@ pub fn handle_instructions(
                 let mut then_side = fragments.pop().expect("End then_side pop");
                 let mut condition = fragments.pop().expect("End condition pop");
 
-                condition.lines(&mut then_side.lines);
-                condition.lines(&mut else_side.lines);
+                condition.append(&mut then_side.lines);
+                condition.append(&mut else_side.lines);
 
                 fragments.push(condition);
             }
@@ -359,8 +359,8 @@ pub fn handle_instructions(
                 let mut truthy = fragments.pop().expect("select3");
                 truthy.prepend_to_first_line(": ");
 
-                condition.lines(&mut falsy.lines);
-                condition.lines(&mut truthy.lines);
+                condition.append(&mut falsy.lines);
+                condition.append(&mut truthy.lines);
 
                 fragments.push(condition);
             }
@@ -373,11 +373,7 @@ pub fn handle_instructions(
         }
     }
 
-    let results = Statement {
-        constraint: result_type_constraint,
-        name: RESULT_SENTINEL.to_string(),
-        fragments,
-    };
+    let results = Statement::new(RESULT_SENTINEL, result_type_constraint, fragments);
 
     // dbg!(&result_type_constraint, &statements, &fragments, &results);
 
