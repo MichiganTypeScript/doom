@@ -223,6 +223,10 @@ pub fn handle_instructions(
                 );
             }
 
+            ////// Bitwise
+            //////
+            // Instruction::I32And() => {}
+
             ////////////////////////////////////////////////
             // Variable Instructions
             // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Variables
@@ -260,6 +264,9 @@ pub fn handle_instructions(
             // Control Flow Instructions
             // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Control_flow
             ////////////////////////////////////////////////
+            Instruction::Nop => {
+                fragments.push(Fragment::from_string("unknown", TypeConstraint::None))
+            }
             Instruction::Block(block) => {
                 dbg!(block);
             }

@@ -16,7 +16,7 @@ https://github.com/eliben/wasm-wat-samples
 
 ## Progress
 
-### Done (69)
+### Done (70)
 
 ```ts
 const currentlyImplemented = [
@@ -87,6 +87,7 @@ const currentlyImplemented = [
   "LocalGet",
   "LocalSet",
   "LocalTee",
+  "Nop",
   "Select",
   "Unreachable",
 ]

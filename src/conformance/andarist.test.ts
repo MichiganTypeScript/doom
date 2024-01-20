@@ -5,7 +5,7 @@ import { test, expect } from 'vitest';
 import { getWasm } from '../utils.js';
 
 const name = 'andarist';
-test.skip(name, async () => {
+test(name, async () => {
   const { andarist } = await getWasm(name);
   expect(andarist(-6)).toStrictEqual(11);
   expect(andarist(-5)).toStrictEqual(12);

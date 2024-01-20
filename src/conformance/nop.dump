@@ -1,0 +1,46 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "nop",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "do_nothing",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Nop,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: None,
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "Nop": 1,
+}
