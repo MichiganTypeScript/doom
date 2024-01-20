@@ -2,11 +2,12 @@ use std::fmt;
 
 use wast::core::ValType;
 
+/// This is effectively the TypeScript type of a given fragment, which just so happens to often be expressed with an `extends` clause
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum TypeConstraint {
     None,
     Number,
-    #[allow(dead_code)] // we'll probably need this later hopefully
+    #[allow(dead_code)] // we'll probably need String later hopefully
     String,
 }
 

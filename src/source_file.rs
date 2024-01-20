@@ -7,19 +7,17 @@ use std::{
 use indexmap::{IndexMap, IndexSet};
 
 use crate::{
-    fragment::Fragment,
-    generic_parameter::GenericParameter,
-    type_definition::{TypeDefinition, TypeDefinitions},
-    utils::RESULT_SENTINEL,
-    Statement,
+    fragment::Fragment, parameter::Parameter, type_definition::TypeDefinition,
+    utils::RESULT_SENTINEL, Statement,
 };
 
 /// This represents is a literal TypeScript file that is the final build output of the program
 pub struct SourceFile {
+    /// npm imports needed for this type to function (globally deduplicated for the whole file)
     imports: RefCell<IndexMap<String, IndexSet<String>>>,
 
     /// separate typescript type definitions for this type
-    types: RefCell<TypeDefinitions>,
+    types: RefCell<IndexMap<String, TypeDefinition>>,
 
     /// exports declared for this type
     exports: RefCell<HashMap<String, Vec<String>>>,
@@ -66,7 +64,7 @@ impl ToString for SourceFile {
                         passed_generics += &definition
                             .generics
                             .iter()
-                            .map(|GenericParameter { name, .. }| "  ".to_string() + name)
+                            .map(|Parameter { name, .. }| "  ".to_string() + name)
                             .collect::<Vec<_>>()
                             .join(",\n")
                             .to_string();
@@ -78,14 +76,11 @@ impl ToString for SourceFile {
                         exported: true,
                         generics: definition.generics.clone(),
                         name: export_name.to_string(),
-                        result: Statement {
-                            name: RESULT_SENTINEL.to_string(),
-                            fragments: vec![Fragment::from_string(
-                                result,
-                                definition.result.constraint,
-                            )],
-                            constraint: definition.result.constraint,
-                        },
+                        result: Statement::new(
+                            RESULT_SENTINEL,
+                            definition.result.constraint,
+                            Fragment::from_string(result, definition.result.constraint),
+                        ),
                         statements: vec![],
                     };
 
@@ -102,7 +97,7 @@ impl SourceFile {
     pub fn new() -> Self {
         SourceFile {
             imports: RefCell::new(IndexMap::new()),
-            types: RefCell::new(TypeDefinitions::new()),
+            types: RefCell::new(IndexMap::new()),
             exports: RefCell::new(HashMap::new()),
         }
     }
@@ -120,7 +115,7 @@ impl SourceFile {
     pub fn add_type<N: Into<String>>(
         &self,
         name: N,
-        generics: Vec<GenericParameter>,
+        generics: Vec<Parameter>,
         statements: Vec<Statement>,
         result: Statement,
     ) {

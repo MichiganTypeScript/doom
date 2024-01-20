@@ -1,5 +1,5 @@
-use crate::generic_parameter::GenericParameter;
 use crate::handle_instructions::handle_instructions;
+use crate::parameter::Parameter;
 use crate::source_file::SourceFile;
 use crate::statement::Statement;
 use crate::type_constraint::TypeConstraint;
@@ -37,7 +37,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func, _module_func_index
             generics = param_names
                 .iter()
                 .enumerate()
-                .map(|(index, name)| GenericParameter::new_number(get_param_name(index, name)))
+                .map(|(index, name)| Parameter::new_number(get_param_name(index, name)))
                 .collect();
         }
 
@@ -57,15 +57,13 @@ fn handle_module_field_func(source: &SourceFile, func: &Func, _module_func_index
         wast::core::FuncKind::Import(_imp) => {
             panic!("didn't implement FuncKind::Import")
         }
-
         wast::core::FuncKind::Inline { locals, expression } => {
-            let func_locals = locals.iter().map(Statement::from).collect();
-
+            let locals_statements = locals.iter().map(Statement::from).collect();
             handle_instructions(
                 source,
                 &expression.instrs,
                 result_type_constraint,
-                func_locals,
+                locals_statements,
             )
         }
     };

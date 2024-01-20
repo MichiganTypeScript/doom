@@ -1,3 +1,5 @@
+use core::panic;
+
 use wast::{core::Instruction, token::Index};
 
 use crate::{
@@ -17,8 +19,7 @@ pub fn handle_instructions(
     result_type_constraint: TypeConstraint,
     locals: Vec<Statement>,
 ) -> (Vec<Statement>, Statement) {
-    let mut statements: Vec<Statement> = locals;
-
+    let mut statements = locals;
     let mut fragments: Vec<Fragment> = Vec::new();
 
     // Order: I32, I64, F32, F64
@@ -242,18 +243,18 @@ pub fn handle_instructions(
                 // `_` before a name means it's a local
                 let name = format_index(index);
 
-                statements.iter_mut().for_each(|statement| {
-                    if statement.name == name {
-                        let value = fragments.pop().expect("LocalSet pop");
-                        statement.fragments = vec![value];
+                statements.iter_mut().for_each(|local| {
+                    if local.name == name {
+                        local.value = fragments.pop().expect("LocalSet pop");
                     }
                 });
             }
             Instruction::LocalTee(index) => {
                 let name = format_index(index);
-                statements.iter_mut().for_each(|statement| {
-                    if statement.name == name {
-                        statement.fragments = fragments.clone();
+                statements.iter_mut().for_each(|local| {
+                    if local.name == name {
+                        // suspect that this is a bug that it uses `first`
+                        local.value = fragments.first().expect("should be a fragment").clone();
                     }
                 });
             }
@@ -373,9 +374,15 @@ pub fn handle_instructions(
         }
     }
 
-    let results = Statement::new(RESULT_SENTINEL, result_type_constraint, fragments);
+    let results = Statement::new(
+        RESULT_SENTINEL,
+        result_type_constraint,
+        fragments.pop().expect("should be at least one"),
+    );
 
-    // dbg!(&result_type_constraint, &statements, &fragments, &results);
+    if !fragments.is_empty() {
+        panic!("fragments should be empty by now because multiple returns are not supported");
+    }
 
     (statements, results)
 }

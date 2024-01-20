@@ -1,9 +1,9 @@
 extern crate wast;
 
 mod fragment;
-mod generic_parameter;
 mod handle_instructions;
 mod handle_module;
+mod parameter;
 mod source_file;
 mod source_line;
 mod statement;
