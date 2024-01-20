@@ -42,13 +42,10 @@ Module {
                                     None,
                                     I32,
                                 ),
-                                (
-                                    None,
-                                    None,
-                                    I32,
-                                ),
                             ],
-                            results: [],
+                            results: [
+                                I32,
+                            ],
                         },
                     ),
                     parent: None,
@@ -58,7 +55,7 @@ Module {
             Type(
                 Type {
                     span: Span {
-                        offset: 67,
+                        offset: 76,
                     },
                     id: Some(
                         "t2",
@@ -95,7 +92,7 @@ Module {
             Type(
                 Type {
                     span: Span {
-                        offset: 120,
+                        offset: 129,
                     },
                     id: Some(
                         "t3",
@@ -116,7 +113,7 @@ Module {
             Type(
                 Type {
                     span: Span {
-                        offset: 153,
+                        offset: 162,
                     },
                     id: Some(
                         "t4",
@@ -125,6 +122,11 @@ Module {
                     def: Func(
                         FunctionType {
                             params: [
+                                (
+                                    None,
+                                    None,
+                                    I32,
+                                ),
                                 (
                                     None,
                                     None,
@@ -141,7 +143,7 @@ Module {
             Type(
                 Type {
                     span: Span {
-                        offset: 185,
+                        offset: 198,
                     },
                     id: Some(
                         "t5",
@@ -156,9 +158,7 @@ Module {
                                     I32,
                                 ),
                             ],
-                            results: [
-                                I32,
-                            ],
+                            results: [],
                         },
                     ),
                     parent: None,
@@ -1508,7 +1508,7 @@ Module {
                     ty: TypeUse {
                         index: Some(
                             Id(
-                                "t1",
+                                "t4",
                             ),
                         ),
                         inline: Some(
@@ -1553,6 +1553,13 @@ Module {
                         locals: [
                             Local {
                                 id: Some(
+                                    "l1",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
                                     "l2",
                                 ),
                                 name: None,
@@ -1586,6 +1593,20 @@ Module {
                                 name: None,
                                 ty: I32,
                             },
+                            Local {
+                                id: Some(
+                                    "l7",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "l8",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
                         ],
                         expression: Expression {
                             instrs: [
@@ -1595,7 +1616,7 @@ Module {
                                     ),
                                 ),
                                 I32Const(
-                                    1008,
+                                    1344,
                                 ),
                                 I32Sub,
                                 LocalTee(
@@ -1610,7 +1631,7 @@ Module {
                                 ),
                                 LocalGet(
                                     Id(
-                                        "p0",
+                                        "l2",
                                     ),
                                 ),
                                 I64Const(
@@ -1618,12 +1639,12 @@ Module {
                                 ),
                                 I64Store(
                                     MemArg {
-                                        align: 4,
-                                        offset: 0,
+                                        align: 8,
+                                        offset: 672,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 9552,
+                                                offset: 9597,
                                             },
                                         ),
                                     },
@@ -1634,7 +1655,7 @@ Module {
                                     ),
                                 ),
                                 I32Const(
-                                    672,
+                                    336,
                                 ),
                                 I32Add,
                                 I32Const(
@@ -1660,11 +1681,11 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 868,
+                                        offset: 532,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 9776,
+                                                offset: 9824,
                                             },
                                         ),
                                     },
@@ -1680,11 +1701,11 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 836,
+                                        offset: 500,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 9845,
+                                                offset: 9893,
                                             },
                                         ),
                                     },
@@ -1700,11 +1721,11 @@ Module {
                                 I64Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 828,
+                                        offset: 492,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 9914,
+                                                offset: 9962,
                                             },
                                         ),
                                     },
@@ -1720,11 +1741,11 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 796,
+                                        offset: 460,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 10000,
+                                                offset: 10048,
                                             },
                                         ),
                                     },
@@ -1734,7 +1755,7 @@ Module {
                                 ),
                                 LocalSet(
                                     Id(
-                                        "l4",
+                                        "l5",
                                     ),
                                 ),
                                 I32Const(
@@ -1742,7 +1763,7 @@ Module {
                                 ),
                                 LocalSet(
                                     Id(
-                                        "l5",
+                                        "l3",
                                     ),
                                 ),
                                 Loop(
@@ -1762,12 +1783,12 @@ Module {
                                 ),
                                 LocalSet(
                                     Id(
-                                        "l3",
+                                        "l1",
                                     ),
                                 ),
                                 LocalGet(
                                     Id(
-                                        "l5",
+                                        "l3",
                                     ),
                                 ),
                                 I32Const(
@@ -1800,7 +1821,7 @@ Module {
                                 ),
                                 LocalGet(
                                     Id(
-                                        "l3",
+                                        "l1",
                                     ),
                                 ),
                                 I32Const(
@@ -1809,17 +1830,17 @@ Module {
                                 I32Shl,
                                 LocalTee(
                                     Id(
+                                        "l5",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
                                         "l4",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "p0",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l6",
                                     ),
                                 ),
                                 I32Const(
@@ -1828,7 +1849,7 @@ Module {
                                 I32Mul,
                                 LocalTee(
                                     Id(
-                                        "l5",
+                                        "l3",
                                     ),
                                 ),
                                 I32Add,
@@ -1839,18 +1860,18 @@ Module {
                                     ),
                                 ),
                                 I32Const(
-                                    672,
+                                    336,
                                 ),
                                 I32Add,
                                 LocalGet(
                                     Id(
-                                        "l5",
+                                        "l3",
                                     ),
                                 ),
                                 I32Add,
                                 LocalGet(
                                     Id(
-                                        "l4",
+                                        "l5",
                                     ),
                                 ),
                                 I32Add,
@@ -1861,7 +1882,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 10718,
+                                                offset: 10768,
                                             },
                                         ),
                                     },
@@ -1869,18 +1890,18 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 8,
+                                        offset: 680,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 10332,
+                                                offset: 10380,
                                             },
                                         ),
                                     },
                                 ),
                                 LocalGet(
                                     Id(
-                                        "l3",
+                                        "l1",
                                     ),
                                 ),
                                 I32Const(
@@ -1889,29 +1910,29 @@ Module {
                                 I32Add,
                                 LocalTee(
                                     Id(
-                                        "l3",
+                                        "l1",
                                     ),
                                 ),
                                 LocalGet(
                                     Id(
-                                        "p0",
+                                        "l2",
                                     ),
                                 ),
                                 I32Load(
                                     MemArg {
                                         align: 4,
-                                        offset: 4,
+                                        offset: 676,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 11186,
+                                                offset: 11236,
                                             },
                                         ),
                                     },
                                 ),
                                 LocalTee(
                                     Id(
-                                        "l5",
+                                        "l3",
                                     ),
                                 ),
                                 I32LtS,
@@ -1925,24 +1946,24 @@ Module {
                                 ),
                                 LocalGet(
                                     Id(
-                                        "p0",
+                                        "l2",
                                     ),
                                 ),
                                 I32Load(
                                     MemArg {
                                         align: 4,
-                                        offset: 0,
+                                        offset: 672,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 11283,
+                                                offset: 11335,
                                             },
                                         ),
                                     },
                                 ),
                                 LocalSet(
                                     Id(
-                                        "l4",
+                                        "l5",
                                     ),
                                 ),
                                 End(
@@ -1950,7 +1971,7 @@ Module {
                                 ),
                                 LocalGet(
                                     Id(
-                                        "l6",
+                                        "l4",
                                     ),
                                 ),
                                 I32Const(
@@ -1959,12 +1980,12 @@ Module {
                                 I32Add,
                                 LocalTee(
                                     Id(
-                                        "l6",
+                                        "l4",
                                     ),
                                 ),
                                 LocalGet(
                                     Id(
-                                        "l4",
+                                        "l5",
                                     ),
                                 ),
                                 I32LtS,
@@ -1978,7 +1999,7 @@ Module {
                                 ),
                                 LocalGet(
                                     Id(
-                                        "p1",
+                                        "p0",
                                     ),
                                 ),
                                 I32Const(
@@ -2002,7 +2023,7 @@ Module {
                                 ),
                                 LocalSet(
                                     Id(
-                                        "l3",
+                                        "l1",
                                     ),
                                 ),
                                 Loop(
@@ -2028,9 +2049,13 @@ Module {
                                 I32Add,
                                 LocalGet(
                                     Id(
-                                        "p0",
+                                        "l2",
                                     ),
                                 ),
+                                I32Const(
+                                    672,
+                                ),
+                                I32Add,
                                 I32Const(
                                     332,
                                 ),
@@ -2046,7 +2071,7 @@ Module {
                                     ),
                                 ),
                                 I32Const(
-                                    336,
+                                    1008,
                                 ),
                                 I32Add,
                                 LocalGet(
@@ -2065,16 +2090,20 @@ Module {
                                 ),
                                 LocalGet(
                                     Id(
-                                        "p0",
+                                        "l2",
                                     ),
                                 ),
+                                I32Const(
+                                    672,
+                                ),
+                                I32Add,
                                 LocalGet(
                                     Id(
                                         "l2",
                                     ),
                                 ),
                                 I32Const(
-                                    336,
+                                    1008,
                                 ),
                                 I32Add,
                                 I32Const(
@@ -2088,7 +2117,7 @@ Module {
                                 Drop,
                                 LocalGet(
                                     Id(
-                                        "l3",
+                                        "l1",
                                     ),
                                 ),
                                 I32Const(
@@ -2097,12 +2126,12 @@ Module {
                                 I32Add,
                                 LocalTee(
                                     Id(
-                                        "l3",
+                                        "l1",
                                     ),
                                 ),
                                 LocalGet(
                                     Id(
-                                        "p1",
+                                        "p0",
                                     ),
                                 ),
                                 I32Ne,
@@ -2126,10 +2155,1210 @@ Module {
                                     1008,
                                 ),
                                 I32Add,
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Const(
+                                    672,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    332,
+                                ),
+                                Call(
+                                    Id(
+                                        "__memcpy",
+                                    ),
+                                ),
+                                Drop,
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                Block(
+                                    BlockType {
+                                        label: Some(
+                                            "B5",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 1008,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 12932,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalTee(
+                                    Id(
+                                        "l6",
+                                    ),
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                I32LeS,
+                                BrIf(
+                                    Id(
+                                        "B5",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 1012,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 13081,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalTee(
+                                    Id(
+                                        "l7",
+                                    ),
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                I32LeS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I6",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l6",
+                                    ),
+                                ),
+                                I32Const(
+                                    3,
+                                ),
+                                I32And,
+                                LocalSet(
+                                    Id(
+                                        "l5",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l6",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Sub,
+                                I32Const(
+                                    3,
+                                ),
+                                I32GeU,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I7",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l6",
+                                    ),
+                                ),
+                                I32Const(
+                                    -4,
+                                ),
+                                I32And,
+                                LocalSet(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                Loop(
+                                    BlockType {
+                                        label: Some(
+                                            "L8",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    997,
+                                ),
+                                I32LeS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I9",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    10,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 13831,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    997,
+                                ),
+                                I32LeS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I10",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    10,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 14312,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    997,
+                                ),
+                                I32LeS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I11",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    10,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 14793,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    997,
+                                ),
+                                I32LeS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I12",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    10,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 15274,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                I32Const(
+                                    4,
+                                ),
+                                I32Add,
+                                LocalTee(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                I32Ne,
+                                BrIf(
+                                    Id(
+                                        "L8",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l5",
+                                    ),
+                                ),
+                                I32Eqz,
+                                BrIf(
+                                    Id(
+                                        "B5",
+                                    ),
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                Loop(
+                                    BlockType {
+                                        label: Some(
+                                            "L13",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    997,
+                                ),
+                                I32LeS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I14",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    10,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 16118,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalTee(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l5",
+                                    ),
+                                ),
+                                I32Ne,
+                                BrIf(
+                                    Id(
+                                        "L13",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                Br(
+                                    Id(
+                                        "B5",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l7",
+                                    ),
+                                ),
+                                I32Const(
+                                    -2,
+                                ),
+                                I32And,
+                                LocalSet(
+                                    Id(
+                                        "p0",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l7",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32And,
+                                LocalSet(
+                                    Id(
+                                        "l8",
+                                    ),
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                Loop(
+                                    BlockType {
+                                        label: Some(
+                                            "L15",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "l5",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l7",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Ne,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I16",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                Loop(
+                                    BlockType {
+                                        label: Some(
+                                            "L17",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    997,
+                                ),
+                                I32LeS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I18",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    120,
+                                ),
+                                I32Const(
+                                    32,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                I32Const(
+                                    36,
+                                ),
+                                I32Mul,
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Add,
+                                LocalGet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                I32Shl,
+                                I32Add,
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 1016,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 17496,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                Select(
+                                    SelectTypes {
+                                        tys: None,
+                                    },
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 17254,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    997,
+                                ),
+                                I32LeS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I19",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    120,
+                                ),
+                                I32Const(
+                                    32,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                I32Const(
+                                    36,
+                                ),
+                                I32Mul,
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Add,
+                                LocalGet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                I32Shl,
+                                I32Const(
+                                    4,
+                                ),
+                                I32Or,
+                                I32Add,
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 1016,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 18428,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                Select(
+                                    SelectTypes {
+                                        tys: None,
+                                    },
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 18186,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l5",
+                                    ),
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                I32Add,
+                                LocalTee(
+                                    Id(
+                                        "l5",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "p0",
+                                    ),
+                                ),
+                                I32Ne,
+                                BrIf(
+                                    Id(
+                                        "L17",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                End(
+                                    None,
+                                ),
+                                Block(
+                                    BlockType {
+                                        label: Some(
+                                            "B20",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l8",
+                                    ),
+                                ),
+                                I32Eqz,
+                                BrIf(
+                                    Id(
+                                        "B20",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    997,
+                                ),
+                                I32GtS,
+                                BrIf(
+                                    Id(
+                                        "B20",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    120,
+                                ),
+                                I32Const(
+                                    32,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                I32Const(
+                                    36,
+                                ),
+                                I32Mul,
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Add,
+                                LocalGet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                I32Shl,
+                                I32Add,
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 1016,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 19789,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                Select(
+                                    SelectTypes {
+                                        tys: None,
+                                    },
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 19603,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    998,
+                                ),
+                                I32LtS,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I21",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    10,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 20338,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalTee(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l6",
+                                    ),
+                                ),
+                                I32Ne,
+                                BrIf(
+                                    Id(
+                                        "L15",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l1",
+                                    ),
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    0,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 20773,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Const(
+                                    1344,
+                                ),
+                                I32Add,
                                 GlobalSet(
                                     Id(
                                         "__stack_pointer",
                                     ),
+                                ),
+                                I32Const(
+                                    1024,
                                 ),
                             ],
                         },
@@ -2150,15 +3379,10 @@ Module {
                                         None,
                                         I32,
                                     ),
-                                    (
-                                        Some(
-                                            "p1",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
                                 ],
-                                results: [],
+                                results: [
+                                    I32,
+                                ],
                             },
                         ),
                     },
@@ -2167,7 +3391,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 12519,
+                        offset: 20984,
                     },
                     id: Some(
                         "_initialize",
@@ -2203,7 +3427,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 12605,
+                        offset: 21070,
                     },
                     id: Some(
                         "__memcpy",
@@ -2386,7 +3610,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 13532,
+                                                offset: 21997,
                                             },
                                         ),
                                     },
@@ -2398,7 +3622,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 13467,
+                                                offset: 21932,
                                             },
                                         ),
                                     },
@@ -2558,7 +3782,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 14641,
+                                                offset: 23106,
                                             },
                                         ),
                                     },
@@ -2570,7 +3794,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 14580,
+                                                offset: 23045,
                                             },
                                         ),
                                     },
@@ -2592,7 +3816,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 14773,
+                                                offset: 23238,
                                             },
                                         ),
                                     },
@@ -2604,7 +3828,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 14703,
+                                                offset: 23168,
                                             },
                                         ),
                                     },
@@ -2626,7 +3850,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 14914,
+                                                offset: 23379,
                                             },
                                         ),
                                     },
@@ -2638,7 +3862,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 14844,
+                                                offset: 23309,
                                             },
                                         ),
                                     },
@@ -2660,7 +3884,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 15055,
+                                                offset: 23520,
                                             },
                                         ),
                                     },
@@ -2672,7 +3896,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 14985,
+                                                offset: 23450,
                                             },
                                         ),
                                     },
@@ -2847,7 +4071,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16069,
+                                                offset: 24534,
                                             },
                                         ),
                                     },
@@ -2859,7 +4083,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16019,
+                                                offset: 24484,
                                             },
                                         ),
                                     },
@@ -2881,7 +4105,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16181,
+                                                offset: 24646,
                                             },
                                         ),
                                     },
@@ -2893,7 +4117,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16122,
+                                                offset: 24587,
                                             },
                                         ),
                                     },
@@ -2915,7 +4139,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16302,
+                                                offset: 24767,
                                             },
                                         ),
                                     },
@@ -2927,7 +4151,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16243,
+                                                offset: 24708,
                                             },
                                         ),
                                     },
@@ -2949,7 +4173,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16424,
+                                                offset: 24889,
                                             },
                                         ),
                                     },
@@ -2961,7 +4185,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16364,
+                                                offset: 24829,
                                             },
                                         ),
                                     },
@@ -2983,7 +4207,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16547,
+                                                offset: 25012,
                                             },
                                         ),
                                     },
@@ -2995,7 +4219,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16487,
+                                                offset: 24952,
                                             },
                                         ),
                                     },
@@ -3017,7 +4241,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16670,
+                                                offset: 25135,
                                             },
                                         ),
                                     },
@@ -3029,7 +4253,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16610,
+                                                offset: 25075,
                                             },
                                         ),
                                     },
@@ -3051,7 +4275,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16793,
+                                                offset: 25258,
                                             },
                                         ),
                                     },
@@ -3063,7 +4287,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16733,
+                                                offset: 25198,
                                             },
                                         ),
                                     },
@@ -3085,7 +4309,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16916,
+                                                offset: 25381,
                                             },
                                         ),
                                     },
@@ -3097,7 +4321,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16856,
+                                                offset: 25321,
                                             },
                                         ),
                                     },
@@ -3119,7 +4343,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17039,
+                                                offset: 25504,
                                             },
                                         ),
                                     },
@@ -3131,7 +4355,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 16979,
+                                                offset: 25444,
                                             },
                                         ),
                                     },
@@ -3153,7 +4377,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17162,
+                                                offset: 25627,
                                             },
                                         ),
                                     },
@@ -3165,7 +4389,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17102,
+                                                offset: 25567,
                                             },
                                         ),
                                     },
@@ -3187,7 +4411,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17285,
+                                                offset: 25750,
                                             },
                                         ),
                                     },
@@ -3199,7 +4423,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17225,
+                                                offset: 25690,
                                             },
                                         ),
                                     },
@@ -3221,7 +4445,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17408,
+                                                offset: 25873,
                                             },
                                         ),
                                     },
@@ -3233,7 +4457,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17348,
+                                                offset: 25813,
                                             },
                                         ),
                                     },
@@ -3255,7 +4479,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17531,
+                                                offset: 25996,
                                             },
                                         ),
                                     },
@@ -3267,7 +4491,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17471,
+                                                offset: 25936,
                                             },
                                         ),
                                     },
@@ -3289,7 +4513,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17654,
+                                                offset: 26119,
                                             },
                                         ),
                                     },
@@ -3301,7 +4525,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17594,
+                                                offset: 26059,
                                             },
                                         ),
                                     },
@@ -3323,7 +4547,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17777,
+                                                offset: 26242,
                                             },
                                         ),
                                     },
@@ -3335,7 +4559,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17717,
+                                                offset: 26182,
                                             },
                                         ),
                                     },
@@ -3357,7 +4581,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17900,
+                                                offset: 26365,
                                             },
                                         ),
                                     },
@@ -3369,7 +4593,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 17840,
+                                                offset: 26305,
                                             },
                                         ),
                                     },
@@ -3464,7 +4688,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 18421,
+                                                offset: 26886,
                                             },
                                         ),
                                     },
@@ -3476,7 +4700,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 18375,
+                                                offset: 26840,
                                             },
                                         ),
                                     },
@@ -3578,7 +4802,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 18918,
+                                                offset: 27383,
                                             },
                                         ),
                                     },
@@ -3590,7 +4814,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 18865,
+                                                offset: 27330,
                                             },
                                         ),
                                     },
@@ -3690,7 +4914,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 19280,
+                        offset: 27745,
                     },
                     id: Some(
                         "memset",
@@ -3772,7 +4996,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 19527,
+                                                offset: 27992,
                                             },
                                         ),
                                     },
@@ -3809,7 +5033,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 19594,
+                                                offset: 28059,
                                             },
                                         ),
                                     },
@@ -3845,7 +5069,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 19874,
+                                                offset: 28339,
                                             },
                                         ),
                                     },
@@ -3867,7 +5091,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 19950,
+                                                offset: 28415,
                                             },
                                         ),
                                     },
@@ -3893,7 +5117,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 20026,
+                                                offset: 28491,
                                             },
                                         ),
                                     },
@@ -3919,7 +5143,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 20137,
+                                                offset: 28602,
                                             },
                                         ),
                                     },
@@ -3955,7 +5179,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 20335,
+                                                offset: 28800,
                                             },
                                         ),
                                     },
@@ -3981,7 +5205,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 20411,
+                                                offset: 28876,
                                             },
                                         ),
                                     },
@@ -4054,7 +5278,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 20608,
+                                                offset: 29073,
                                             },
                                         ),
                                     },
@@ -4106,7 +5330,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 21031,
+                                                offset: 29496,
                                             },
                                         ),
                                     },
@@ -4142,7 +5366,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 21469,
+                                                offset: 29934,
                                             },
                                         ),
                                     },
@@ -4164,7 +5388,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 21544,
+                                                offset: 30009,
                                             },
                                         ),
                                     },
@@ -4190,7 +5414,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 21619,
+                                                offset: 30084,
                                             },
                                         ),
                                     },
@@ -4216,7 +5440,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 21729,
+                                                offset: 30194,
                                             },
                                         ),
                                     },
@@ -4252,7 +5476,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 21928,
+                                                offset: 30393,
                                             },
                                         ),
                                     },
@@ -4274,7 +5498,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 22004,
+                                                offset: 30469,
                                             },
                                         ),
                                     },
@@ -4296,7 +5520,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 22080,
+                                                offset: 30545,
                                             },
                                         ),
                                     },
@@ -4318,7 +5542,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 22156,
+                                                offset: 30621,
                                             },
                                         ),
                                     },
@@ -4344,7 +5568,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 22232,
+                                                offset: 30697,
                                             },
                                         ),
                                     },
@@ -4370,7 +5594,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 22343,
+                                                offset: 30808,
                                             },
                                         ),
                                     },
@@ -4396,7 +5620,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 22454,
+                                                offset: 30919,
                                             },
                                         ),
                                     },
@@ -4422,7 +5646,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 22565,
+                                                offset: 31030,
                                             },
                                         ),
                                     },
@@ -4525,7 +5749,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 23242,
+                                                offset: 31707,
                                             },
                                         ),
                                     },
@@ -4547,7 +5771,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 23324,
+                                                offset: 31789,
                                             },
                                         ),
                                     },
@@ -4569,7 +5793,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 23406,
+                                                offset: 31871,
                                             },
                                         ),
                                     },
@@ -4591,7 +5815,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 23487,
+                                                offset: 31952,
                                             },
                                         ),
                                     },
@@ -4689,7 +5913,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 23849,
+                        offset: 32314,
                     },
                     id: Some(
                         "stackSave",
@@ -4732,7 +5956,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 23948,
+                        offset: 32413,
                     },
                     id: Some(
                         "stackRestore",
@@ -4763,7 +5987,7 @@ Module {
                     ty: TypeUse {
                         index: Some(
                             Id(
-                                "t4",
+                                "t5",
                             ),
                         ),
                         inline: Some(
@@ -4786,7 +6010,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 24078,
+                        offset: 32543,
                     },
                     id: Some(
                         "stackAlloc",
@@ -4845,7 +6069,7 @@ Module {
                     ty: TypeUse {
                         index: Some(
                             Id(
-                                "t5",
+                                "t1",
                             ),
                         ),
                         inline: Some(
@@ -4870,7 +6094,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 24391,
+                        offset: 32856,
                     },
                     id: Some(
                         "__errno_location",
@@ -4886,7 +6110,7 @@ Module {
                         expression: Expression {
                             instrs: [
                                 I32Const(
-                                    1024,
+                                    2024,
                                 ),
                             ],
                         },
@@ -4911,7 +6135,7 @@ Module {
             Table(
                 Table {
                     span: Span {
-                        offset: 24491,
+                        offset: 32956,
                     },
                     id: Some(
                         "__indirect_function_table",
@@ -4942,7 +6166,7 @@ Module {
             Memory(
                 Memory {
                     span: Span {
-                        offset: 24577,
+                        offset: 33042,
                     },
                     id: Some(
                         "memory",
@@ -4969,7 +6193,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 24622,
+                        offset: 33087,
                     },
                     id: Some(
                         "__stack_pointer",
@@ -4986,7 +6210,7 @@ Module {
                         Expression {
                             instrs: [
                                 I32Const(
-                                    5243920,
+                                    5244912,
                                 ),
                             ],
                         },
@@ -4996,7 +6220,7 @@ Module {
             Elem(
                 Elem {
                     span: Span {
-                        offset: 24680,
+                        offset: 33145,
                     },
                     id: Some(
                         "e0",
@@ -5006,7 +6230,7 @@ Module {
                         table: Num(
                             0,
                             Span {
-                                offset: 24680,
+                                offset: 33145,
                             },
                         ),
                         offset: Expression {
@@ -5034,46 +6258,46 @@ Module {
 
 
 {
-    "LocalGet": 265,
-    "I32Const": 116,
-    "I32Add": 62,
-    "BrIf": 41,
+    "LocalGet": 323,
+    "I32Const": 190,
+    "I32Add": 96,
+    "LocalSet": 52,
+    "BrIf": 49,
+    "End": 47,
+    "LocalTee": 42,
+    "I32Load": 38,
     "I32Store": 38,
-    "LocalTee": 36,
-    "I32Load": 33,
-    "LocalSet": 32,
-    "End": 30,
-    "I32Sub": 22,
-    "I32Store8": 14,
-    "Block": 13,
-    "I32Ne": 12,
+    "I32Store8": 24,
+    "I32Sub": 23,
+    "I32Ne": 17,
+    "If": 17,
+    "Block": 15,
+    "Loop": 15,
+    "I32Mul": 14,
+    "I32And": 14,
+    "I32Shl": 13,
+    "I32LeS": 12,
     "I32LtU": 12,
-    "Loop": 11,
-    "I32Mul": 11,
-    "I32Shl": 10,
-    "I32And": 10,
-    "I32Eqz": 8,
+    "I32Eqz": 10,
+    "Call": 7,
+    "I32GtS": 7,
     "GlobalSet": 6,
-    "Call": 6,
-    "I32GtS": 6,
-    "If": 6,
     "I64Store": 6,
     "I32Load8u": 6,
+    "I32LtS": 5,
     "I32GeS": 5,
     "GlobalGet": 4,
-    "I32LtS": 4,
-    "I32LeS": 3,
+    "Select": 4,
+    "Drop": 4,
+    "Br": 4,
     "I64Const": 3,
-    "Drop": 3,
-    "Br": 3,
     "I32Eq": 2,
+    "I32GeU": 2,
+    "I32Or": 2,
     "I32LeU": 2,
     "I32GtU": 2,
     "Nop": 1,
-    "Select": 1,
     "I32Xor": 1,
-    "I32GeU": 1,
-    "I32Or": 1,
     "I64ExtendI32U": 1,
     "I64Mul": 1,
 }

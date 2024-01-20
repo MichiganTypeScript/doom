@@ -39,19 +39,16 @@ fn handle_module_field_func(source: &mut SourceFile, func: &Func, _module_func_i
                 .collect();
         }
 
-        if func_type.results.len() != 1 {
-            panic!("expecting every func to have a single return");
+        if func_type.results.len() > 1 {
+            dbg!(func.id);
+            dbg!(&func_type);
+            panic!("multiple returns are not supported");
         }
 
-        result_type_constraint = map_valtype_to_typeconstraint(
-            func_type
-                .results
-                .to_vec()
-                .first()
-                .unwrap_or_else(|| panic!("expecting at least one return type type")),
-        );
-
-        // dbg!(func_types);
+        result_type_constraint = func_type
+            .results
+            .first()
+            .map_or(TypeConstraint::None, map_valtype_to_typeconstraint);
     }
 
     let (statements, results) = match &func.kind {
