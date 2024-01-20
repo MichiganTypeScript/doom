@@ -17,13 +17,9 @@ pub fn handle_instructions(
 
     let mut fragments: Vec<Fragment> = Vec::new();
 
+    // Order: I32, I64, F32, F64
+    // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference
     for instruction in instructions.iter() {
-        // dbg!(&stack);
-        // dbg!(&instruction);
-
-        // Order: I32, I64, F32, F64
-
-        // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference
         match instruction {
             ////////////////////////////////////////////////
             // Numeric Instructions

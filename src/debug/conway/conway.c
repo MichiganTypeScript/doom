@@ -76,8 +76,6 @@ Frame conway(int iterations) {
         }
     }
 
-    int iterations = 1;
-
     for (int i = 0; i < iterations; i++) {
         frame = updateGrid(frame);
     }

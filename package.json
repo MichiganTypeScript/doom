@@ -9,7 +9,7 @@
     "conway-stateless:ts": "tsx examples/conway-stateless/conway.ts",
     "conway-stateful:c": "gcc examples/conway-stateful/conway.c -o examples/conway-stateful/conway && examples/conway-stateful/conway",
     "conway-stateless:c": "gcc examples/conway-stateless/conway.c -o examples/conway-stateless/conway && examples/conway-stateless/conway",
-    "compile:c-to-wasm": "emcc src/debug/code.c -o src/debug/code.wasm -g -O3 -s STANDALONE_WASM",
+    "compile:c-to-wasm": "emcc src/debug/code.c -o src/debug/code.wasm -g -O3 -s STANDALONE_WASM -s EXPORTED_FUNCTIONS='[\"_conway\"]' --no-entry",
     "compile:wasm-to-wat": "wasm2wat src/debug/code.wasm --enable-code-metadata --inline-exports --inline-imports --disable-reference-types --generate-names --fold-exprs --output=src/debug/code.wat",
     "compile:c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
     "compile:wat-to-wasm": "wat2wasm src/debug/code.wat --output src/debug/code.wasm",
