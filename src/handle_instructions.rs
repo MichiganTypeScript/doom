@@ -2,9 +2,13 @@ use wast::{core::Instruction, token::Index};
 
 use crate::{
     fragment::Fragment,
-    source_file::{SourceFile, TypeConstraint, RESULT_SENTINEL},
+    source_file::SourceFile,
     statement::Statement,
-    utils::{format_call_id, format_index, format_index_name, hotscript_binary, hotscript_unary},
+    type_constraint::TypeConstraint,
+    utils::{
+        format_call_id, format_index, format_index_name, hotscript_binary, hotscript_unary,
+        RESULT_SENTINEL,
+    },
 };
 
 pub fn handle_instructions(

@@ -1,10 +1,13 @@
 extern crate wast;
 
 mod fragment;
+mod generic_parameter;
 mod handle_instructions;
 mod handle_module;
 mod source_file;
 mod statement;
+mod type_constraint;
+mod type_definition;
 mod utils;
 mod wat_to_dts;
 

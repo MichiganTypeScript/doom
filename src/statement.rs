@@ -2,7 +2,7 @@ use wast::core::Local;
 
 use crate::{
     fragment::Fragment,
-    source_file::TypeConstraint,
+    type_constraint::TypeConstraint,
     utils::{format_call_id, map_valtype_to_typeconstraint},
 };
 

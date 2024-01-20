@@ -1,85 +1,18 @@
 use std::{collections::HashMap, fmt};
 
 use indexmap::{IndexMap, IndexSet};
-use wast::core::Local;
 
 use crate::{
     fragment::Fragment,
-    utils::{format_call_id, map_valtype_to_typeconstraint},
+    generic_parameter::GenericParameter,
+    type_definition::{TypeDefinition, TypeDefinitions},
+    utils::RESULT_SENTINEL,
     Statement,
 };
 
-pub const RESULT_SENTINEL: &str = "RESULT";
-
 pub type Imports = IndexMap<String, IndexSet<String>>;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum TypeConstraint {
-    None,
-    Number,
-    #[allow(dead_code)] // we'll probably need this later hopefully
-    String,
-}
-
-impl fmt::Display for TypeConstraint {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            TypeConstraint::None => write!(f, ""),
-            TypeConstraint::Number => write!(f, "number"),
-            TypeConstraint::String => write!(f, "string"),
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct GenericParameter {
-    pub constraint: TypeConstraint,
-    pub name: String,
-}
-
-impl GenericParameter {
-    #[allow(dead_code)] // we'll probably need this later hopefully
-    pub fn new_string<T: Into<String>>(name: T) -> Self {
-        GenericParameter {
-            constraint: TypeConstraint::String,
-            name: name.into(),
-        }
-    }
-    pub fn new_number<T: Into<String>>(name: T) -> Self {
-        GenericParameter {
-            constraint: TypeConstraint::Number,
-            name: name.into(),
-        }
-    }
-}
-
-impl From<&Local<'_>> for GenericParameter {
-    fn from(local: &Local) -> Self {
-        let name = local.id.expect("didn't get local name").name().to_string();
-        GenericParameter {
-            constraint: map_valtype_to_typeconstraint(&local.ty),
-            name: format_call_id(name),
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct TypeDefinition {
-    /// the name of the type
-    pub name: String,
-
-    /// any arguments
-    pub generics: Vec<GenericParameter>,
-
-    /// the body of the type
-    pub statements: Vec<Statement>,
-
-    /// a set of statements
-    pub result: Statement,
-}
-
-pub type TypeDefinitions = IndexMap<String, TypeDefinition>;
-
+/// This represents is a literal TypeScript file that is the final build output of the program
 pub struct SourceFile {
     pub imports: Imports,
 
@@ -94,60 +27,6 @@ impl fmt::Debug for SourceFile {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{{ {:?} {:?} }}", self.imports, self.types)
     }
-}
-
-pub fn create_type(
-    exported: bool,
-    name: String,
-    generics: Vec<String>,
-    statements: &mut Vec<Statement>,
-    result: Statement,
-) -> String {
-    // dbg!(
-    //     "create type",
-    //     exported,
-    //     &name,
-    //     &generics,
-    //     &statements,
-    //     &results
-    // );
-
-    let export = if exported { "export " } else { "" };
-
-    let mut g = String::new();
-    if !generics.is_empty() {
-        g = generics.iter().map(|line| line.to_string() + ",").collect();
-    }
-
-    // handle RESULT
-    statements.push(result);
-
-    let s = &statements
-        .iter()
-        .map(|statement| {
-            let mut working = statement.clone();
-            let extends = if working.constraint != TypeConstraint::None {
-                " extends ".to_string() + &working.constraint.to_string()
-            } else {
-                String::new()
-            };
-
-            let mut working_stack = working
-                .fragments
-                .pop()
-                .expect("tried to pop a Fragment from statements but there wasn't one");
-
-            working_stack.increase_indent();
-            working_stack.increase_indent();
-            let before_equals = "\n  ".to_string() + &working.name + &extends + " ";
-            let mut after_equals = "\n".to_string() + &working_stack.to_string();
-            after_equals.pop();
-            before_equals.to_string() + "=" + &after_equals
-        })
-        .collect::<Vec<String>>()
-        .join(",");
-
-    format!("{export}type {name}<{g}{s}\n> = {RESULT_SENTINEL}\n")
 }
 
 impl ToString for SourceFile {
@@ -170,31 +49,9 @@ impl ToString for SourceFile {
         }
 
         for (_name, definition) in &self.types {
+            lines.push(definition.to_string());
+
             let type_key = &definition.name;
-            let mut generics: Vec<String> = Vec::new();
-
-            if !definition.generics.is_empty() {
-                generics = definition
-                    .generics
-                    .iter()
-                    .map(|GenericParameter { constraint, name }| {
-                        format!("\n  {name} extends {constraint}")
-                    })
-                    .collect::<Vec<_>>()
-            }
-
-            let mut statements = definition.statements.clone();
-            let results = definition.result.clone();
-
-            let name = create_type(
-                false,
-                type_key.clone(),
-                generics.clone(),
-                &mut statements,
-                results,
-            );
-
-            lines.push(name);
 
             // handle exports
             if let Some(export_names) = self.exports.get(type_key) {
@@ -214,12 +71,11 @@ impl ToString for SourceFile {
                     }
 
                     let result = format!("{type_key}{passed_generics}");
-                    let export_section = create_type(
-                        true,
-                        export_name.to_string(),
-                        generics.clone(),
-                        &mut vec![],
-                        Statement {
+                    let export_section = TypeDefinition {
+                        exported: true,
+                        generics: definition.generics.clone(),
+                        name: export_name.to_string(),
+                        result: Statement {
                             name: RESULT_SENTINEL.to_string(),
                             fragments: vec![Fragment::from_string(
                                 result,
@@ -227,9 +83,10 @@ impl ToString for SourceFile {
                             )],
                             constraint: definition.result.constraint,
                         },
-                    );
+                        statements: vec![],
+                    };
 
-                    lines.push(export_section);
+                    lines.push(export_section.to_string());
                 }
             }
         }
@@ -257,7 +114,7 @@ impl SourceFile {
         name: N,
         generics: Vec<GenericParameter>,
         statements: Vec<Statement>,
-        results: Statement,
+        result: Statement,
     ) {
         let name = name.into();
         if self.types.contains_key(&name) {
@@ -269,7 +126,8 @@ impl SourceFile {
                 statements,
                 generics,
                 name,
-                result: results,
+                result,
+                exported: false, // TODO, is this correct?
             },
         );
     }

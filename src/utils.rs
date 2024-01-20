@@ -6,10 +6,7 @@ use wast::{
     token::Index,
 };
 
-use crate::{
-    fragment::Fragment,
-    source_file::{SourceFile, TypeConstraint},
-};
+use crate::{fragment::Fragment, source_file::SourceFile, type_constraint::TypeConstraint};
 
 #[macro_export]
 macro_rules! dbg_dump_file {
@@ -22,6 +19,8 @@ macro_rules! dbg_dump_file {
         // println!("{}", file_source);
     }};
 }
+
+pub const RESULT_SENTINEL: &str = "RESULT";
 
 pub fn format_index_name(index: usize) -> String {
     format!("i_{index}")

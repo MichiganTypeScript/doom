@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::source_file::TypeConstraint;
+use crate::type_constraint::TypeConstraint;
 
 #[derive(Debug, Clone)]
 pub struct SourceLine {
