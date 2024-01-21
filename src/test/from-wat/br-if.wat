@@ -32,6 +32,6 @@
   )
 
   (func $entry (export "entry") (param $a i32) (result i32)
-    (call $foo (local.get $a))
+    (call $brif (local.get $a))
   )
 )

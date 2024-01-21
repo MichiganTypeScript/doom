@@ -5,5 +5,5 @@
     "strict": true,
     "noEmit": true
   },
-  "include": ["src/conformance/*.test.ts"]
+  "include": ["src/test/from-wat/*.test.ts"]
 }

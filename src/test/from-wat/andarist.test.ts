@@ -2,11 +2,11 @@ import { Expect, Equal } from 'type-testing';
 import type { entry } from './andarist.expected.js'; // TODO, change to actual
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.js';
+import { getWasm } from '../../utils.js';
 
 const name = 'andarist';
 test(name, async () => {
-  const entry = await getWasm(name);
+  const entry = await getWasm("from-wat", name);
   expect(entry(-6)).toStrictEqual(11);
   expect(entry(-5)).toStrictEqual(12);
   expect(entry(-4)).toStrictEqual(15);

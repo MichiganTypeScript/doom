@@ -1,12 +1,12 @@
 import { Expect, Equal } from 'type-testing';
-import type { entry } from './equal.actual.d.ts';
+import type { entry } from './equal.actual.js';
 
-import { getWasm } from '../utils.js';
+import { getWasm } from '../../utils.js';
 import { expect, test } from 'vitest';
 
 const name = 'equal';
 test(name, async () => {
-  const entry = await getWasm(name);
+  const entry = await getWasm("from-wat", name);
   expect(entry(2, 2)).toStrictEqual(1);
   expect(entry(1, 2)).toStrictEqual(0);
   expect(entry(0, 2)).toStrictEqual(0);

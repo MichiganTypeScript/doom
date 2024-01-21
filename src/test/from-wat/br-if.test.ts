@@ -1,12 +1,12 @@
-import type { entry } from './br-if.expected.d.ts'; // TODO: change to `actual`
+import type { entry } from './br-if.expected.js'; // TODO: change to `actual`
 import { Expect, Equal } from 'type-testing';
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.js';
+import { getWasm } from '../../utils.js';
 
 const name = 'br-if';
 test(name, async () => {
-  const entry = await getWasm(name);
+  const entry = await getWasm("from-wat", name);
   expect(entry(2)).toStrictEqual(7);
   expect(entry(1)).toStrictEqual(99);
   expect(entry(0)).toStrictEqual(42);
