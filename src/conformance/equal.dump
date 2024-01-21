@@ -16,9 +16,7 @@ Module {
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "equal",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [],
@@ -66,6 +64,70 @@ Module {
                     },
                 },
             ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 118,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "main",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
         ],
     ),
 }
@@ -74,6 +136,7 @@ Module {
 
 
 {
-    "LocalGet": 2,
+    "LocalGet": 4,
     "I32Eq": 1,
+    "Call": 1,
 }

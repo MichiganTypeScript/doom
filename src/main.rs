@@ -54,19 +54,25 @@ mod tests {
             }
 
             // focus
-            // if file_name != "br-if.wat" {
+            // if ["add", "andarist"]
+            //     .iter()
+            //     .any(|&focus| file_name == format!("{focus}.wat"))
+            //     .not()
+            // {
             //     continue;
             // }
 
             // to skip files from the test suite, add them here
-            if [
-                "br-if", // this one blocked by sheer force of will
-            ]
-            .iter()
-            .any(|&skip| file_name == format!("{skip}.wat"))
-            {
-                continue;
-            }
+            // if [
+            //     "br-if", // this one blocked by sheer force of will
+            // ]
+            // .iter()
+            // .any(|&skip| file_name == format!("{skip}.wat"))
+            // {
+            //     continue;
+            // }
+
+            dbg!(format!("running: {}", &file_name));
 
             let dump_path = format!(
                 "{}{}",

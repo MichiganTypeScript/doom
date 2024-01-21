@@ -12,13 +12,11 @@ Module {
                         offset: 11,
                     },
                     id: Some(
-                        "theOmniscient",
+                        "ziltoid",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "ziltoid",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [],
@@ -47,6 +45,45 @@ Module {
                     },
                 },
             ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 186,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Call(
+                                    Id(
+                                        "ziltoid",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
         ],
     ),
 }
@@ -57,4 +94,5 @@ Module {
 {
     "I32Const": 2,
     "I32Sub": 1,
+    "Call": 1,
 }

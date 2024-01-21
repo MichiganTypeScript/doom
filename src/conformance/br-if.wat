@@ -1,5 +1,5 @@
 (module
-  (func $foo (export "brif") (param $x i32) (result i32)
+  (func $brif (param $x i32) (result i32)
     (local $result i32)
 
     (block $outer_block
@@ -29,5 +29,9 @@
       local.set $result
     )
     local.get $result
+  )
+
+  (func $entry (export "entry") (param $a i32) (result i32)
+    (call $foo (local.get $a))
   )
 )

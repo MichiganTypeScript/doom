@@ -12,13 +12,11 @@ Module {
                         offset: 11,
                     },
                     id: Some(
-                        "main",
+                        "negate",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "main",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [],
@@ -46,6 +44,45 @@ Module {
                     },
                 },
             ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 127,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Call(
+                                    Id(
+                                        "negate",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    F64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
         ],
     ),
 }
@@ -56,4 +93,5 @@ Module {
 {
     "F64Const": 1,
     "F64Neg": 1,
+    "Call": 1,
 }

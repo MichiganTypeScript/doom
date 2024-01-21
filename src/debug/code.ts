@@ -6,14 +6,14 @@ export const getWasm = async () => {
   const instance = await WebAssembly.instantiate(wasmModule);
   return instance.exports as unknown as {
     memory: WebAssembly.Memory;
-    conway: (x: number) => number;
+    entry: (x: number) => number;
   };
 }
 
-getWasm().then(({ memory, conway }) => {
+getWasm().then(({ memory, entry }) => {
   const buffer = new Uint8Array(memory.buffer);
 
-  const ptr = conway(5);
+  const ptr = entry(5);
 
   let str = '';
 

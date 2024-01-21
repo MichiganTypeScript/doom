@@ -6,5 +6,5 @@ export const getWasm = async (filePath: string) => {
   const wasmBuffer = await readFile(wasmPath);
   const wasmModule = await WebAssembly.compile(wasmBuffer);
   const instance = await WebAssembly.instantiate(wasmModule);
-  return instance.exports as Record<string, CallableFunction>;
+  return instance.exports.entry as CallableFunction;
 }

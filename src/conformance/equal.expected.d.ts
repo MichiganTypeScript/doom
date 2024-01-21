@@ -10,11 +10,21 @@ type $main<
     >> extends true ? 1 : 0)
 > = RESULT
 
-export type equal<
+type $entry<
   $a extends number,
   $b extends number,
   RESULT extends number =
     $main<
+      $a,
+      $b
+    >
+> = RESULT
+
+export type entry<
+  $a extends number,
+  $b extends number,
+  RESULT extends number =
+    $entry<
       $a,
       $b
     >

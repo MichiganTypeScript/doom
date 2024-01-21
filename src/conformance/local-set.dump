@@ -16,9 +16,7 @@ Module {
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "main",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [
@@ -65,6 +63,45 @@ Module {
                     },
                 },
             ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 231,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Call(
+                                    Id(
+                                        "main",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
         ],
     ),
 }
@@ -77,4 +114,5 @@ Module {
     "LocalSet": 1,
     "LocalGet": 1,
     "I32Add": 1,
+    "Call": 1,
 }

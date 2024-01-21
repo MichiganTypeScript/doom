@@ -51,9 +51,7 @@ Module {
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "get42Plus1",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [],
@@ -84,6 +82,45 @@ Module {
                     },
                 },
             ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 143,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Call(
+                                    Id(
+                                        "get42Plus1",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
         ],
     ),
 }
@@ -93,6 +130,6 @@ Module {
 
 {
     "I32Const": 2,
-    "Call": 1,
+    "Call": 2,
     "I32Add": 1,
 }

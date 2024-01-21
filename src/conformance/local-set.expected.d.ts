@@ -10,7 +10,12 @@ type $main<
     >>
 > = RESULT
 
-export type main<
+type $entry<
   RESULT extends number =
     $main
+> = RESULT
+
+export type entry<
+  RESULT extends number =
+    $entry
 > = RESULT

@@ -1,13 +1,18 @@
 import { Call, Numbers } from 'hotscript'
 
-type $main<
+type $negate<
   RESULT extends number =
     Call<Numbers.Negate<
       10
     >>
 > = RESULT
 
-export type main<
+type $entry<
   RESULT extends number =
-    $main
+    $negate
+> = RESULT
+
+export type entry<
+  RESULT extends number =
+    $entry
 > = RESULT

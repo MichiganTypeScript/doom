@@ -1,23 +1,23 @@
-type $selectTrue<
+type $selectBranch<
+  $condition extends number,
   RESULT extends number =
-    1 extends 0
+    $condition extends 0
     ? 20
     : 10
 > = RESULT
 
-export type selectTrue<
+type $entry<
+  $a extends number,
   RESULT extends number =
-    $selectTrue
+    $selectBranch<
+      $a
+    >
 > = RESULT
 
-type $selectFalse<
+export type entry<
+  $a extends number,
   RESULT extends number =
-    0 extends 0
-    ? 20
-    : 10
-> = RESULT
-
-export type selectFalse<
-  RESULT extends number =
-    $selectFalse
+    $entry<
+      $a
+    >
 > = RESULT

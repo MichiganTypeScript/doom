@@ -34,7 +34,7 @@
   ;;   )
   ;; )
 
-  (func $andarist (export "andarist") (param $x i32) (result i32)
+  (func $andarist (param $x i32) (result i32)
     (i32.add
       (i32.add
         (local.get $x)
@@ -49,5 +49,9 @@
       )
       (i32.const 7)
     )
+  )
+
+  (func $entry (export "entry") (param $a i32) (result i32)
+    (call $andarist (local.get $a))
   )
 )

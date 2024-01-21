@@ -12,13 +12,11 @@ Module {
                         offset: 73,
                     },
                     id: Some(
-                        "useLocalTee",
+                        "localTee",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "localTee",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [
@@ -72,6 +70,58 @@ Module {
                     },
                 },
             ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 439,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "localTee",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
         ],
     ),
 }
@@ -80,7 +130,8 @@ Module {
 
 
 {
-    "LocalGet": 2,
+    "LocalGet": 3,
     "LocalTee": 1,
     "I32Add": 1,
+    "Call": 1,
 }

@@ -12,13 +12,11 @@ Module {
                         offset: 11,
                     },
                     id: Some(
-                        "selectTrue",
+                        "selectBranch",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "selectTrue",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [],
@@ -30,8 +28,10 @@ Module {
                                 I32Const(
                                     20,
                                 ),
-                                I32Const(
-                                    1,
+                                LocalGet(
+                                    Id(
+                                        "condition",
+                                    ),
                                 ),
                                 Select(
                                     SelectTypes {
@@ -45,7 +45,15 @@ Module {
                         index: None,
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "condition",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
                                 results: [
                                     I32,
                                 ],
@@ -57,34 +65,30 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 246,
+                        offset: 304,
                     },
                     id: Some(
-                        "selectFalse",
+                        "entry",
                     ),
                     name: None,
                     exports: InlineExport {
                         names: [
-                            "selectFalse",
+                            "entry",
                         ],
                     },
                     kind: Inline {
                         locals: [],
                         expression: Expression {
                             instrs: [
-                                I32Const(
-                                    10,
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
                                 ),
-                                I32Const(
-                                    20,
-                                ),
-                                I32Const(
-                                    0,
-                                ),
-                                Select(
-                                    SelectTypes {
-                                        tys: None,
-                                    },
+                                Call(
+                                    Id(
+                                        "selectBranch",
+                                    ),
                                 ),
                             ],
                         },
@@ -93,7 +97,15 @@ Module {
                         index: None,
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
                                 results: [
                                     I32,
                                 ],
@@ -110,6 +122,8 @@ Module {
 
 
 {
-    "I32Const": 6,
-    "Select": 2,
+    "I32Const": 2,
+    "LocalGet": 2,
+    "Select": 1,
+    "Call": 1,
 }

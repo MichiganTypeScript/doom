@@ -18,10 +18,6 @@ macro_rules! dbg_dump_file {
 
 pub const RESULT_SENTINEL: &str = "RESULT";
 
-pub fn format_index_name(index: usize) -> String {
-    format!("i_{index}")
-}
-
 pub fn format_call_id<I: Into<String>>(id: I) -> String {
     format!("${}", id.into())
 }
@@ -29,7 +25,7 @@ pub fn format_call_id<I: Into<String>>(id: I) -> String {
 pub fn format_index(index: &Index) -> String {
     match index {
         Index::Id(id) => "$".to_string() + id.name(),
-        Index::Num(num, _) => format_index_name(*num as usize),
+        _ => panic!("numeric index not supported"),
     }
 }
 
@@ -118,10 +114,10 @@ pub fn hotscript_binary<N: Into<String> + Copy + Display>(
     stack.push(fragment);
 }
 
-pub fn get_param_name(index: usize, maybe_name: &Option<String>) -> String {
+pub fn get_param_name(maybe_name: &Option<String>) -> String {
     if let Some(name) = maybe_name {
         name.to_string()
     } else {
-        format_index_name(index)
+        panic!("numeric param name not supported")
     }
 }

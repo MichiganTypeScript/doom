@@ -7,10 +7,7 @@ use crate::{
     source_file::SourceFile,
     statement::Statement,
     type_constraint::TypeConstraint,
-    utils::{
-        format_call_id, format_index, format_index_name, hotscript_binary, hotscript_unary,
-        RESULT_SENTINEL,
-    },
+    utils::{format_call_id, format_index, hotscript_binary, hotscript_unary, RESULT_SENTINEL},
 };
 
 pub fn handle_instructions(
@@ -277,11 +274,7 @@ pub fn handle_instructions(
             Instruction::Call(index) => {
                 let actual_id = match index {
                     Index::Id(i) => format_call_id(i.name()),
-                    Index::Num(num, _span) => format_index_name(*num as usize),
-                };
-                let print_id = match index {
-                    Index::Id(i) => i.name().to_string(),
-                    Index::Num(num, _span) => format_index_name(*num as usize),
+                    _ => panic!("numeric call index not supported"),
                 };
 
                 if let Some(td) = source.get_type(&actual_id) {
@@ -293,7 +286,7 @@ pub fn handle_instructions(
                     if td.generics.is_empty() {
                         f.push(indent, actual_id);
                     } else {
-                        f.push(indent, format!("{print_id}<"));
+                        f.push(indent, format!("{actual_id}<"));
 
                         let mut temp = vec![];
                         for (index, _) in td.generics.iter().enumerate() {

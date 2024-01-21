@@ -9,10 +9,18 @@ type $isZero<
     >> extends true ? 1 : 0)
 > = RESULT
 
-export type isZeroExport<
-  $x extends number,
+type $entry<
+  $a extends number,
   RESULT extends number =
     $isZero<
-      $x
+      $a
+    >
+> = RESULT
+
+export type entry<
+  $a extends number,
+  RESULT extends number =
+    $entry<
+      $a
     >
 > = RESULT

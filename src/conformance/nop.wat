@@ -1,5 +1,9 @@
 (module
-  (func $nop (export "do_nothing")
+  (func $nop
     nop
+  )
+
+  (func $entry (export "entry")
+    (call $nop)
   )
 )

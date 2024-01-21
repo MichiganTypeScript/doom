@@ -3,12 +3,16 @@ ignorePaths: []
 dictionaryDefinitions: []
 dictionaries: []
 words:
+  - Alloc
   - andarist
   - emcc
+  - errno
   - funcs
   - hotscript
   - indexmap
   - instrs
+  - memcpy
+  - memset
   - Trunc
   - typeconstraint
   - valtype

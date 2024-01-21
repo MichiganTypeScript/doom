@@ -81,7 +81,7 @@ char* displayGrid(Frame frame) {
 }
 
 EMSCRIPTEN_KEEPALIVE
-char* conway(int iterations) {
+char* entry(int iterations) {
     Frame frame;
     frame.rows = 9;
     frame.columns = 9;

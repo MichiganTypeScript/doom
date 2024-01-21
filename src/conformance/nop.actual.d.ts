@@ -3,7 +3,12 @@ type $nop<
     unknown
 > = RESULT
 
-export type do_nothing<
+type $entry<
   RESULT =
     $nop
+> = RESULT
+
+export type entry<
+  RESULT =
+    $entry
 > = RESULT

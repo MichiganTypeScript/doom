@@ -17,10 +17,18 @@ type $andarist<
     >>
 > = RESULT
 
-export type andarist<
-  $x extends number,
+type $entry<
+  $a extends number,
   RESULT extends number =
     $andarist<
-      $x
+      $a
+    >
+> = RESULT
+
+export type entry<
+  $a extends number,
+  RESULT extends number =
+    $entry<
+      $a
     >
 > = RESULT

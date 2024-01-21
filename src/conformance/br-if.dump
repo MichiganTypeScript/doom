@@ -16,9 +16,7 @@ Module {
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "brif",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [
@@ -165,6 +163,58 @@ Module {
                     },
                 },
             ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 630,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "foo",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
         ],
     ),
 }
@@ -173,13 +223,14 @@ Module {
 
 
 {
+    "LocalGet": 4,
     "I32Const": 4,
     "Block": 3,
-    "LocalGet": 3,
     "LocalSet": 3,
     "End": 3,
     "BrIf": 2,
     "Br": 2,
     "I32Eqz": 1,
     "I32Eq": 1,
+    "Call": 1,
 }

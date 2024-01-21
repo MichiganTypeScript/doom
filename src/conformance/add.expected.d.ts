@@ -10,11 +10,21 @@ type $add<
     >>
 > = RESULT
 
-export type add<
+type $entry<
   $a extends number,
   $b extends number,
   RESULT extends number =
     $add<
+      $a,
+      $b
+    >
+> = RESULT
+
+export type entry<
+  $a extends number,
+  $b extends number,
+  RESULT extends number =
+    $entry<
       $a,
       $b
     >

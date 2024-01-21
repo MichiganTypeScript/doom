@@ -16,15 +16,45 @@ Module {
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "do_nothing",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [],
                         expression: Expression {
                             instrs: [
                                 Nop,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: None,
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 37,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Call(
+                                    Id(
+                                        "nop",
+                                    ),
+                                ),
                             ],
                         },
                     },
@@ -43,4 +73,5 @@ Module {
 
 {
     "Nop": 1,
+    "Call": 1,
 }

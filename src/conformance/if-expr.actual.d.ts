@@ -15,12 +15,22 @@ type $ifexpr<
     >>
 > = RESULT
 
-export type ifexpr<
-  $n extends number,
-  $control extends number,
+type $entry<
+  $a extends number,
+  $b extends number,
   RESULT extends number =
     $ifexpr<
-      $n,
-      $control
+      $a,
+      $b
+    >
+> = RESULT
+
+export type entry<
+  $a extends number,
+  $b extends number,
+  RESULT extends number =
+    $entry<
+      $a,
+      $b
     >
 > = RESULT

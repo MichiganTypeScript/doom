@@ -1,7 +1,11 @@
 (module
-  (func $main (export "equal")  (param $a i32) (param $b i32) (result i32)
+  (func $main (param $a i32) (param $b i32) (result i32)
     local.get $a
     local.get $b
     i32.eq
+  )
+
+  (func $entry (export "entry") (param $a i32) (param $b i32) (result i32)
+    (call $main (local.get $a) (local.get $b))
   )
 )

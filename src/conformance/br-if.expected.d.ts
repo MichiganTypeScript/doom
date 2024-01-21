@@ -1,6 +1,6 @@
 import { Call, Numbers } from 'hotscript'
 
-type $foo<
+type $brif<
   $x extends number,
   RESULT extends number =
     (Call<Numbers.Equal<$x, 0>> extends true ? 1 : 0) extends 0
@@ -10,10 +10,18 @@ type $foo<
     : 42
 > = RESULT
 
-export type brif<
-  $x extends number,
+type $entry<
+  $a extends number,
   RESULT extends number =
-    $foo<
-      $x
+    $brif<
+      $a
+    >
+> = RESULT
+
+export type entry<
+  $a extends number,
+  RESULT extends number =
+    $entry<
+      $a
     >
 > = RESULT

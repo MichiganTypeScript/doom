@@ -1,6 +1,6 @@
 import { Call, Numbers } from 'hotscript'
 
-type $useLocalTee<
+type $localTee<
   $x extends number,
   $y extends number =
     $x,
@@ -11,10 +11,18 @@ type $useLocalTee<
     >>
 > = RESULT
 
-export type localTee<
-  $x extends number,
+type $entry<
+  $a extends number,
   RESULT extends number =
-    $useLocalTee<
-      $x
+    $localTee<
+      $a
+    >
+> = RESULT
+
+export type entry<
+  $a extends number,
+  RESULT extends number =
+    $entry<
+      $a
     >
 > = RESULT

@@ -13,7 +13,12 @@ type $get42Plus1<
     >>
 > = RESULT
 
-export type get42Plus1<
+type $entry<
   RESULT extends number =
     $get42Plus1
+> = RESULT
+
+export type entry<
+  RESULT extends number =
+    $entry
 > = RESULT

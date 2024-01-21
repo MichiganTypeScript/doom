@@ -7,7 +7,7 @@
   ;; Returns n+1 if control >= 0, n-1 otherwise.
   ;; This is a somewhat artificial function designed to demonstrate a WAT
   ;; feature.
-  (func $ifexpr (export "ifexpr") (param $n i32) (param $control i32) (result i32)
+  (func $ifexpr (param $n i32) (param $control i32) (result i32)
     (i32.add 
       (local.get $n)
       ;; The "(result i32)" clause says that the expression will leave
@@ -19,5 +19,9 @@
         (else (i32.const -1))
       )
     )
+  )
+
+  (func $entry (export "entry") (param $a i32) (param $b i32) (result i32)
+    (call $ifexpr (local.get $a) (local.get $b))
   )
 )

@@ -37,7 +37,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func, _module_func_index
             generics = param_names
                 .iter()
                 .enumerate()
-                .map(|(index, name)| Parameter::new_number(get_param_name(index, name)))
+                .map(|(_index, name)| Parameter::new_number(get_param_name(name)))
                 .collect();
         }
 

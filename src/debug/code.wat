@@ -291,7 +291,7 @@
       (i32.add
         (local.get $l11)
         (i32.const 336))))
-  (func $conway (export "conway") (type $t1) (param $p0 i32) (result i32)
+  (func $entry (export "entry") (type $t1) (param $p0 i32) (result i32)
     (local $l1 i32) (local $l2 i32) (local $l3 i32) (local $l4 i32) (local $l5 i32) (local $l6 i32) (local $l7 i32) (local $l8 i32)
     (global.set $__stack_pointer
       (local.tee $l2
