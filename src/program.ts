@@ -34,7 +34,7 @@ export type runProgram<
   executeInstruction<
     {
       instructions: [
-        { kind: "Call", id: "entry" }
+        { kind: "Call", id: "$entry" }
       ];
       module: input['module'];
       stack: input['stack'];

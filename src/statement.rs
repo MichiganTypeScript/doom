@@ -19,16 +19,6 @@ pub struct Statement {
     pub value: Fragment,
 }
 
-impl Statement {
-    pub fn new<S: AsRef<str>>(name: S, constraint: TypeConstraint, value: Fragment) -> Self {
-        Statement {
-            name: name.as_ref().to_string(),
-            constraint,
-            value,
-        }
-    }
-}
-
 impl From<&Local<'_>> for Statement {
     fn from(local: &Local) -> Self {
         let name = local.id.expect("didn't get local name").name().to_string();

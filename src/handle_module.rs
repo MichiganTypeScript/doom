@@ -1,106 +1,55 @@
 use crate::handle_instructions::handle_instructions;
-use crate::parameter::Parameter;
 use crate::source_file::SourceFile;
-use crate::statement::Statement;
-use crate::type_constraint::TypeConstraint;
-use crate::utils::get_param_name;
-use std::{collections::HashMap, vec};
-use wast::core::{Export, Func, Global, ModuleField};
+use std::collections::HashMap;
+use wast::core::{Func, ModuleField};
 
-use crate::utils::format_index;
+fn handle_module_field_func(source: &SourceFile, func: &Func) {
+    source.add_import("../../module.ts", "ModuleField");
+    source.add_import("../../program.ts", "runProgram");
 
-fn handle_module_field_func(source: &SourceFile, func: &Func, _module_func_index: usize) {
-    // dbg!(func);
-    // dbg!(module_func_index);
     let name = "$".to_string()
       + func
           .id
           .unwrap_or_else(|| panic!("need to implement no name funcs but it looks like I can skirt by without having to do any of it"))
           .name();
 
-    let mut generics = vec![];
-
-    let mut param_names: Vec<Option<String>> = Vec::new();
-
-    let mut result_type_constraint = TypeConstraint::None;
-
-    if let Some(ref func_type) = func.ty.inline {
-        for (param_id, _, _) in func_type.params.iter() {
-            if let Some(p) = param_id {
-                param_names.push(Some(format!("${}", p.name())));
-            } else {
-                param_names.push(None);
-            }
-        }
-
-        if !func_type.params.is_empty() {
-            generics = param_names
+    let params_and_result = func
+        .ty
+        .inline
+        .clone()
+        .map(|function_type| {
+            let params = function_type
+                .params
                 .iter()
-                .enumerate()
-                .map(|(_index, name)| Parameter::new_number(get_param_name(name)))
-                .collect();
-        }
+                .map(|(id, _, _)| {
+                    let id = id.expect("params must have an id").name();
+                    format!("'${id}'")
+                })
+                .collect::<Vec<String>>()
+                .join(", ");
 
-        if func_type.results.len() > 1 {
-            dbg!(func.id);
-            dbg!(&func_type);
-            panic!("multiple returns are not supported");
-        }
+            let result = "number";
 
-        result_type_constraint = func_type
-            .results
-            .first()
-            .map_or(TypeConstraint::None, TypeConstraint::from);
-    }
-
-    let (statements, results) = match &func.kind {
-        wast::core::FuncKind::Import(_imp) => {
-            panic!("didn't implement FuncKind::Import")
-        }
-        wast::core::FuncKind::Inline { locals, expression } => {
-            let locals_statements = locals.iter().map(Statement::from).collect();
-            handle_instructions(
-                source,
-                &expression.instrs,
-                result_type_constraint,
-                locals_statements,
+            format!(
+                "    params: [{params}];
+    result: {result};"
             )
-        }
-    };
+        })
+        .unwrap_or(String::from("hit the default"));
 
-    source.add_type(&name, generics, statements, results);
+    let instructions_and_locals = handle_instructions(func);
 
-    for export in func.exports.names.iter() {
-        source.add_export(&name, *export);
-    }
-}
+    let output = format!(
+        "type {name}<
+  RESULT extends ModuleField.Func = {{
+    kind: 'func';
+{params_and_result}
+{instructions_and_locals}
+  }}
+> = RESULT\n"
+    );
 
-fn handle_module_field_global(source: &SourceFile, global: &Global) {
-    // dbg!(global);
-    let (statements, results) = match &global.kind {
-        wast::core::GlobalKind::Import(_import) => {
-            panic!("not implemented GlobalKind::Import")
-        }
-        wast::core::GlobalKind::Inline(expression) => {
-            let result_type_constraint = TypeConstraint::from(&global.ty.ty);
-            handle_instructions(source, &expression.instrs, result_type_constraint, vec![])
-        }
-    };
-
-    let name = "$".to_string() + global.id.unwrap().name();
-    source.add_type(&name, vec![], statements, results);
-
-    for export in global.exports.names.iter() {
-        source.add_export(&name, *export);
-    }
-}
-
-fn handle_module_field_export(source: &SourceFile, export: &Export) {
-    // dbg!(export);
-    let export_name = export.name;
-    let local_name = format_index(&export.item);
-
-    source.add_export(local_name, export_name);
+    source.add_type(name, output);
 }
 
 /*
@@ -119,20 +68,18 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
         match field {
             ModuleField::Func(func) => {
                 let count = module_index.entry("Func").or_insert(0);
-                handle_module_field_func(source, func, *count);
                 *count += 1;
+                // handle_module_field_func(source, func);
+                handle_module_field_func(source, func);
             }
 
-            ModuleField::Global(global) => {
+            ModuleField::Global(_global) => {
                 let count = module_index.entry("Global").or_insert(0);
-                handle_module_field_global(source, global);
+                // handle_module_field_global(source, global);
                 *count += 1;
             }
-            ModuleField::Export(export) => {
-                // no known need for module_index addressing exports, but it was implemented early on accident and so I left it here.
-                handle_module_field_export(source, export);
-            }
-            ModuleField::Table(_)
+            ModuleField::Export(_)
+            | ModuleField::Table(_)
             | ModuleField::Import(_)
             | ModuleField::Memory(_)
             | ModuleField::Elem(_)
