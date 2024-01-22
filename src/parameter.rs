@@ -22,12 +22,6 @@ impl Parameter {
             name: name.into(),
         }
     }
-    pub fn new_number<T: Into<String>>(name: T) -> Self {
-        Parameter {
-            constraint: TypeConstraint::Number,
-            name: name.into(),
-        }
-    }
 }
 
 impl From<&Local<'_>> for Parameter {

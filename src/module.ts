@@ -11,10 +11,8 @@ export type WasmModule = {
 export namespace ModuleField {
   export type Func = {
     kind: 'func';
-    signature: {
-      params: string[];
-      result: number;
-    };
+    params: string[];
+    result: number;
     locals: string[];
     instructions: Instruction[];
   }

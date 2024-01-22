@@ -13,7 +13,6 @@ mod type_definition;
 mod utils;
 mod wat_to_dts;
 
-use statement::Statement;
 use std::fs;
 use wat_to_dts::wat_to_dts;
 
@@ -60,7 +59,6 @@ mod tests {
 
     /// the file is focused if anything in the focus list matches the given file name
     fn is_focused(file_name: &str) -> bool {
-        dbg!(file_name);
         focus_list().iter().any(|&focus| file_name == focus)
     }
 
@@ -94,7 +92,7 @@ mod tests {
             .flatten()
             .filter_map(|dir_entry| {
                 let path = dir_entry.path();
-                dbg!(&path);
+                // dbg!(&path);
 
                 if !path.is_file() {
                     return None;
@@ -105,7 +103,7 @@ mod tests {
                 }
 
                 if !should_run(&dir_entry) {
-                    println!("skipping: {:?}", dir_entry.path());
+                    // println!("skipping: {:?}", dir_entry.path());
                     return None;
                 }
 
@@ -120,7 +118,7 @@ mod tests {
             .flatten()
             .filter_map(|dir_entry| {
                 let path = dir_entry.path();
-                dbg!(&path);
+                // dbg!(&path);
 
                 if !path.is_file() {
                     return None;
@@ -131,7 +129,7 @@ mod tests {
                 }
 
                 if !should_run(&dir_entry) {
-                    println!("skipping: {:?}", dir_entry.path());
+                    // println!("skipping: {:?}", dir_entry.path());
                     return None;
                 }
 
@@ -141,7 +139,7 @@ mod tests {
     }
 
     fn generate_wasm_from_wat(wat_input: &DirEntry) {
-        println!("generating wasm from wat: {:?}", &wat_input.path());
+        // println!("generating wasm from wat: {:?}", &wat_input.path());
 
         // convert the .wat file to a .wasm file (also validates the .wat)
         let output = Command::new("wat2wasm")
@@ -167,7 +165,7 @@ mod tests {
 
     fn parse_wat_and_dump(dir_entry: &DirEntry) -> SourceFile {
         let wat_file = dir_entry.path().with_extension("wat");
-        println!("parsing wat and dumping: {:?}", &wat_file);
+        // println!("parsing wat and dumping: {:?}", &wat_file);
 
         let wat = fs::read_to_string(wat_file).unwrap();
         let dump_path = dir_entry
@@ -195,7 +193,7 @@ mod tests {
     }
 
     fn generate_wasm_from_c(c_input: &DirEntry) {
-        println!("generating wasm from c: {:?}", &c_input.path());
+        // println!("generating wasm from c: {:?}", &c_input.path());
 
         // convert the .wat file to a .wasm file (also validates the .wat)
         let output = Command::new("emcc")
@@ -226,7 +224,7 @@ mod tests {
     fn generate_wat_from_wasm(c_input: &DirEntry) {
         let wasm_input = c_input.path().with_extension("wasm");
 
-        println!("generating wat from wasm: {:?}", &wasm_input);
+        // println!("generating wat from wasm: {:?}", &wasm_input);
 
         // convert the .wat file to a .wasm file (also validates the .wat)
         let output = Command::new("wasm2wat")

@@ -3,10 +3,40 @@ import { Call as Apply, Numbers } from "hotscript"
 import { Update } from "./update.js"
 import { ModuleField } from "./module.js"
 
+/*
+target for running c-add
+
+DONE
+{
+  "LocalGet": 14,
+  "Call": 2,
+  "I32Add": 2,
+}
+
+REMAINING
+{
+  "I32Const": 8,
+  "GlobalGet": 7,
+  "LocalSet": 6,
+  "GlobalSet": 4,
+  "I32Sub": 3,
+  "I32Store": 2,
+  "I32Load": 2,
+  "I32And": 2,
+  "Return": 1,
+  "Block": 1,
+  "I32Eqz": 1,
+  "BrIf": 1,
+  "End": 1,
+  "LocalTee": 1,
+}
+*/
+
+
 /** No.  I'm not a Java programmer.  The `I` prefixing is not hungarian notation, it's to prevent naming collisions.  That's all.  */
 
 export type IAdd = {
-  kind: "add"
+  kind: "Add"
 }
 
 export type ICall = {
@@ -89,8 +119,8 @@ export namespace Instructions {
         {
           locals: {
             // TEMPORARY HARDCODING. THIS IS WRONG.  It needs to grab names from the params.
-            ['a']: a;
-            ['b']: b;
+            ['$a']: a;
+            ['$b']: b;
           }
         }
       >
