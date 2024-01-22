@@ -1,7 +1,7 @@
-import { ProgramState } from "./program.js"
-import { Call as Apply, Numbers } from "hotscript"
+import { ProgramState, evaluate } from "./program.js"
+import { Call as Apply, Numbers, U } from "hotscript"
 import { Update } from "./update.js"
-import { ModuleField } from "./module.js"
+import { ModuleField, Param } from "./module.js"
 
 /*
 target for running c-add
@@ -9,31 +9,41 @@ target for running c-add
 DONE
 {
   "LocalGet": 14,
+  "I32Const": 8,
+  "LocalSet": 6,
+  "I32Sub": 3,
   "Call": 2,
   "I32Add": 2,
+  "I32Eqz": 1,
 }
 
 REMAINING
 {
-  "I32Const": 8,
-  "GlobalGet": 7,
-  "LocalSet": 6,
-  "GlobalSet": 4,
-  "I32Sub": 3,
-  "I32Store": 2,
-  "I32Load": 2,
-  "I32And": 2,
-  "Return": 1,
-  "Block": 1,
-  "I32Eqz": 1,
-  "BrIf": 1,
-  "End": 1,
-  "LocalTee": 1,
+  "GlobalGet": 7, // easy
+  "GlobalSet": 4, // easy
+  "I32Store": 2, // medium
+  "I32Load": 2, // medium
+  "I32And": 2, // hard
+  "Return": 1, // easy
+  "Block": 1, // hard
+  "BrIf": 1, // hard
+  "End": 1, // hard
+  "LocalTee": 1, // easy
 }
 */
 
+type Reverse<T extends any[]> =
+  T extends [infer head, ...infer tail]
+  ? [...Reverse<tail>, head]
+  : []
 
-/** No.  I'm not a Java programmer.  The `I` prefixing is not hungarian notation, it's to prevent naming collisions.  That's all.  */
+
+/*
+ * No.
+ * I'm not a Java programmer.
+ * The `I` prefixing is not hungarian notation.. it's just to prevent naming collisions.
+ * That's all.
+ */
 
 export type IAdd = {
   kind: "Add"
@@ -46,13 +56,6 @@ export type ICall = {
   id: string;
 }
 
-export type ILocalGet = {
-  kind: "LocalGet"
-
-  /** a local identifier */
-  id: string
-}
-
 export type IConst = {
   kind: "Const"
 
@@ -60,22 +63,83 @@ export type IConst = {
   value: number;
 }
 
+export type IEqualsZero = {
+  kind: "EqualsZero"
+}
+
+export type ILocalGet = {
+  kind: "LocalGet"
+
+  /** a local identifier */
+  id: string
+}
+
+export type ILocalSet = {
+  kind: "LocalSet"
+
+  /** a local identifier */
+  id: string
+}
+
+export type ISub = {
+  kind: "Sub"
+}
+
 /** an item on the stack */
 export type Entry = number;
 
-export type Instruction = ILocalGet | IAdd | ICall
+export type Instruction =
+  | IAdd
+  | ICall
+  | IConst
+  | IEqualsZero
+  | ILocalGet
+  | ILocalSet
+  | ISub
+
+/** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
+type PopulateParams<
+  state extends ProgramState,
+  params extends Param[],
+> =
+  // HELP: params are fed in reverse order and simply switching the infer statements order below for some reason doesn't work...
+  Reverse<params> extends [
+    infer param extends Param,
+    ...infer remainingParams extends Param[],
+  ]
+  ? state["stack"] extends [
+      ...infer remainingStack extends Entry[],
+      infer pop extends Entry
+    ]
+    ? PopulateParams<
+        // set the locals to have the values from the stack that we just popped off
+        Update.ExecutionContext.set<
+          
+          // set the stack to have remaining values only
+          Update.Stack.set<state, remainingStack>,
+          {
+            locals: evaluate<
+              & state['executionContext']['locals']
+              & { [p in param]: pop }
+            >
+          }
+        >,
+
+        remainingParams
+      >
+    : never // should never happen because the stack should always have at least as many items as there are params
+  : state // no more params, so we can jump out
 
 export namespace Instructions {
 
-  /** this encapsulates I32Add, I64Add, F32Add, F64Add */
   export type Add<
     state extends ProgramState,
     instruction extends IAdd // unused
   > =
     state["stack"] extends [
-      ...infer remaining extends number[],
-      infer b extends number,
-      infer a extends number
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry
     ]
     ? Update.Stack.set<
         state,
@@ -90,41 +154,44 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends ICall,
 
-    _id extends instruction['id'] = instruction['id'],
+    _func extends ModuleField.Func = state['module']['func'][instruction['id']],
+  > =
+    // add the instructions from this func onto the stack
+    Update.Instructions.push<
 
-    _func extends ModuleField.Func = state['module']['func'][_id],
+      // first, pop things off the stack to populate params
+      PopulateParams<
+        state,
+        _func['params']
+      >,
 
-  > = state["stack"] extends [
-      ...infer remaining extends number[],
-      // TEMPORARY HARDCODING. THIS IS WRONG.  need to pop off a variable number of arguments off the stack corresponds to the length of this func's `params` array.
-      infer b extends number,
-      infer a extends number
+      _func['instructions']
+    >
+
+  export type Const<
+    state extends ProgramState,
+    instruction extends IConst,
+  > =
+    Update.Stack.push<
+      state,
+      instruction['value']
+    >
+
+    export type EqualsZero<
+    state extends ProgramState,
+    instruction extends IEqualsZero // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer a extends Entry
     ]
-    ?
-      // set the locals to have the values from the stack that we just popped off
-      Update.ExecutionContext.set<
-
-        // set the stack to have remaining values only
-        Update.Stack.set<
-        
-          // add the instructions from this func onto the stack
-          Update.Instructions.push<
-            state,
-            _func['instructions']
-          >,
-
-          remaining
-        >,
-
-        {
-          locals: {
-            // TEMPORARY HARDCODING. THIS IS WRONG.  It needs to grab names from the params.
-            ['$a']: a;
-            ['$b']: b;
-          }
-        }
+    ? Update.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.Equal<a, 0>> extends true ? 1 : 0
+        ]
       >
-
     : never
 
   export type LocalGet<
@@ -135,4 +202,71 @@ export namespace Instructions {
       state,
       state['executionContext']['locals'][instruction['id']]
     >
+
+  export type LocalSet<
+    state extends ProgramState,
+    instruction extends ILocalSet,
+  > =
+    state['stack'] extends [
+      ...infer remaining extends Entry[],
+      infer a extends Entry
+    ]
+    ? Update.Stack.set<
+        Update.ExecutionContext.set<
+          state,
+          {
+            locals: evaluate<
+              & Omit<state['executionContext']['locals'], instruction['id']>
+              & Record<instruction['id'], a>
+            >
+          }
+        >,
+        remaining
+      >
+    : never
+
+  export type Sub<
+    state extends ProgramState,
+    instruction extends ISub // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry
+    ]
+    ? Update.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.Sub<b, a>>
+        ]
+      >
+    : never
 }
+
+export type selectInstruction<
+  state extends ProgramState,
+  instruction extends Instruction
+> =
+  instruction extends IAdd
+  ? Instructions.Add<state, instruction>
+  
+  : instruction extends ICall
+  ? Instructions.Call<state, instruction>
+
+  : instruction extends IConst
+  ? Instructions.Const<state, instruction>
+
+  : instruction extends IEqualsZero
+  ? Instructions.EqualsZero<state, instruction>
+
+  : instruction extends ILocalGet
+  ? Instructions.LocalGet<state, instruction>
+
+  : instruction extends ILocalSet
+  ? Instructions.LocalSet<state, instruction>
+
+  : instruction extends ISub
+  ? Instructions.Sub<state, instruction>
+
+  : 'you forgot to handle an instruction'

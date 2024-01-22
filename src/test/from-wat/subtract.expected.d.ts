@@ -1,19 +1,43 @@
-import { Call, Numbers } from 'hotscript'
+import { ModuleField } from '../../module.ts'
+import { runProgram } from '../../program.ts'
 
 type $ziltoid<
-  RESULT extends number =
-    Call<Numbers.Sub<
-      10,
-      3
-    >>
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: [];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'Const'; value: 10 },
+      { kind: 'Const'; value: 3 },
+      { kind: 'Sub' }
+    ];
+  }
 > = RESULT
 
 type $entry<
-  RESULT extends number =
-    $ziltoid
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: [];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'Call'; id: '$ziltoid' }
+    ];
+  }
 > = RESULT
 
 export type entry<
-  RESULT extends number =
-    $entry
-> = RESULT
+  input extends number[] = []
+> = runProgram<
+  {
+    stack: input;
+    module: {
+      func: {
+        $ziltoid: $ziltoid;
+        $entry: $entry;
+      }
+    }
+  },
+  false
+>

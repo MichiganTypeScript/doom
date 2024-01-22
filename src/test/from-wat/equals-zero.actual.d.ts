@@ -1,26 +1,43 @@
-import { Call, Numbers } from 'hotscript'
+import { ModuleField } from '../../module.ts'
+import { runProgram } from '../../program.ts'
 
 type $isZero<
-  $x extends number,
-  RESULT extends number =
-    (Call<Numbers.Equal<
-      $x,
-      0
-    >> extends true ? 1 : 0)
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$x'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$x' },
+      { kind: 'EqualsZero' }
+    ];
+  }
 > = RESULT
 
 type $entry<
-  $a extends number,
-  RESULT extends number =
-    $isZero<
-      $a
-    >
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$a'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'Call'; id: '$isZero' }
+    ];
+  }
 > = RESULT
 
 export type entry<
-  $a extends number,
-  RESULT extends number =
-    $entry<
-      $a
-    >
-> = RESULT
+  input extends number[] = []
+> = runProgram<
+  {
+    stack: input;
+    module: {
+      func: {
+        $isZero: $isZero;
+        $entry: $entry;
+      }
+    }
+  },
+  false
+>

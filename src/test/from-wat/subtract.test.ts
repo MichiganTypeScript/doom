@@ -13,7 +13,4 @@ test(name, async () => {
 
 type testCases = [
   Expect<Equal<entry, 7>>,
-  
-  // @ts-expect-error
-  Expect<Equal<entry, 6>>,
 ]
