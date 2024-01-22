@@ -41,13 +41,14 @@ mod tests {
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            "add",         //
-            "call",        //
-            "subtract",    //
-            "equals-zero", //
-            "local-set",   //
-            "globals",     //
-            "return",      //
+            "add",
+            "call",
+            "equals-zero",
+            "globals",
+            "local-set",
+            "local-tee",
+            "return",
+            "subtract",
         ]
     }
 

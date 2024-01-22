@@ -50,6 +50,10 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
                 .len();
             format!("{indent}{{ kind: 'Return'; count: {count} }}")
         }
+        Instruction::LocalTee(index) => {
+            let id = format_index(index);
+            format!("{indent}{{ kind: 'LocalTee'; id: '{id}' }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

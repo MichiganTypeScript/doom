@@ -1,28 +1,46 @@
-import { Call, Numbers } from 'hotscript'
+import { ModuleField } from '../../module.ts'
+import { runProgram } from '../../program.ts'
 
 type $localTee<
-  $x extends number,
-  $y extends number =
-    $x,
-  RESULT extends number =
-    Call<Numbers.Add<
-      $x,
-      $y
-    >>
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$x'];
+    result: number;
+    locals: ['$y'];
+    instructions: [
+      { kind: 'LocalGet'; id: '$x' },
+      { kind: 'LocalTee'; id: '$y' },
+      { kind: 'LocalGet'; id: '$y' },
+      { kind: 'Add' }
+    ];
+  }
 > = RESULT
 
 type $entry<
-  $a extends number,
-  RESULT extends number =
-    $localTee<
-      $a
-    >
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$a'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'Call'; id: '$localTee' }
+    ];
+  }
 > = RESULT
 
 export type entry<
-  $a extends number,
-  RESULT extends number =
-    $entry<
-      $a
-    >
-> = RESULT
+  input extends number[] = []
+> = runProgram<
+  {
+    stack: input;
+    module: {
+      func: {
+        $localTee: $localTee;
+        $entry: $entry;
+      };
+      globals: {};
+    }
+  },
+  false
+>

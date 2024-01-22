@@ -95,6 +95,13 @@ export type ILocalSet = {
   id: string
 }
 
+export type ILocalTee = {
+  kind: "LocalTee"
+
+  /** a local identifier */
+  id: string
+}
+
 export type IReturn = {
   kind: "Return"
 
@@ -118,6 +125,7 @@ export type Instruction =
   | IGlobalSet
   | ILocalGet
   | ILocalSet
+  | ILocalTee
   | IReturn
   | ISub
 
@@ -149,6 +157,9 @@ export type selectInstruction<
 
   : instruction extends ILocalSet
   ? Instructions.LocalSet<state, instruction>
+
+  : instruction extends ILocalTee
+  ? Instructions.LocalTee<state, instruction>
 
   : instruction extends IReturn
   ? Instructions.Return<state, instruction>
@@ -313,6 +324,24 @@ export namespace Instructions {
       >
     : never
 
+  export type LocalTee<
+    state extends ProgramState,
+    instruction extends ILocalTee,
+  > =
+    state['stack'] extends [
+      ...infer remaining extends Entry[],
+      infer a extends Entry
+    ]
+    ? Update.ExecutionContext.set<
+        state,
+        {
+          locals: evaluate<
+            & Omit<state['executionContext']['locals'], instruction['id']>
+            & Record<instruction['id'], a>
+          >
+        }
+      >
+    : never
 
   /**
    * If there are no values left on the stack, it returns nothing/void.
