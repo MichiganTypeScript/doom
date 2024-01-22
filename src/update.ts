@@ -9,7 +9,6 @@ export namespace Update {
     RESULT extends ProgramState = {
       instructions: instructions;
 
-      input: state['input'];
       module: state['module'];
       stack: state['stack'];
     }
@@ -37,7 +36,6 @@ export namespace Update {
     RESULT extends ProgramState = {
       stack: stack;
 
-      input: state['input'];
       instructions: state['instructions'];
       module: state['module'];
     }

@@ -4,13 +4,11 @@ import { Instructions } from "./instructions.js"
 import { ModuleField, WasmModule } from "./module.js";
 
 export type ProgramInput = {
-  input: unknown[];
+  stack: Entry[];
   module: WasmModule;
 }
 
 export type ProgramState = {
-  input: unknown[]
-
   module: WasmModule;
 
   /** the currently executing instructions */
@@ -19,12 +17,14 @@ export type ProgramState = {
   stack: Entry[];
 }
 
-export type runProgram<input extends ProgramInput> = loop<
-  input & {
+export type runProgram<input extends ProgramInput> =
+ executeInstruction<
+  {
     instructions: [
       { kind: "Call", id: "entry" }
-    ]
-    stack: [];
+    ];
+    module: input['module'];
+    stack: input['stack'];
   }
 >
 
@@ -32,13 +32,13 @@ export type evaluate<T> = {
   [K in keyof T]: T[K]
 } & unknown
 
-export type loop<state extends ProgramState> =
+export type executeInstruction<state extends ProgramState> =
   state["instructions"] extends [
     infer currentInstruction extends Instruction,
     ...infer remainingInstructions extends Instruction[]
   ]
-  ? loop<
-      executeInstruction<
+  ? executeInstruction<
+      selectInstruction<
         Update.setInstructions<
           state,
           remainingInstructions
@@ -54,7 +54,7 @@ export type tail<T extends readonly number[]> =
   ? tail
   : never
 
-export type executeInstruction<
+export type selectInstruction<
   state extends ProgramState,
   instruction extends Instruction
 > =

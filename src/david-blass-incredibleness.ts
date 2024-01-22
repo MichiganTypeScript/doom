@@ -34,16 +34,17 @@ type entry<
   }
 > = RESULT;
 
-type add<input extends number[]> = runProgram<{
-    input: input;
-
-    module: {
-        func: {
-            $add: $add;
-            entry: entry;
-        }
+type add<
+  input extends number[]
+> = runProgram<{
+  stack: input;
+  module: {
+    func: {
+      $add: $add;
+      entry: entry;
     }
-}> // =>
+  }
+}>
 
 type x = add<[2, 2]>
 //   ^?
