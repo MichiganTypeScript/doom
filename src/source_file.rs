@@ -4,7 +4,6 @@ use std::{
 };
 
 use indexmap::{IndexMap, IndexSet};
-use regex::Replacer;
 
 /// This represents is a literal TypeScript file that is the final build output of the program
 pub struct SourceFile {

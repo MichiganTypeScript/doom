@@ -4,7 +4,7 @@ use wast::core::{Func, Instruction};
 
 use crate::utils::format_index;
 
-pub fn handle_instruction(instruction: &Instruction<'_>) -> String {
+pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String {
     let indent = "      ";
     match instruction {
         Instruction::I32Add | Instruction::I64Add | Instruction::F32Add | Instruction::F64Add => {
@@ -40,6 +40,16 @@ pub fn handle_instruction(instruction: &Instruction<'_>) -> String {
             let id = format_index(index);
             format!("{indent}{{ kind: 'GlobalSet'; id: '{id}' }}")
         }
+        Instruction::Return => {
+            let count = func
+                .ty
+                .inline
+                .clone()
+                .expect("must have a return type")
+                .results
+                .len();
+            format!("{indent}{{ kind: 'Return'; count: {count} }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }
@@ -61,7 +71,7 @@ pub fn handle_instructions(func: &Func) -> String {
             let instructions = expression
                 .instrs
                 .iter()
-                .map(handle_instruction)
+                .map(|instruction| handle_instruction(func, instruction))
                 .collect::<Vec<_>>()
                 .join(",\n");
             format!(

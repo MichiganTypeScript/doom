@@ -17,6 +17,8 @@ DONE
   "Call": 2,
   "I32Add": 2,
   "I32Eqz": 1,
+  "Return": 1,
+  "LocalTee": 1,
 }
 
 REMAINING
@@ -24,11 +26,9 @@ REMAINING
   "I32Store": 2, // medium
   "I32Load": 2, // medium
   "I32And": 2, // hard
-  "Return": 1, // easy
   "Block": 1, // hard
   "BrIf": 1, // hard
   "End": 1, // hard
-  "LocalTee": 1, // easy
 }
 */
 
@@ -95,6 +95,13 @@ export type ILocalSet = {
   id: string
 }
 
+export type IReturn = {
+  kind: "Return"
+
+  /** the number of items to return */
+  count: number
+}
+
 export type ISub = {
   kind: "Sub"
 }
@@ -111,6 +118,7 @@ export type Instruction =
   | IGlobalSet
   | ILocalGet
   | ILocalSet
+  | IReturn
   | ISub
 
 
@@ -141,6 +149,9 @@ export type selectInstruction<
 
   : instruction extends ILocalSet
   ? Instructions.LocalSet<state, instruction>
+
+  : instruction extends IReturn
+  ? Instructions.Return<state, instruction>
 
   : instruction extends ISub
   ? Instructions.Sub<state, instruction>
@@ -301,6 +312,41 @@ export namespace Instructions {
         remaining
       >
     : never
+
+
+  /**
+   * If there are no values left on the stack, it returns nothing/void.
+   * If there are the same amount of values left on the stack as specified in the function's type signature, it returns those values.
+   * If there are more values that the function's return type specifies, then the excess values are popped from the stack and discarded, and the last N values are returned.
+   */
+  export type Return<
+    state extends ProgramState,
+    instruction extends IReturn,
+
+    _stack extends Entry[] = [],
+  > =
+    _stack['length'] extends instruction['count']
+    ? Update.Stack.set<
+        state,
+        _stack
+      >
+    : state['stack'] extends [
+        ...infer remaining extends Entry[],
+        infer pop extends Entry
+      ]
+      ? Return<
+          Update.Stack.set<
+            state,
+            remaining
+          >,
+          instruction,
+
+          [
+            ..._stack,
+            pop
+          ]
+        >
+      : never
 
   export type Sub<
     state extends ProgramState,
