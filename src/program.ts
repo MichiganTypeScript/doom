@@ -1,38 +1,70 @@
-import { Entry, Instruction } from "./instructions.js"
-import { loop } from "./update.js"
+import { IAdd, ICall, Entry, Instruction, ILocalGet } from "./instructions.js"
+import { Update } from "./update.js"
+import { Instructions } from "./instructions.js"
+import { ModuleField, WasmModule } from "./module.js";
 
 export type ProgramInput = {
-  input: unknown[]
-  instructions: Instruction[]
+  input: unknown[];
+  module: WasmModule;
 }
 
 export type ProgramState = {
   input: unknown[]
 
-  instructions: Instruction[]
+  module: WasmModule;
 
-  scope: Record<string, Instruction[]>
+  /** the currently executing instructions */
+  instructions: Instruction[];
 
-  // starts empty, when you enter a new block, push the current program state onto this stack
-  // create a new state from that block=> replace statements with whatever statements were nested inside that block
-  // then recurse and execute all of those. when your list of statements is empty, check if there are any previous states
-  // from blocks that have not been closed and close the next block
-  blocks: ProgramState[]
-
-  // when you encounter a break statement, set this to be string
-  // when you are exiting a block, check if skipToLabel is a string and if the next block on the stack has
-  // a label matching that string. If it does not, pop blocks until it does (this would skip any remaining unexecuted statements
-  // in the blocks that were on the stack)
-  skipToLabel: string | undefined
-
-  stack: Entry[]
+  stack: Entry[];
 }
 
 export type runProgram<input extends ProgramInput> = loop<
   input & {
-      blocks: []
-      skipToLabel: undefined
-      scope: {}
-      stack: []
+    instructions: [
+      { kind: "Call", id: "entry" }
+    ]
+    stack: [];
   }
 >
+
+export type evaluate<T> = {
+  [K in keyof T]: T[K]
+} & unknown
+
+export type loop<state extends ProgramState> =
+  state["instructions"] extends [
+    infer currentInstruction extends Instruction,
+    ...infer remainingInstructions extends Instruction[]
+  ]
+  ? loop<
+      executeInstruction<
+        Update.setInstructions<
+          state,
+          remainingInstructions
+        >,
+        currentInstruction
+      >
+    >
+  : evaluate<state>
+
+/** removes the first item from an array and returns the rest */
+export type tail<T extends readonly number[]> =
+  T extends [unknown, ...infer tail extends number[]]
+  ? tail
+  : never
+
+export type executeInstruction<
+  state extends ProgramState,
+  instruction extends Instruction
+> =
+  instruction extends IAdd
+  ? Instructions.Add<state, instruction>
+    
+  : instruction extends ILocalGet
+  ? Instructions.LocalGet<state, instruction>
+
+  : instruction extends ICall
+  ? Instructions.CallInst<state, instruction>
+  
+  : never

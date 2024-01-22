@@ -1,62 +1,60 @@
-import { Add, Entry, Instruction, Pop, Push, Instructions } from "./instructions.js";
+import { Entry, Instruction } from "./instructions.js";
 import { ProgramState } from "./program.js";
 
 export namespace Update {
-  export type instructions<
+  export type setInstructions<
     state extends ProgramState,
-    instructions extends Instruction[]
-  > =
-    {
+    instructions extends Instruction[],
+
+    RESULT extends ProgramState = {
       instructions: instructions;
+
       input: state['input'];
-      scope: state['scope'];
-      blocks: state['blocks'];
-      skipToLabel: state['skipToLabel'];
+      module: state['module'];
       stack: state['stack'];
     }
+  > = RESULT
+
+  export type pushInstructions<
+  state extends ProgramState,
+  instructions extends Instruction[],
+
+  RESULT extends ProgramState =
+    setInstructions<
+      state,
+      [
+        ...state['instructions'],
+        ...instructions
+      ]
+    >
+> = RESULT
 
 
-  export type stack<
+  export type setStack<
     state extends ProgramState,
-    stack extends Entry[]
-  > =
-    {
-      instructions: state['instructions'];
-      input: state['input'];
-      scope: state['scope'];
-      blocks: state['blocks'];
-      skipToLabel: state['skipToLabel'];
+    stack extends Entry[],
+
+    RESULT extends ProgramState = {
       stack: stack;
+
+      input: state['input'];
+      instructions: state['instructions'];
+      module: state['module'];
     }
-}
+  > = RESULT
 
-export type evaluate<t> = { [k in keyof t]: t[k] } & unknown
 
-export type loop<s extends ProgramState> =
-  s["instructions"] extends [
-    infer head extends Instruction,
-    ...infer tail extends Instruction[]
-  ]
-  ? loop<execute<Update.instructions<s, tail>, head>>
-  : evaluate<s>
-
-/** removes the first item from an array and returns the rest */
-export type tail<t extends readonly number[]> =
-  t extends [unknown, ...infer tail extends number[]]
-  ? tail
-  : never
-
-export type execute<
+  export type pushStack<
     state extends ProgramState,
-    instruction extends Instruction
-> =
-  instruction extends Push
-  ? Update.stack<state, [...state["stack"], instruction["arg"]]>
-    
-  : instruction extends Pop
-  ? Update.stack<state, tail<state["stack"]>>
+    entry extends Entry,
 
-  : instruction extends Add
-  ? Instructions.add<state>
-  
-  : never
+    RESULT extends ProgramState = 
+      setStack<
+        state,
+        [
+          ...state['stack'],
+          entry
+        ]
+      >
+  > = RESULT
+}

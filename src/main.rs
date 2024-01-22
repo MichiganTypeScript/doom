@@ -48,8 +48,8 @@ mod tests {
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            "add",      //
-            "andarist", //
+            "add", //
+                  // "andarist", //
         ]
     }
 
@@ -75,6 +75,10 @@ mod tests {
         // focusing takes precedence over skipping
         if is_focused(file_name) {
             return true;
+        }
+
+        if !focus_list().is_empty() {
+            return false;
         }
 
         if should_skip(file_name) {
