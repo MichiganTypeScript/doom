@@ -5,7 +5,6 @@ export type WasmModule = {
   func: Record<string, ModuleField.Func>
 };
 
-
 /**
  * `kind` maps directly to the WAT name of the field
  */

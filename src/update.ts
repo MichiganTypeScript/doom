@@ -1,58 +1,99 @@
 import { Entry, Instruction } from "./instructions.js";
-import { ProgramState } from "./program.js";
+import { ProgramState, ExecutionContext } from "./program.js";
 
 export namespace Update {
-  export type setInstructions<
+
+  /** Helpers for Instruction manipulation */
+  export namespace Instructions {
+    export type set<
+      state extends ProgramState,
+      instructions extends Instruction[],
+  
+      RESULT extends ProgramState = {
+        instructions: instructions;
+  
+        executionContext: state['executionContext'];
+        module: state['module'];
+        stack: state['stack'];
+      }
+    > = RESULT
+  
+    export type push<
     state extends ProgramState,
     instructions extends Instruction[],
-
-    RESULT extends ProgramState = {
-      instructions: instructions;
-
-      module: state['module'];
-      stack: state['stack'];
-    }
-  > = RESULT
-
-  export type pushInstructions<
-  state extends ProgramState,
-  instructions extends Instruction[],
-
-  RESULT extends ProgramState =
-    setInstructions<
-      state,
-      [
-        ...state['instructions'],
-        ...instructions
-      ]
-    >
-> = RESULT
-
-
-  export type setStack<
-    state extends ProgramState,
-    stack extends Entry[],
-
-    RESULT extends ProgramState = {
-      stack: stack;
-
-      instructions: state['instructions'];
-      module: state['module'];
-    }
-  > = RESULT
-
-
-  export type pushStack<
-    state extends ProgramState,
-    entry extends Entry,
-
-    RESULT extends ProgramState = 
-      setStack<
+  
+    RESULT extends ProgramState =
+      set<
         state,
         [
-          ...state['stack'],
-          entry
+          ...state['instructions'],
+          ...instructions
         ]
       >
   > = RESULT
+  }
+
+
+  /** Helpers for Stack manipulation */
+  export namespace Stack {
+    export type set<
+      state extends ProgramState,
+      stack extends Entry[],
+
+      RESULT extends ProgramState = {
+        stack: stack;
+
+        executionContext: state['executionContext'];
+        instructions: state['instructions'];
+        module: state['module'];
+      }
+    > = RESULT
+
+
+    export type push<
+      state extends ProgramState,
+      entry extends Entry,
+
+      RESULT extends ProgramState = 
+        set<
+          state,
+          [
+            ...state['stack'],
+            entry
+          ]
+        >
+    > = RESULT
+  }
+
+  /** Helpers for ExecutionContext manipulation */
+  export namespace ExecutionContext {
+    export type set<
+      state extends ProgramState,
+      executionContext extends ExecutionContext,
+
+      RESULT extends ProgramState = {
+        executionContext: executionContext;
+        
+        instructions: state['instructions'];
+        module: state['module'];
+        stack: state['stack'];
+      }
+    > = RESULT
+
+
+    // export type push<
+    //   state extends ProgramState,
+    //   executionContext extends ExecutionContext,
+
+    //   RESULT extends ProgramState = 
+    //     set<
+    //       state,
+    //       [
+    //         ...state['executionContext'],
+    //         executionContext
+    //       ]
+    //     >
+    // > = RESULT
+  }
+
 }

@@ -1,6 +1,9 @@
-import { ProgramState } from "./program.js"
-import { Call, Numbers } from "hotscript"
+import { ExecutionContext, ProgramState } from "./program.js"
+import { Call as Apply, Numbers } from "hotscript"
 import { Update } from "./update.js"
+import { ModuleField } from "./module.js"
+
+/** No.  I'm not a Java programmer.  The `I` prefixing is not hungarian notation, it's to prevent naming collisions.  That's all.  */
 
 export type IAdd = {
   kind: "add"
@@ -44,26 +47,62 @@ export namespace Instructions {
       infer b extends number,
       infer a extends number
     ]
-    ? Update.pushStack<
+    ? Update.Stack.set<
         state,
-        Call<Numbers.Add<a, b>>
+        [
+          ...remaining,
+          Apply<Numbers.Add<a, b>>
+        ]
       >
+    : never
+
+  export type Call<
+    state extends ProgramState,
+    instruction extends ICall,
+
+    _id extends instruction['id'] = instruction['id'],
+
+    _func extends ModuleField.Func = state['module']['func'][_id],
+
+  > = state["stack"] extends [
+      ...infer remaining extends number[],
+      // TEMPORARY HARDCODING. THIS IS WRONG.  need to pop off a variable number of arguments off the stack corresponds to the length of this func's `params` array.
+      infer b extends number,
+      infer a extends number
+    ]
+    ?
+      // set the locals to have the values from the stack that we just popped off
+      Update.ExecutionContext.set<
+
+        // set the stack to have remaining values only
+        Update.Stack.set<
+        
+          // add the instructions from this func onto the stack
+          Update.Instructions.push<
+            state,
+            _func['instructions']
+          >,
+
+          remaining
+        >,
+
+        {
+          locals: {
+            // TEMPORARY HARDCODING. THIS IS WRONG.  It needs to grab names from the params.
+            ['a']: a;
+            ['b']: b;
+          }
+        }
+      >
+
     : never
 
   export type LocalGet<
     state extends ProgramState,
-    instruction extends ILocalGet
+    instruction extends ILocalGet,
   > =
-    state
-
-  export type CallInst<
-    state extends ProgramState,
-    instruction extends ICall,
-
-    _id extends instruction['id'] = instruction['id']
-  > =
-    Update.pushInstructions<
+    Update.Stack.push<
       state,
-      state["module"]['func'][_id]['instructions']
+      state['executionContext']['locals'][instruction['id']]
     >
 }

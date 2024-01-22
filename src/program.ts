@@ -1,20 +1,30 @@
 import { IAdd, ICall, Entry, Instruction, ILocalGet } from "./instructions.js"
 import { Update } from "./update.js"
 import { Instructions } from "./instructions.js"
-import { ModuleField, WasmModule } from "./module.js";
+import { WasmModule } from "./module.js";
 
 export type ProgramInput = {
   stack: Entry[];
   module: WasmModule;
 }
 
+export type ExecutionContext = {
+  /** the current local variable values */
+  locals: Record<string, number>;
+}
+
 export type ProgramState = {
+  /** the WASM module itself, with all the top-level declarations */
   module: WasmModule;
 
   /** the currently executing instructions */
   instructions: Instruction[];
 
+  /** a stack of values */
   stack: Entry[];
+
+  /** a stack of execution contexts */
+  executionContext: ExecutionContext;
 }
 
 export type runProgram<input extends ProgramInput> =
@@ -25,6 +35,9 @@ export type runProgram<input extends ProgramInput> =
     ];
     module: input['module'];
     stack: input['stack'];
+    executionContext: {
+      locals: {}
+    };
   }
 >
 
@@ -34,25 +47,19 @@ export type evaluate<T> = {
 
 export type executeInstruction<state extends ProgramState> =
   state["instructions"] extends [
-    infer currentInstruction extends Instruction,
+    infer instruction extends Instruction,
     ...infer remainingInstructions extends Instruction[]
   ]
   ? executeInstruction<
       selectInstruction<
-        Update.setInstructions<
+        Update.Instructions.set<
           state,
           remainingInstructions
         >,
-        currentInstruction
+        instruction
       >
     >
   : evaluate<state>
-
-/** removes the first item from an array and returns the rest */
-export type tail<T extends readonly number[]> =
-  T extends [unknown, ...infer tail extends number[]]
-  ? tail
-  : never
 
 export type selectInstruction<
   state extends ProgramState,
@@ -60,11 +67,11 @@ export type selectInstruction<
 > =
   instruction extends IAdd
   ? Instructions.Add<state, instruction>
-    
+
   : instruction extends ILocalGet
   ? Instructions.LocalGet<state, instruction>
 
   : instruction extends ICall
-  ? Instructions.CallInst<state, instruction>
-  
+  ? Instructions.Call<state, instruction>
+
   : never
