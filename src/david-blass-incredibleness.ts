@@ -45,7 +45,7 @@ type entry<
   false
 >
 
-type dbg = entry<[2, 2]>;
+type dbg = entry<[1, 2]>;
 //   ^?
 
 type testCases = [

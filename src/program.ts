@@ -1,4 +1,4 @@
-import { IAdd, ICall, Entry, Instruction, ILocalGet } from "./instructions.js"
+import { IAdd, ICall, Entry, Instruction, ILocalGet, IConst, ISub, selectInstruction } from "./instructions.js"
 import { Update } from "./update.js"
 import { Instructions } from "./instructions.js"
 import { WasmModule } from "./module.js";
@@ -70,18 +70,3 @@ export type executeInstruction<
   : debugMode extends true
     ? evaluate<state>
     : evaluate<state>['stack'][0]
-
-export type selectInstruction<
-  state extends ProgramState,
-  instruction extends Instruction
-> =
-  instruction extends IAdd
-  ? Instructions.Add<state, instruction>
-
-  : instruction extends ILocalGet
-  ? Instructions.LocalGet<state, instruction>
-
-  : instruction extends ICall
-  ? Instructions.Call<state, instruction>
-
-  : never

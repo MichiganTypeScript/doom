@@ -29,8 +29,8 @@ type $entry<
   }
 > = RESULT
 
-type entry<
-  input extends number[]
+export type entry<
+  input extends number[] = []
 > = runProgram<
   {
     stack: input;

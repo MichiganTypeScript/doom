@@ -54,8 +54,8 @@ impl ToString for SourceFile {
             .join("\n");
 
         let entry = format!(
-            "type entry<
-  input extends number[]
+            "export type entry<
+  input extends number[] = []
 > = runProgram<
   {{
     stack: input;

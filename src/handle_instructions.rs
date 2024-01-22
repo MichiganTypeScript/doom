@@ -15,9 +15,22 @@ pub fn handle_instruction(instruction: &Instruction<'_>) -> String {
             // let id = index.id().expect("call index must have an id").name();
             format!("{indent}{{ kind: 'Call'; id: '{id}' }}")
         }
+        Instruction::I32Const(value) => {
+            format!("{indent}{{ kind: 'Const'; value: {value} }}")
+        }
+        Instruction::I32Sub | Instruction::I64Sub | Instruction::F32Sub | Instruction::F64Sub => {
+            format!("{indent}{{ kind: 'Sub' }}")
+        }
+        Instruction::I32Eqz | Instruction::I64Eqz => {
+            format!("{indent}{{ kind: 'EqualsZero' }}")
+        }
         Instruction::LocalGet(index) => {
             let id = format_index(index);
             format!("{indent}{{ kind: 'LocalGet'; id: '{id}' }}")
+        }
+        Instruction::LocalSet(index) => {
+            let id = format_index(index);
+            format!("{indent}{{ kind: 'LocalSet'; id: '{id}' }}")
         }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
@@ -33,7 +46,7 @@ pub fn handle_instructions(func: &Func) -> String {
         wast::core::FuncKind::Inline { locals, expression } => {
             let locals = locals
                 .iter()
-                .map(|local| local.id.expect("local must have a name").name().to_string())
+                .map(|local| format!("'${}'", local.id.expect("local must have a name").name()))
                 .collect::<Vec<String>>()
                 .join(", ");
 

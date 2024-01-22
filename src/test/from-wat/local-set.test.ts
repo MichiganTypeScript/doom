@@ -10,9 +10,9 @@ test(name, async () => {
   expect(entry()).toStrictEqual(11);
 });
 
+type x = entry;
+//   ^?
+
 type testCases = [
   Expect<Equal<entry, 11>>,
-  
-  // @ts-expect-error
-  Expect<Equal<entry, 6>>,
 ]

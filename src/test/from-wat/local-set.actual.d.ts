@@ -1,21 +1,45 @@
-import { Call, Numbers } from 'hotscript'
+import { ModuleField } from '../../module.ts'
+import { runProgram } from '../../program.ts'
 
 type $main<
-  $var extends number =
-    10,
-  RESULT extends number =
-    Call<Numbers.Add<
-      $var,
-      1
-    >>
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: [];
+    result: number;
+    locals: ['$var'];
+    instructions: [
+      { kind: 'Const'; value: 10 },
+      { kind: 'LocalSet'; id: '$var' },
+      { kind: 'LocalGet'; id: '$var' },
+      { kind: 'Const'; value: 1 },
+      { kind: 'Add' }
+    ];
+  }
 > = RESULT
 
 type $entry<
-  RESULT extends number =
-    $main
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: [];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'Call'; id: '$main' }
+    ];
+  }
 > = RESULT
 
 export type entry<
-  RESULT extends number =
-    $entry
-> = RESULT
+  input extends number[] = []
+> = runProgram<
+  {
+    stack: input;
+    module: {
+      func: {
+        $main: $main;
+        $entry: $entry;
+      }
+    }
+  },
+  false
+>

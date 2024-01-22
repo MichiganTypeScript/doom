@@ -12,12 +12,6 @@ macro_rules! dbg_dump_file {
     }};
 }
 
-pub const RESULT_SENTINEL: &str = "RESULT";
-
-pub fn format_call_id<I: Into<String>>(id: I) -> String {
-    format!("${}", id.into())
-}
-
 pub fn format_index(index: &Index) -> String {
     match index {
         Index::Id(id) => "$".to_string() + id.name(),

@@ -1,15 +1,9 @@
 extern crate wast;
 
-mod fragment;
 mod handle_instructions;
 mod handle_module;
-mod parameter;
 mod source_file;
-mod source_line;
-mod statement;
 mod stats;
-mod type_constraint;
-mod type_definition;
 mod utils;
 mod wat_to_dts;
 
@@ -47,8 +41,12 @@ mod tests {
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            "add", //
-                  // "andarist", //
+            "add",         //
+            "call",        //
+            "subtract",    //
+            "equals-zero", //
+            "local-set",   //
+                           // "andarist", //
         ]
     }
 

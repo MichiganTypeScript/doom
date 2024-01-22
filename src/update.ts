@@ -26,8 +26,8 @@ export namespace Update {
       set<
         state,
         [
+          ...instructions,
           ...state['instructions'],
-          ...instructions
         ]
       >
   > = RESULT
