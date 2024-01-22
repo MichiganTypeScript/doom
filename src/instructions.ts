@@ -1,4 +1,4 @@
-import { ExecutionContext, ProgramState } from "./program.js"
+import { ProgramState } from "./program.js"
 import { Call as Apply, Numbers } from "hotscript"
 import { Update } from "./update.js"
 import { ModuleField } from "./module.js"

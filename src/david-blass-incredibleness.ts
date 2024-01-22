@@ -46,14 +46,14 @@ type add<
   }
 }>
 
-type x = add<[2, 2]>
+type dbg = add<[2, 2]>;
 //   ^?
 
 type testCases = [
-    Expect<Equal<add<[2, 2]>['stack'][0], 4>>,
-    Expect<Equal<add<[1, 2]>['stack'][0], 3>>,
-    Expect<Equal<add<[0, 2]>['stack'][0], 2>>,
-    Expect<Equal<add<[-1, 2]>['stack'][0], 1>>,
-    Expect<Equal<add<[-2, 2]>['stack'][0], 0>>,
-    Expect<Equal<add<[-3, -3]>['stack'][0], -6>>
+    Expect<Equal<add<[2, 2]>, 4>>,
+    Expect<Equal<add<[1, 2]>, 3>>,
+    Expect<Equal<add<[0, 2]>, 2>>,
+    Expect<Equal<add<[-1, 2]>, 1>>,
+    Expect<Equal<add<[-2, 2]>, 0>>,
+    Expect<Equal<add<[-3, -3]>, -6>>
 ]

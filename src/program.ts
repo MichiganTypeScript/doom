@@ -27,25 +27,32 @@ export type ProgramState = {
   executionContext: ExecutionContext;
 }
 
-export type runProgram<input extends ProgramInput> =
- executeInstruction<
-  {
-    instructions: [
-      { kind: "Call", id: "entry" }
-    ];
-    module: input['module'];
-    stack: input['stack'];
-    executionContext: {
-      locals: {}
-    };
-  }
->
+export type runProgram<
+  input extends ProgramInput,
+  debugMode extends boolean = false,
+> =
+  executeInstruction<
+    {
+      instructions: [
+        { kind: "Call", id: "entry" }
+      ];
+      module: input['module'];
+      stack: input['stack'];
+      executionContext: {
+        locals: {}
+      };
+    },
+    debugMode
+  >
 
 export type evaluate<T> = {
   [K in keyof T]: T[K]
 } & unknown
 
-export type executeInstruction<state extends ProgramState> =
+export type executeInstruction<
+  state extends ProgramState,
+  debugMode extends boolean,
+> =
   state["instructions"] extends [
     infer instruction extends Instruction,
     ...infer remainingInstructions extends Instruction[]
@@ -57,9 +64,12 @@ export type executeInstruction<state extends ProgramState> =
           remainingInstructions
         >,
         instruction
-      >
+      >,
+      debugMode
     >
-  : evaluate<state>
+  : debugMode extends true
+    ? evaluate<state>
+    : evaluate<state>['stack'][0]
 
 export type selectInstruction<
   state extends ProgramState,
