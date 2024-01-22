@@ -32,6 +32,14 @@ pub fn handle_instruction(instruction: &Instruction<'_>) -> String {
             let id = format_index(index);
             format!("{indent}{{ kind: 'LocalSet'; id: '{id}' }}")
         }
+        Instruction::GlobalGet(index) => {
+            let id = format_index(index);
+            format!("{indent}{{ kind: 'GlobalGet'; id: '{id}' }}")
+        }
+        Instruction::GlobalSet(index) => {
+            let id = format_index(index);
+            format!("{indent}{{ kind: 'GlobalSet'; id: '{id}' }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

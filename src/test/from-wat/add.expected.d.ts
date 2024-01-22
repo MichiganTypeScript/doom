@@ -38,7 +38,8 @@ export type entry<
       func: {
         $add: $add;
         $entry: $entry;
-      }
+      };
+      globals: {};
     }
   },
   false

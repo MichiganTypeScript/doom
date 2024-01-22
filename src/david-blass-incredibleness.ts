@@ -40,7 +40,8 @@ type entry<
         $add: $add;
         $entry: $entry;
       }
-    }
+      globals: {}
+    };
   },
   false
 >

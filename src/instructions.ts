@@ -10,7 +10,9 @@ DONE
 {
   "LocalGet": 14,
   "I32Const": 8,
+  "GlobalGet": 7,
   "LocalSet": 6,
+  "GlobalSet": 4,
   "I32Sub": 3,
   "Call": 2,
   "I32Add": 2,
@@ -19,8 +21,6 @@ DONE
 
 REMAINING
 {
-  "GlobalGet": 7, // easy
-  "GlobalSet": 4, // easy
   "I32Store": 2, // medium
   "I32Load": 2, // medium
   "I32And": 2, // hard
@@ -67,6 +67,20 @@ export type IEqualsZero = {
   kind: "EqualsZero"
 }
 
+export type IGlobalGet = {
+  kind: "GlobalGet"
+
+  /** a local identifier */
+  id: string
+}
+
+export type IGlobalSet = {
+  kind: "GlobalSet"
+
+  /** a local identifier */
+  id: string
+}
+
 export type ILocalGet = {
   kind: "LocalGet"
 
@@ -93,9 +107,46 @@ export type Instruction =
   | ICall
   | IConst
   | IEqualsZero
+  | IGlobalGet
+  | IGlobalSet
   | ILocalGet
   | ILocalSet
   | ISub
+
+
+export type selectInstruction<
+  state extends ProgramState,
+  instruction extends Instruction
+> =
+  instruction extends IAdd
+  ? Instructions.Add<state, instruction>
+  
+  : instruction extends ICall
+  ? Instructions.Call<state, instruction>
+
+  : instruction extends IConst
+  ? Instructions.Const<state, instruction>
+
+  : instruction extends IEqualsZero
+  ? Instructions.EqualsZero<state, instruction>
+
+  : instruction extends IGlobalGet
+  ? Instructions.GlobalGet<state, instruction>
+
+  : instruction extends IGlobalSet
+  ? Instructions.GlobalSet<state, instruction>
+
+  : instruction extends ILocalGet
+  ? Instructions.LocalGet<state, instruction>
+
+  : instruction extends ILocalSet
+  ? Instructions.LocalSet<state, instruction>
+
+  : instruction extends ISub
+  ? Instructions.Sub<state, instruction>
+
+  : 'you forgot to handle an instruction'
+
 
 /** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
 type PopulateParams<
@@ -113,15 +164,13 @@ type PopulateParams<
     ]
     ? PopulateParams<
         // set the locals to have the values from the stack that we just popped off
-        Update.ExecutionContext.set<
+        Update.ExecutionContext.updateActive<
           
           // set the stack to have remaining values only
           Update.Stack.set<state, remainingStack>,
+
           {
-            locals: evaluate<
-              & state['executionContext']['locals']
-              & { [p in param]: pop }
-            >
+            locals: { [p in param]: pop }
           }
         >,
 
@@ -194,6 +243,34 @@ export namespace Instructions {
       >
     : never
 
+
+  export type GlobalGet<
+    state extends ProgramState,
+    instruction extends IGlobalGet,
+    _id extends string = instruction['id'],
+  > =
+    Update.Stack.push<
+      state,
+      state['module']['globals'][_id]
+    >
+
+  export type GlobalSet<
+    state extends ProgramState,
+    instruction extends IGlobalSet,
+  > =
+    state['stack'] extends [
+      ...infer remaining extends Entry[],
+      infer a extends Entry
+    ]
+    ? Update.Stack.set<
+        Update.Globals.insert<
+          state,
+          Record<instruction['id'], a>
+        >,
+        remaining
+      >
+    : never
+
   export type LocalGet<
     state extends ProgramState,
     instruction extends ILocalGet,
@@ -243,30 +320,3 @@ export namespace Instructions {
       >
     : never
 }
-
-export type selectInstruction<
-  state extends ProgramState,
-  instruction extends Instruction
-> =
-  instruction extends IAdd
-  ? Instructions.Add<state, instruction>
-  
-  : instruction extends ICall
-  ? Instructions.Call<state, instruction>
-
-  : instruction extends IConst
-  ? Instructions.Const<state, instruction>
-
-  : instruction extends IEqualsZero
-  ? Instructions.EqualsZero<state, instruction>
-
-  : instruction extends ILocalGet
-  ? Instructions.LocalGet<state, instruction>
-
-  : instruction extends ILocalSet
-  ? Instructions.LocalSet<state, instruction>
-
-  : instruction extends ISub
-  ? Instructions.Sub<state, instruction>
-
-  : 'you forgot to handle an instruction'

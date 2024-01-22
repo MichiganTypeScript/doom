@@ -1,8 +1,12 @@
-import { Instruction } from "./instructions.js";
+import { Entry, Instruction } from "./instructions.js";
+
+export type Globals = Record<string, Entry>;
 
 /** a representation of the full webassembly module */
 export type WasmModule = {
   func: Record<string, ModuleField.Func>
+
+  globals: Globals
 };
 
 export type Param = string;

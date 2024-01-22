@@ -36,7 +36,8 @@ export type entry<
       func: {
         $ziltoid: $ziltoid;
         $entry: $entry;
-      }
+      };
+      globals: {};
     }
   },
   false

@@ -1,5 +1,6 @@
 import { Entry, Instruction } from "./instructions.js";
 import { ProgramState, ExecutionContext } from "./program.js";
+import { Globals as GlobalsType } from "./module.js";
 
 export namespace Update {
 
@@ -8,7 +9,7 @@ export namespace Update {
     export type set<
       state extends ProgramState,
       instructions extends Instruction[],
-  
+
       RESULT extends ProgramState = {
         instructions: instructions;
   
@@ -17,7 +18,7 @@ export namespace Update {
         stack: state['stack'];
       }
     > = RESULT
-  
+
     export type push<
     state extends ProgramState,
     instructions extends Instruction[],
@@ -33,7 +34,6 @@ export namespace Update {
   > = RESULT
   }
 
-
   /** Helpers for Stack manipulation */
   export namespace Stack {
     export type set<
@@ -48,7 +48,6 @@ export namespace Update {
         module: state['module'];
       }
     > = RESULT
-
 
     export type push<
       state extends ProgramState,
@@ -80,20 +79,39 @@ export namespace Update {
       }
     > = RESULT
 
+    export type updateActive<
+      state extends ProgramState,
+      executionContext extends ExecutionContext,
 
-    // export type push<
-    //   state extends ProgramState,
-    //   executionContext extends ExecutionContext,
-
-    //   RESULT extends ProgramState = 
-    //     set<
-    //       state,
-    //       [
-    //         ...state['executionContext'],
-    //         executionContext
-    //       ]
-    //     >
-    // > = RESULT
+      RESULT extends ProgramState = 
+        set<
+          state,
+          {
+            locals: state['executionContext']['locals']
+            & executionContext['locals']
+          }
+        >
+    > = RESULT
   }
 
+  /** Helpers for Globals manipulation */
+  export namespace Globals {
+    export type insert<
+      state extends ProgramState,
+      globals extends GlobalsType,
+
+      RESULT extends ProgramState = {
+        module: {
+          // TODO: maybe should omit this global?
+          globals: state['module']['func'] & globals;
+
+          func: state['module']['func'];
+        };
+
+        executionContext: state['executionContext'];
+        instructions: state['instructions'];
+        stack: state['stack'];
+      }
+    > = RESULT
+  }
 }

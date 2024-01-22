@@ -1,7 +1,7 @@
 use crate::handle_instructions::handle_instructions;
 use crate::source_file::SourceFile;
 use std::collections::HashMap;
-use wast::core::{Func, ModuleField};
+use wast::core::{Func, Global, GlobalKind, Instruction, ModuleField};
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
     source.add_import("../../module.ts", "ModuleField");
@@ -35,7 +35,10 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
     result: {result};"
             )
         })
-        .unwrap_or(String::from("hit the default"));
+        .unwrap_or(String::from(
+            "    params: [];
+    result: number;",
+        ));
 
     let instructions_and_locals = handle_instructions(func);
 
@@ -50,6 +53,31 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
     );
 
     source.add_type(name, output);
+}
+
+fn handle_module_field_global(source: &SourceFile, global: &Global) {
+    let name = global.id.expect("global to have a name").name().to_string();
+
+    let value = match &global.kind {
+        GlobalKind::Import(_) => {
+            panic!("imported globals are not supported");
+        }
+        GlobalKind::Inline(inline) => {
+            let first = inline
+                .instrs
+                .first()
+                .expect("inline global to have at least one instruction");
+            match first {
+                Instruction::I32Const(value) => value.to_string(),
+                _ => {
+                    dbg!(first);
+                    panic!("inline global to have a first instruction of i32.const");
+                }
+            }
+        }
+    };
+
+    source.add_global(format!("${name}"), value);
 }
 
 /*
@@ -73,10 +101,10 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
                 handle_module_field_func(source, func);
             }
 
-            ModuleField::Global(_global) => {
+            ModuleField::Global(global) => {
                 let count = module_index.entry("Global").or_insert(0);
-                // handle_module_field_global(source, global);
                 *count += 1;
+                handle_module_field_global(source, global);
             }
             ModuleField::Export(_)
             | ModuleField::Table(_)

@@ -46,6 +46,7 @@ mod tests {
             "subtract",    //
             "equals-zero", //
             "local-set",   //
+            "globals",     //
                            // "andarist", //
         ]
     }

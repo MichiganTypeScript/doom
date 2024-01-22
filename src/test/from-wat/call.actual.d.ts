@@ -49,7 +49,8 @@ export type entry<
         $get42: $get42;
         $get42Plus1: $get42Plus1;
         $entry: $entry;
-      }
+      };
+      globals: {};
     }
   },
   false

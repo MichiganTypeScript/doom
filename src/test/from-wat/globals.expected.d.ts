@@ -1,16 +1,27 @@
 import { ModuleField } from '../../module.ts'
 import { runProgram } from '../../program.ts'
 
-type $add<
+type $setGlobal<
   RESULT extends ModuleField.Func = {
     kind: 'func';
-    params: ['$a', '$b'];
+    params: [];
     result: number;
     locals: [];
     instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Add' }
+      { kind: 'Const'; value: 42 },
+      { kind: 'GlobalSet'; id: '$myGlobal' }
+    ];
+  }
+> = RESULT
+
+type $getGlobal<
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: [];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'GlobalGet'; id: '$myGlobal' }
     ];
   }
 > = RESULT
@@ -18,13 +29,12 @@ type $add<
 type $entry<
   RESULT extends ModuleField.Func = {
     kind: 'func';
-    params: ['$a', '$b'];
+    params: [];
     result: number;
     locals: [];
     instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Call'; id: '$add' }
+      { kind: 'Call'; id: '$setGlobal' },
+      { kind: 'Call'; id: '$getGlobal' }
     ];
   }
 > = RESULT
@@ -36,10 +46,13 @@ export type entry<
     stack: input;
     module: {
       func: {
-        $add: $add;
+        $setGlobal: $setGlobal;
+        $getGlobal: $getGlobal;
         $entry: $entry;
       };
-      globals: {};
+      globals: {
+        $myGlobal: 0;
+      };
     }
   },
   false

@@ -4,9 +4,12 @@ use std::{
 };
 
 use indexmap::{IndexMap, IndexSet};
+use regex::Replacer;
 
 /// This represents is a literal TypeScript file that is the final build output of the program
 pub struct SourceFile {
+    globals: RefCell<IndexMap<String, String>>,
+
     /// npm imports needed for this type to function (globally deduplicated for the whole file)
     imports: RefCell<IndexMap<String, IndexSet<String>>>,
 
@@ -53,6 +56,17 @@ impl ToString for SourceFile {
             .collect::<Vec<_>>()
             .join("\n");
 
+        let mut globals = self
+            .globals
+            .borrow()
+            .iter()
+            .map(|(name, value)| format!("        {name}: {value};"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        if !globals.is_empty() {
+            globals = format!("\n{globals}\n      ");
+        }
+
         let entry = format!(
             "export type entry<
   input extends number[] = []
@@ -62,7 +76,8 @@ impl ToString for SourceFile {
     module: {{
       func: {{
 {funcs}
-      }}
+      }};
+      globals: {{{globals}}};
     }}
   }},
   false
@@ -76,6 +91,7 @@ impl ToString for SourceFile {
 impl SourceFile {
     pub fn new() -> Self {
         SourceFile {
+            globals: RefCell::new(IndexMap::new()),
             imports: RefCell::new(IndexMap::new()),
             types: RefCell::new(IndexMap::new()),
         }
@@ -89,5 +105,9 @@ impl SourceFile {
 
     pub fn add_type(&self, name: String, contents: String) {
         self.types.borrow_mut().insert(name, contents);
+    }
+
+    pub fn add_global(&self, name: String, value: String) {
+        self.globals.borrow_mut().insert(name, value);
     }
 }
