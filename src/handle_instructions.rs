@@ -19,7 +19,7 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
             format!("{indent}{{ kind: 'Const'; value: {value} }}")
         }
         Instruction::I32Sub | Instruction::I64Sub | Instruction::F32Sub | Instruction::F64Sub => {
-            format!("{indent}{{ kind: 'Sub' }}")
+            format!("{indent}{{ kind: 'Subtract' }}")
         }
         Instruction::I32Eqz | Instruction::I64Eqz => {
             format!("{indent}{{ kind: 'EqualsZero' }}")

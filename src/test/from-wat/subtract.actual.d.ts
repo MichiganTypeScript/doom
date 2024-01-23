@@ -1,16 +1,16 @@
 import { ModuleField } from '../../module.ts'
 import { runProgram } from '../../program.ts'
 
-type $ziltoid<
+type $minusOne<
   RESULT extends ModuleField.Func = {
     kind: 'func';
-    params: [];
+    params: ['$a'];
     result: number;
     locals: [];
     instructions: [
-      { kind: 'Const'; value: 10 },
-      { kind: 'Const'; value: 3 },
-      { kind: 'Sub' }
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'Const'; value: 1 },
+      { kind: 'Subtract' }
     ];
   }
 > = RESULT
@@ -18,11 +18,12 @@ type $ziltoid<
 type $entry<
   RESULT extends ModuleField.Func = {
     kind: 'func';
-    params: [];
+    params: ['$a'];
     result: number;
     locals: [];
     instructions: [
-      { kind: 'Call'; id: '$ziltoid' }
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'Call'; id: '$minusOne' }
     ];
   }
 > = RESULT
@@ -34,11 +35,12 @@ export type entry<
     stack: input;
     module: {
       func: {
-        $ziltoid: $ziltoid;
+        $minusOne: $minusOne;
         $entry: $entry;
       };
       globals: {};
-    }
+    };
+    memory: [];
   },
   false
 >

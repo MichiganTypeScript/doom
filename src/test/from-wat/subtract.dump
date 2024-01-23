@@ -12,7 +12,7 @@ Module {
                         offset: 11,
                     },
                     id: Some(
-                        "ziltoid",
+                        "minusOne",
                     ),
                     name: None,
                     exports: InlineExport {
@@ -22,11 +22,13 @@ Module {
                         locals: [],
                         expression: Expression {
                             instrs: [
-                                I32Const(
-                                    10,
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
                                 ),
                                 I32Const(
-                                    3,
+                                    1,
                                 ),
                                 I32Sub,
                             ],
@@ -36,7 +38,15 @@ Module {
                         index: None,
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
                                 results: [
                                     I32,
                                 ],
@@ -63,9 +73,14 @@ Module {
                         locals: [],
                         expression: Expression {
                             instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
                                 Call(
                                     Id(
-                                        "ziltoid",
+                                        "minusOne",
                                     ),
                                 ),
                             ],
@@ -75,7 +90,15 @@ Module {
                         index: None,
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
                                 results: [
                                     I32,
                                 ],
@@ -92,7 +115,8 @@ Module {
 
 
 {
-    "I32Const": 2,
+    "LocalGet": 2,
+    "I32Const": 1,
     "I32Sub": 1,
     "Call": 1,
 }

@@ -109,8 +109,10 @@ export type IReturn = {
   count: number
 }
 
-export type ISub = {
-  kind: "Sub"
+export type ISubtract = {
+  kind: "Subtract"
+}
+
 }
 
 /** an item on the stack */
@@ -164,7 +166,7 @@ export type selectInstruction<
   : instruction extends IReturn
   ? Instructions.Return<state, instruction>
 
-  : instruction extends ISub
+  : instruction extends ISubtract
   ? Instructions.Sub<state, instruction>
 
   : 'you forgot to handle an instruction'
@@ -377,9 +379,9 @@ export namespace Instructions {
         >
       : never
 
-  export type Sub<
+  export type Subtract<
     state extends ProgramState,
-    instruction extends ISub // unused
+    instruction extends ISubtract // unused
   > =
     state["stack"] extends [
       ...infer remaining extends Entry[],
