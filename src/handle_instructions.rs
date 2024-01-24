@@ -1,6 +1,6 @@
 use core::panic;
 
-use wast::core::{Func, Instruction};
+use wast::core::{Func, Instruction, MemArg};
 
 use crate::utils::format_index;
 
@@ -53,6 +53,23 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
         Instruction::LocalTee(index) => {
             let id = format_index(index);
             format!("{indent}{{ kind: 'LocalTee'; id: '{id}' }}")
+        }
+        Instruction::I32Mul | Instruction::I64Mul | Instruction::F32Mul | Instruction::F64Mul => {
+            format!("{indent}{{ kind: 'Multiply' }}")
+        }
+        Instruction::I32Load(MemArg {
+            offset,
+            align,
+            memory: _,
+        }) => {
+            format!("{indent}{{ kind: 'Load'; offset: {offset}; align: {align} }}")
+        }
+        Instruction::I32Store(MemArg {
+            offset,
+            align,
+            memory: _,
+        }) => {
+            format!("{indent}{{ kind: 'Store'; offset: {offset}; align: {align} }}")
         }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);

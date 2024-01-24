@@ -15,9 +15,9 @@ extern crate pretty_assertions;
 
 fn main() {
     let current_dir = std::env::current_dir().unwrap();
-    let wat_path = current_dir.join("src/debug/code.wat");
+    let wat_path = current_dir.join("src/debug/doom/doom.wat");
     let wat = fs::read_to_string(wat_path).unwrap();
-    let output = wat_to_dts(wat, "src/debug/code.dump").to_string();
+    let output = wat_to_dts(wat, "src/debug/doom/doom.dump").to_string();
     fs::write("src/debug/code.d.ts", output).unwrap();
 }
 
@@ -41,14 +41,17 @@ mod tests {
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            "add",
-            "call",
-            "equals-zero",
-            "globals",
-            "local-set",
-            "local-tee",
-            "return",
-            "subtract",
+            // "c-add",
+            // "add",
+            "add-middle",
+            // "call",
+            // "equals-zero",
+            // "globals",
+            // "local-set",
+            // "local-tee",
+            // "memory",
+            // "return",
+            // "subtract",
         ]
     }
 

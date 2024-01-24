@@ -8,3 +8,7 @@ export const getWasm = async (directory: string, filePath: string) => {
   const instance = await WebAssembly.instantiate(wasmModule);
   return instance.exports.entry as CallableFunction;
 }
+
+type UpdateTuple<T extends readonly number[], Index extends keyof T, NewValue> = {
+  [P in keyof T]: P extends Index ? NewValue : T[P]
+};

@@ -48,7 +48,7 @@ Usage count (in Doom) is the number on the right
 | I32Xor            | 411   | ❌           |
 | I32GtS            | 365   | ❌           |
 | I64Load           | 357   | ❌           |
-| GlobalSet         | 349   | ❌           |
+| GlobalSet         | 349   | ✅           |
 | Return            | 324   | ✅           |
 | I32LtS            | 298   | ❌           |
 | I32Load16s        | 278   | ❌           |

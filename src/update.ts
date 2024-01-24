@@ -14,6 +14,7 @@ export namespace Update {
         instructions: instructions;
   
         executionContext: state['executionContext'];
+        memory: state['memory'];
         module: state['module'];
         stack: state['stack'];
       }
@@ -45,6 +46,7 @@ export namespace Update {
 
         executionContext: state['executionContext'];
         instructions: state['instructions'];
+        memory: state['memory'];
         module: state['module'];
       }
     > = RESULT
@@ -74,6 +76,7 @@ export namespace Update {
         executionContext: executionContext;
         
         instructions: state['instructions'];
+        memory: state['memory'];
         module: state['module'];
         stack: state['stack'];
       }
@@ -110,8 +113,20 @@ export namespace Update {
 
         executionContext: state['executionContext'];
         instructions: state['instructions'];
+        memory: state['memory'];
         stack: state['stack'];
       }
+    > = RESULT
+  }
+
+  // TODO
+  export namespace Memory {
+    export type set<
+      state extends ProgramState,
+      index extends number,
+      value extends number,
+
+      RESULT extends ProgramState = state
     > = RESULT
   }
 }

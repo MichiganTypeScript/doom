@@ -18,6 +18,12 @@ test(name, async () => {
   expect(entry(-3)).toStrictEqual(-4);
   expect(entry(-4)).toStrictEqual(-5);
   expect(entry(-5)).toStrictEqual(-6);
+
+  expect(entry(4294967295)).toStrictEqual(-2);
+  expect(entry(4294967296)).toStrictEqual(-1);
+  expect(entry(4294967297)).toStrictEqual(0);
+  expect(entry(4294967298)).toStrictEqual(1);
+  expect(entry(4294967299)).toStrictEqual(2);
 });
 
 type testCases = [

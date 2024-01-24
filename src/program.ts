@@ -1,11 +1,11 @@
-import { IAdd, ICall, Entry, Instruction, ILocalGet, IConst, ISub, selectInstruction } from "./instructions.js"
+import { Entry, Instruction, selectInstruction } from "./instructions.js"
 import { Update } from "./update.js"
-import { Instructions } from "./instructions.js"
 import { WasmModule } from "./module.js";
 
 export type ProgramInput = {
   stack: Entry[];
   module: WasmModule;
+  memory: number[];
 }
 
 export type ExecutionContext = {
@@ -16,6 +16,9 @@ export type ExecutionContext = {
 export type ProgramState = {
   /** the WASM module itself, with all the top-level declarations */
   module: WasmModule;
+
+  /** the linear memory of the program */
+  memory: number[];
 
   /** the currently executing instructions */
   instructions: Instruction[];
@@ -36,6 +39,7 @@ export type runProgram<
       instructions: [
         { kind: "Call", id: "$entry" }
       ];
+      memory: []
       module: input['module'];
       stack: input['stack'];
       executionContext: {

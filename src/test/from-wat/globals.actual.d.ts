@@ -53,7 +53,8 @@ export type entry<
       globals: {
         $myGlobal: 0;
       };
-    }
+    };
+    memory: [];
   },
   false
 >

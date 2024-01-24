@@ -12,6 +12,8 @@ test(name, async () => {
   expect(entry(0)).toStrictEqual(1);
   expect(entry(-1)).toStrictEqual(0);
   expect(entry(-2)).toStrictEqual(0);
+
+  expect(entry(4294967296)).toStrictEqual(1);
 });
 
 type testCases = [

@@ -1,7 +1,9 @@
 use crate::handle_instructions::handle_instructions;
 use crate::source_file::SourceFile;
 use std::collections::HashMap;
-use wast::core::{Func, Global, GlobalKind, Instruction, ModuleField};
+use wast::core::{
+    Func, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField,
+};
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
     source.add_import("../../module.ts", "ModuleField");
@@ -80,6 +82,27 @@ fn handle_module_field_global(source: &SourceFile, global: &Global) {
     source.add_global(format!("${name}"), value);
 }
 
+fn handle_module_field_memory(source: &SourceFile, memory: &Memory) {
+    let name = "$".to_string()
+        + memory
+            .id
+            .expect("memory declarations must have an id")
+            .name();
+    let size = match memory.kind {
+        MemoryKind::Normal(memory_type) => match memory_type {
+            MemoryType::B32 { limits, shared: _ } => limits.min,
+            MemoryType::B64 { limits, shared: _ } => limits
+                .min
+                .try_into()
+                .expect("converting memory size to i32"),
+        },
+        _ => {
+            panic!("only Normal MemoryKind supported");
+        }
+    };
+    source.add_memory(name, size);
+}
+
 /*
 In WebAssembly, the index used to reference entities like functions, globals, or types is relative to the entire module, but it's specific to each kind of entity.
 
@@ -106,10 +129,15 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
                 *count += 1;
                 handle_module_field_global(source, global);
             }
+            ModuleField::Memory(memory) => {
+                let count = module_index.entry("Memory").or_insert(0);
+                *count += 1;
+                handle_module_field_memory(source, memory);
+            }
+
             ModuleField::Export(_)
             | ModuleField::Table(_)
             | ModuleField::Import(_)
-            | ModuleField::Memory(_)
             | ModuleField::Elem(_)
             | ModuleField::Data(_) => {
                 dbg!(field);

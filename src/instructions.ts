@@ -1,5 +1,5 @@
 import { ProgramState, evaluate } from "./program.js"
-import { Call as Apply, Numbers, U } from "hotscript"
+import { Call as Apply, Numbers } from "hotscript"
 import { Update } from "./update.js"
 import { ModuleField, Param } from "./module.js"
 
@@ -81,6 +81,14 @@ export type IGlobalSet = {
   id: string
 }
 
+export type ILoad = {
+  kind: "Load"
+
+  align: number;
+
+  offset: number;
+}
+
 export type ILocalGet = {
   kind: "LocalGet"
 
@@ -102,6 +110,10 @@ export type ILocalTee = {
   id: string
 }
 
+export type IMultiply = {
+  kind: "Multiply"
+}
+
 export type IReturn = {
   kind: "Return"
 
@@ -113,6 +125,12 @@ export type ISubtract = {
   kind: "Subtract"
 }
 
+export type IStore = {
+  kind: "Store"
+
+  align: number;
+
+  offset: number;
 }
 
 /** an item on the stack */
@@ -125,11 +143,14 @@ export type Instruction =
   | IEqualsZero
   | IGlobalGet
   | IGlobalSet
+  | ILoad
   | ILocalGet
   | ILocalSet
   | ILocalTee
+  | IMultiply
   | IReturn
-  | ISub
+  | ISubtract
+  | IStore
 
 
 export type selectInstruction<
@@ -154,6 +175,9 @@ export type selectInstruction<
   : instruction extends IGlobalSet
   ? Instructions.GlobalSet<state, instruction>
 
+  : instruction extends ILoad
+  ? Instructions.Load<state, instruction>
+
   : instruction extends ILocalGet
   ? Instructions.LocalGet<state, instruction>
 
@@ -163,11 +187,17 @@ export type selectInstruction<
   : instruction extends ILocalTee
   ? Instructions.LocalTee<state, instruction>
 
+  : instruction extends IMultiply
+  ? Instructions.Multiply<state, instruction>
+
   : instruction extends IReturn
   ? Instructions.Return<state, instruction>
 
   : instruction extends ISubtract
-  ? Instructions.Sub<state, instruction>
+  ? Instructions.Subtract<state, instruction>
+
+  : instruction extends IStore
+  ? Instructions.Store<state, instruction>
 
   : 'you forgot to handle an instruction'
 
@@ -295,6 +325,22 @@ export namespace Instructions {
       >
     : never
 
+  export type Load<
+    state extends ProgramState,
+    instruction extends ILoad,
+  > =
+    state['stack'] extends [
+      ...infer remaining extends Entry[],
+      infer index extends Entry,
+      infer value extends Entry,
+    ]
+    ? Update.Memory.set<
+        state,
+        index,
+        value
+      >
+    : never
+
   export type LocalGet<
     state extends ProgramState,
     instruction extends ILocalGet,
@@ -342,6 +388,24 @@ export namespace Instructions {
             & Record<instruction['id'], a>
           >
         }
+      >
+    : never
+
+    export type Multiply<
+    state extends ProgramState,
+    instruction extends IMultiply // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry
+    ]
+    ? Update.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.Mul<a, b>>
+        ]
       >
     : never
 
@@ -396,4 +460,27 @@ export namespace Instructions {
         ]
       >
     : never
+
+  export type Store<
+    state extends ProgramState,
+    instruction extends IStore,
+  > =
+    state // TODO
+    // state['stack'] extends [
+    //   ...infer remaining extends Entry[],
+    //   infer a extends Entry
+    // ]
+    // ? Update.Stack.set<
+    //     Update.ExecutionContext.set<
+    //       state,
+    //       {
+    //         locals: evaluate<
+    //           & Omit<state['executionContext']['locals'], instruction['id']>
+    //           & Record<instruction['id'], a>
+    //         >
+    //       }
+    //     >,
+    //     remaining
+    //   >
+    // : never
 }

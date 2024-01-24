@@ -7,6 +7,7 @@ use indexmap::{IndexMap, IndexSet};
 
 /// This represents is a literal TypeScript file that is the final build output of the program
 pub struct SourceFile {
+    /// WASM module-level globals
     globals: RefCell<IndexMap<String, String>>,
 
     /// npm imports needed for this type to function (globally deduplicated for the whole file)
@@ -14,6 +15,9 @@ pub struct SourceFile {
 
     /// separate typescript type definitions for this type
     types: RefCell<IndexMap<String, String>>,
+
+    /// the name of a memory segment and the size of that memory segment
+    memory: RefCell<IndexMap<String, u32>>,
 }
 
 impl fmt::Debug for SourceFile {
@@ -24,6 +28,13 @@ impl fmt::Debug for SourceFile {
 
 impl ToString for SourceFile {
     fn to_string(&self) -> String {
+        let mut memory = String::from("[]");
+        let pages = self.memory.borrow();
+        if let Some(page_count) = pages.get("$memory") {
+            self.add_import("../../memory.ts", "MemoryPages");
+            memory = format!("MemoryPages<{page_count}>");
+        }
+
         let imports = self
             .imports
             .borrow()
@@ -77,7 +88,8 @@ impl ToString for SourceFile {
 {funcs}
       }};
       globals: {{{globals}}};
-    }}
+    }};
+    memory: {memory};
   }},
   false
 >"
@@ -93,6 +105,7 @@ impl SourceFile {
             globals: RefCell::new(IndexMap::new()),
             imports: RefCell::new(IndexMap::new()),
             types: RefCell::new(IndexMap::new()),
+            memory: RefCell::new(IndexMap::new()),
         }
     }
 
@@ -108,5 +121,9 @@ impl SourceFile {
 
     pub fn add_global(&self, name: String, value: String) {
         self.globals.borrow_mut().insert(name, value);
+    }
+
+    pub fn add_memory(&self, name: String, size: u32) {
+        self.memory.borrow_mut().insert(name, size);
     }
 }

@@ -51,7 +51,8 @@ export type entry<
         $entry: $entry;
       };
       globals: {};
-    }
+    };
+    memory: [];
   },
   false
 >

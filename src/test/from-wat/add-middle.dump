@@ -1,0 +1,516 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "__wasm_call_ctors",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Call(
+                                    Id(
+                                        "emscripten_stack_init",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: None,
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 77,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [
+                            Local {
+                                id: Some(
+                                    "stack_pointer",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "stack_size",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "this_stack",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "stack_a",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "stack_b",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "result",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                        ],
+                        expression: Expression {
+                            instrs: [
+                                GlobalGet(
+                                    Id(
+                                        "__stack_pointer",
+                                    ),
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "stack_pointer",
+                                    ),
+                                ),
+                                I32Const(
+                                    16,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "stack_size",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "stack_pointer",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "stack_size",
+                                    ),
+                                ),
+                                I32Sub,
+                                LocalSet(
+                                    Id(
+                                        "this_stack",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "this_stack",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 12,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 961,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "this_stack",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 8,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 1091,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "this_stack",
+                                    ),
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 12,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 1246,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "stack_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "this_stack",
+                                    ),
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 8,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 1391,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "stack_b",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "stack_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "stack_b",
+                                    ),
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "result",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "result",
+                                    ),
+                                ),
+                                Return,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1817,
+                    },
+                    id: Some(
+                        "emscripten_stack_init",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "emscripten_stack_init",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    5243920,
+                                ),
+                                GlobalSet(
+                                    Id(
+                                        "__stack_base",
+                                    ),
+                                ),
+                                I32Const(
+                                    1028,
+                                ),
+                                I32Const(
+                                    15,
+                                ),
+                                I32Add,
+                                I32Const(
+                                    -16,
+                                ),
+                                I32And,
+                                GlobalSet(
+                                    Id(
+                                        "__stack_end",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: None,
+                    },
+                },
+            ),
+            Memory(
+                Memory {
+                    span: Span {
+                        offset: 2204,
+                    },
+                    id: Some(
+                        "memory",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "memory",
+                        ],
+                    },
+                    kind: Normal(
+                        B32 {
+                            limits: Limits {
+                                min: 1,
+                                max: Some(
+                                    1,
+                                ),
+                            },
+                            shared: false,
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 2248,
+                    },
+                    id: Some(
+                        "__stack_pointer",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: true,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    5243920,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 2306,
+                    },
+                    id: Some(
+                        "__stack_end",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: true,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 2354,
+                    },
+                    id: Some(
+                        "__stack_base",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: true,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Table(
+                Table {
+                    span: Span {
+                        offset: 2439,
+                    },
+                    id: Some(
+                        "__indirect_function_table",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Normal {
+                        ty: TableType {
+                            limits: Limits {
+                                min: 2,
+                                max: Some(
+                                    2,
+                                ),
+                            },
+                            elem: RefType {
+                                nullable: true,
+                                heap: Func,
+                            },
+                        },
+                        init_expr: None,
+                    },
+                },
+            ),
+            Elem(
+                Elem {
+                    span: Span {
+                        offset: 2488,
+                    },
+                    id: Some(
+                        "e0",
+                    ),
+                    name: None,
+                    kind: Active {
+                        table: Num(
+                            0,
+                            Span {
+                                offset: 2488,
+                            },
+                        ),
+                        offset: Expression {
+                            instrs: [
+                                I32Const(
+                                    1,
+                                ),
+                            ],
+                        },
+                    },
+                    payload: Indices(
+                        [
+                            Id(
+                                "__wasm_call_ctors",
+                            ),
+                        ],
+                    ),
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 11,
+    "LocalSet": 6,
+    "I32Const": 5,
+    "I32Store": 2,
+    "I32Load": 2,
+    "I32Add": 2,
+    "GlobalSet": 2,
+    "Call": 1,
+    "GlobalGet": 1,
+    "I32Sub": 1,
+    "Return": 1,
+    "I32And": 1,
+}
