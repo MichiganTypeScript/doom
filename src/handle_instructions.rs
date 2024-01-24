@@ -105,6 +105,38 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
         Instruction::F32Neg | Instruction::F64Neg => {
             format!("{indent}{{ kind: 'Negate' }}")
         }
+        Instruction::I32GeS
+        | Instruction::I64GeS
+        | Instruction::I32GeU
+        | Instruction::I64GeU
+        | Instruction::F32Ge
+        | Instruction::F64Ge => {
+            format!("{indent}{{ kind: 'GreaterThanOrEqual' }}")
+        }
+        Instruction::I32GtS
+        | Instruction::I64GtS
+        | Instruction::I32GtU
+        | Instruction::I64GtU
+        | Instruction::F32Gt
+        | Instruction::F64Gt => {
+            format!("{indent}{{ kind: 'GreaterThan' }}")
+        }
+        Instruction::I32LtS
+        | Instruction::I64LtS
+        | Instruction::I32LtU
+        | Instruction::I64LtU
+        | Instruction::F32Lt
+        | Instruction::F64Lt => {
+            format!("{indent}{{ kind: 'LessThan' }}")
+        }
+        Instruction::I32LeS
+        | Instruction::I64LeS
+        | Instruction::I32LeU
+        | Instruction::I64LeU
+        | Instruction::F32Le
+        | Instruction::F64Le => {
+            format!("{indent}{{ kind: 'LessThanOrEqual' }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

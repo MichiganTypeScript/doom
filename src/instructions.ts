@@ -95,6 +95,14 @@ export type IGlobalSet = {
   id: string
 }
 
+export type IGreaterThan = {
+  kind: "GreaterThan"
+}
+
+export type IGreaterThanOrEqual = {
+  kind: "GreaterThanOrEqual"
+}
+
 /** not a webassembly instruction. used for debugging: tells the program to immediately Halt */
 export type IHalt = {
   kind: "Halt"
@@ -106,6 +114,14 @@ export type ILoad = {
   align: number;
 
   offset: number;
+}
+
+export type ILessThan = {
+  kind: "LessThan"
+}
+
+export type ILessThanOrEqual = {
+  kind: "LessThanOrEqual"
 }
 
 export type ILocalGet = {
@@ -174,7 +190,11 @@ export type Instruction =
   | IEqualsZero
   | IGlobalGet
   | IGlobalSet
+  | IGreaterThan
+  | IGreaterThanOrEqual
   | IHalt
+  | ILessThan
+  | ILessThanOrEqual
   | ILoad
   | ILocalGet
   | ILocalSet
@@ -215,8 +235,20 @@ export type selectInstruction<
   : instruction extends IGlobalSet
   ? Instructions.GlobalSet<state, instruction>
 
+  : instruction extends IGreaterThan
+  ? Instructions.GreaterThan<state, instruction>
+
+  : instruction extends IGreaterThanOrEqual
+  ? Instructions.GreaterThanOrEqual<state, instruction>
+
   : instruction extends IHalt
   ? Instructions.Halt<state, instruction>
+
+  : instruction extends ILessThan
+  ? Instructions.LessThan<state, instruction>
+
+  : instruction extends ILessThanOrEqual
+  ? Instructions.LessThanOrEqual<state, instruction>
 
   : instruction extends ILoad
   ? Instructions.Load<state, instruction>
@@ -413,10 +445,82 @@ export namespace Instructions {
       >
     : never
 
+  export type GreaterThan<
+    state extends ProgramState,
+    instruction extends IGreaterThan // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry,
+    ]
+    ? State.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.GreaterThan<a, b>> extends true ? 1 : 0
+        ]
+      >
+    : never
+
+  export type GreaterThanOrEqual<
+    state extends ProgramState,
+    instruction extends IGreaterThanOrEqual // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry,
+    ]
+    ? State.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.GreaterThanOrEqual<a, b>> extends true ? 1 : 0
+        ]
+      >
+    : never
+
   export type Halt<
     state extends ProgramState,
     instruction extends IHalt
   > = state;
+
+  export type LessThan<
+    state extends ProgramState,
+    instruction extends ILessThan // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry,
+    ]
+    ? State.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.LessThan<a, b>> extends true ? 1 : 0
+        ]
+      >
+    : never
+
+  export type LessThanOrEqual<
+    state extends ProgramState,
+    instruction extends ILessThanOrEqual // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry,
+    ]
+    ? State.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.LessThanOrEqual<a, b>> extends true ? 1 : 0
+        ]
+      >
+    : never
 
   export type Load<
     state extends ProgramState,
