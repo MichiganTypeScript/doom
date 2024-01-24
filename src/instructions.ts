@@ -73,6 +73,10 @@ export type IEndFunction = {
   id: string;
 }
 
+export type IEquals = {
+  kind: "Equals"
+}
+
 export type IEqualsZero = {
   kind: "EqualsZero"
 }
@@ -156,6 +160,7 @@ export type Instruction =
   | ICall
   | IConst
   | IEndFunction
+  | IEquals
   | IEqualsZero
   | IGlobalGet
   | IGlobalSet
@@ -185,6 +190,9 @@ export type selectInstruction<
 
   : instruction extends IEndFunction
   ? Instructions.EndFunction<state, instruction>
+
+  : instruction extends IEquals
+  ? Instructions.Equals<state, instruction>
 
   : instruction extends IEqualsZero
   ? Instructions.EqualsZero<state, instruction>
@@ -317,7 +325,25 @@ export namespace Instructions {
       instruction['value']
     >
 
-    export type EqualsZero<
+  export type Equals<
+    state extends ProgramState,
+    instruction extends IEquals // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry,
+    ]
+    ? State.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.Equal<a, b>> extends true ? 1 : 0
+        ]
+      >
+    : never
+
+  export type EqualsZero<
     state extends ProgramState,
     instruction extends IEqualsZero // unused
   > =

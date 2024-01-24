@@ -57,7 +57,13 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
         Instruction::I32Mul | Instruction::I64Mul | Instruction::F32Mul | Instruction::F64Mul => {
             format!("{indent}{{ kind: 'Multiply' }}")
         }
+
         Instruction::I32Load(MemArg {
+            offset,
+            align,
+            memory: _,
+        })
+        | Instruction::I64Load(MemArg {
             offset,
             align,
             memory: _,
@@ -68,11 +74,19 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
             offset,
             align,
             memory: _,
+        })
+        | Instruction::I64Store(MemArg {
+            offset,
+            align,
+            memory: _,
         }) => {
             format!("{indent}{{ kind: 'Store'; offset: {offset}; align: {align} }}")
         }
         Instruction::I32And | Instruction::I64And => {
             format!("{indent}{{ kind: 'And' }}")
+        }
+        Instruction::I32Eq | Instruction::I64Eq | Instruction::F32Eq | Instruction::F64Eq => {
+            format!("{indent}{{ kind: 'Equals' }}")
         }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);

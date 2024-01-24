@@ -35,23 +35,21 @@ mod tests {
 
     fn skip_list() -> Vec<&'static str> {
         vec![
-            "br-if", // this one blocked by sheer force of will
+            "br-if",      // this one blocked by sheer force of will
+            "andarist",   //
+            "if-expr",    //
+            "negate",     //
+            "c-add",      //
+            "add-middle", //
+            "nop",        //
+            "select",     //
         ]
     }
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            // "c-add",//
-            "add", //
-            // "add-middle",//
-            "call",        //
-            "equals-zero", //
-            "globals",     //
-            "local-set",   //
-            "local-tee",   //
-            "memory",      //
-            "return",      //
-            "subtract",    //
+            // "c-add", //
+            // "add-middle", //
         ]
     }
 

@@ -1,31 +1,49 @@
-import { Call, Numbers } from 'hotscript'
+import { ModuleField } from '../../module.ts'
+import { runProgram } from '../../program.ts'
 
 type $main<
-  $a extends number,
-  $b extends number,
-  RESULT extends number =
-    (Call<Numbers.Equal<
-      $a,
-      $b
-    >> extends true ? 1 : 0)
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$a', '$b'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'LocalGet'; id: '$b' },
+      { kind: 'Equals' },
+    ];
+  }
 > = RESULT
 
 type $entry<
-  $a extends number,
-  $b extends number,
-  RESULT extends number =
-    $main<
-      $a,
-      $b
-    >
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$a', '$b'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'LocalGet'; id: '$b' },
+      { kind: 'Call'; id: '$main' },
+    ];
+  }
 > = RESULT
 
 export type entry<
-  $a extends number,
-  $b extends number,
-  RESULT extends number =
-    $entry<
-      $a,
-      $b
-    >
-> = RESULT
+  input extends number[] = [],
+  debugMode extends boolean = false
+> = runProgram<
+  {
+    stack: input;
+    module: {
+      func: {
+        $main: $main;
+        $entry: $entry;
+      };
+      globals: {};
+    };
+    memory: {};
+    memorySize: 0;
+  },
+  debugMode
+>
