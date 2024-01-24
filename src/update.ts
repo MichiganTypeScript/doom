@@ -168,8 +168,10 @@ export namespace State {
                {
                   funcId: State.ExecutionContexts.Active.get<state>['funcId'];
                   locals:
+                    evaluate<
                     & State.ExecutionContexts.Active.Locals.get<state>
                     & { [k in id]: value }
+                    >;
                }
               >
         > = RESULT

@@ -1,10 +1,10 @@
 import { Expect, Equal } from 'type-testing';
-import type { entry } from "./if-expr.actual.js";
+import type { entry } from "./if-else.actual.js";
 
 import { getWasm } from '../../utils.js';
 import { expect, test } from 'vitest';
 
-const name = 'if-expr';
+const name = 'if-else';
 test(name, async () => {
   const entry = await getWasm("from-wat", name);
   expect(entry(10, 2)).toStrictEqual(11);

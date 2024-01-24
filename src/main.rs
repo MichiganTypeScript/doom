@@ -37,7 +37,6 @@ mod tests {
         vec![
             "br-if",      // this one blocked by sheer force of will
             "andarist",   //
-            "if-expr",    //
             "c-add",      //
             "add-middle", //
             "select",     //

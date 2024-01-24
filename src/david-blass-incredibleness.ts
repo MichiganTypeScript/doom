@@ -1,6 +1,6 @@
-import type { entry } from './test/from-wat/if-expr.actual.d.ts';
+import type { entry } from './test/from-wat/if-else.actual.js';
 
-type e = entry<[0], true>
+type e = entry<[10, 2], true>
 //   ^?
 
 type stack = e['stack'];

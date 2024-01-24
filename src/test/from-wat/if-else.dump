@@ -12,7 +12,7 @@ Module {
                         offset: 326,
                     },
                     id: Some(
-                        "ifexpr",
+                        "if",
                     ),
                     name: None,
                     exports: InlineExport {
@@ -100,7 +100,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 762,
+                        offset: 758,
                     },
                     id: Some(
                         "entry",
@@ -127,7 +127,7 @@ Module {
                                 ),
                                 Call(
                                     Id(
-                                        "ifexpr",
+                                        "if",
                                     ),
                                 ),
                             ],

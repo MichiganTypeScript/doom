@@ -65,6 +65,14 @@ export type IConst = {
   value: number;
 }
 
+export type IElse = {
+  kind: "Else"
+}
+
+export type IEnd = {
+  kind: "End"
+}
+
 /** this isn't really a webassembly instruction, but it's a sentinel put here so that the program can understand when to cull execution contexts (i.e. after the function returns) */
 export type IEndFunction = {
   kind: "EndFunction"
@@ -106,6 +114,10 @@ export type IGreaterThanOrEqual = {
 /** not a webassembly instruction. used for debugging: tells the program to immediately Halt */
 export type IHalt = {
   kind: "Halt"
+}
+
+export type IIf = {
+  kind: "If"
 }
 
 export type ILoad = {
@@ -185,6 +197,8 @@ export type Instruction =
   | IAdd
   | ICall
   | IConst
+  | IElse
+  | IEnd
   | IEndFunction
   | IEquals
   | IEqualsZero
@@ -193,6 +207,7 @@ export type Instruction =
   | IGreaterThan
   | IGreaterThanOrEqual
   | IHalt
+  | IIf
   | ILessThan
   | ILessThanOrEqual
   | ILoad
@@ -203,8 +218,8 @@ export type Instruction =
   | INegate
   | INop
   | IReturn
-  | ISubtract
   | IStore
+  | ISubtract
 
 
 export type selectInstruction<
@@ -219,6 +234,12 @@ export type selectInstruction<
 
   : instruction extends IConst
   ? Instructions.Const<state, instruction>
+
+  : instruction extends IElse
+  ? Instructions.Else<state, instruction>
+
+  : instruction extends IEnd
+  ? Instructions.End<state, instruction>
 
   : instruction extends IEndFunction
   ? Instructions.EndFunction<state, instruction>
@@ -243,6 +264,9 @@ export type selectInstruction<
 
   : instruction extends IHalt
   ? Instructions.Halt<state, instruction>
+
+  : instruction extends IIf
+  ? Instructions.If<state, instruction>
 
   : instruction extends ILessThan
   ? Instructions.LessThan<state, instruction>
@@ -282,40 +306,6 @@ export type selectInstruction<
 
   : 'you forgot to handle an instruction'
 
-
-/** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
-type PopulateParams<
-  state extends ProgramState,
-  funcId extends string,
-  params extends Param[],
-> =
-  // HELP: params are fed in reverse order and simply switching the infer statements order below for some reason doesn't work...
-  Reverse<params> extends [
-    infer param extends Param,
-    ...infer remainingParams extends Param[],
-  ]
-  ? state["stack"] extends [
-      ...infer remainingStack extends Entry[],
-      infer pop extends Entry,
-    ]
-    ? PopulateParams<
-        // set the locals to have the values from the stack that we just popped off
-        State.ExecutionContexts.Active.Locals.set<
-          // set the stack to have remaining values only
-          State.Stack.set<
-            state,
-            remainingStack
-          >,
-
-          param,
-          pop
-        >,
-        funcId,
-        remainingParams
-      >
-    : never // should never happen because the stack should always have at least as many items as there are params
-  : state // no more params, so we can jump out
-
 export namespace Instructions {
   export type Add<
     state extends ProgramState,
@@ -334,6 +324,50 @@ export namespace Instructions {
         ]
       >
     : never
+
+  export type Else<
+    state extends ProgramState,
+    instruction extends IElse // unused
+  > = state; // TODO
+
+  export type End<
+    state extends ProgramState,
+    instruction extends IEnd // unused
+  > = state; // TODO
+
+
+  /** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
+  type PopulateParams<
+    state extends ProgramState,
+    funcId extends string,
+    params extends Param[],
+  > =
+    // HELP: params are fed in reverse order and simply switching the infer statements order below for some reason doesn't work...
+    Reverse<params> extends [
+      infer param extends Param,
+      ...infer remainingParams extends Param[],
+    ]
+    ? state["stack"] extends [
+        ...infer remainingStack extends Entry[],
+        infer pop extends Entry,
+      ]
+      ? PopulateParams<
+          // set the locals to have the values from the stack that we just popped off
+          State.ExecutionContexts.Active.Locals.set<
+            // set the stack to have remaining values only
+            State.Stack.set<
+              state,
+              remainingStack
+            >,
+
+            param,
+            pop
+          >,
+          funcId,
+          remainingParams
+        >
+      : never // should never happen because the stack should always have at least as many items as there are params
+    : state // no more params, so we can jump out
 
   export type Call<
     state extends ProgramState,
@@ -485,6 +519,23 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IHalt
   > = state;
+
+  export type If<
+    state extends ProgramState,
+    instruction extends IIf,
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer condition extends Entry,
+    ]
+    ? condition extends 0
+
+      // false branch
+      ? never
+
+      // true branch
+      : never
+    : never
 
   export type LessThan<
     state extends ProgramState,

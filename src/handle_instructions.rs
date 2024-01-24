@@ -137,6 +137,15 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
         | Instruction::F64Le => {
             format!("{indent}{{ kind: 'LessThanOrEqual' }}")
         }
+        Instruction::If(_) => {
+            format!("{indent}{{ kind: 'If' }}")
+        }
+        Instruction::End(_) => {
+            format!("{indent}{{ kind: 'End' }}")
+        }
+        Instruction::Else(_) => {
+            format!("{indent}{{ kind: 'Else' }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

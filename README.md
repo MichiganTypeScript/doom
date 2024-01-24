@@ -22,7 +22,7 @@ Usage count (in Doom) is the number on the right
 | LocalGet          | 18967 | ✅           |
 | I32Const          | 17073 | ✅           |
 | I32Load           | 5853  | ✅           |
-| End               | 4218  | ❌ c-add     |
+| End               | 4218  | ⏸️ c-add     |
 | I32Add            | 4175  | ✅           |
 | LocalTee          | 4081  | ✅           |
 | Call              | 3824  | ✅           |
@@ -77,11 +77,11 @@ Usage count (in Doom) is the number on the right
 | I32GeU            | 74    | ✅           |
 | I64And            | 73    | ❌           |
 | I32Load8s         | 71    | ❌           |
-| Else              | 70    | ❌           |
+| Else              | 70    | ⏸️           |
 | I64LtU            | 62    | ✅           |
 | I64Eqz            | 57    | ✅           |
 | I32WrapI64        | 53    | ❌           |
-| I64Sub            | 53    | ❌           |
+| I64Sub            | 53    | ✅           |
 | I64Mul            | 46    | ✅           |
 | I32RemS           | 44    | ❌           |
 | Nop               | 40    | ✅           |
@@ -100,7 +100,7 @@ Usage count (in Doom) is the number on the right
 | I64LeU            | 8     | ✅           |
 | I64Clz            | 7     | ❌           |
 | I64Load32u        | 6     | ❌           |
-| F64Sub            | 5     | ❌           |
+| F64Sub            | 5     | ✅           |
 | F64Add            | 5     | ✅           |
 | I64LeS            | 5     | ✅           |
 | I64GtS            | 5     | ✅           |
