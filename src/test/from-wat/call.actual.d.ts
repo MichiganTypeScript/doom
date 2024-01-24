@@ -8,7 +8,7 @@ type $get42<
     result: number;
     locals: [];
     instructions: [
-      { kind: 'Const'; value: 42 }
+      { kind: 'Const'; value: 42 },
     ];
   }
 > = RESULT
@@ -22,7 +22,7 @@ type $get42Plus1<
     instructions: [
       { kind: 'Call'; id: '$get42' },
       { kind: 'Const'; value: 1 },
-      { kind: 'Add' }
+      { kind: 'Add' },
     ];
   }
 > = RESULT
@@ -34,13 +34,14 @@ type $entry<
     result: number;
     locals: [];
     instructions: [
-      { kind: 'Call'; id: '$get42Plus1' }
+      { kind: 'Call'; id: '$get42Plus1' },
     ];
   }
 > = RESULT
 
 export type entry<
-  input extends number[] = []
+  input extends number[] = [],
+  debugMode extends boolean = false
 > = runProgram<
   {
     stack: input;
@@ -52,7 +53,8 @@ export type entry<
       };
       globals: {};
     };
-    memory: [];
+    memory: {};
+    memorySize: 0;
   },
-  false
+  debugMode
 >

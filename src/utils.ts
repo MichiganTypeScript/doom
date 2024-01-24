@@ -12,3 +12,7 @@ export const getWasm = async (directory: string, filePath: string) => {
 type UpdateTuple<T extends readonly number[], Index extends keyof T, NewValue> = {
   [P in keyof T]: P extends Index ? NewValue : T[P]
 };
+
+export type Satisfies<T, U extends T> = U;
+
+export type Cast<T, U> = T extends U ? T : never;

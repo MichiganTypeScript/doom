@@ -13,7 +13,7 @@ type $return<
       { kind: 'Const'; value: 2 },
       { kind: 'Const'; value: 3 },
       { kind: 'Const'; value: 4 },
-      { kind: 'Return'; count: 1 }
+      { kind: 'Return'; count: 1 },
     ];
   }
 > = RESULT
@@ -25,13 +25,14 @@ type $entry<
     result: number;
     locals: [];
     instructions: [
-      { kind: 'Call'; id: '$return' }
+      { kind: 'Call'; id: '$return' },
     ];
   }
 > = RESULT
 
 export type entry<
-  input extends number[] = []
+  input extends number[] = [],
+  debugMode extends boolean = false
 > = runProgram<
   {
     stack: input;
@@ -42,7 +43,8 @@ export type entry<
       };
       globals: {};
     };
-    memory: [];
+    memory: {};
+    memorySize: 0;
   },
-  false
+  debugMode
 >

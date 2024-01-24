@@ -10,9 +10,6 @@ test(name, async () => {
   expect(entry()).toStrictEqual(11);
 });
 
-type x = entry;
-//   ^?
-
 type testCases = [
   Expect<Equal<entry, 11>>,
 ]

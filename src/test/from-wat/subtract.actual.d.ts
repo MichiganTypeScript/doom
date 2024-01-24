@@ -10,7 +10,7 @@ type $minusOne<
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'Const'; value: 1 },
-      { kind: 'Subtract' }
+      { kind: 'Subtract' },
     ];
   }
 > = RESULT
@@ -23,13 +23,14 @@ type $entry<
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Call'; id: '$minusOne' }
+      { kind: 'Call'; id: '$minusOne' },
     ];
   }
 > = RESULT
 
 export type entry<
-  input extends number[] = []
+  input extends number[] = [],
+  debugMode extends boolean = false
 > = runProgram<
   {
     stack: input;
@@ -40,7 +41,8 @@ export type entry<
       };
       globals: {};
     };
-    memory: [];
+    memory: {};
+    memorySize: 0;
   },
-  false
+  debugMode
 >

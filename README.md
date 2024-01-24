@@ -21,13 +21,13 @@ Usage count (in Doom) is the number on the right
 | ----------------- | ----- | ------------ |
 | LocalGet          | 18967 | ✅           |
 | I32Const          | 17073 | ✅           |
-| I32Load           | 5853  | ⏸️           |
+| I32Load           | 5853  | ✅           |
 | End               | 4218  | ❌ c-add     |
 | I32Add            | 4175  | ✅           |
 | LocalTee          | 4081  | ✅           |
 | Call              | 3824  | ✅           |
 | LocalSet          | 3602  | ✅           |
-| I32Store          | 3413  | ⏸️           |
+| I32Store          | 3413  | ✅           |
 | BrIf              | 2041  | ❌ c-add     |
 | If                | 1888  | ❌           |
 | Block             | 1692  | ❌ c-add     |
@@ -146,6 +146,8 @@ Usage count (in Doom) is the number on the right
 | MemorySize        | 1     | ❌           |
 | I32ReinterpretF32 | 1     | ❌           |
 | F32ReinterpretI32 | 1     | ❌           |
+
+<sub>⏸️ means things are in progress</sub>
 
 ## Design decisions
 

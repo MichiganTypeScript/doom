@@ -27,12 +27,12 @@
     i32.load
   )
 
-  (func $foo (result i32)
+  (func $foo (param $a i32) (result i32)
     ;; Index to store/load the value
     (i32.const 2)
 
     ;; Value to store
-    (i32.const 42)
+    (local.get $a)
 
     ;; Call $storeValue with the index and value
     (call $storeValue)
@@ -42,9 +42,13 @@
 
     ;; Call $loadValue with the index
     (call $loadValue)
+
+    ;; Add 1 to the loaded value just to make sure everything's working as intended
+    (i32.const 1)
+    (i32.add)
   )
 
-  (func $entry (export "entry") (result i32)
-    (call $foo)
+  (func $entry (export "entry") (param $value i32) (result i32)
+    (call $foo (local.get $value))
   )
 )

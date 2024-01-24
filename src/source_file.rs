@@ -16,8 +16,8 @@ pub struct SourceFile {
     /// separate typescript type definitions for this type
     types: RefCell<IndexMap<String, String>>,
 
-    /// the name of a memory segment and the size of that memory segment
-    memory: RefCell<IndexMap<String, u32>>,
+    /// the declared size of that memory segment and the maximum memory size
+    memory: RefCell<(u64, u64)>,
 }
 
 impl fmt::Debug for SourceFile {
@@ -28,13 +28,6 @@ impl fmt::Debug for SourceFile {
 
 impl ToString for SourceFile {
     fn to_string(&self) -> String {
-        let mut memory = String::from("[]");
-        let pages = self.memory.borrow();
-        if let Some(page_count) = pages.get("$memory") {
-            self.add_import("../../memory.ts", "MemoryPages");
-            memory = format!("MemoryPages<{page_count}>");
-        }
-
         let imports = self
             .imports
             .borrow()
@@ -77,9 +70,12 @@ impl ToString for SourceFile {
             globals = format!("\n{globals}\n      ");
         }
 
+        let (memory_size, _max_memory) = self.memory.borrow().to_owned();
+
         let entry = format!(
             "export type entry<
-  input extends number[] = []
+  input extends number[] = [],
+  debugMode extends boolean = false
 > = runProgram<
   {{
     stack: input;
@@ -89,9 +85,10 @@ impl ToString for SourceFile {
       }};
       globals: {{{globals}}};
     }};
-    memory: {memory};
+    memory: {{}};
+    memorySize: {memory_size};
   }},
-  false
+  debugMode
 >"
         );
 
@@ -105,7 +102,7 @@ impl SourceFile {
             globals: RefCell::new(IndexMap::new()),
             imports: RefCell::new(IndexMap::new()),
             types: RefCell::new(IndexMap::new()),
-            memory: RefCell::new(IndexMap::new()),
+            memory: RefCell::new((0, 0)),
         }
     }
 
@@ -123,7 +120,8 @@ impl SourceFile {
         self.globals.borrow_mut().insert(name, value);
     }
 
-    pub fn add_memory(&self, name: String, size: u32) {
-        self.memory.borrow_mut().insert(name, size);
+    pub fn set_memory(&self, size: u64, max: u64) {
+        self.memory.borrow_mut().0 = size;
+        self.memory.borrow_mut().1 = max;
     }
 }

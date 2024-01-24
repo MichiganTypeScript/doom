@@ -1,16 +1,14 @@
-import { Entry, Instruction, selectInstruction } from "./instructions.js"
-import { Update } from "./update.js"
+import { Entry, IHalt, Instruction, selectInstruction } from "./instructions.js"
+import { State } from "./update.js"
 import { WasmModule } from "./module.js";
-
-export type ProgramInput = {
-  stack: Entry[];
-  module: WasmModule;
-  memory: number[];
-}
+import { MemoryByAddress } from "./memory.js";
 
 export type ExecutionContext = {
   /** the current local variable values */
   locals: Record<string, number>;
+
+  /** not really required, but really helpful for debugging */
+  funcId: string;
 }
 
 export type ProgramState = {
@@ -18,7 +16,9 @@ export type ProgramState = {
   module: WasmModule;
 
   /** the linear memory of the program */
-  memory: number[];
+  memory: MemoryByAddress;
+
+  memorySize: number;
 
   /** the currently executing instructions */
   instructions: Instruction[];
@@ -27,8 +27,13 @@ export type ProgramState = {
   stack: Entry[];
 
   /** a stack of execution contexts */
-  executionContext: ExecutionContext;
+  executionContexts: ExecutionContext[];
 }
+
+export type ProgramInput = Pick<
+  ProgramState,
+  "stack" | "module" | "memory" | "memorySize"
+>
 
 export type runProgram<
   input extends ProgramInput,
@@ -39,12 +44,11 @@ export type runProgram<
       instructions: [
         { kind: "Call", id: "$entry" }
       ];
-      memory: []
+      memory: [];
+      memorySize: input['memorySize'];
       module: input['module'];
       stack: input['stack'];
-      executionContext: {
-        locals: {}
-      };
+      executionContexts: [];
     },
     debugMode
   >
@@ -61,16 +65,18 @@ export type executeInstruction<
     infer instruction extends Instruction,
     ...infer remainingInstructions extends Instruction[]
   ]
-  ? executeInstruction<
-      selectInstruction<
-        Update.Instructions.set<
-          state,
-          remainingInstructions
+  ? instruction extends IHalt
+    ? state
+    : executeInstruction<
+        selectInstruction<
+          State.Instructions.set<
+            state,
+            remainingInstructions
+          >,
+          instruction
         >,
-        instruction
-      >,
-      debugMode
-    >
+        debugMode
+      >
   : debugMode extends true
     ? evaluate<state>
     : evaluate<state>['stack'][0]

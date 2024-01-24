@@ -1,8 +1,10 @@
 import { Entry, Instruction } from "./instructions.js";
-import { ProgramState, ExecutionContext } from "./program.js";
+import { ProgramState, ExecutionContext, evaluate } from "./program.js";
 import { Globals as GlobalsType } from "./module.js";
+import { MemoryAddress } from "./memory.js";
+import { Cast } from "./utils.js";
 
-export namespace Update {
+export namespace State {
 
   /** Helpers for Instruction manipulation */
   export namespace Instructions {
@@ -13,8 +15,9 @@ export namespace Update {
       RESULT extends ProgramState = {
         instructions: instructions;
   
-        executionContext: state['executionContext'];
+        executionContexts: state['executionContexts'];
         memory: state['memory'];
+        memorySize: state['memorySize'];
         module: state['module'];
         stack: state['stack'];
       }
@@ -44,9 +47,10 @@ export namespace Update {
       RESULT extends ProgramState = {
         stack: stack;
 
-        executionContext: state['executionContext'];
+        executionContexts: state['executionContexts'];
         instructions: state['instructions'];
         memory: state['memory'];
+        memorySize: state['memorySize'];
         module: state['module'];
       }
     > = RESULT
@@ -67,34 +71,110 @@ export namespace Update {
   }
 
   /** Helpers for ExecutionContext manipulation */
-  export namespace ExecutionContext {
+  export namespace ExecutionContexts {
+    /** destructively set all execution contexts at once */
     export type set<
+      state extends ProgramState,
+      executionContexts extends ExecutionContext[],
+
+      RESULT extends ProgramState = {
+          executionContexts: executionContexts;
+
+          instructions: state['instructions'];
+          memory: state['memory'];
+          memorySize: state['memorySize'];
+          module: state['module'];
+          stack: state['stack'];
+        }
+    > = RESULT
+
+    /** push a brand new execution context */
+    export type push<
       state extends ProgramState,
       executionContext extends ExecutionContext,
 
-      RESULT extends ProgramState = {
-        executionContext: executionContext;
-        
+      RESULT extends ProgramState = set<
+        state,
+        [
+          ...state['executionContexts'],
+          executionContext
+        ]
+      >
+    > = RESULT
+
+    /** pop a brand new execution context */
+    export type pop<
+      state extends ProgramState,
+
+      RESULT extends ProgramState = set<
+        state,
+        state['executionContexts'] extends [
+          ...infer remaining extends ExecutionContext[],
+          infer dropped extends ExecutionContext,
+        ]
+        ? remaining
+        : never
+      >
+    > = RESULT
+
+    export namespace Active {
+      export type get<
+        state extends ProgramState,
+      > =
+        state['executionContexts'] extends [
+          ...infer remaining extends ExecutionContext[],
+          infer active extends ExecutionContext,
+        ]
+        ? active
+        : never;
+
+      export type set<
+        state extends ProgramState,
+        executionContext extends ExecutionContext,
+      > = {
+        executionContexts:
+          state['executionContexts'] extends [
+            ...infer remaining extends ExecutionContext[],
+            infer oldActive extends ExecutionContext, // throw away the old active
+          ]
+          ? [
+              ...remaining,
+              executionContext
+            ]
+          : never;
+
         instructions: state['instructions'];
         memory: state['memory'];
+        memorySize: state['memorySize'];
         module: state['module'];
         stack: state['stack'];
       }
-    > = RESULT
 
-    export type updateActive<
-      state extends ProgramState,
-      executionContext extends ExecutionContext,
+      export namespace Locals {
+        export type get<
+          state extends ProgramState
+        > =
+          State.ExecutionContexts.Active.get<state>['locals'];
 
-      RESULT extends ProgramState = 
-        set<
-          state,
-          {
-            locals: state['executionContext']['locals']
-            & executionContext['locals']
-          }
-        >
-    > = RESULT
+        
+        export type set<
+          state extends ProgramState,
+          id extends string,
+          value extends Entry,
+
+          RESULT extends ProgramState = 
+            State.ExecutionContexts.Active.set<
+              state,
+               {
+                  funcId: State.ExecutionContexts.Active.get<state>['funcId'];
+                  locals:
+                    & State.ExecutionContexts.Active.Locals.get<state>
+                    & { [k in id]: value }
+               }
+              >
+        > = RESULT
+      }
+    }
   }
 
   /** Helpers for Globals manipulation */
@@ -105,28 +185,49 @@ export namespace Update {
 
       RESULT extends ProgramState = {
         module: {
-          // TODO: maybe should omit this global?
-          globals: state['module']['func'] & globals;
+          globals:
+            // TODO: maybe should omit this global?
+            & globals
+            & state['module']['func'];
 
           func: state['module']['func'];
         };
 
-        executionContext: state['executionContext'];
+        executionContexts: state['executionContexts'];
         instructions: state['instructions'];
         memory: state['memory'];
+        memorySize: state['memorySize'];
         stack: state['stack'];
       }
     > = RESULT
   }
 
-  // TODO
   export namespace Memory {
-    export type set<
+    export type get<
       state extends ProgramState,
-      index extends number,
-      value extends number,
+      address extends keyof state['memory'],
 
-      RESULT extends ProgramState = state
+      RESULT extends Entry =
+        // no idea why this Cast is needed, but it is
+        Cast<state['memory'][address], Entry>
+    > = RESULT
+
+    export type insert<
+      state extends ProgramState,
+      address extends MemoryAddress,
+      entry extends Entry,
+
+      RESULT extends ProgramState = {
+        memory:
+            & state['memory']
+            & { [k in address]: entry }
+
+        executionContexts: state['executionContexts'];
+        instructions: state['instructions'];
+        memorySize: state['memorySize'];
+        module: state['module'];
+        stack: state['stack'];
+      }
     > = RESULT
   }
 }

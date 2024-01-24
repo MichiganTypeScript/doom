@@ -148,7 +148,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 961,
+                                                offset: 1000,
                                             },
                                         ),
                                     },
@@ -170,7 +170,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 1091,
+                                                offset: 1130,
                                             },
                                         ),
                                     },
@@ -187,7 +187,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 1246,
+                                                offset: 1285,
                                             },
                                         ),
                                     },
@@ -209,7 +209,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 1391,
+                                                offset: 1430,
                                             },
                                         ),
                                     },
@@ -275,7 +275,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1817,
+                        offset: 1856,
                     },
                     id: Some(
                         "emscripten_stack_init",
@@ -326,7 +326,7 @@ Module {
             Memory(
                 Memory {
                     span: Span {
-                        offset: 2204,
+                        offset: 2244,
                     },
                     id: Some(
                         "memory",
@@ -353,7 +353,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2248,
+                        offset: 2286,
                     },
                     id: Some(
                         "__stack_pointer",
@@ -380,7 +380,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2306,
+                        offset: 2344,
                     },
                     id: Some(
                         "__stack_end",
@@ -407,7 +407,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2354,
+                        offset: 2392,
                     },
                     id: Some(
                         "__stack_base",
@@ -434,7 +434,7 @@ Module {
             Table(
                 Table {
                     span: Span {
-                        offset: 2439,
+                        offset: 2477,
                     },
                     id: Some(
                         "__indirect_function_table",
@@ -463,7 +463,7 @@ Module {
             Elem(
                 Elem {
                     span: Span {
-                        offset: 2488,
+                        offset: 2526,
                     },
                     id: Some(
                         "e0",
@@ -473,7 +473,7 @@ Module {
                         table: Num(
                             0,
                             Span {
-                                offset: 2488,
+                                offset: 2526,
                             },
                         ),
                         offset: Expression {

@@ -10,7 +10,7 @@ type $add<
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Add' }
+      { kind: 'Add' },
     ];
   }
 > = RESULT
@@ -24,13 +24,14 @@ type $entry<
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Call'; id: '$add' }
+      { kind: 'Call'; id: '$add' },
     ];
   }
 > = RESULT
 
 export type entry<
-  input extends number[] = []
+  input extends number[] = [],
+  debugMode extends boolean = false
 > = runProgram<
   {
     stack: input;
@@ -41,7 +42,8 @@ export type entry<
       };
       globals: {};
     };
-    memory: [];
+    memory: {};
+    memorySize: 0;
   },
-  false
+  debugMode
 >

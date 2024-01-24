@@ -71,6 +71,9 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
         }) => {
             format!("{indent}{{ kind: 'Store'; offset: {offset}; align: {align} }}")
         }
+        Instruction::I32And | Instruction::I64And => {
+            format!("{indent}{{ kind: 'And' }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }
@@ -98,7 +101,7 @@ pub fn handle_instructions(func: &Func) -> String {
             format!(
                 "    locals: [{locals}];
     instructions: [
-{instructions}
+{instructions},
     ];"
             )
         }

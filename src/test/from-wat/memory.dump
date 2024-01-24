@@ -182,8 +182,10 @@ Module {
                                 I32Const(
                                     2,
                                 ),
-                                I32Const(
-                                    42,
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
                                 ),
                                 Call(
                                     Id(
@@ -198,6 +200,10 @@ Module {
                                         "loadValue",
                                     ),
                                 ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
                             ],
                         },
                     },
@@ -205,7 +211,15 @@ Module {
                         index: None,
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
                                 results: [
                                     I32,
                                 ],
@@ -217,7 +231,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1006,
+                        offset: 1138,
                     },
                     id: Some(
                         "entry",
@@ -232,6 +246,11 @@ Module {
                         locals: [],
                         expression: Expression {
                             instrs: [
+                                LocalGet(
+                                    Id(
+                                        "value",
+                                    ),
+                                ),
                                 Call(
                                     Id(
                                         "foo",
@@ -244,7 +263,15 @@ Module {
                         index: None,
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "value",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
                                 results: [
                                     I32,
                                 ],
@@ -261,10 +288,11 @@ Module {
 
 
 {
+    "LocalGet": 5,
     "I32Const": 5,
-    "LocalGet": 3,
     "Call": 3,
     "I32Mul": 2,
     "I32Store": 1,
     "I32Load": 1,
+    "I32Add": 1,
 }

@@ -9,7 +9,7 @@ type $setGlobal<
     locals: [];
     instructions: [
       { kind: 'Const'; value: 42 },
-      { kind: 'GlobalSet'; id: '$myGlobal' }
+      { kind: 'GlobalSet'; id: '$myGlobal' },
     ];
   }
 > = RESULT
@@ -21,7 +21,7 @@ type $getGlobal<
     result: number;
     locals: [];
     instructions: [
-      { kind: 'GlobalGet'; id: '$myGlobal' }
+      { kind: 'GlobalGet'; id: '$myGlobal' },
     ];
   }
 > = RESULT
@@ -34,13 +34,14 @@ type $entry<
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$setGlobal' },
-      { kind: 'Call'; id: '$getGlobal' }
+      { kind: 'Call'; id: '$getGlobal' },
     ];
   }
 > = RESULT
 
 export type entry<
-  input extends number[] = []
+  input extends number[] = [],
+  debugMode extends boolean = false
 > = runProgram<
   {
     stack: input;
@@ -54,7 +55,8 @@ export type entry<
         $myGlobal: 0;
       };
     };
-    memory: [];
+    memory: {};
+    memorySize: 0;
   },
-  false
+  debugMode
 >

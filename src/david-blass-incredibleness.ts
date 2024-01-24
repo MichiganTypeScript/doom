@@ -1,59 +1,20 @@
-import { Equal, Expect } from "type-testing"
-import { runProgram } from "./program.js";
-import { ModuleField } from "./module.js";
+import type { entry } from './test/from-wat/memory.actual.d.ts';
 
-type $add<
-  RESULT extends ModuleField.Func = {
-    kind: "func";
-    params: ["$a", "$b"];
-    result: number;
-    locals: [];
-    instructions: [
-      { kind: "LocalGet"; id: "$a" },
-      { kind: "LocalGet"; id: "$b" },
-      { kind: "Add" },
-    ];
-  }
-> = RESULT;
-
-type $entry<
-  RESULT extends ModuleField.Func = {
-    kind: "func";
-    params: ["$a", "$b"];
-    result: number;
-    locals: [];
-    instructions: [
-        { kind: "LocalGet"; id: "$a" },
-        { kind: "LocalGet"; id: "$b" },
-        { kind: "Call", id: "$add" },
-    ];
-  }
-> = RESULT;
-
-type entry<
-  input extends number[]
-> = runProgram<
-  {
-    stack: input;
-    module: {
-      func: {
-        $add: $add;
-        $entry: $entry;
-      }
-      globals: {}
-    };
-  },
-  false
->
-
-type dbg = entry<[1, 2]>;
+type e = entry<[2], true>
 //   ^?
 
-type testCases = [
-    Expect<Equal<entry<[2, 2]>, 4>>,
-    Expect<Equal<entry<[1, 2]>, 3>>,
-    Expect<Equal<entry<[0, 2]>, 2>>,
-    Expect<Equal<entry<[-1, 2]>, 1>>,
-    Expect<Equal<entry<[-2, 2]>, 0>>,
-    Expect<Equal<entry<[-3, -3]>, -6>>
-]
+type stack = e['stack'];
+//   ^?
+
+type executionContexts = e['executionContexts'];
+
+type c_0 = executionContexts[0]; // =>
+type c_1 = executionContexts[1]; // =>
+type c_2 = executionContexts[2]; // =>
+type c_3 = executionContexts[3]; // =>
+
+type memory = e['memory'];
+//   ^?
+
+type instructions = e['instructions'];
+//   ^?

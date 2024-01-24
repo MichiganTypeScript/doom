@@ -1,7 +1,9 @@
 import { ProgramState, evaluate } from "./program.js"
 import { Call as Apply, Numbers } from "hotscript"
-import { Update } from "./update.js"
+import { State } from "./update.js"
 import { ModuleField, Param } from "./module.js"
+import { MemoryAddress } from "./memory.js"
+import { Cast } from "./utils.js"
 
 /*
 target for running c-add
@@ -16,8 +18,8 @@ DONE
   "I32Sub": 3,
   "Call": 2,
   "I32Add": 2,
-  "I32Store": 2, // in progress
-  "I32Load": 2, // in progress
+  "I32Store": 2,
+  "I32Load": 2,
   "I32Eqz": 1,
   "Return": 1,
   "LocalTee": 1,
@@ -63,6 +65,14 @@ export type IConst = {
   value: number;
 }
 
+/** this isn't really a webassembly instruction, but it's a sentinel put here so that the program can understand when to cull execution contexts (i.e. after the function returns) */
+export type IEndFunction = {
+  kind: "EndFunction"
+
+  /** a function identifier */
+  id: string;
+}
+
 export type IEqualsZero = {
   kind: "EqualsZero"
 }
@@ -79,6 +89,11 @@ export type IGlobalSet = {
 
   /** a local identifier */
   id: string
+}
+
+/** not a webassembly instruction. used for debugging: tells the program to immediately Halt */
+export type IHalt = {
+  kind: "Halt"
 }
 
 export type ILoad = {
@@ -140,9 +155,11 @@ export type Instruction =
   | IAdd
   | ICall
   | IConst
+  | IEndFunction
   | IEqualsZero
   | IGlobalGet
   | IGlobalSet
+  | IHalt
   | ILoad
   | ILocalGet
   | ILocalSet
@@ -166,6 +183,9 @@ export type selectInstruction<
   : instruction extends IConst
   ? Instructions.Const<state, instruction>
 
+  : instruction extends IEndFunction
+  ? Instructions.EndFunction<state, instruction>
+
   : instruction extends IEqualsZero
   ? Instructions.EqualsZero<state, instruction>
 
@@ -174,6 +194,9 @@ export type selectInstruction<
 
   : instruction extends IGlobalSet
   ? Instructions.GlobalSet<state, instruction>
+
+  : instruction extends IHalt
+  ? Instructions.Halt<state, instruction>
 
   : instruction extends ILoad
   ? Instructions.Load<state, instruction>
@@ -205,6 +228,7 @@ export type selectInstruction<
 /** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
 type PopulateParams<
   state extends ProgramState,
+  funcId extends string,
   params extends Param[],
 > =
   // HELP: params are fed in reverse order and simply switching the infer statements order below for some reason doesn't work...
@@ -218,16 +242,17 @@ type PopulateParams<
     ]
     ? PopulateParams<
         // set the locals to have the values from the stack that we just popped off
-        Update.ExecutionContext.updateActive<
-          
+        State.ExecutionContexts.Active.Locals.set<
           // set the stack to have remaining values only
-          Update.Stack.set<state, remainingStack>,
+          State.Stack.set<
+            state,
+            remainingStack
+          >,
 
-          {
-            locals: { [p in param]: pop }
-          }
+          param,
+          pop
         >,
-
+        funcId,
         remainingParams
       >
     : never // should never happen because the stack should always have at least as many items as there are params
@@ -244,7 +269,7 @@ export namespace Instructions {
       infer b extends Entry,
       infer a extends Entry
     ]
-    ? Update.Stack.set<
+    ? State.Stack.set<
         state,
         [
           ...remaining,
@@ -260,22 +285,34 @@ export namespace Instructions {
     _func extends ModuleField.Func = state['module']['func'][instruction['id']],
   > =
     // add the instructions from this func onto the stack
-    Update.Instructions.push<
+    State.Instructions.push<
+
 
       // first, pop things off the stack to populate params
       PopulateParams<
-        state,
+        // push a new execution context
+        State.ExecutionContexts.push<
+          state,
+          {
+            locals: {},
+            funcId: instruction['id'],
+          }
+        >,
+        instruction['id'],
         _func['params']
       >,
 
-      _func['instructions']
+      [
+        ..._func['instructions'],
+        { kind: 'EndFunction', id: instruction['id'] }
+      ]
     >
 
   export type Const<
     state extends ProgramState,
     instruction extends IConst,
   > =
-    Update.Stack.push<
+    State.Stack.push<
       state,
       instruction['value']
     >
@@ -288,7 +325,7 @@ export namespace Instructions {
       ...infer remaining extends Entry[],
       infer a extends Entry
     ]
-    ? Update.Stack.set<
+    ? State.Stack.set<
         state,
         [
           ...remaining,
@@ -297,13 +334,21 @@ export namespace Instructions {
       >
     : never
 
+  export type EndFunction<
+    state extends ProgramState,
+    instruction extends IEndFunction,
+  > =
+    // pop the active execution context
+    State.ExecutionContexts.pop<
+      state
+    >
 
   export type GlobalGet<
     state extends ProgramState,
     instruction extends IGlobalGet,
     _id extends string = instruction['id'],
   > =
-    Update.Stack.push<
+    State.Stack.push<
       state,
       state['module']['globals'][_id]
     >
@@ -316,8 +361,8 @@ export namespace Instructions {
       ...infer remaining extends Entry[],
       infer a extends Entry
     ]
-    ? Update.Stack.set<
-        Update.Globals.insert<
+    ? State.Stack.set<
+        State.Globals.insert<
           state,
           Record<instruction['id'], a>
         >,
@@ -325,19 +370,26 @@ export namespace Instructions {
       >
     : never
 
+  export type Halt<
+    state extends ProgramState,
+    instruction extends IHalt
+  > = state;
+
   export type Load<
     state extends ProgramState,
     instruction extends ILoad,
   > =
     state['stack'] extends [
       ...infer remaining extends Entry[],
-      infer index extends Entry,
-      infer value extends Entry,
+      infer address extends keyof state['memory']
     ]
-    ? Update.Memory.set<
+    ? State.Stack.set<
         state,
-        index,
-        value
+        [
+          ...remaining,
+          // no idea why this Cast is needed, but it is
+          Cast<state['memory'][address], Entry>,
+        ]
       >
     : never
 
@@ -345,9 +397,9 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends ILocalGet,
   > =
-    Update.Stack.push<
+    State.Stack.push<
       state,
-      state['executionContext']['locals'][instruction['id']]
+      State.ExecutionContexts.Active.Locals.get<state>[instruction['id']]
     >
 
   export type LocalSet<
@@ -356,17 +408,13 @@ export namespace Instructions {
   > =
     state['stack'] extends [
       ...infer remaining extends Entry[],
-      infer a extends Entry
+      infer entry extends Entry
     ]
-    ? Update.Stack.set<
-        Update.ExecutionContext.set<
+    ? State.Stack.set<
+        State.ExecutionContexts.Active.Locals.set<
           state,
-          {
-            locals: evaluate<
-              & Omit<state['executionContext']['locals'], instruction['id']>
-              & Record<instruction['id'], a>
-            >
-          }
+          instruction['id'],
+          entry
         >,
         remaining
       >
@@ -378,16 +426,12 @@ export namespace Instructions {
   > =
     state['stack'] extends [
       ...infer remaining extends Entry[],
-      infer a extends Entry
+      infer entry extends Entry
     ]
-    ? Update.ExecutionContext.set<
+    ? State.ExecutionContexts.Active.Locals.set<
         state,
-        {
-          locals: evaluate<
-            & Omit<state['executionContext']['locals'], instruction['id']>
-            & Record<instruction['id'], a>
-          >
-        }
+        instruction['id'],
+        entry
       >
     : never
 
@@ -400,7 +444,7 @@ export namespace Instructions {
       infer b extends Entry,
       infer a extends Entry
     ]
-    ? Update.Stack.set<
+    ? State.Stack.set<
         state,
         [
           ...remaining,
@@ -421,7 +465,7 @@ export namespace Instructions {
     _stack extends Entry[] = [],
   > =
     _stack['length'] extends instruction['count']
-    ? Update.Stack.set<
+    ? State.Stack.set<
         state,
         _stack
       >
@@ -430,7 +474,7 @@ export namespace Instructions {
         infer pop extends Entry
       ]
       ? Return<
-          Update.Stack.set<
+          State.Stack.set<
             state,
             remaining
           >,
@@ -452,7 +496,7 @@ export namespace Instructions {
       infer b extends Entry,
       infer a extends Entry
     ]
-    ? Update.Stack.set<
+    ? State.Stack.set<
         state,
         [
           ...remaining,
@@ -463,24 +507,21 @@ export namespace Instructions {
 
   export type Store<
     state extends ProgramState,
-    instruction extends IStore,
+    instruction extends IStore, // unused
+    // TODO: gotta grab the offset from somewhere
   > =
-    state // TODO
-    // state['stack'] extends [
-    //   ...infer remaining extends Entry[],
-    //   infer a extends Entry
-    // ]
-    // ? Update.Stack.set<
-    //     Update.ExecutionContext.set<
-    //       state,
-    //       {
-    //         locals: evaluate<
-    //           & Omit<state['executionContext']['locals'], instruction['id']>
-    //           & Record<instruction['id'], a>
-    //         >
-    //       }
-    //     >,
-    //     remaining
-    //   >
-    // : never
+    state['stack'] extends [
+      ...infer remaining extends Entry[],
+      infer address extends MemoryAddress,
+      infer entry extends Entry,
+    ]
+    ? State.Stack.set<
+        State.Memory.insert<
+          state,
+          address,
+          entry
+        >,
+        remaining
+      >
+    : never
 }

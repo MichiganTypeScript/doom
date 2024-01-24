@@ -83,24 +83,23 @@ fn handle_module_field_global(source: &SourceFile, global: &Global) {
 }
 
 fn handle_module_field_memory(source: &SourceFile, memory: &Memory) {
-    let name = "$".to_string()
-        + memory
-            .id
-            .expect("memory declarations must have an id")
-            .name();
-    let size = match memory.kind {
+    match memory.kind {
         MemoryKind::Normal(memory_type) => match memory_type {
-            MemoryType::B32 { limits, shared: _ } => limits.min,
-            MemoryType::B64 { limits, shared: _ } => limits
-                .min
-                .try_into()
-                .expect("converting memory size to i32"),
+            MemoryType::B32 { limits, shared: _ } => {
+                let size = limits.min;
+                let max = limits.max.unwrap_or(size).into();
+                source.set_memory(size.into(), max);
+            }
+            MemoryType::B64 { limits, shared: _ } => {
+                let size = limits.min;
+                let max = limits.max.unwrap_or(size);
+                source.set_memory(size, max);
+            }
         },
         _ => {
             panic!("only Normal MemoryKind supported");
         }
     };
-    source.add_memory(name, size);
 }
 
 /*
