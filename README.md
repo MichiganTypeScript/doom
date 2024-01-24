@@ -4,166 +4,148 @@
 
 Doom's resolution is 320x200.
 
+It looks like it can be run with 4 MiB which equates to 64 pages.
+
 ## Links
 
-https://diekmann.github.io/wasm-fizzbuzz/doom/
-
-https://diekmann.github.io/wasm-fizzbuzz/doom/doom.wasm
-
-https://doom.fandom.com/wiki/Doom_source_code_files
-
-https://github.com/eliben/wasm-wat-samples
+- https://diekmann.github.io/wasm-fizzbuzz/doom
+- https://diekmann.github.io/wasm-fizzbuzz/doom/doom.wasm
+- https://doom.fandom.com/wiki/Doom_source_code_files
+- https://github.com/eliben/wasm-wat-samples
 
 ## Progress
 
-### Done (70)
-
-```ts
-const currentlyImplemented = [
-  "Block",
-  "Br",
-  "BrIf",
-  "Call",
-  "Else",
-  "End",
-  "F32Abs",
-  "F32Add",
-  "F32Eq",
-  "F32Ge",
-  "F32Gt",
-  "F32Le",
-  "F32Lt",
-  "F32Mul",
-  "F32Ne",
-  "F32Neg",
-  "F32Sub",
-  "F64Abs",
-  "F64Add",
-  "F64Const",
-  "F64Eq",
-  "F64Ge",
-  "F64Gt",
-  "F64Le",
-  "F64Lt",
-  "F64Mul",
-  "F64Ne",
-  "F64Neg",
-  "F64Sub",
-  "I32Add",
-  "I32Const",
-  "I32DivS",
-  "I32DivU",
-  "I32Eq",
-  "I32Eqz",
-  "I32GeS",
-  "I32GeU",
-  "I32GtS",
-  "I32GtU",
-  "I32LeS",
-  "I32LeU",
-  "I32LtS",
-  "I32LtU",
-  "I32Mul",
-  "I32Ne",
-  "I32Sub",
-  "I64Add",
-  "I64Const",
-  "I64DivS",
-  "I64DivU",
-  "I64Eq",
-  "I64Eqz",
-  "I64GeS",
-  "I64GeU",
-  "I64GtS",
-  "I64GtU",
-  "I64LeS",
-  "I64LeU",
-  "I64LtS",
-  "I64LtU",
-  "I64Mul",
-  "I64Ne",
-  "I64Sub",
-  "If",
-  "LocalGet",
-  "LocalSet",
-  "LocalTee",
-  "Nop",
-  "Select",
-  "Unreachable",
-]
-```
-
-### Remaining (46)
-
 Usage count (in Doom) is the number on the right
 
-```text
-BrTable: 4
-
-CallIndirect: 8
-
-Drop: 17
-
-GlobalGet: 18
-
-GlobalSet: 26
-
-I32And: 92
-I64And: 11
-
-F64ConvertI32S: 1
-F64ConvertI32U: 1
-
-I64ExtendI32S: 3S
-I64ExtendI32U: 11
-
-I32Load8s: 16
-I64Load8s: 1
-I32Load8u: 27
-I64Load8u: 1
-I64Load16s: 1
-I64Load16u: 1
-I64Load32s: 3
-I64Load32u: 8
-F64Load: 2
-I32Load: 203
-I64Load: 20
-
-I32Or: 31
-I64Or: 11
-
-F64ReinterpretI64: 2
-I64ReinterpretF64: 2
-
-I32RemU: 2
-
-I32Shl: 24
-I64Shl: 8
-
-I32ShrS: 8
-I32ShrU: 11
-I64ShrU: 11
-
-I64Store8: 1
-I32Store8: 42
-I32Store16: 1
-I64Store32: 2
-F64Store: 2
-I32Store: 161
-I64Store: 31
-
-I32TruncF64S: 1
-I32TruncF64U: 1
-
-I32WrapI64: 7
-
-I32Xor: 18
-I64Xor: 2
-
-Loop: 58
-
-Return: 32
-```
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| LocalGet          | 18967 | ✅           |
+| I32Const          | 17073 | ✅           |
+| I32Load           | 5853  | ⏸️           |
+| End               | 4218  | ❌ c-add     |
+| I32Add            | 4175  | ✅           |
+| LocalTee          | 4081  | ✅           |
+| Call              | 3824  | ✅           |
+| LocalSet          | 3602  | ✅           |
+| I32Store          | 3413  | ⏸️           |
+| BrIf              | 2041  | ❌ c-add     |
+| If                | 1888  | ❌           |
+| Block             | 1692  | ❌ c-add     |
+| Br                | 1479  | ❌           |
+| I32Sub            | 1424  | ✅           |
+| I32Eqz            | 1198  | ✅           |
+| I32Shl            | 954   | ❌           |
+| I32Eq             | 823   | ❌           |
+| I32And            | 819   | ❌ c-add     |
+| I64Const          | 712   | ❌           |
+| Loop              | 638   | ❌           |
+| Select            | 637   | ❌           |
+| Drop              | 504   | ❌           |
+| I32Or             | 488   | ❌           |
+| I32Ne             | 483   | ❌           |
+| I32Mul            | 478   | ❌           |
+| I32Load8u         | 460   | ❌           |
+| I32Xor            | 411   | ❌           |
+| I32GtS            | 365   | ❌           |
+| I64Load           | 357   | ❌           |
+| GlobalSet         | 349   | ❌           |
+| Return            | 324   | ✅           |
+| I32LtS            | 298   | ❌           |
+| I32Load16s        | 278   | ❌           |
+| I32Store8         | 253   | ❌           |
+| I32Rotl           | 240   | ❌           |
+| I32ShrU           | 234   | ❌           |
+| I32ShrS           | 230   | ❌           |
+| I32GeS            | 213   | ❌           |
+| I64Store          | 196   | ❌           |
+| I32Store16        | 188   | ❌           |
+| GlobalGet         | 179   | ✅           |
+| I32Load16u        | 176   | ❌           |
+| I32DivS           | 165   | ❌           |
+| I32LeS            | 155   | ❌           |
+| I32LtU            | 139   | ❌           |
+| I64Add            | 130   | ❌           |
+| Unreachable       | 129   | ❌           |
+| I64Or             | 129   | ❌           |
+| I32GtU            | 118   | ❌           |
+| I64ExtendI32U     | 118   | ❌           |
+| BrTable           | 114   | ❌           |
+| I32LeU            | 95    | ❌           |
+| CallIndirect      | 89    | ❌           |
+| I64ShrU           | 83    | ❌           |
+| I64Shl            | 80    | ❌           |
+| I32GeU            | 74    | ❌           |
+| I64And            | 73    | ❌           |
+| I32Load8s         | 71    | ❌           |
+| Else              | 70    | ❌           |
+| I64LtU            | 62    | ❌           |
+| I64Eqz            | 57    | ❌           |
+| I32WrapI64        | 53    | ❌           |
+| I64Sub            | 53    | ❌           |
+| I64Mul            | 46    | ❌           |
+| I32RemS           | 44    | ❌           |
+| Nop               | 40    | ❌           |
+| F64Const          | 37    | ❌           |
+| I64GtU            | 35    | ❌           |
+| I64Xor            | 34    | ❌           |
+| I32DivU           | 30    | ❌           |
+| I64Ne             | 30    | ❌           |
+| I64ExtendI32S     | 29    | ❌           |
+| I64Eq             | 26    | ❌           |
+| I64GeS            | 21    | ❌           |
+| I64LtS            | 19    | ❌           |
+| F64Mul            | 18    | ❌           |
+| I32RemU           | 13    | ❌           |
+| F64ConvertI32S    | 9     | ❌           |
+| I64LeU            | 8     | ❌           |
+| I64Clz            | 7     | ❌           |
+| I64Load32u        | 6     | ❌           |
+| F64Sub            | 5     | ❌           |
+| F64Add            | 5     | ❌           |
+| I64LeS            | 5     | ❌           |
+| I64GtS            | 5     | ❌           |
+| F64Neg            | 5     | ❌           |
+| I64GeU            | 5     | ❌           |
+| I32Clz            | 5     | ❌           |
+| F32Const          | 4     | ❌           |
+| F64Lt             | 4     | ❌           |
+| F32ConvertI32S    | 4     | ❌           |
+| F64Store          | 4     | ❌           |
+| I64Store32        | 4     | ❌           |
+| F64Ne             | 4     | ❌           |
+| F64ReinterpretI64 | 3     | ❌           |
+| I64DivU           | 3     | ❌           |
+| I64ReinterpretF64 | 3     | ❌           |
+| F64Eq             | 3     | ❌           |
+| F32Load           | 2     | ❌           |
+| F32Abs            | 2     | ❌           |
+| F64PromoteF32     | 2     | ❌           |
+| F32Div            | 2     | ❌           |
+| F32Store          | 2     | ❌           |
+| F32Mul            | 2     | ❌           |
+| F64Load           | 2     | ❌           |
+| I64Store8         | 2     | ❌           |
+| I64Rotl           | 1     | ❌           |
+| F32Add            | 1     | ❌           |
+| F32Lt             | 1     | ❌           |
+| I32TruncF32S      | 1     | ❌           |
+| I64DivS           | 1     | ❌           |
+| F32DemoteF64      | 1     | ❌           |
+| F64Div            | 1     | ❌           |
+| I64Load16s        | 1     | ❌           |
+| I64Load16u        | 1     | ❌           |
+| I64Load8s         | 1     | ❌           |
+| I64Load8u         | 1     | ❌           |
+| I64Load32s        | 1     | ❌           |
+| F64Ge             | 1     | ❌           |
+| I32TruncF64U      | 1     | ❌           |
+| F64ConvertI32U    | 1     | ❌           |
+| F64Abs            | 1     | ❌           |
+| I32TruncF64S      | 1     | ❌           |
+| I64Store16        | 1     | ❌           |
+| MemorySize        | 1     | ❌           |
+| I32ReinterpretF32 | 1     | ❌           |
+| F32ReinterpretI32 | 1     | ❌           |
 
 ## Design decisions
 

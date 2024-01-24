@@ -16,6 +16,8 @@ DONE
   "I32Sub": 3,
   "Call": 2,
   "I32Add": 2,
+  "I32Store": 2, // in progress
+  "I32Load": 2, // in progress
   "I32Eqz": 1,
   "Return": 1,
   "LocalTee": 1,
@@ -23,12 +25,10 @@ DONE
 
 REMAINING
 {
-  "I32Store": 2, // medium
-  "I32Load": 2, // medium
-  "I32And": 2, // hard
-  "Block": 1, // hard
-  "BrIf": 1, // hard
-  "End": 1, // hard
+  "I32And": 2,
+  "Block": 1,
+  "BrIf": 1,
+  "End": 1,
 }
 */
 
