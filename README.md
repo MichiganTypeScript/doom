@@ -84,7 +84,7 @@ Usage count (in Doom) is the number on the right
 | I64Sub            | 53    | ❌           |
 | I64Mul            | 46    | ✅           |
 | I32RemS           | 44    | ❌           |
-| Nop               | 40    | ❌           |
+| Nop               | 40    | ✅           |
 | F64Const          | 37    | ❌           |
 | I64GtU            | 35    | ❌           |
 | I64Xor            | 34    | ❌           |

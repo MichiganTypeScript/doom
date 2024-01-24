@@ -88,6 +88,9 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
         Instruction::I32Eq | Instruction::I64Eq | Instruction::F32Eq | Instruction::F64Eq => {
             format!("{indent}{{ kind: 'Equals' }}")
         }
+        Instruction::Nop => {
+            format!("{indent}{{ kind: 'Nop'; ziltoid: 'theOmniscient' }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

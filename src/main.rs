@@ -41,7 +41,6 @@ mod tests {
             "negate",     //
             "c-add",      //
             "add-middle", //
-            "nop",        //
             "select",     //
         ]
     }

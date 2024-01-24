@@ -133,6 +133,12 @@ export type IMultiply = {
   kind: "Multiply"
 }
 
+export type INop = {
+  kind: "Nop"
+
+  ziltoid: "theOmniscient"
+}
+
 export type IReturn = {
   kind: "Return"
 
@@ -170,6 +176,7 @@ export type Instruction =
   | ILocalSet
   | ILocalTee
   | IMultiply
+  | INop
   | IReturn
   | ISubtract
   | IStore
@@ -221,6 +228,9 @@ export type selectInstruction<
   : instruction extends IMultiply
   ? Instructions.Multiply<state, instruction>
 
+  : instruction extends INop
+  ? Instructions.Nop<state, instruction>
+
   : instruction extends IReturn
   ? Instructions.Return<state, instruction>
 
@@ -267,7 +277,6 @@ type PopulateParams<
   : state // no more params, so we can jump out
 
 export namespace Instructions {
-
   export type Add<
     state extends ProgramState,
     instruction extends IAdd // unused
@@ -461,7 +470,7 @@ export namespace Instructions {
       >
     : never
 
-    export type Multiply<
+  export type Multiply<
     state extends ProgramState,
     instruction extends IMultiply // unused
   > =
@@ -478,6 +487,11 @@ export namespace Instructions {
         ]
       >
     : never
+
+  export type Nop<
+    state extends ProgramState,
+    instruction extends INop // unused
+  > = state;
 
   /**
    * If there are no values left on the stack, it returns nothing/void.
