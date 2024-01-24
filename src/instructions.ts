@@ -133,6 +133,10 @@ export type IMultiply = {
   kind: "Multiply"
 }
 
+export type INegate = {
+  kind: "Negate"
+}
+
 export type INop = {
   kind: "Nop"
 
@@ -176,6 +180,7 @@ export type Instruction =
   | ILocalSet
   | ILocalTee
   | IMultiply
+  | INegate
   | INop
   | IReturn
   | ISubtract
@@ -228,6 +233,9 @@ export type selectInstruction<
   : instruction extends IMultiply
   ? Instructions.Multiply<state, instruction>
 
+  : instruction extends INegate
+  ? Instructions.Negate<state, instruction>
+
   : instruction extends INop
   ? Instructions.Nop<state, instruction>
 
@@ -256,7 +264,7 @@ type PopulateParams<
   ]
   ? state["stack"] extends [
       ...infer remainingStack extends Entry[],
-      infer pop extends Entry
+      infer pop extends Entry,
     ]
     ? PopulateParams<
         // set the locals to have the values from the stack that we just popped off
@@ -284,7 +292,7 @@ export namespace Instructions {
     state["stack"] extends [
       ...infer remaining extends Entry[],
       infer b extends Entry,
-      infer a extends Entry
+      infer a extends Entry,
     ]
     ? State.Stack.set<
         state,
@@ -358,7 +366,7 @@ export namespace Instructions {
   > =
     state["stack"] extends [
       ...infer remaining extends Entry[],
-      infer a extends Entry
+      infer a extends Entry,
     ]
     ? State.Stack.set<
         state,
@@ -394,7 +402,7 @@ export namespace Instructions {
   > =
     state['stack'] extends [
       ...infer remaining extends Entry[],
-      infer a extends Entry
+      infer a extends Entry,
     ]
     ? State.Stack.set<
         State.Globals.insert<
@@ -416,7 +424,7 @@ export namespace Instructions {
   > =
     state['stack'] extends [
       ...infer remaining extends Entry[],
-      infer address extends keyof state['memory']
+      infer address extends keyof state['memory'],
     ]
     ? State.Stack.set<
         state,
@@ -443,7 +451,7 @@ export namespace Instructions {
   > =
     state['stack'] extends [
       ...infer remaining extends Entry[],
-      infer entry extends Entry
+      infer entry extends Entry,
     ]
     ? State.Stack.set<
         State.ExecutionContexts.Active.Locals.set<
@@ -477,13 +485,33 @@ export namespace Instructions {
     state["stack"] extends [
       ...infer remaining extends Entry[],
       infer b extends Entry,
-      infer a extends Entry
+      infer a extends Entry,
     ]
     ? State.Stack.set<
         state,
         [
           ...remaining,
           Apply<Numbers.Mul<a, b>>
+        ]
+      >
+    : never
+
+
+  export type Negate<
+    state extends ProgramState,
+    instruction extends INegate // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer a extends Entry,
+    ]
+    ? State.Stack.set<
+        state,
+        [
+          ...remaining,
+          a extends 0 // this check is only necessary due to a bug in hotscript: https://github.com/gvergnaud/hotscript/issues/117
+          ? 0
+          : Apply<Numbers.Negate<a>>
         ]
       >
     : never
@@ -511,7 +539,7 @@ export namespace Instructions {
       >
     : state['stack'] extends [
         ...infer remaining extends Entry[],
-        infer pop extends Entry
+        infer pop extends Entry,
       ]
       ? Return<
           State.Stack.set<
@@ -534,7 +562,7 @@ export namespace Instructions {
     state["stack"] extends [
       ...infer remaining extends Entry[],
       infer b extends Entry,
-      infer a extends Entry
+      infer a extends Entry,
     ]
     ? State.Stack.set<
         state,

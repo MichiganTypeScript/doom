@@ -7,12 +7,19 @@ import { expect, test } from 'vitest';
 const name = 'negate';
 test(name, async () => {
   const entry = await getWasm("from-wat", name);
-  expect(entry()).toStrictEqual(-10);
+  expect(entry(2)).toStrictEqual(-2);
+  expect(entry(-1)).toStrictEqual(1);
+  expect(entry(0)).toStrictEqual(-0); // Difference between TS and WASM
+  expect(entry(1)).toStrictEqual(-1);
+  expect(entry(2)).toStrictEqual(-2);
 });
 
 type testCases = [
-  Expect<Equal<entry, -10>>,
-  
-  // @ts-expect-error
-  Expect<Equal<entry, 6>>,
+  Expect<Equal<entry<[2]>, -2>>,
+  Expect<Equal<entry<[-1]>, 1>>,
+  Expect<Equal<entry<[0]>, 0>>,
+  Expect<Equal<0, -0>>, // there's not really a "negative zero" in TypeScript
+  Expect<Equal<entry<[0]>, -0>>,
+  Expect<Equal<entry<[1]>, -1>>,
+  Expect<Equal<entry<[2]>, -2>>,
 ]

@@ -38,7 +38,6 @@ mod tests {
             "br-if",      // this one blocked by sheer force of will
             "andarist",   //
             "if-expr",    //
-            "negate",     //
             "c-add",      //
             "add-middle", //
             "select",     //

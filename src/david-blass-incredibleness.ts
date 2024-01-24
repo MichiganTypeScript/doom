@@ -1,6 +1,6 @@
-import type { entry } from './test/from-wat/memory.actual.d.ts';
+import type { entry } from './test/from-wat/negate.actual.d.ts';
 
-type e = entry<[2], true>
+type e = entry<[0], true>
 //   ^?
 
 type stack = e['stack'];

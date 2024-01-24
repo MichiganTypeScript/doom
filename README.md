@@ -37,7 +37,7 @@ Usage count (in Doom) is the number on the right
 | I32Shl            | 954   | ❌           |
 | I32Eq             | 823   | ❌           |
 | I32And            | 819   | ❌ c-add     |
-| I64Const          | 712   | ❌           |
+| I64Const          | 712   | ✅           |
 | Loop              | 638   | ❌           |
 | Select            | 637   | ❌           |
 | Drop              | 504   | ❌           |
@@ -104,7 +104,7 @@ Usage count (in Doom) is the number on the right
 | F64Add            | 5     | ✅           |
 | I64LeS            | 5     | ❌           |
 | I64GtS            | 5     | ❌           |
-| F64Neg            | 5     | ❌           |
+| F64Neg            | 5     | ✅           |
 | I64GeU            | 5     | ❌           |
 | I32Clz            | 5     | ❌           |
 | F32Const          | 4     | ❌           |

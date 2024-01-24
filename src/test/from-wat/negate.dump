@@ -22,10 +22,10 @@ Module {
                         locals: [],
                         expression: Expression {
                             instrs: [
-                                F64Const(
-                                    Float64 {
-                                        bits: 4621819117588971520,
-                                    },
+                                LocalGet(
+                                    Id(
+                                        "theOmniscient",
+                                    ),
                                 ),
                                 F64Neg,
                             ],
@@ -35,7 +35,15 @@ Module {
                         index: None,
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "theOmniscient",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                ],
                                 results: [
                                     F64,
                                 ],
@@ -47,7 +55,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 127,
+                        offset: 134,
                     },
                     id: Some(
                         "entry",
@@ -62,6 +70,11 @@ Module {
                         locals: [],
                         expression: Expression {
                             instrs: [
+                                LocalGet(
+                                    Id(
+                                        "ziltoid",
+                                    ),
+                                ),
                                 Call(
                                     Id(
                                         "negate",
@@ -74,7 +87,15 @@ Module {
                         index: None,
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "ziltoid",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                ],
                                 results: [
                                     F64,
                                 ],
@@ -91,7 +112,7 @@ Module {
 
 
 {
-    "F64Const": 1,
+    "LocalGet": 2,
     "F64Neg": 1,
     "Call": 1,
 }
