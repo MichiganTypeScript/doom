@@ -28,14 +28,14 @@ Usage count (in Doom) is the number on the right
 | Call              | 3824  | ✅           |
 | LocalSet          | 3602  | ✅           |
 | I32Store          | 3413  | ✅           |
-| BrIf              | 2041  | ❌ c-add     |
+| BrIf              | 2041  | ⏸️ c-add     |
 | If                | 1888  | ✅           |
-| Block             | 1692  | ❌ c-add     |
-| Br                | 1479  | ❌           |
+| Block             | 1692  | ⏸️ c-add     |
+| Br                | 1479  | ⏸️           |
 | I32Sub            | 1424  | ✅           |
 | I32Eqz            | 1198  | ✅           |
 | I32Shl            | 954   | ❌           |
-| I32Eq             | 823   | ❌           |
+| I32Eq             | 823   | ✅           |
 | I32And            | 819   | ❌ c-add     |
 | I64Const          | 712   | ✅           |
 | Loop              | 638   | ❌           |
@@ -91,7 +91,7 @@ Usage count (in Doom) is the number on the right
 | I32DivU           | 30    | ❌           |
 | I64Ne             | 30    | ❌           |
 | I64ExtendI32S     | 29    | ❌           |
-| I64Eq             | 26    | ❌           |
+| I64Eq             | 26    | ✅           |
 | I64GeS            | 21    | ✅           |
 | I64LtS            | 19    | ✅           |
 | F64Mul            | 18    | ✅           |
@@ -116,7 +116,7 @@ Usage count (in Doom) is the number on the right
 | F64ReinterpretI64 | 3     | ❌           |
 | I64DivU           | 3     | ❌           |
 | I64ReinterpretF64 | 3     | ❌           |
-| F64Eq             | 3     | ❌           |
+| F64Eq             | 3     | ✅           |
 | F32Load           | 2     | ❌           |
 | F32Abs            | 2     | ❌           |
 | F64PromoteF32     | 2     | ❌           |

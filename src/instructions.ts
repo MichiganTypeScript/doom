@@ -5,40 +5,10 @@ import { ModuleField, Param } from "./module.js"
 import { MemoryAddress } from "./memory.js"
 import { Cast } from "./utils.js"
 
-/*
-target for running c-add
-
-DONE
-{
-  "LocalGet": 14,
-  "I32Const": 8,
-  "GlobalGet": 7,
-  "LocalSet": 6,
-  "GlobalSet": 4,
-  "I32Sub": 3,
-  "Call": 2,
-  "I32Add": 2,
-  "I32Store": 2,
-  "I32Load": 2,
-  "I32Eqz": 1,
-  "Return": 1,
-  "LocalTee": 1,
-}
-
-REMAINING
-{
-  "I32And": 2,
-  "Block": 1,
-  "BrIf": 1,
-  "End": 1,
-}
-*/
-
 type Reverse<T extends any[]> =
   T extends [infer head, ...infer tail]
   ? [...Reverse<tail>, head]
   : []
-
 
 /*
  * No.
@@ -49,6 +19,27 @@ type Reverse<T extends any[]> =
 
 export type IAdd = {
   kind: "Add"
+}
+
+export type IBlock = {
+  kind: "Block"
+
+  /** a block identifier */
+  id: string;
+}
+
+export type IBranch = {
+  kind: "Branch"
+
+  /** a block identifier */
+  id: string;
+}
+
+export type IBranchIf = {
+  kind: "BranchIf"
+
+  /** a block identifier */
+  id: string;
 }
 
 export type ICall = {
@@ -199,6 +190,9 @@ export type Entry = number;
 
 export type Instruction =
   | IAdd
+  | IBlock
+  | IBranch
+  | IBranchIf
   | ICall
   | IConst
   | IElse
@@ -240,7 +234,16 @@ export type selectInstruction<
 > =
   instruction extends IAdd
   ? Instructions.Add<state, instruction>
-  
+
+  : instruction extends IBlock
+  ? Instructions.Block<state, instruction>
+
+  : instruction extends IBranch
+  ? Instructions.Branch<state, instruction>
+
+  : instruction extends IBranchIf
+  ? Instructions.BranchIf<state, instruction>
+
   : instruction extends ICall
   ? Instructions.Call<state, instruction>
 
@@ -339,6 +342,21 @@ export namespace Instructions {
         ]
       >
     : never
+
+  export type Block<
+    state extends ProgramState,
+    instruction extends IBlock,
+  > = state // TODO
+
+  export type BranchIf<
+    state extends ProgramState,
+    instruction extends IBranchIf,
+  > = state // TODO
+
+  export type Branch<
+    state extends ProgramState,
+    instruction extends IBranch,
+  > = state // TODO
 
   export type Else<
     state extends ProgramState,

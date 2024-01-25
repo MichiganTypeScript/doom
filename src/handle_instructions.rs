@@ -149,6 +149,18 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
         Instruction::Select(_) => {
             format!("{indent}{{ kind: 'Select' }}")
         }
+        Instruction::Br(index) => {
+            let id = format_index(index);
+            format!("{indent}{{ kind: 'Branch'; id: '{id}' }}")
+        }
+        Instruction::BrIf(index) => {
+            let id = format_index(index);
+            format!("{indent}{{ kind: 'BranchIf'; id: '{id}' }}")
+        }
+        Instruction::Block(block) => {
+            let label = block.label.expect("blocks must have labels").name();
+            format!("{indent}{{ kind: 'Block'; id: '${label}' }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

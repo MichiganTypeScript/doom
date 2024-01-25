@@ -35,7 +35,6 @@ mod tests {
 
     fn skip_list() -> Vec<&'static str> {
         vec![
-            "br-if",      // this one blocked by sheer force of will
             "c-add",      //
             "add-middle", //
         ]

@@ -1,19 +1,67 @@
-import { Call, Numbers } from 'hotscript'
+import { ModuleField } from '../../module.ts'
+import { runProgram } from '../../program.ts'
 
-export type $foo<
-  $x extends number,
-  RESULT extends number =
-    (Call<Numbers.Equal<$x, 0>> extends true ? 1 : 0) extends 1
-    ? 42
-    : (Call<Numbers.Equal<$x, 1>> extends true ? 1 : 0) extends 1
-      ? 99
-      : 7
+type $brif<
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$x'];
+    result: number;
+    locals: ['$result'];
+    instructions: [
+      { kind: 'Block'; id: '$outer_block' },
+      { kind: 'Block'; id: '$middle_block' },
+      { kind: 'Block'; id: '$inner_block' },
+      { kind: 'LocalGet'; id: '$x' },
+      { kind: 'EqualsZero' },
+      { kind: 'BranchIf'; id: '$inner_block' },
+      { kind: 'LocalGet'; id: '$x' },
+      { kind: 'Const'; value: 1 },
+      { kind: 'Equals' },
+      { kind: 'BranchIf'; id: '$middle_block' },
+      { kind: 'Const'; value: 7 },
+      { kind: 'LocalSet'; id: '$result' },
+      { kind: 'Branch'; id: '$outer_block' },
+      { kind: 'End' },
+      { kind: 'Const'; value: 42 },
+      { kind: 'LocalSet'; id: '$result' },
+      { kind: 'Branch'; id: '$outer_block' },
+      { kind: 'End' },
+      { kind: 'Const'; value: 99 },
+      { kind: 'LocalSet'; id: '$result' },
+      { kind: 'End' },
+      { kind: 'LocalGet'; id: '$result' },
+    ];
+  }
 > = RESULT
 
-export type brif<
-  $x extends number,
-  RESULT extends number =
-    $foo<
-      $x
-    >
+type $entry<
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$a'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'Call'; id: '$brif' },
+    ];
+  }
 > = RESULT
+
+export type entry<
+  input extends number[] = [],
+  debugMode extends boolean = false
+> = runProgram<
+  {
+    stack: input;
+    module: {
+      func: {
+        $brif: $brif;
+        $entry: $entry;
+      };
+      globals: {};
+    };
+    memory: {};
+    memorySize: 0;
+  },
+  debugMode
+>
