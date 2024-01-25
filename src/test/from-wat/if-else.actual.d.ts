@@ -12,7 +12,6 @@ type $if<
       { kind: 'LocalGet'; id: '$control' },
       { kind: 'Const'; value: 0 },
       { kind: 'GreaterThanOrEqual' },
-      { kind: 'Halt' },
       { kind: 'If' },
       { kind: 'Const'; value: 1 },
       { kind: 'Else' },

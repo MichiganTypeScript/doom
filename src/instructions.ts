@@ -1,6 +1,6 @@
 import { ProgramState, evaluate } from "./program.js"
 import { Call as Apply, Numbers } from "hotscript"
-import { State } from "./update.js"
+import { State } from "./state.js"
 import { ModuleField, Param } from "./module.js"
 import { MemoryAddress } from "./memory.js"
 import { Cast } from "./utils.js"
@@ -223,8 +223,15 @@ export type Instruction =
 
 
 export type selectInstruction<
-  state extends ProgramState,
-  instruction extends Instruction
+  initialState extends ProgramState,
+  remainingInstructions extends Instruction[],
+  instruction extends Instruction,
+
+  state extends ProgramState =
+    State.Instructions.set<
+      initialState,
+      remainingInstructions
+    >
 > =
   instruction extends IAdd
   ? Instructions.Add<state, instruction>
@@ -327,13 +334,40 @@ export namespace Instructions {
 
   export type Else<
     state extends ProgramState,
-    instruction extends IElse // unused
-  > = state; // TODO
+    instruction extends IElse
+    > =
+      State.ExecutionContexts.Active.Masks.isEmpty<state> extends true
+      ? State.ExecutionContexts.Active.Masks.push<state, 'End'>
+      :
+
+      // is the top mask `Else`?
+      // if we came here as a result of a false branch of an if statement, there will be some mask to pop.
+      // so we first need to check if the thing on top of the mask stack is an Else mask.
+      instruction['kind'] extends State.ExecutionContexts.Active.Masks.Active.get<state>
+
+      // the only way that could happen is if an previous If statement hit its false case
+      // that means we can pop the mask and continue with what comes in the Else branch
+      ? State.ExecutionContexts.Active.Masks.Active.pop<
+          state
+        >
+
+      // that means we MUST have come here as a result of a true branch of an If statement
+      // that means we want to skip everything until we find an `End` instruction
+      : State.ExecutionContexts.Active.Masks.Active.replace<
+          state,
+          "End"
+        >
 
   export type End<
     state extends ProgramState,
     instruction extends IEnd // unused
-  > = state; // TODO
+  > =
+    // if we came here as a result of a false branch of an if statement, there won't be a mask because the `Else` already popped it.
+    State.ExecutionContexts.Active.Masks.isEmpty<state> extends true
+    ? state
+    :
+    // so otherwise, we came here as the result of the truth branch of an If statement that had no Else
+    State.ExecutionContexts.Active.Masks.Active.pop<state>
 
 
   /** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
@@ -387,6 +421,7 @@ export namespace Instructions {
           {
             locals: {},
             funcId: instruction['id'],
+            masks: [],
           }
         >,
         instruction['id'],
@@ -485,8 +520,8 @@ export namespace Instructions {
   > =
     state["stack"] extends [
       ...infer remaining extends Entry[],
-      infer b extends Entry,
       infer a extends Entry,
+      infer b extends Entry,
     ]
     ? State.Stack.set<
         state,
@@ -503,8 +538,8 @@ export namespace Instructions {
   > =
     state["stack"] extends [
       ...infer remaining extends Entry[],
-      infer b extends Entry,
       infer a extends Entry,
+      infer b extends Entry,
     ]
     ? State.Stack.set<
         state,
@@ -530,11 +565,27 @@ export namespace Instructions {
     ]
     ? condition extends 0
 
-      // false branch
-      ? never
+      ? // false branch
 
-      // true branch
-      : never
+        State.ExecutionContexts.Active.Masks.push<
+          // pop the condition (we're done with it now)
+          State.Stack.set<
+            state,
+            remaining
+          >,
+
+          'Else' | 'End'
+        >
+
+      
+      : // true branch
+
+        // pop the condition since we're done with it now
+        State.Stack.set<
+          state,
+          remaining
+        >
+
     : never
 
   export type LessThan<
@@ -543,8 +594,8 @@ export namespace Instructions {
   > =
     state["stack"] extends [
       ...infer remaining extends Entry[],
-      infer b extends Entry,
       infer a extends Entry,
+      infer b extends Entry,
     ]
     ? State.Stack.set<
         state,
@@ -561,8 +612,8 @@ export namespace Instructions {
   > =
     state["stack"] extends [
       ...infer remaining extends Entry[],
-      infer b extends Entry,
       infer a extends Entry,
+      infer b extends Entry,
     ]
     ? State.Stack.set<
         state,

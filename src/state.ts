@@ -1,5 +1,5 @@
 import { Entry, Instruction } from "./instructions.js";
-import { ProgramState, ExecutionContext, evaluate } from "./program.js";
+import { ProgramState, ExecutionContext, evaluate, Mask } from "./program.js";
 import { Globals as GlobalsType } from "./module.js";
 import { MemoryAddress } from "./memory.js";
 import { Cast } from "./utils.js";
@@ -23,19 +23,72 @@ export namespace State {
       }
     > = RESULT
 
+    export type get<
+      state extends ProgramState
+    > = state['instructions'];
+
     export type push<
-    state extends ProgramState,
-    instructions extends Instruction[],
-  
-    RESULT extends ProgramState =
-      set<
-        state,
-        [
-          ...instructions,
-          ...state['instructions'],
+      state extends ProgramState,
+      instructions extends Instruction[],
+    
+      RESULT extends ProgramState =
+        set<
+          state,
+          [
+            ...instructions,
+            ...state['instructions'],
+          ]
+        >
+    > = RESULT
+
+    export type pop<
+      state extends ProgramState,
+    
+      RESULT extends ProgramState =
+        get<state> extends [
+          infer discarded extends Instruction,
+          ...infer remaining extends Instruction[],
         ]
-      >
-  > = RESULT
+        ? set<
+            state,
+            remaining
+          >
+        : never
+
+    > = RESULT
+
+
+    export namespace Active {
+      export type get<
+        state extends ProgramState
+      > =
+        State.Instructions.get<state> extends [
+          infer active extends Instruction,
+          ...infer remaining extends Instruction[],
+        ]
+        ? active
+        : never;
+
+      /** in a control flow situation where we are trying to (effectively) match up parenthesis of control flow structures (like If, Else, End, etc.) we may need to skip instructions and continue until we find what our heart desires */
+      export type shouldSkip<
+        state extends ProgramState,
+        instruction extends Instruction,
+      > =
+        State.ExecutionContexts.Active.Masks.isEmpty<state> extends true
+
+        // we should not skip because the execution context mask is empty which means we can freely execute the next instruction
+        ? false
+
+        // there is at least some mask, so we should check whether it matches instruction
+        : instruction['kind'] extends State.ExecutionContexts.Active.Masks.Active.get<state>
+
+          // we should not skip because we hit the instruction we want
+          // the instruction itself will handle resolving things
+          ? false
+
+          // we
+          : true
+    }
   }
 
   /** Helpers for Stack manipulation */
@@ -165,16 +218,107 @@ export namespace State {
           RESULT extends ProgramState = 
             State.ExecutionContexts.Active.set<
               state,
-               {
-                  funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                  locals:
-                    evaluate<
-                    & State.ExecutionContexts.Active.Locals.get<state>
-                    & { [k in id]: value }
-                    >;
-               }
+              {
+                locals:
+                  evaluate<
+                  & State.ExecutionContexts.Active.Locals.get<state>
+                  & { [k in id]: value }
+                  >;
+
+                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
+                masks: State.ExecutionContexts.Active.get<state>['masks'];
+              }
               >
         > = RESULT
+      }
+
+
+      export namespace Masks {
+        export type get<
+          state extends ProgramState
+        > =
+          State.ExecutionContexts.Active.get<state>['masks'];
+
+        export type isEmpty<
+          state extends ProgramState
+        > =
+          get<state>['length'] extends 0
+          ? true
+          : false;
+
+        export type set<
+          state extends ProgramState,
+          mask extends Mask[],
+
+          RESULT extends ProgramState = 
+            State.ExecutionContexts.Active.set<
+              state,
+              {
+                masks: mask;
+
+                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
+                locals: State.ExecutionContexts.Active.get<state>['locals'];
+              }
+              >
+        > = RESULT
+      
+        export type push<
+          state extends ProgramState,
+          mask extends Mask,
+
+          RESULT extends ProgramState = 
+            State.ExecutionContexts.Active.set<
+              state,
+              {
+                masks: [
+                  ...get<state>,
+                  mask
+                ];
+
+                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
+                locals: State.ExecutionContexts.Active.get<state>['locals'];
+              }
+              >
+        > = RESULT
+
+        export namespace Active {
+          export type get<
+            state extends ProgramState
+          > =
+            State.ExecutionContexts.Active.Masks.get<state> extends [
+              ...infer remaining extends Mask[],
+              infer active extends Mask,
+            ]
+            ? active
+            : never
+
+          export type pop<
+            state extends ProgramState
+          > =
+            State.ExecutionContexts.Active.Masks.get<state> extends [
+              ...infer remaining extends Mask[],
+              infer active extends Mask,
+            ]
+            ? State.ExecutionContexts.Active.Masks.set<state, remaining>
+            : never
+
+          export type replace<
+            state extends ProgramState,
+            mask extends Mask,
+          > =
+            State.ExecutionContexts.Active.Masks.get<state> extends [
+              ...infer remaining extends Mask[],
+              infer discarded extends Mask,
+            ]
+            ? State.ExecutionContexts.Active.Masks.set<
+                state,
+                [
+                  ...remaining,
+                  mask
+                ]
+              >
+            : never
+        }
       }
     }
   }

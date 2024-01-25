@@ -1,7 +1,9 @@
 import { Entry, IHalt, Instruction, selectInstruction } from "./instructions.js"
-import { State } from "./update.js"
+import { State } from "./state.js"
 import { WasmModule } from "./module.js";
 import { MemoryByAddress } from "./memory.js";
+
+export type Mask = 'If' | 'Else' | 'End';
 
 export type ExecutionContext = {
   /** the current local variable values */
@@ -9,6 +11,13 @@ export type ExecutionContext = {
 
   /** not really required, but really helpful for debugging */
   funcId: string;
+
+  /**
+   * a control flow mask
+   * 
+   * this tells the program to keep going until it reaches the desired statement
+   */
+  masks: Mask[];
 }
 
 export type ProgramState = {
@@ -59,24 +68,38 @@ export type evaluate<T> = {
 
 export type executeInstruction<
   state extends ProgramState,
-  debugMode extends boolean,
+  debugMode extends boolean = false,
 > =
   state["instructions"] extends [
     infer instruction extends Instruction,
     ...infer remainingInstructions extends Instruction[]
   ]
+
+  // `Halt` is a special instruction that tells the program to stop for debugging
   ? instruction extends IHalt
     ? state
-    : executeInstruction<
-        selectInstruction<
-          State.Instructions.set<
-            state,
-            remainingInstructions
-          >,
-          instruction
-        >,
-        debugMode
-      >
+
+      // first we gotta check if we need to skip this instruction because of some control flow mask
+    : State.Instructions.Active.shouldSkip<state, instruction> extends true
+
+        // we didn't hit the instruction we want, so we pop and continue
+        ? executeInstruction<
+            State.Instructions.pop<state>,
+            debugMode
+          >
+
+        // we hit the instruction we want so we can pop the mask and continue
+        : executeInstruction<
+            selectInstruction<
+              state,
+              remainingInstructions,
+              instruction
+            >,
+            debugMode
+          >
+
+  // program execution is complete.  yay.
+  // this is the base case of the main loop's recursion
   : debugMode extends true
     ? evaluate<state>
     : evaluate<state>['stack'][0]

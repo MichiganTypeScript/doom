@@ -1,5 +1,6 @@
 {
   "files.associations": {
     "emscripten.h": "c"
-  }
+  },
+  "editor.rulers": []
 }

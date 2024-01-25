@@ -8,7 +8,7 @@
   ;; This is a somewhat artificial function designed to demonstrate a WAT
   ;; feature.
   (func $if (param $n i32) (param $control i32) (result i32)
-    (i32.add 
+    (i32.add
       (local.get $n)
       ;; The "(result i32)" clause says that the expression will leave
       ;; a single i32 value on the stack. If it's ommitted, the WASM
