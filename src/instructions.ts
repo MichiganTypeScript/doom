@@ -178,6 +178,10 @@ export type IReturn = {
   count: number
 }
 
+export type ISelect = {
+  kind: "Select"
+}
+
 export type ISubtract = {
   kind: "Subtract"
 }
@@ -218,6 +222,7 @@ export type Instruction =
   | INegate
   | INop
   | IReturn
+  | ISelect
   | IStore
   | ISubtract
 
@@ -304,6 +309,9 @@ export type selectInstruction<
 
   : instruction extends IReturn
   ? Instructions.Return<state, instruction>
+
+  : instruction extends ISelect
+  ? Instructions.Select<state, instruction>
 
   : instruction extends ISubtract
   ? Instructions.Subtract<state, instruction>
@@ -760,6 +768,27 @@ export namespace Instructions {
           ]
         >
       : never
+
+  export type Select<
+    state extends ProgramState,
+    instruction extends ISelect // unused
+  > =
+    state["stack"] extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry,
+      infer condition extends Entry,
+    ]
+    ? condition extends 0
+      ? State.Stack.set<state, [
+          ...remaining,
+          a,
+        ]>
+      : State.Stack.set<state, [
+          ...remaining,
+          b,
+        ]>
+    : never
 
   export type Subtract<
     state extends ProgramState,

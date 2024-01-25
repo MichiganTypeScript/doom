@@ -39,7 +39,6 @@ mod tests {
             "andarist",   //
             "c-add",      //
             "add-middle", //
-            "select",     //
         ]
     }
 

@@ -146,6 +146,9 @@ pub fn handle_instruction(func: &Func, instruction: &Instruction<'_>) -> String 
         Instruction::Else(_) => {
             format!("{indent}{{ kind: 'Else' }}")
         }
+        Instruction::Select(_) => {
+            format!("{indent}{{ kind: 'Select' }}")
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }
