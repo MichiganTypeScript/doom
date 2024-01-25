@@ -1,6 +1,6 @@
 import { Entry, IHalt, Instruction, selectInstruction } from "./instructions.js"
 import { State } from "./state.js"
-import { WasmModule } from "./module.js";
+import { Param, WasmModule } from "./module.js";
 import { MemoryByAddress } from "./memory.js";
 
 export type Mask = 'If' | 'Else' | 'End';
@@ -18,6 +18,8 @@ export type ExecutionContext = {
    * this tells the program to keep going until it reaches the desired statement
    */
   masks: Mask[];
+
+  instructions: Instruction[];
 }
 
 export type ProgramState = {
@@ -28,9 +30,6 @@ export type ProgramState = {
   memory: MemoryByAddress;
 
   memorySize: number;
-
-  /** the currently executing instructions */
-  instructions: Instruction[];
 
   /** a stack of values */
   stack: Entry[];
@@ -44,20 +43,60 @@ export type ProgramInput = Pick<
   "stack" | "module" | "memory" | "memorySize"
 >
 
+type ParamsToLocals<
+  input extends ProgramInput,
+  Params extends Param[] = input['module']['func']['$entry']['params'],
+  
+  _Acc extends Record<string, number> = {},
+
+  RESULT extends Record<string, number> =
+    Params extends [
+      infer firstParam extends Param,
+      ...infer remainingParams extends Param[]
+    ]
+    ? input['stack'] extends [
+        infer firstValue extends Entry,
+        ...infer remainingValues extends Entry[]
+      ]
+      ? ParamsToLocals<
+          {
+            stack: remainingValues;
+            module: input['module'];
+            memory: input['memory'];
+            memorySize: input['memorySize'];
+          },
+
+          remainingParams,
+
+          evaluate<{
+            [K in firstParam]: firstValue;
+          } & _Acc>
+        >
+      : never // will happen if there's a mismatch between inputs and params
+    : _Acc
+> = RESULT
+
 export type runProgram<
   input extends ProgramInput,
   debugMode extends boolean = false,
 > =
   executeInstruction<
     {
-      instructions: [
-        { kind: "Call", id: "$entry" }
-      ];
       memory: [];
       memorySize: input['memorySize'];
       module: input['module'];
-      stack: input['stack'];
-      executionContexts: [];
+      stack: [];
+      executionContexts: [
+        {
+          locals: ParamsToLocals<input>;
+          funcId: '$entry';
+          masks: [];
+          instructions: [
+            ...input['module']['func']['$entry']['instructions'],
+            // { kind: 'EndFunction', id: '$entry' },
+          ];
+        }
+      ];
     },
     debugMode
   >
@@ -70,7 +109,7 @@ export type executeInstruction<
   state extends ProgramState,
   debugMode extends boolean = false,
 > =
-  state["instructions"] extends [
+  State.ExecutionContexts.Active.Instructions.get<state> extends [
     infer instruction extends Instruction,
     ...infer remainingInstructions extends Instruction[]
   ]
@@ -80,11 +119,11 @@ export type executeInstruction<
     ? state
 
       // first we gotta check if we need to skip this instruction because of some control flow mask
-    : State.Instructions.Active.shouldSkip<state, instruction> extends true
+    : State.ExecutionContexts.Active.Instructions.shouldSkip<state, instruction> extends true
 
         // we didn't hit the instruction we want, so we pop and continue
         ? executeInstruction<
-            State.Instructions.pop<state>,
+            State.ExecutionContexts.Active.Instructions.pop<state>,
             debugMode
           >
 
