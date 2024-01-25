@@ -1,34 +1,55 @@
-import { Call, Numbers } from 'hotscript'
+import { ModuleField } from '../../module.ts'
+import { runProgram } from '../../program.ts'
 
 type $andarist<
-  $x extends number,
-  RESULT extends number =
-    Call<Numbers.Add<
-      Call<Numbers.Add<
-        $x,
-        (Call<Numbers.GreaterThan<
-          $x,
-          -5
-        >> extends true ? 1 : 0) extends 0
-        ? 10
-        : 12
-      >>,
-      7
-    >>
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$x'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$x' },
+      { kind: 'Const'; value: 12 },
+      { kind: 'Const'; value: 10 },
+      { kind: 'LocalGet'; id: '$x' },
+      { kind: 'Const'; value: -5 },
+      { kind: 'GreaterThan' },
+      { kind: 'Select' },
+      { kind: 'Add' },
+      { kind: 'Const'; value: 7 },
+      { kind: 'Add' },
+    ];
+  }
 > = RESULT
 
 type $entry<
-  $a extends number,
-  RESULT extends number =
-    $andarist<
-      $a
-    >
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$a'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'Call'; id: '$andarist' },
+    ];
+  }
 > = RESULT
 
 export type entry<
-  $a extends number,
-  RESULT extends number =
-    $entry<
-      $a
-    >
-> = RESULT
+  input extends number[] = [],
+  debugMode extends boolean = false
+> = runProgram<
+  {
+    stack: input;
+    module: {
+      func: {
+        $andarist: $andarist;
+        $entry: $entry;
+      };
+      globals: {};
+    };
+    memory: {};
+    memorySize: 0;
+  },
+  debugMode
+>
