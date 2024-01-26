@@ -1,6 +1,6 @@
-import type { entry } from './test/from-wat/br-if.actual.js';
+import type { entry } from './test/from-wat/if-else.actual.js';
 import { State } from './state.js';
-type e = entry<[2], true> // =>
+type e = entry<[10, 2], true> // =>
 
 type stack = e['stack']; // =>
 

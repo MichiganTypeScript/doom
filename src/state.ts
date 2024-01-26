@@ -68,26 +68,6 @@ export namespace State {
         ]
         ? active
         : never;
-
-      /** in a control flow situation where we are trying to (effectively) match up parenthesis of control flow structures (like If, Else, End, etc.) we may need to skip instructions and continue until we find what our heart desires */
-      export type shouldSkip<
-        state extends ProgramState,
-        instruction extends Instruction,
-      > =
-        State.ExecutionContexts.Active.Masks.isEmpty<state> extends true
-
-        // we should not skip because the execution context mask is empty which means we can freely execute the next instruction
-        ? false
-
-        // there is at least some mask, so we should check whether it matches instruction
-        : instruction['kind'] extends State.ExecutionContexts.Active.Masks.Active.get<state>
-
-          // we should not skip because we hit the instruction we want
-          // the instruction itself will handle resolving things
-          ? false
-
-          // we
-          : true
     }
   }
 
@@ -230,95 +210,6 @@ export namespace State {
               }
               >
         > = RESULT
-      }
-
-
-      export namespace Masks {
-        export type get<
-          state extends ProgramState
-        > =
-          State.ExecutionContexts.Active.get<state>['masks'];
-
-        export type isEmpty<
-          state extends ProgramState
-        > =
-          get<state>['length'] extends 0
-          ? true
-          : false;
-
-        export type set<
-          state extends ProgramState,
-          mask extends Mask[],
-
-          RESULT extends ProgramState = 
-            State.ExecutionContexts.Active.set<
-              state,
-              {
-                masks: mask;
-
-                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                locals: State.ExecutionContexts.Active.get<state>['locals'];
-              }
-              >
-        > = RESULT
-      
-        export type push<
-          state extends ProgramState,
-          mask extends Mask,
-
-          RESULT extends ProgramState = 
-            State.ExecutionContexts.Active.set<
-              state,
-              {
-                masks: [
-                  ...get<state>,
-                  mask
-                ];
-
-                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                locals: State.ExecutionContexts.Active.get<state>['locals'];
-              }
-              >
-        > = RESULT
-
-        export namespace Active {
-          export type get<
-            state extends ProgramState
-          > =
-            State.ExecutionContexts.Active.Masks.get<state> extends [
-              ...infer remaining extends Mask[],
-              infer active extends Mask,
-            ]
-            ? active
-            : never
-
-          export type pop<
-            state extends ProgramState
-          > =
-            State.ExecutionContexts.Active.Masks.get<state> extends [
-              ...infer remaining extends Mask[],
-              infer active extends Mask,
-            ]
-            ? State.ExecutionContexts.Active.Masks.set<state, remaining>
-            : never
-
-          export type replace<
-            state extends ProgramState,
-            mask extends Mask,
-          > =
-            State.ExecutionContexts.Active.Masks.get<state> extends [
-              ...infer remaining extends Mask[],
-              infer discarded extends Mask,
-            ]
-            ? State.ExecutionContexts.Active.Masks.set<
-                state,
-                [
-                  ...remaining,
-                  mask
-                ]
-              >
-            : never
-        }
       }
     }
   }

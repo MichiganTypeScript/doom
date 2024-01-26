@@ -12,11 +12,14 @@ type $if<
       { kind: 'LocalGet'; id: '$control' },
       { kind: 'Const'; value: 0 },
       { kind: 'GreaterThanOrEqual' },
-      { kind: 'If' },
-      { kind: 'Const'; value: 1 },
-      { kind: 'Else' },
-      { kind: 'Const'; value: -1 },
-      { kind: 'End' },
+      { kind: 'If';
+        then: [
+          { kind: 'Const'; value: 1 },
+        ];
+        else: [
+          { kind: 'Const'; value: -1 },
+        ];
+      },
       { kind: 'Add' },
     ];
   }

@@ -79,24 +79,14 @@ export type executeInstruction<
   ? instruction extends IHalt
     ? state
 
-      // first we gotta check if we need to skip this instruction because of some control flow mask
-    : State.Instructions.Active.shouldSkip<state, instruction> extends true
-
-        // we didn't hit the instruction we want, so we pop and continue
-        ? executeInstruction<
-            State.Instructions.pop<state>,
-            debugMode
-          >
-
-        // we hit the instruction we want so we can pop the mask and continue
-        : executeInstruction<
-            selectInstruction<
-              state,
-              remainingInstructions,
-              instruction
-            >,
-            debugMode
-          >
+    : executeInstruction<
+        selectInstruction<
+          state,
+          remainingInstructions,
+          instruction
+        >,
+        debugMode
+      >
 
   // program execution is complete.  yay.
   // this is the base case of the main loop's recursion

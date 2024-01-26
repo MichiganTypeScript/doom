@@ -37,11 +37,13 @@ mod tests {
         vec![
             "c-add",      //
             "add-middle", //
+            "br-if",      //
         ]
     }
 
     fn focus_list() -> Vec<&'static str> {
         vec![
+            // "if-else",
             // "c-add", //
             // "add-middle", //
         ]

@@ -1,4 +1,4 @@
-use crate::handle_instructions::handle_instructions;
+use crate::handle_instructions::handle_func;
 use crate::source_file::SourceFile;
 use std::collections::HashMap;
 use wast::core::{
@@ -42,7 +42,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
     result: number;",
         ));
 
-    let instructions_and_locals = handle_instructions(func);
+    let instructions_and_locals = handle_func(func);
 
     let output = format!(
         "type {name}<

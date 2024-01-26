@@ -56,14 +56,6 @@ export type IConst = {
   value: number;
 }
 
-export type IElse = {
-  kind: "Else"
-}
-
-export type IEnd = {
-  kind: "End"
-}
-
 /** this isn't really a webassembly instruction, but it's a sentinel put here so that the program can understand when to cull execution contexts (i.e. after the function returns) */
 export type IEndFunction = {
   kind: "EndFunction"
@@ -109,6 +101,9 @@ export type IHalt = {
 
 export type IIf = {
   kind: "If"
+
+  then: Instruction[];
+  else: Instruction[];
 }
 
 export type ILoad = {
@@ -195,8 +190,6 @@ export type Instruction =
   | IBranchIf
   | ICall
   | IConst
-  | IElse
-  | IEnd
   | IEndFunction
   | IEquals
   | IEqualsZero
@@ -249,12 +242,6 @@ export type selectInstruction<
 
   : instruction extends IConst
   ? Instructions.Const<state, instruction>
-
-  : instruction extends IElse
-  ? Instructions.Else<state, instruction>
-
-  : instruction extends IEnd
-  ? Instructions.End<state, instruction>
 
   : instruction extends IEndFunction
   ? Instructions.EndFunction<state, instruction>
@@ -357,44 +344,6 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IBranch,
   > = state // TODO
-
-  export type Else<
-    state extends ProgramState,
-    instruction extends IElse
-    > =
-      State.ExecutionContexts.Active.Masks.isEmpty<state> extends true
-      ? State.ExecutionContexts.Active.Masks.push<state, 'End'>
-      :
-
-      // is the top mask `Else`?
-      // if we came here as a result of a false branch of an if statement, there will be some mask to pop.
-      // so we first need to check if the thing on top of the mask stack is an Else mask.
-      instruction['kind'] extends State.ExecutionContexts.Active.Masks.Active.get<state>
-
-      // the only way that could happen is if an previous If statement hit its false case
-      // that means we can pop the mask and continue with what comes in the Else branch
-      ? State.ExecutionContexts.Active.Masks.Active.pop<
-          state
-        >
-
-      // that means we MUST have come here as a result of a true branch of an If statement
-      // that means we want to skip everything until we find an `End` instruction
-      : State.ExecutionContexts.Active.Masks.Active.replace<
-          state,
-          "End"
-        >
-
-  export type End<
-    state extends ProgramState,
-    instruction extends IEnd // unused
-  > =
-    // if we came here as a result of a false branch of an if statement, there won't be a mask because the `Else` already popped it.
-    State.ExecutionContexts.Active.Masks.isEmpty<state> extends true
-    ? state
-    :
-    // so otherwise, we came here as the result of the truth branch of an If statement that had no Else
-    State.ExecutionContexts.Active.Masks.Active.pop<state>
-
 
   /** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
   type PopulateParams<
@@ -592,24 +541,25 @@ export namespace Instructions {
     ? condition extends 0
 
       ? // false branch
-
-        State.ExecutionContexts.Active.Masks.push<
+        // pop the false branch instructions
+        State.Instructions.push<
           // pop the condition (we're done with it now)
           State.Stack.set<
             state,
             remaining
           >,
-
-          'Else' | 'End'
+          instruction['else']
         >
 
-      
       : // true branch
-
-        // pop the condition since we're done with it now
-        State.Stack.set<
-          state,
-          remaining
+        // pop the false branch instructions
+        State.Instructions.push<
+          // pop the condition (we're done with it now)
+          State.Stack.set<
+            state,
+            remaining
+          >,
+          instruction['then']
         >
 
     : never
