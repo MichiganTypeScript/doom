@@ -1,3 +1,11 @@
 - memory offsets
 - bitwise numbers
 - table / element
+
+refactors
+- use Alice's trick for all instructions
+- make state the last argument of an instruction
+- add a newline after each test
+
+after everything works
+- publish as an NPM (lol)

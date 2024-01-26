@@ -1,6 +1,6 @@
-import type { entry } from './test/from-wat/globals.actual.js';
+import type { entry } from './test/from-wat/call-indirect.actual.js';
 import { State } from './state.js';
-type e = entry<[], true> // =>
+type e = entry<[5, 6], true> // =>
 
 type stack = e['stack']; // =>
 
@@ -20,7 +20,7 @@ type memory = e['memory'];
 //   ^?
 
 type i = e['instructions']; // =>
-type a = State.Instructions.Active.get<e>; // =>
+type ia = State.Instructions.Active.get<e>; // =>
 type i0 = e['instructions'][0]; // =>
 type i1 = e['instructions'][1]; // =>
 type i2 = e['instructions'][2]; // =>

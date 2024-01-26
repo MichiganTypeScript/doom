@@ -15,12 +15,17 @@
 
   ;; Define a function to perform an indirect call to the function in the table.
   (func $indirect_call (param $a i32) (param $b i32) (result i32)
-    ;; The index in the table (0 in this case) and the parameters for the call.
-    i32.const 0
     local.get $a
     local.get $b
 
+    ;; The index in the table (0 in this case) and the parameters for the call.
+    i32.const 0
+
     ;; Perform the indirect call. The type signature is (param i32 i32) (result i32).
     call_indirect $__indirect_function_table (type $add_t)
+  )
+
+  (func $entry (export "entry") (param $a i32) (param $b i32) (result i32)
+    (call $indirect_call (local.get $a) (local.get $b))
   )
 )

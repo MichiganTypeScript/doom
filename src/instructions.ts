@@ -373,7 +373,7 @@ export namespace Instructions {
     instruction extends IBlock,
   > =
     // then push the block's instructions onto the stack
-    State.Instructions.push<
+    State.Instructions.concat<
 
       // first cache existing instructions (as they are at this moment) in the execution context for when we break to this block later
       State.ExecutionContexts.Active.Branches.set<
@@ -462,7 +462,7 @@ export namespace Instructions {
     _func extends Func = State.Funcs.get<state>[instruction['id']],
   > =
     // add the instructions from this func onto the stack
-    State.Instructions.push<
+    State.Instructions.concat<
 
 
       // first, pop things off the stack to populate params
@@ -489,7 +489,25 @@ export namespace Instructions {
   export type CallIndirect<
     state extends ProgramState,
     instruction extends ICallIndirect,
-  > = state;
+  > =
+    State.Stack.get<state> extends [
+      ...infer remainder extends Entry[],
+      infer index extends Entry, // it's sorta hard to tell because there are no MDN docs to go from on this but it does seem like the argument that comes before is in fact the index.  if instead the params come before... we'll just have to look up the count and pop accordingly.
+    ]
+    ? 
+      State.Instructions.unshift<
+
+        State.Stack.set<
+          state,
+          remainder
+        >,
+
+        {
+          kind: 'Call',
+          id: State.Indirect.getByIndex<state, index>
+        }
+      >
+    : never // there should always at least be a single value on the stack (the index)
 
   export type Const<
     state extends ProgramState,
@@ -623,7 +641,7 @@ export namespace Instructions {
 
       ? // false branch
         // pop the false branch instructions
-        State.Instructions.push<
+        State.Instructions.concat<
           // pop the condition (we're done with it now)
           State.Stack.set<
             state,
@@ -634,7 +652,7 @@ export namespace Instructions {
 
       : // true branch
         // pop the false branch instructions
-        State.Instructions.push<
+        State.Instructions.concat<
           // pop the condition (we're done with it now)
           State.Stack.set<
             state,

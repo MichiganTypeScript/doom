@@ -1,7 +1,8 @@
 import { Entry, Instruction } from "./instructions.js";
-import { ProgramState, ExecutionContext, evaluate, Globals as GlobalsType, Func } from "./program.js";
+import { ProgramState, ExecutionContext, evaluate, Globals as GlobalsType, Func, Param } from "./program.js";
 import { MemoryAddress } from "./memory.js";
 import { Cast } from "./utils.js";
+import { Call, Numbers } from "hotscript";
 
 export namespace State {
 
@@ -28,7 +29,7 @@ export namespace State {
       state extends ProgramState
     > = state['instructions'];
 
-    export type push<
+    export type concat<
       state extends ProgramState,
       instructions extends Instruction[],
     
@@ -55,6 +56,36 @@ export namespace State {
             remaining
           >
         : never
+
+    > = RESULT
+
+    export type push<
+      state extends ProgramState,
+      instruction extends Instruction,
+
+      RESULT extends ProgramState =
+        set<
+          state,
+          [
+            ...state['instructions'],
+            instruction,
+          ]
+        >
+
+    > = RESULT
+
+    export type unshift<
+      state extends ProgramState,
+      instruction extends Instruction,
+
+      RESULT extends ProgramState =
+        set<
+          state,
+          [
+            instruction,
+            ...state['instructions'],
+          ]
+        >
 
     > = RESULT
 
@@ -264,6 +295,27 @@ export namespace State {
 
       RESULT extends Record<string, Func> = state['funcs']
     > = RESULT
+
+    export type getById<
+      state extends ProgramState,
+      id extends keyof get<state>,
+
+      RESULT extends Func = get<state>[id]
+    > = RESULT
+
+    /** when you call a function, you have to pop the stack some number of times depending on how many parameters and returns there are */
+    export type countCallPops<
+      state extends ProgramState,
+      funcId extends keyof get<state>,
+
+      RESULT extends number =
+        getById<state, funcId> extends {
+          params: infer params extends Param[];
+          result: infer result extends number;
+        }
+        ? Call<Numbers.Add<params['length'], result>>
+        : never
+    > = RESULT
   }
 
   /** Helpers for Globals manipulation */
@@ -326,6 +378,22 @@ export namespace State {
         memorySize: state['memorySize'];
         stack: state['stack'];
       }
+    > = RESULT
+  }
+
+  /** Helpers for indirect function lookups */
+  export namespace Indirect {
+    export type get<
+      state extends ProgramState,
+
+      RESULT extends string[] = state['indirect']
+    > = RESULT
+
+    export type getByIndex<
+      state extends ProgramState,
+      id extends number,
+
+      RESULT extends string = get<state>[id]
     > = RESULT
   }
 }

@@ -21,10 +21,24 @@ type $indirect_call<
     result: number;
     locals: [];
     instructions: [
-      { kind: 'Const'; value: 0 },
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
+      { kind: 'Const'; value: 0 },
       { kind: 'CallIndirect'; id: '$__indirect_function_table' },
+    ];
+  }
+> = RESULT
+
+type $entry<
+  RESULT extends Func = {
+    kind: 'func';
+    params: ['$a', '$b'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'LocalGet'; id: '$b' },
+      { kind: 'Call'; id: '$indirect_call' },
     ];
   }
 > = RESULT
@@ -38,6 +52,7 @@ export type entry<
     funcs: {
       $add: $add;
       $indirect_call: $indirect_call;
+      $entry: $entry;
     };
     globals: {};
     memory: {};
