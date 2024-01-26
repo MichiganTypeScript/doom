@@ -334,84 +334,92 @@ export type selectInstruction<
 export namespace Instructions {
   export type Add<
     state extends ProgramState,
-    instruction extends IAdd // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.Add<a, b>>
-        ]
-      >
-    : never
+    instruction extends IAdd, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.Add<a, b>>
+          ]
+        >
+      : never
+  > = RESULT
 
   export type And<
     state extends ProgramState,
-    instruction extends IAnd // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.Add<a, b>> // TODO THIS IS WRONG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        ]
-      >
-    : never
+    instruction extends IAnd, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.Add<a, b>> // TODO THIS IS WRONG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          ]
+        >
+      : never
+  > = RESULT
 
   export type Block<
     state extends ProgramState,
     instruction extends IBlock,
-  > =
-    // then push the block's instructions onto the stack
-    State.Instructions.concat<
 
-      // first cache existing instructions (as they are at this moment) in the execution context for when we break to this block later
-      State.ExecutionContexts.Active.Branches.set<
-        state,
-        instruction['id'],
-        State.Instructions.get<state>
-      >,
+    RESULT extends ProgramState =
+      // then push the block's instructions onto the stack
+      State.Instructions.concat<
 
-      instruction['instructions']
-    >
+        // first cache existing instructions (as they are at this moment) in the execution context for when we break to this block later
+        State.ExecutionContexts.Active.Branches.set<
+          state,
+          instruction['id'],
+          State.Instructions.get<state>
+        >,
+
+        instruction['instructions']
+      >
+  > = RESULT
 
   export type BranchIf<
     state extends ProgramState,
     instruction extends IBranchIf,
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer condition extends Entry,
-    ]
-    ? condition extends 0
 
-      // false branch
-      // nothing happens. we just pop the stack and continue on to the next instruction
-      ? State.Stack.set<
-          state,
-          remaining
-        >
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer condition extends Entry,
+      ]
+      ? condition extends 0
 
-      // true branch
-      : State.Instructions.set<
-          State.Stack.set<
+        // false branch
+        // nothing happens. we just pop the stack and continue on to the next instruction
+        ? State.Stack.set<
             state,
             remaining
-          >,
-          State.ExecutionContexts.Active.Branches.get<state>[instruction['id']]
-        >
+          >
 
-    : never
+        // true branch
+        : State.Instructions.set<
+            State.Stack.set<
+              state,
+              remaining
+            >,
+            State.ExecutionContexts.Active.Branches.get<state>[instruction['id']]
+          >
+
+      : never
+  > = RESULT
 
   export type Branch<
     state extends ProgramState,
@@ -427,202 +435,224 @@ export namespace Instructions {
     state extends ProgramState,
     funcId extends string,
     params extends Param[],
-  > =
-    // HELP: params are fed in reverse order and simply switching the infer statements order below for some reason doesn't work...
-    Reverse<params> extends [
-      infer param extends Param,
-      ...infer remainingParams extends Param[],
-    ]
-    ? State.Stack.get<state> extends [
-        ...infer remainingStack extends Entry[],
-        infer pop extends Entry,
-      ]
-      ? PopulateParams<
-          // set the locals to have the values from the stack that we just popped off
-          State.ExecutionContexts.Active.Locals.set<
-            // set the stack to have remaining values only
-            State.Stack.set<
-              state,
-              remainingStack
-            >,
 
-            param,
-            pop
-          >,
-          funcId,
-          remainingParams
-        >
-      : never // should never happen because the stack should always have at least as many items as there are params
-    : state // no more params, so we can jump out
+    RESULT extends ProgramState =
+      // HELP: params are fed in reverse order and simply switching the infer statements order below for some reason doesn't work...
+      Reverse<params> extends [
+        infer param extends Param,
+        ...infer remainingParams extends Param[],
+      ]
+      ? State.Stack.get<state> extends [
+          ...infer remainingStack extends Entry[],
+          infer pop extends Entry,
+        ]
+        ? PopulateParams<
+            // set the locals to have the values from the stack that we just popped off
+            State.ExecutionContexts.Active.Locals.set<
+              // set the stack to have remaining values only
+              State.Stack.set<
+                state,
+                remainingStack
+              >,
+
+              param,
+              pop
+            >,
+            funcId,
+            remainingParams
+          >
+        : never // should never happen because the stack should always have at least as many items as there are params
+      : state // no more params, so we can jump out
+  > = RESULT
 
   export type Call<
     state extends ProgramState,
     instruction extends ICall,
 
     _func extends Func = State.Funcs.get<state>[instruction['id']],
-  > =
-    // add the instructions from this func onto the stack
-    State.Instructions.concat<
+
+    RESULT extends ProgramState =
+      // add the instructions from this func onto the stack
+      State.Instructions.concat<
 
 
-      // first, pop things off the stack to populate params
-      PopulateParams<
-        // push a new execution context
-        State.ExecutionContexts.push<
-          state,
-          {
-            locals: {},
-            funcId: instruction['id'],
-            branches: {},
-          }
+        // first, pop things off the stack to populate params
+        PopulateParams<
+          // push a new execution context
+          State.ExecutionContexts.push<
+            state,
+            {
+              locals: {},
+              funcId: instruction['id'],
+              branches: {},
+            }
+          >,
+          instruction['id'],
+          _func['params']
         >,
-        instruction['id'],
-        _func['params']
-      >,
 
-      [
-        ..._func['instructions'],
-        { kind: 'EndFunction', id: instruction['id'] }
-      ]
-    >
+        [
+          ..._func['instructions'],
+          { kind: 'EndFunction', id: instruction['id'] }
+        ]
+      >
+  > = RESULT
 
   export type CallIndirect<
     state extends ProgramState,
     instruction extends ICallIndirect,
-  > =
-    State.Stack.get<state> extends [
-      ...infer remainder extends Entry[],
-      infer index extends Entry, // it's sorta hard to tell because there are no MDN docs to go from on this but it does seem like the argument that comes before is in fact the index.  if instead the params come before... we'll just have to look up the count and pop accordingly.
-    ]
-    ? 
-      State.Instructions.unshift<
 
-        State.Stack.set<
-          state,
-          remainder
-        >,
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remainder extends Entry[],
+        infer index extends Entry, // it's sorta hard to tell because there are no MDN docs to go from on this but it does seem like the argument that comes before is in fact the index.  if instead the params come before... we'll just have to look up the count and pop accordingly.
+      ]
+      ? 
+        State.Instructions.unshift<
 
-        {
-          kind: 'Call',
-          id: State.Indirect.getByIndex<state, index>
-        }
-      >
-    : never // there should always at least be a single value on the stack (the index)
+          State.Stack.set<
+            state,
+            remainder
+          >,
+
+          {
+            kind: 'Call',
+            id: State.Indirect.getByIndex<state, index>
+          }
+        >
+      : never // there should always at least be a single value on the stack (the index)
+  > = RESULT
 
   export type Const<
     state extends ProgramState,
     instruction extends IConst,
-  > =
-    State.Stack.push<
-      state,
-      instruction['value']
-    >
+
+    RESULT extends ProgramState =
+      State.Stack.push<
+        state,
+        instruction['value']
+      >
+  > = RESULT
 
   export type Equals<
     state extends ProgramState,
-    instruction extends IEquals // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.Equal<a, b>> extends true ? 1 : 0
-        ]
-      >
-    : never
+    instruction extends IEquals, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.Equal<a, b>> extends true ? 1 : 0
+          ]
+        >
+      : never
+  > = RESULT
 
   export type EqualsZero<
     state extends ProgramState,
-    instruction extends IEqualsZero // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.Equal<a, 0>> extends true ? 1 : 0
-        ]
-      >
-    : never
+    instruction extends IEqualsZero, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.Equal<a, 0>> extends true ? 1 : 0
+          ]
+        >
+      : never
+  > = RESULT
 
   export type EndFunction<
     state extends ProgramState,
     instruction extends IEndFunction,
-  > =
-    // pop the active execution context
-    State.ExecutionContexts.pop<
-      state
-    >
+
+    RESULT extends ProgramState =
+      // pop the active execution context
+      State.ExecutionContexts.pop<
+        state
+      >
+  > = RESULT
 
   export type GlobalGet<
     state extends ProgramState,
     instruction extends IGlobalGet,
-  > =
-    State.Stack.push<
-      state,
-      State.Globals.get<state>[instruction['id']]
-    >
+
+    RESULT extends ProgramState =
+      State.Stack.push<
+        state,
+        State.Globals.get<state>[instruction['id']]
+      >
+  > = RESULT
 
   export type GlobalSet<
     state extends ProgramState,
     instruction extends IGlobalSet,
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        State.Globals.insert<
-          state,
-          Record<instruction['id'], a>
-        >,
-        remaining
-      >
-    : never
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          State.Globals.insert<
+            state,
+            Record<instruction['id'], a>
+          >,
+          remaining
+        >
+      : never
+  > = RESULT
 
   export type GreaterThan<
     state extends ProgramState,
-    instruction extends IGreaterThan // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-      infer b extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.GreaterThan<a, b>> extends true ? 1 : 0
-        ]
-      >
-    : never
+    instruction extends IGreaterThan, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer a extends Entry,
+        infer b extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.GreaterThan<a, b>> extends true ? 1 : 0
+          ]
+        >
+      : never
+  > = RESULT
 
   export type GreaterThanOrEqual<
     state extends ProgramState,
-    instruction extends IGreaterThanOrEqual // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-      infer b extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.GreaterThanOrEqual<a, b>> extends true ? 1 : 0
-        ]
-      >
-    : never
+    instruction extends IGreaterThanOrEqual, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer a extends Entry,
+        infer b extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.GreaterThanOrEqual<a, b>> extends true ? 1 : 0
+          ]
+        >
+      : never
+  > = RESULT
 
   export type Halt<
     state extends ProgramState,
@@ -632,175 +662,195 @@ export namespace Instructions {
   export type If<
     state extends ProgramState,
     instruction extends IIf,
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer condition extends Entry,
-    ]
-    ? condition extends 0
 
-      ? // false branch
-        // pop the false branch instructions
-        State.Instructions.concat<
-          // pop the condition (we're done with it now)
-          State.Stack.set<
-            state,
-            remaining
-          >,
-          instruction['else']
-        >
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer condition extends Entry,
+      ]
+      ? condition extends 0
 
-      : // true branch
-        // pop the false branch instructions
-        State.Instructions.concat<
-          // pop the condition (we're done with it now)
-          State.Stack.set<
-            state,
-            remaining
-          >,
-          instruction['then']
-        >
+        ? // false branch
+          // pop the false branch instructions
+          State.Instructions.concat<
+            // pop the condition (we're done with it now)
+            State.Stack.set<
+              state,
+              remaining
+            >,
+            instruction['else']
+          >
 
-    : never
+        : // true branch
+          // pop the false branch instructions
+          State.Instructions.concat<
+            // pop the condition (we're done with it now)
+            State.Stack.set<
+              state,
+              remaining
+            >,
+            instruction['then']
+          >
+
+      : never
+  > = RESULT
 
   export type LessThan<
     state extends ProgramState,
-    instruction extends ILessThan // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-      infer b extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.LessThan<a, b>> extends true ? 1 : 0
-        ]
-      >
-    : never
+    instruction extends ILessThan, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer a extends Entry,
+        infer b extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.LessThan<a, b>> extends true ? 1 : 0
+          ]
+        >
+      : never
+  > = RESULT
 
   export type LessThanOrEqual<
     state extends ProgramState,
-    instruction extends ILessThanOrEqual // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-      infer b extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.LessThanOrEqual<a, b>> extends true ? 1 : 0
-        ]
-      >
-    : never
+    instruction extends ILessThanOrEqual, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer a extends Entry,
+        infer b extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.LessThanOrEqual<a, b>> extends true ? 1 : 0
+          ]
+        >
+      : never
+  > = RESULT
 
   export type Load<
     state extends ProgramState,
     instruction extends ILoad,
-  > =
-    state['stack'] extends [
-      ...infer remaining extends Entry[],
-      infer address extends keyof state['memory'],
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          // no idea why this Cast is needed, but it is
-          Cast<state['memory'][address], Entry>,
-        ]
-      >
-    : never
+
+    RESULT extends ProgramState =
+      state['stack'] extends [
+        ...infer remaining extends Entry[],
+        infer address extends keyof state['memory'],
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            // no idea why this Cast is needed, but it is
+            Cast<state['memory'][address], Entry>,
+          ]
+        >
+      : never
+  > = RESULT
 
   export type LocalGet<
     state extends ProgramState,
     instruction extends ILocalGet,
-  > =
-    State.Stack.push<
-      state,
-      State.ExecutionContexts.Active.Locals.get<state>[instruction['id']]
-    >
+
+    RESULT extends ProgramState =
+      State.Stack.push<
+        state,
+        State.ExecutionContexts.Active.Locals.get<state>[instruction['id']]
+      >
+  > = RESULT
 
   export type LocalSet<
     state extends ProgramState,
     instruction extends ILocalSet,
-  > =
-    state['stack'] extends [
-      ...infer remaining extends Entry[],
-      infer entry extends Entry,
-    ]
-    ? State.Stack.set<
-        State.ExecutionContexts.Active.Locals.set<
-          state,
-          instruction['id'],
-          entry
-        >,
-        remaining
-      >
-    : never
+    RESULT extends ProgramState =
+      state['stack'] extends [
+        ...infer remaining extends Entry[],
+        infer entry extends Entry,
+      ]
+      ? State.Stack.set<
+          State.ExecutionContexts.Active.Locals.set<
+            state,
+            instruction['id'],
+            entry
+          >,
+          remaining
+        >
+      : never
+  > = RESULT
 
   export type LocalTee<
     state extends ProgramState,
     instruction extends ILocalTee,
-  > =
-    state['stack'] extends [
-      ...infer remaining extends Entry[],
-      infer entry extends Entry
-    ]
-    ? State.ExecutionContexts.Active.Locals.set<
-        state,
-        instruction['id'],
-        entry
-      >
-    : never
+
+    RESULT extends ProgramState =
+      state['stack'] extends [
+        ...infer remaining extends Entry[],
+        infer entry extends Entry
+      ]
+      ? State.ExecutionContexts.Active.Locals.set<
+          state,
+          instruction['id'],
+          entry
+        >
+      : never
+  > = RESULT
 
   export type Multiply<
     state extends ProgramState,
-    instruction extends IMultiply // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.Mul<a, b>>
-        ]
-      >
-    : never
+    instruction extends IMultiply, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.Mul<a, b>>
+          ]
+        >
+      : never
+  > = RESULT
 
 
   export type Negate<
     state extends ProgramState,
-    instruction extends INegate // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          a extends 0 // this check is only necessary due to a bug in hotscript: https://github.com/gvergnaud/hotscript/issues/117
-          ? 0
-          : Apply<Numbers.Negate<a>>
-        ]
-      >
-    : never
+    instruction extends INegate, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            a extends 0 // this check is only necessary due to a bug in hotscript: https://github.com/gvergnaud/hotscript/issues/117
+            ? 0
+            : Apply<Numbers.Negate<a>>
+          ]
+        >
+      : never
+  > = RESULT
 
   export type Nop<
     state extends ProgramState,
-    instruction extends INop // unused
-  > = state;
+    instruction extends INop, // unused
+
+    RESULT extends ProgramState =
+      state
+  > = RESULT;
 
   /**
    * If there are no values left on the stack, it returns nothing/void.
@@ -812,86 +862,94 @@ export namespace Instructions {
     instruction extends IReturn,
 
     _stack extends Entry[] = [],
-  > =
-    _stack['length'] extends instruction['count']
-    ? State.Stack.set<
-        state,
-        _stack
-      >
-    : state['stack'] extends [
-        ...infer remaining extends Entry[],
-        infer pop extends Entry,
-      ]
-      ? Return<
-          State.Stack.set<
-            state,
-            remaining
-          >,
-          instruction,
 
-          [
-            ..._stack,
-            pop
-          ]
+    RESULT extends ProgramState =
+      _stack['length'] extends instruction['count']
+      ? State.Stack.set<
+          state,
+          _stack
         >
-      : never
+      : state['stack'] extends [
+          ...infer remaining extends Entry[],
+          infer pop extends Entry,
+        ]
+        ? Return<
+            State.Stack.set<
+              state,
+              remaining
+            >,
+            instruction,
+
+            [
+              ..._stack,
+              pop
+            ]
+          >
+        : never
+  > = RESULT
 
   export type Select<
     state extends ProgramState,
-    instruction extends ISelect // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-      infer condition extends Entry,
-    ]
-    ? condition extends 0
-      ? State.Stack.set<state, [
-          ...remaining,
-          a,
-        ]>
-      : State.Stack.set<state, [
-          ...remaining,
-          b,
-        ]>
-    : never
+    instruction extends ISelect, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+        infer condition extends Entry,
+      ]
+      ? condition extends 0
+        ? State.Stack.set<state, [
+            ...remaining,
+            a,
+          ]>
+        : State.Stack.set<state, [
+            ...remaining,
+            b,
+          ]>
+      : never
+  > = RESULT
 
   export type Subtract<
     state extends ProgramState,
-    instruction extends ISubtract // unused
-  > =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        state,
-        [
-          ...remaining,
-          Apply<Numbers.Sub<b, a>>
-        ]
-      >
-    : never
+    instruction extends ISubtract, // unused
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          state,
+          [
+            ...remaining,
+            Apply<Numbers.Sub<b, a>>
+          ]
+        >
+      : never
+  > = RESULT
 
   export type Store<
     state extends ProgramState,
     instruction extends IStore, // unused
     // TODO: gotta grab the offset from somewhere
-  > =
-    state['stack'] extends [
-      ...infer remaining extends Entry[],
-      infer address extends MemoryAddress,
-      infer entry extends Entry,
-    ]
-    ? State.Stack.set<
-        State.Memory.insert<
-          state,
-          address,
-          entry
-        >,
-        remaining
-      >
-    : never
+
+    RESULT extends ProgramState =
+      state['stack'] extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress,
+        infer entry extends Entry,
+      ]
+      ? State.Stack.set<
+          State.Memory.insert<
+            state,
+            address,
+            entry
+          >,
+          remaining
+        >
+      : never
+  > = RESULT
 }
