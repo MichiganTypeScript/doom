@@ -12,10 +12,13 @@ export type Func = {
   locals: string[];
   instructions: Instruction[];
 }
+export type Locals = Record<string, number>;
+export type Branches = Record<BranchId, Instruction[]>;
+export type Funcs = Record<string, Func>;
 
 export type ExecutionContext = {
   /** the current local variable values */
-  locals: Record<string, number>;
+  locals: Locals;
 
   /** not really required, but really helpful for debugging */
   funcId: string;
@@ -23,14 +26,14 @@ export type ExecutionContext = {
   /**
    * a control flow helper that tells the program how to interpret the next when it hits a branch
    */
-  branches: Record<BranchId, Instruction[]>;
+  branches: Branches;
 }
 
 export type ProgramState = {
   /** a stack of execution contexts */
   executionContexts: ExecutionContext[];
 
-  funcs: Record<string, Func>
+  funcs: Funcs;
 
   globals: Globals;
 

@@ -3,7 +3,6 @@
 - table / element
 
 refactors
-- make state the last argument of an instruction
 - add a newline after each test
 
 after everything works
