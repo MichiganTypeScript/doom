@@ -6,7 +6,7 @@ use wast::core::{
 };
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
-    source.add_import("../../module.ts", "ModuleField");
+    source.add_import("../../program.ts", "Func");
     source.add_import("../../program.ts", "runProgram");
 
     let name = "$".to_string()
@@ -46,7 +46,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
 
     let output = format!(
         "type {name}<
-  RESULT extends ModuleField.Func = {{
+  RESULT extends Func = {{
     kind: 'func';
 {params_and_result}
 {instructions_and_locals}
@@ -133,12 +133,15 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
                 *count += 1;
                 handle_module_field_memory(source, memory);
             }
+            ModuleField::Table(table) => {
+                dbg!(table);
+            }
+            ModuleField::Elem(element) => {
+                // it's assumed there's exactly one table and exactly one element
+                source.add_element(element);
+            }
 
-            ModuleField::Export(_)
-            | ModuleField::Table(_)
-            | ModuleField::Import(_)
-            | ModuleField::Elem(_)
-            | ModuleField::Data(_) => {
+            ModuleField::Export(_) | ModuleField::Import(_) | ModuleField::Data(_) => {
                 dbg!(field);
                 panic!("unintentionally not implemented module field");
             }

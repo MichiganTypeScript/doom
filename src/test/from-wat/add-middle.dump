@@ -326,7 +326,7 @@ Module {
             Memory(
                 Memory {
                     span: Span {
-                        offset: 2244,
+                        offset: 2333,
                     },
                     id: Some(
                         "memory",
@@ -353,7 +353,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2286,
+                        offset: 2375,
                     },
                     id: Some(
                         "__stack_pointer",
@@ -380,7 +380,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2344,
+                        offset: 2433,
                     },
                     id: Some(
                         "__stack_end",
@@ -407,7 +407,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2392,
+                        offset: 2481,
                     },
                     id: Some(
                         "__stack_base",
@@ -434,7 +434,7 @@ Module {
             Table(
                 Table {
                     span: Span {
-                        offset: 2477,
+                        offset: 2604,
                     },
                     id: Some(
                         "__indirect_function_table",
@@ -447,9 +447,7 @@ Module {
                         ty: TableType {
                             limits: Limits {
                                 min: 2,
-                                max: Some(
-                                    2,
-                                ),
+                                max: None,
                             },
                             elem: RefType {
                                 nullable: true,
@@ -463,7 +461,7 @@ Module {
             Elem(
                 Elem {
                     span: Span {
-                        offset: 2526,
+                        offset: 2728,
                     },
                     id: Some(
                         "e0",
@@ -473,7 +471,7 @@ Module {
                         table: Num(
                             0,
                             Span {
-                                offset: 2526,
+                                offset: 2728,
                             },
                         ),
                         offset: Expression {

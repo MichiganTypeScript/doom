@@ -1,9 +1,17 @@
 import { Entry, IHalt, Instruction, selectInstruction } from "./instructions.js"
 import { State } from "./state.js"
-import { WasmModule } from "./module.js";
 import { MemoryByAddress } from "./memory.js";
 
 export type BranchId = string;
+export type Globals = Record<string, Entry>;
+export type Param = string;
+export type Func = {
+  kind: 'func';
+  params: Param[];
+  result: number;
+  locals: string[];
+  instructions: Instruction[];
+}
 
 export type ExecutionContext = {
   /** the current local variable values */
@@ -19,27 +27,31 @@ export type ExecutionContext = {
 }
 
 export type ProgramState = {
-  /** the WASM module itself, with all the top-level declarations */
-  module: WasmModule;
+  /** a stack of execution contexts */
+  executionContexts: ExecutionContext[];
+
+  funcs: Record<string, Func>
+
+  globals: Globals;
+
+  /** used for dynamic dispatch: maps directly to funcs */
+  indirect: string[];
+
+  /** the currently executing instructions */
+  instructions: Instruction[];
 
   /** the linear memory of the program */
   memory: MemoryByAddress;
 
   memorySize: number;
 
-  /** the currently executing instructions */
-  instructions: Instruction[];
-
   /** a stack of values */
   stack: Entry[];
-
-  /** a stack of execution contexts */
-  executionContexts: ExecutionContext[];
 }
 
 export type ProgramInput = Pick<
   ProgramState,
-  "stack" | "module" | "memory" | "memorySize"
+  "stack" | "memory" | "memorySize" | "indirect" | "funcs" | "globals"
 >
 
 export type runProgram<
@@ -48,14 +60,16 @@ export type runProgram<
 > =
   executeInstruction<
     {
+      executionContexts: [];
+      funcs: input['funcs'];
+      globals: input['globals'];
+      indirect: input['indirect'];
       instructions: [
         { kind: "Call", id: "$entry" }
       ];
       memory: [];
       memorySize: input['memorySize'];
-      module: input['module'];
       stack: input['stack'];
-      executionContexts: [];
     },
     debugMode
   >

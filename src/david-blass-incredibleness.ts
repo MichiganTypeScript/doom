@@ -1,6 +1,6 @@
-import type { entry } from './test/from-wat/br-if.actual.js';
+import type { entry } from './test/from-wat/globals.actual.js';
 import { State } from './state.js';
-type e = entry<[1], true> // =>
+type e = entry<[], true> // =>
 
 type stack = e['stack']; // =>
 
@@ -27,3 +27,5 @@ type i2 = e['instructions'][2]; // =>
 type i3 = e['instructions'][3]; // =>
 type i4 = e['instructions'][4]; // =>
 type i5 = e['instructions'][5]; // =>
+
+type g = e['globals']; // =>

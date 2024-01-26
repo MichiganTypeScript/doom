@@ -99,7 +99,9 @@
   (global $__stack_end (mut i32) (i32.const 0))
   (global $__stack_base (mut i32) (i32.const 0))
 
-  ;; these two go together somehow
-  (table $__indirect_function_table 2 2 funcref)
+  ;; create a table that can hold 2 elements, both of which are funcrefs
+  (table $__indirect_function_table 2 funcref)
+
+  ;; populate the table with a reference to the $__wasm_call_ctors function
   (elem $e0 (i32.const 1) func $__wasm_call_ctors)
 )

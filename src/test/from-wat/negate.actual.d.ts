@@ -1,8 +1,7 @@
-import { ModuleField } from '../../module.ts'
-import { runProgram } from '../../program.ts'
+import { Func, runProgram } from '../../program.ts'
 
 type $negate<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$theOmniscient'];
     result: number;
@@ -15,7 +14,7 @@ type $negate<
 > = RESULT
 
 type $entry<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$ziltoid'];
     result: number;
@@ -33,15 +32,14 @@ export type entry<
 > = runProgram<
   {
     stack: input;
-    module: {
-      func: {
-        $negate: $negate;
-        $entry: $entry;
-      };
-      globals: {};
+    funcs: {
+      $negate: $negate;
+      $entry: $entry;
     };
+    globals: {};
     memory: {};
     memorySize: 0;
+    indirect: [];
   },
   debugMode
 >

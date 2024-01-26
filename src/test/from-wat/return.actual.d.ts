@@ -1,8 +1,7 @@
-import { ModuleField } from '../../module.ts'
-import { runProgram } from '../../program.ts'
+import { Func, runProgram } from '../../program.ts'
 
 type $return<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -19,7 +18,7 @@ type $return<
 > = RESULT
 
 type $entry<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -36,15 +35,14 @@ export type entry<
 > = runProgram<
   {
     stack: input;
-    module: {
-      func: {
-        $return: $return;
-        $entry: $entry;
-      };
-      globals: {};
+    funcs: {
+      $return: $return;
+      $entry: $entry;
     };
+    globals: {};
     memory: {};
     memorySize: 0;
+    indirect: [];
   },
   debugMode
 >

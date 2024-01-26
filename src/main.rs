@@ -29,22 +29,23 @@ mod tests {
         process::Command,
     };
 
+    /// SETTING THIS TO TRUE WILL FORCIBLY OVERWRITE ALL TESTS
+    const OVERWRITE: bool = true;
+
     use self::source_file::SourceFile;
 
     use super::*;
 
     fn skip_list() -> Vec<&'static str> {
         vec![
-            "c-add",      //
-            "add-middle", //
+            "c-add", //
+                    // "add-middle", //
         ]
     }
 
     fn focus_list() -> Vec<&'static str> {
         vec![
             // "if-else",
-            // "c-add", //
-            // "add-middle", //
         ]
     }
 
@@ -283,7 +284,11 @@ mod tests {
         for dir_entry in all_files {
             let source_file = parse_wat_and_dump(dir_entry);
             let actual = create_expected_d_ts(&source_file, dir_entry);
+            if OVERWRITE {
+                fs::write(dir_entry.path().with_extension("expected.d.ts"), &actual).unwrap();
+            }
             let expected = get_expected(dir_entry);
+
             assert_eq!(actual, expected, "{:?}", dir_entry.path().file_name());
         }
     }

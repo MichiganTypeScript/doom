@@ -1,6 +1,5 @@
 import { Entry, Instruction } from "./instructions.js";
-import { ProgramState, ExecutionContext, evaluate } from "./program.js";
-import { Globals as GlobalsType } from "./module.js";
+import { ProgramState, ExecutionContext, evaluate, Globals as GlobalsType, Func } from "./program.js";
 import { MemoryAddress } from "./memory.js";
 import { Cast } from "./utils.js";
 
@@ -16,9 +15,11 @@ export namespace State {
         instructions: instructions;
   
         executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+        globals: state['globals'];
+        indirect: state['indirect'];
         memory: state['memory'];
         memorySize: state['memorySize'];
-        module: state['module'];
         stack: state['stack'];
       }
     > = RESULT
@@ -87,10 +88,12 @@ export namespace State {
         stack: stack;
 
         executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+        globals: state['globals'];
+        indirect: state['indirect'];
         instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
-        module: state['module'];
       }
     > = RESULT
 
@@ -119,10 +122,12 @@ export namespace State {
       RESULT extends ProgramState = {
           executionContexts: executionContexts;
 
+          funcs: state['funcs'];
+          globals: state['globals'];
+          indirect: state['indirect'];
           instructions: state['instructions'];
           memory: state['memory'];
           memorySize: state['memorySize'];
-          module: state['module'];
           stack: state['stack'];
         }
     > = RESULT
@@ -170,24 +175,28 @@ export namespace State {
       export type set<
         state extends ProgramState,
         executionContext extends ExecutionContext,
-      > = {
-        executionContexts:
-          state['executionContexts'] extends [
-            ...infer remaining extends ExecutionContext[],
-            infer oldActive extends ExecutionContext, // throw away the old active
-          ]
-          ? [
-              ...remaining,
-              executionContext
-            ]
-          : never;
 
-        instructions: state['instructions'];
-        memory: state['memory'];
-        memorySize: state['memorySize'];
-        module: state['module'];
-        stack: state['stack'];
-      }
+        RESULT extends ProgramState = {
+          executionContexts:
+            state['executionContexts'] extends [
+              ...infer remaining extends ExecutionContext[],
+              infer oldActive extends ExecutionContext, // throw away the old active
+            ]
+            ? [
+                ...remaining,
+                executionContext
+              ]
+            : never;
+  
+          funcs: state['funcs'];
+          globals: state['globals'];
+          indirect: state['indirect'];
+          instructions: state['instructions'];
+          memory: state['memory'];
+          memorySize: state['memorySize'];
+          stack: state['stack'];
+        }
+      > = RESULT
 
       export namespace Locals {
         export type get<
@@ -234,11 +243,11 @@ export namespace State {
             State.ExecutionContexts.Active.set<
               state,
               {
-                branches: 
-                evaluate<
-                & State.ExecutionContexts.Active.Branches.get<state>
-                & { [k in id]: instructions }
-                >;
+                branches:
+                  evaluate<
+                  & State.ExecutionContexts.Active.Branches.get<state>
+                  & { [k in id]: instructions }
+                  >;
 
                 funcId: State.ExecutionContexts.Active.get<state>['funcId'];
                 locals: State.ExecutionContexts.Active.get<state>['locals'];
@@ -249,23 +258,38 @@ export namespace State {
     }
   }
 
+  export namespace Funcs {
+    export type get<
+      state extends ProgramState,
+
+      RESULT extends Record<string, Func> = state['funcs']
+    > = RESULT
+  }
+
   /** Helpers for Globals manipulation */
   export namespace Globals {
+    export type get<
+      state extends ProgramState,
+
+      RESULT extends GlobalsType = state['globals']
+    > = RESULT
+    
     export type insert<
       state extends ProgramState,
       globals extends GlobalsType,
 
       RESULT extends ProgramState = {
-        module: {
-          globals:
-            // TODO: maybe should omit this global?
-            & globals
-            & state['module']['func'];
 
-          func: state['module']['func'];
-        };
+        globals:
+          evaluate<
+          // TODO: maybe should omit this global?
+          & Omit<get<state>, keyof globals>
+          & globals
+          >;
 
         executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+        indirect: state['indirect'];
         instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
@@ -294,10 +318,12 @@ export namespace State {
             & state['memory']
             & { [k in address]: entry }
 
+        funcs: state['funcs'];
+        globals: state['globals'];
         executionContexts: state['executionContexts'];
+        indirect: state['indirect'];
         instructions: state['instructions'];
         memorySize: state['memorySize'];
-        module: state['module'];
         stack: state['stack'];
       }
     > = RESULT

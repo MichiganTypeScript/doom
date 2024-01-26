@@ -256,6 +256,11 @@ pub fn handle_instructions(
 
             handle_instructions(func, instrs, indent, result, context)
         }
+        Instruction::CallIndirect(call_indirect) => {
+            let id = format_index(&call_indirect.table);
+            result.push((indent, format!("{{ kind: 'CallIndirect'; id: '{id}' }},")));
+            handle_instructions(func, instrs, indent, result, context)
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }
@@ -272,7 +277,7 @@ pub fn handle_func(func: &Func) -> String {
                 .iter()
                 .map(|local| format!("'${}'", local.id.expect("local must have a name").name()))
                 .collect::<Vec<String>>()
-                .join("");
+                .join(", ");
 
             let instructions = handle_instructions(
                 func,

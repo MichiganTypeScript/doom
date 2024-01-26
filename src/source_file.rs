@@ -4,6 +4,9 @@ use std::{
 };
 
 use indexmap::{IndexMap, IndexSet};
+use wast::core::Elem;
+
+use crate::utils::format_index;
 
 /// This represents is a literal TypeScript file that is the final build output of the program
 pub struct SourceFile {
@@ -18,6 +21,9 @@ pub struct SourceFile {
 
     /// the declared size of that memory segment and the maximum memory size
     memory: RefCell<(u64, u64)>,
+
+    /// table ref elements
+    indirect: RefCell<Vec<String>>,
 }
 
 impl fmt::Debug for SourceFile {
@@ -55,7 +61,7 @@ impl ToString for SourceFile {
             .types
             .borrow()
             .iter()
-            .map(|(name, _)| format!("        {name}: {name};"))
+            .map(|(name, _)| format!("      {name}: {name};"))
             .collect::<Vec<_>>()
             .join("\n");
 
@@ -63,14 +69,16 @@ impl ToString for SourceFile {
             .globals
             .borrow()
             .iter()
-            .map(|(name, value)| format!("        {name}: {value};"))
+            .map(|(name, value)| format!("      {name}: {value};"))
             .collect::<Vec<_>>()
             .join("\n");
         if !globals.is_empty() {
-            globals = format!("\n{globals}\n      ");
+            globals = format!("\n{globals}\n    ");
         }
 
         let (memory_size, _max_memory) = self.memory.borrow().to_owned();
+
+        let indirect = self.indirect.borrow().to_owned().join(", ");
 
         let entry = format!(
             "export type entry<
@@ -79,14 +87,13 @@ impl ToString for SourceFile {
 > = runProgram<
   {{
     stack: input;
-    module: {{
-      func: {{
+    funcs: {{
 {funcs}
-      }};
-      globals: {{{globals}}};
     }};
+    globals: {{{globals}}};
     memory: {{}};
     memorySize: {memory_size};
+    indirect: [{indirect}];
   }},
   debugMode
 >"
@@ -103,6 +110,7 @@ impl SourceFile {
             imports: RefCell::new(IndexMap::new()),
             types: RefCell::new(IndexMap::new()),
             memory: RefCell::new((0, 0)),
+            indirect: RefCell::new(Vec::new()),
         }
     }
 
@@ -123,5 +131,18 @@ impl SourceFile {
     pub fn set_memory(&self, size: u64, max: u64) {
         self.memory.borrow_mut().0 = size;
         self.memory.borrow_mut().1 = max;
+    }
+
+    pub fn add_element(&self, element: &Elem) {
+        let strings: Vec<String> = match element.payload {
+            wast::core::ElemPayload::Indices(ref indices) => indices
+                .iter()
+                .map(format_index)
+                .map(|x| format!("\"{x}\""))
+                .collect(),
+            _ => panic!("only Indices ElemPayload supported"),
+        };
+
+        self.indirect.borrow_mut().extend(strings);
     }
 }

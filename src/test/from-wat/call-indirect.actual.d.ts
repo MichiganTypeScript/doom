@@ -1,35 +1,30 @@
 import { Func, runProgram } from '../../program.ts'
 
-type $andarist<
+type $add<
   RESULT extends Func = {
     kind: 'func';
-    params: ['$x'];
+    params: ['$a', '$b'];
     result: number;
     locals: [];
     instructions: [
-      { kind: 'LocalGet'; id: '$x' },
-      { kind: 'Const'; value: 12 },
-      { kind: 'Const'; value: 10 },
-      { kind: 'LocalGet'; id: '$x' },
-      { kind: 'Const'; value: -5 },
-      { kind: 'GreaterThan' },
-      { kind: 'Select' },
-      { kind: 'Add' },
-      { kind: 'Const'; value: 7 },
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'LocalGet'; id: '$b' },
       { kind: 'Add' },
     ];
   }
 > = RESULT
 
-type $entry<
+type $indirect_call<
   RESULT extends Func = {
     kind: 'func';
-    params: ['$a'];
+    params: ['$a', '$b'];
     result: number;
     locals: [];
     instructions: [
+      { kind: 'Const'; value: 0 },
       { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Call'; id: '$andarist' },
+      { kind: 'LocalGet'; id: '$b' },
+      { kind: 'CallIndirect'; id: '$__indirect_function_table' },
     ];
   }
 > = RESULT
@@ -41,13 +36,13 @@ export type entry<
   {
     stack: input;
     funcs: {
-      $andarist: $andarist;
-      $entry: $entry;
+      $add: $add;
+      $indirect_call: $indirect_call;
     };
     globals: {};
     memory: {};
     memorySize: 0;
-    indirect: [];
+    indirect: ["$add"];
   },
   debugMode
 >

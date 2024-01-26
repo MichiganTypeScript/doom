@@ -1,7 +1,6 @@
-import { ProgramState, evaluate } from "./program.js"
+import { Func, Param, ProgramState, evaluate } from "./program.js"
 import { Call as Apply, Numbers } from "hotscript"
 import { State } from "./state.js"
-import { ModuleField, Param } from "./module.js"
 import { MemoryAddress } from "./memory.js"
 import { Cast } from "./utils.js"
 
@@ -19,6 +18,10 @@ type Reverse<T extends any[]> =
 
 export type IAdd = {
   kind: "Add"
+}
+
+export type IAnd = {
+  kind: "And"
 }
 
 export type IBlock = {
@@ -46,6 +49,13 @@ export type IBranchIf = {
 
 export type ICall = {
   kind: "Call"
+
+  /** a function identifier */
+  id: string;
+}
+
+export type ICallIndirect = {
+  kind: "CallIndirect"
 
   /** a function identifier */
   id: string;
@@ -187,10 +197,12 @@ export type Entry = number;
 
 export type Instruction =
   | IAdd
+  | IAnd
   | IBlock
   | IBranch
   | IBranchIf
   | ICall
+  | ICallIndirect
   | IConst
   | IEndFunction
   | IEquals
@@ -230,6 +242,9 @@ export type selectInstruction<
   instruction extends IAdd
   ? Instructions.Add<state, instruction>
 
+  : instruction extends IAnd
+  ? Instructions.And<state, instruction>
+
   : instruction extends IBlock
   ? Instructions.Block<state, instruction>
 
@@ -241,6 +256,9 @@ export type selectInstruction<
 
   : instruction extends ICall
   ? Instructions.Call<state, instruction>
+
+  : instruction extends ICallIndirect
+  ? Instructions.CallIndirect<state, instruction>
 
   : instruction extends IConst
   ? Instructions.Const<state, instruction>
@@ -328,6 +346,24 @@ export namespace Instructions {
         [
           ...remaining,
           Apply<Numbers.Add<a, b>>
+        ]
+      >
+    : never
+
+  export type And<
+    state extends ProgramState,
+    instruction extends IAnd // unused
+  > =
+    State.Stack.get<state> extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry,
+    ]
+    ? State.Stack.set<
+        state,
+        [
+          ...remaining,
+          Apply<Numbers.Add<a, b>> // TODO THIS IS WRONG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         ]
       >
     : never
@@ -423,7 +459,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends ICall,
 
-    _func extends ModuleField.Func = state['module']['func'][instruction['id']],
+    _func extends Func = State.Funcs.get<state>[instruction['id']],
   > =
     // add the instructions from this func onto the stack
     State.Instructions.push<
@@ -449,6 +485,11 @@ export namespace Instructions {
         { kind: 'EndFunction', id: instruction['id'] }
       ]
     >
+
+  export type CallIndirect<
+    state extends ProgramState,
+    instruction extends ICallIndirect,
+  > = state;
 
   export type Const<
     state extends ProgramState,
@@ -506,18 +547,17 @@ export namespace Instructions {
   export type GlobalGet<
     state extends ProgramState,
     instruction extends IGlobalGet,
-    _id extends string = instruction['id'],
   > =
     State.Stack.push<
       state,
-      state['module']['globals'][_id]
+      State.Globals.get<state>[instruction['id']]
     >
 
   export type GlobalSet<
     state extends ProgramState,
     instruction extends IGlobalSet,
   > =
-    state['stack'] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer a extends Entry,
     ]

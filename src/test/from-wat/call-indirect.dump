@@ -1,0 +1,246 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Type(
+                Type {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "add_t",
+                    ),
+                    name: None,
+                    def: Func(
+                        FunctionType {
+                            params: [
+                                (
+                                    None,
+                                    None,
+                                    I32,
+                                ),
+                                (
+                                    None,
+                                    None,
+                                    I32,
+                                ),
+                            ],
+                            results: [
+                                I32,
+                            ],
+                        },
+                    ),
+                    parent: None,
+                    final_type: None,
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 140,
+                    },
+                    id: Some(
+                        "add",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32Add,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Table(
+                Table {
+                    span: Span {
+                        offset: 299,
+                    },
+                    id: Some(
+                        "__indirect_function_table",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Normal {
+                        ty: TableType {
+                            limits: Limits {
+                                min: 1,
+                                max: None,
+                            },
+                            elem: RefType {
+                                nullable: true,
+                                heap: Func,
+                            },
+                        },
+                        init_expr: None,
+                    },
+                },
+            ),
+            Elem(
+                Elem {
+                    span: Span {
+                        offset: 406,
+                    },
+                    id: Some(
+                        "e0",
+                    ),
+                    name: None,
+                    kind: Active {
+                        table: Num(
+                            0,
+                            Span {
+                                offset: 406,
+                            },
+                        ),
+                        offset: Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                            ],
+                        },
+                    },
+                    payload: Indices(
+                        [
+                            Id(
+                                "add",
+                            ),
+                        ],
+                    ),
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 520,
+                    },
+                    id: Some(
+                        "indirect_call",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                CallIndirect(
+                                    CallIndirect {
+                                        table: Id(
+                                            "__indirect_function_table",
+                                        ),
+                                        ty: TypeUse {
+                                            index: Some(
+                                                Id(
+                                                    "add_t",
+                                                ),
+                                            ),
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 4,
+    "I32Add": 1,
+    "I32Const": 1,
+    "CallIndirect": 1,
+}

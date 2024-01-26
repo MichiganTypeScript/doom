@@ -1,8 +1,7 @@
-import { ModuleField } from '../../module.ts'
-import { runProgram } from '../../program.ts'
+import { Func, runProgram } from '../../program.ts'
 
 type $storeValue<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$index', '$value'];
     result: number;
@@ -18,7 +17,7 @@ type $storeValue<
 > = RESULT
 
 type $loadValue<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$index'];
     result: number;
@@ -33,7 +32,7 @@ type $loadValue<
 > = RESULT
 
 type $foo<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$a'];
     result: number;
@@ -51,7 +50,7 @@ type $foo<
 > = RESULT
 
 type $entry<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$value'];
     result: number;
@@ -69,17 +68,16 @@ export type entry<
 > = runProgram<
   {
     stack: input;
-    module: {
-      func: {
-        $storeValue: $storeValue;
-        $loadValue: $loadValue;
-        $foo: $foo;
-        $entry: $entry;
-      };
-      globals: {};
+    funcs: {
+      $storeValue: $storeValue;
+      $loadValue: $loadValue;
+      $foo: $foo;
+      $entry: $entry;
     };
+    globals: {};
     memory: {};
     memorySize: 1;
+    indirect: [];
   },
   debugMode
 >
