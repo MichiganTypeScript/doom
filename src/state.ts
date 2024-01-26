@@ -5,12 +5,94 @@ import { MemoryAddress } from "./memory.js";
 import { Cast } from "./utils.js";
 
 export namespace State {
-  /** Helpers for Stack manipulation */
-  export namespace Stack {
+
+  /** Helpers for Instruction manipulation */
+  export namespace Instructions {
+    export type set<
+      state extends ProgramState,
+      instructions extends Instruction[],
+
+      RESULT extends ProgramState = {
+        instructions: instructions;
+  
+        executionContexts: state['executionContexts'];
+        memory: state['memory'];
+        memorySize: state['memorySize'];
+        module: state['module'];
+        stack: state['stack'];
+      }
+    > = RESULT
+
     export type get<
       state extends ProgramState
-    > = state['stack']
+    > = state['instructions'];
+
+    export type push<
+      state extends ProgramState,
+      instructions extends Instruction[],
     
+      RESULT extends ProgramState =
+        set<
+          state,
+          [
+            ...instructions,
+            ...state['instructions'],
+          ]
+        >
+    > = RESULT
+
+    export type pop<
+      state extends ProgramState,
+    
+      RESULT extends ProgramState =
+        get<state> extends [
+          infer discarded extends Instruction,
+          ...infer remaining extends Instruction[],
+        ]
+        ? set<
+            state,
+            remaining
+          >
+        : never
+
+    > = RESULT
+
+
+    export namespace Active {
+      export type get<
+        state extends ProgramState
+      > =
+        State.Instructions.get<state> extends [
+          infer active extends Instruction,
+          ...infer remaining extends Instruction[],
+        ]
+        ? active
+        : never;
+
+      /** in a control flow situation where we are trying to (effectively) match up parenthesis of control flow structures (like If, Else, End, etc.) we may need to skip instructions and continue until we find what our heart desires */
+      export type shouldSkip<
+        state extends ProgramState,
+        instruction extends Instruction,
+      > =
+        State.ExecutionContexts.Active.Masks.isEmpty<state> extends true
+
+        // we should not skip because the execution context mask is empty which means we can freely execute the next instruction
+        ? false
+
+        // there is at least some mask, so we should check whether it matches instruction
+        : instruction['kind'] extends State.ExecutionContexts.Active.Masks.Active.get<state>
+
+          // we should not skip because we hit the instruction we want
+          // the instruction itself will handle resolving things
+          ? false
+
+          // we
+          : true
+    }
+  }
+
+  /** Helpers for Stack manipulation */
+  export namespace Stack {
     export type set<
       state extends ProgramState,
       stack extends Entry[],
@@ -19,6 +101,7 @@ export namespace State {
         stack: stack;
 
         executionContexts: state['executionContexts'];
+        instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
         module: state['module'];
@@ -50,6 +133,7 @@ export namespace State {
       RESULT extends ProgramState = {
           executionContexts: executionContexts;
 
+          instructions: state['instructions'];
           memory: state['memory'];
           memorySize: state['memorySize'];
           module: state['module'];
@@ -112,86 +196,11 @@ export namespace State {
             ]
           : never;
 
+        instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
         module: state['module'];
         stack: state['stack'];
-      }
-
-
-      export namespace Instructions {
-        export type get<
-          state extends ProgramState,
-        > =
-          State.ExecutionContexts.Active.get<state>['instructions'];
-
-        export type set<
-          state extends ProgramState,
-          instructions extends Instruction[],
-
-          RESULT extends ProgramState = 
-            State.ExecutionContexts.Active.set<
-              state,
-              {
-                instructions: instructions;
-
-                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                locals: State.ExecutionContexts.Active.get<state>['locals'];
-                masks: State.ExecutionContexts.Active.get<state>['masks'];
-              }
-            >
-        > = RESULT
-
-        export type pop<
-          state extends ProgramState,
-        
-          RESULT extends ProgramState =
-            get<state> extends [
-              infer discarded extends Instruction,
-              ...infer remaining extends Instruction[],
-            ]
-            ? set<
-                state,
-                remaining
-              >
-            : never
-
-        > = RESULT
-
-        export type push<
-          state extends ProgramState,
-          instructions extends Instruction[],
-        
-          RESULT extends ProgramState =
-            set<
-              state,
-              [
-                ...instructions,
-                ...get<state>,
-              ]
-            >
-        > = RESULT
-
-      /** in a control flow situation where we are trying to (effectively) match up parenthesis of control flow structures (like If, Else, End, etc.) we may need to skip instructions and continue until we find what our heart desires */
-      export type shouldSkip<
-        state extends ProgramState,
-        instruction extends Instruction,
-      > =
-        State.ExecutionContexts.Active.Masks.isEmpty<state> extends true
-
-        // we should not skip because the execution context mask is empty which means we can freely execute the next instruction
-        ? false
-
-        // there is at least some mask, so we should check whether it matches instruction
-        : instruction['kind'] extends State.ExecutionContexts.Active.Masks.Active.get<state>
-
-          // we should not skip because we hit the instruction we want
-          // the instruction itself will handle resolving things
-          ? false
-
-          // we
-          : true
-
       }
 
       export namespace Locals {
@@ -217,7 +226,6 @@ export namespace State {
                   >;
 
                 funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                instructions: State.ExecutionContexts.Active.get<state>['instructions'];
                 masks: State.ExecutionContexts.Active.get<state>['masks'];
               }
               >
@@ -249,7 +257,6 @@ export namespace State {
                 masks: mask;
 
                 funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                instructions: State.ExecutionContexts.Active.get<state>['instructions'];
                 locals: State.ExecutionContexts.Active.get<state>['locals'];
               }
               >
@@ -269,7 +276,6 @@ export namespace State {
                 ];
 
                 funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                instructions: State.ExecutionContexts.Active.get<state>['instructions'];
                 locals: State.ExecutionContexts.Active.get<state>['locals'];
               }
               >
@@ -334,6 +340,7 @@ export namespace State {
         };
 
         executionContexts: state['executionContexts'];
+        instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
         stack: state['stack'];
@@ -362,6 +369,7 @@ export namespace State {
             & { [k in address]: entry }
 
         executionContexts: state['executionContexts'];
+        instructions: state['instructions'];
         memorySize: state['memorySize'];
         module: state['module'];
         stack: state['stack'];
