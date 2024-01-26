@@ -1,0 +1,315 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Memory(
+                Memory {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "memory",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "memory",
+                        ],
+                    },
+                    kind: Normal(
+                        B32 {
+                            limits: Limits {
+                                min: 1,
+                                max: None,
+                            },
+                            shared: false,
+                        },
+                    ),
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 51,
+                    },
+                    id: Some(
+                        "foo",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [
+                            Local {
+                                id: Some(
+                                    "start",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                        ],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "start",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "start",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 238,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "start",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 4,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 335,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "start",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "c",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 8,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 403,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "start",
+                                    ),
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 8,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 451,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "start",
+                                    ),
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 4,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 503,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "start",
+                                    ),
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 555,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                I32Sub,
+                                I32Add,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "c",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 628,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "c",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "foo",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "c",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 12,
+    "I32Store": 3,
+    "I32Load": 3,
+    "I32Const": 1,
+    "LocalSet": 1,
+    "I32Sub": 1,
+    "I32Add": 1,
+    "Call": 1,
+}

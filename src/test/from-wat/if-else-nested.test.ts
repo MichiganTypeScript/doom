@@ -21,7 +21,7 @@ const example = ($n: number, $control: number) => {
   return 105 + $n
 }
 
-test('example', () => {
+test('if-else example', () => {
   expect(example(10, 0)).toStrictEqual(115);
   expect(example(10, 1)).toStrictEqual(111);
   expect(example(10, 2)).toStrictEqual(92);

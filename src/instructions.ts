@@ -1,13 +1,14 @@
-import { Func, Param, ProgramState, evaluate } from "./program.js"
+import {
+  Cast,
+  Func,
+  MemoryAddress,
+  Param,
+  ProgramState,
+  Reverse,
+  evaluate,
+} from "./program.js"
 import { Call as Apply, Numbers } from "hotscript"
 import { State } from "./state.js"
-import { MemoryAddress } from "./memory.js"
-import { Cast } from "./utils.js"
-
-type Reverse<T extends any[]> =
-  T extends [infer head, ...infer tail]
-  ? [...Reverse<tail>, head]
-  : []
 
 /*
  * No.
@@ -754,13 +755,19 @@ export namespace Instructions {
     RESULT extends ProgramState =
       state['stack'] extends [
         ...infer remaining extends Entry[],
-        infer address extends keyof state['memory'],
+        infer address extends MemoryAddress
       ]
       ? State.Stack.set<
           [
             ...remaining,
-            // no idea why this Cast is needed, but it is
-            Cast<state['memory'][address], Entry>,
+
+            State.Memory.getByAddress<
+              Apply<Numbers.Add<
+                address,
+                instruction['offset']
+              >>,
+              state
+            >
           ],
 
           state
@@ -784,7 +791,7 @@ export namespace Instructions {
     state extends ProgramState,
 
     RESULT extends ProgramState =
-      state['stack'] extends [
+      State.Stack.get<state> extends [
         ...infer remaining extends Entry[],
         infer entry extends Entry,
       ]
@@ -805,7 +812,7 @@ export namespace Instructions {
     state extends ProgramState,
 
     RESULT extends ProgramState =
-      state['stack'] extends [
+      State.Stack.get<state> extends [
         ...infer remaining extends Entry[],
         infer entry extends Entry
       ]
@@ -963,7 +970,7 @@ export namespace Instructions {
     // TODO: gotta grab the offset from somewhere
 
     RESULT extends ProgramState =
-      state['stack'] extends [
+      State.Stack.get<state> extends [
         ...infer remaining extends Entry[],
         infer address extends MemoryAddress,
         infer entry extends Entry,
@@ -972,7 +979,12 @@ export namespace Instructions {
           remaining,
 
           State.Memory.insert<
-            address,
+
+            Apply<Numbers.Add<
+              address,
+              instruction['offset']
+            >>,
+
             entry,
             state
           >

@@ -8,5 +8,3 @@ export const getWasm = async (directory: string, filePath: string) => {
   const instance = await WebAssembly.instantiate(wasmModule);
   return instance.exports.entry as CallableFunction;
 }
-
-export type Cast<T, U> = T extends U ? T : never;

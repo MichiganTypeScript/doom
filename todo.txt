@@ -2,9 +2,7 @@
 
 ## Implementation improvements
 
-- memory offsets
 - bitwise numbers
-- table / element
 
 ## Refactors
 

@@ -1,6 +1,6 @@
-import type { entry } from './test/from-wat/call-indirect.actual.js';
+import type { entry } from './test/from-wat/memory-offset.actual.js';
 import { State } from './state.js';
-type e = entry<[5, 6], true> // =>
+type e = entry<[10, 20, 30], true> // =>
 
 type stack = e['stack']; // =>
 

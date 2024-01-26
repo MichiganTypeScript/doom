@@ -1,17 +1,18 @@
 import { Entry, Instruction } from "./instructions.js";
 import {
-  Branches as BranchesType,
+  BranchesById as BranchesType,
+  Cast,
   ExecutionContext,
   Func,
-  Funcs as FuncsType,
-  Globals as GlobalsType,
-  Locals as LocalsType,
+  FuncsById,
+  GlobalsById,
+  LocalsById,
+  MemoryAddress,
+  MemoryByAddress,
   Param,
   ProgramState,
   evaluate,
 } from "./program.js";
-import { MemoryAddress } from "./memory.js";
-import { Cast } from "./utils.js";
 import { Call, Numbers } from "hotscript";
 
 export namespace State {
@@ -252,7 +253,7 @@ export namespace State {
         export type get<
           state extends ProgramState,
 
-          RESULT extends LocalsType =
+          RESULT extends LocalsById =
             State.ExecutionContexts.Active.get<state>['locals']
         > = RESULT;
 
@@ -317,7 +318,7 @@ export namespace State {
     export type get<
       state extends ProgramState,
 
-      RESULT extends FuncsType =
+      RESULT extends FuncsById =
         state['funcs']
     > = RESULT
 
@@ -348,12 +349,12 @@ export namespace State {
     export type get<
       state extends ProgramState,
 
-      RESULT extends GlobalsType =
+      RESULT extends GlobalsById =
         state['globals']
     > = RESULT
     
     export type insert<
-      globals extends GlobalsType,
+      globals extends GlobalsById,
       state extends ProgramState,
 
       RESULT extends ProgramState = {
@@ -378,12 +379,19 @@ export namespace State {
 
   export namespace Memory {
     export type get<
-      address extends keyof state['memory'],
+      state extends ProgramState,
+
+      RESULT extends MemoryByAddress =
+        state['memory']
+    > = RESULT
+
+    export type getByAddress<
+      address extends MemoryAddress,
       state extends ProgramState,
 
       RESULT extends Entry =
         // no idea why this Cast is needed, but it is
-        Cast<state['memory'][address], Entry>
+        get<state>[address]
     > = RESULT
 
     export type insert<

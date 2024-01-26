@@ -1,9 +1,9 @@
 import { Entry, IHalt, Instruction, selectInstruction } from "./instructions.js"
-import { State } from "./state.js"
-import { MemoryByAddress } from "./memory.js";
 
+export type MemoryAddress = number;
+export type MemoryByAddress = Record<MemoryAddress, number>
 export type BranchId = string;
-export type Globals = Record<string, Entry>;
+export type GlobalsById = Record<string, Entry>;
 export type Param = string;
 export type Func = {
   kind: 'func';
@@ -12,13 +12,18 @@ export type Func = {
   locals: string[];
   instructions: Instruction[];
 }
-export type Locals = Record<string, number>;
-export type Branches = Record<BranchId, Instruction[]>;
-export type Funcs = Record<string, Func>;
+export type LocalsById = Record<string, number>;
+export type BranchesById = Record<BranchId, Instruction[]>;
+export type FuncsById = Record<string, Func>;
+export type Cast<T, U> = T extends U ? T : never;
+export type Reverse<T extends any[]> =
+  T extends [infer head, ...infer tail]
+  ? [...Reverse<tail>, head]
+  : []
 
 export type ExecutionContext = {
   /** the current local variable values */
-  locals: Locals;
+  locals: LocalsById;
 
   /** not really required, but really helpful for debugging */
   funcId: string;
@@ -26,16 +31,16 @@ export type ExecutionContext = {
   /**
    * a control flow helper that tells the program how to interpret the next when it hits a branch
    */
-  branches: Branches;
+  branches: BranchesById;
 }
 
 export type ProgramState = {
   /** a stack of execution contexts */
   executionContexts: ExecutionContext[];
 
-  funcs: Funcs;
+  funcs: FuncsById;
 
-  globals: Globals;
+  globals: GlobalsById;
 
   /** used for dynamic dispatch: maps directly to funcs */
   indirect: string[];

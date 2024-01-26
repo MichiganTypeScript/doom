@@ -30,7 +30,7 @@ mod tests {
     };
 
     /// SETTING THIS TO TRUE WILL FORCIBLY OVERWRITE ALL TESTS
-    const OVERWRITE: bool = true;
+    const OVERWRITE: bool = false;
 
     use self::source_file::SourceFile;
 
@@ -44,7 +44,7 @@ mod tests {
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            // "if-else",
+            "memory-offset", //
         ]
     }
 
