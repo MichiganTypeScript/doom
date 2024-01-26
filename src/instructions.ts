@@ -26,6 +26,8 @@ export type IBlock = {
 
   /** a block identifier */
   id: string;
+
+  instructions: Instruction[];
 }
 
 export type IBranch = {
@@ -316,7 +318,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IAdd // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer b extends Entry,
       infer a extends Entry,
@@ -333,17 +335,56 @@ export namespace Instructions {
   export type Block<
     state extends ProgramState,
     instruction extends IBlock,
-  > = state // TODO
+  > =
+    // then push the block's instructions onto the stack
+    State.Instructions.push<
+
+      // first cache existing instructions (as they are at this moment) in the execution context for when we break to this block later
+      State.ExecutionContexts.Active.Branches.set<
+        state,
+        instruction['id'],
+        State.Instructions.get<state>
+      >,
+
+      instruction['instructions']
+    >
 
   export type BranchIf<
     state extends ProgramState,
     instruction extends IBranchIf,
-  > = state // TODO
+  > =
+    State.Stack.get<state> extends [
+      ...infer remaining extends Entry[],
+      infer condition extends Entry,
+    ]
+    ? condition extends 0
+
+      // false branch
+      // nothing happens. we just pop the stack and continue on to the next instruction
+      ? State.Stack.set<
+          state,
+          remaining
+        >
+
+      // true branch
+      : State.Instructions.set<
+          State.Stack.set<
+            state,
+            remaining
+          >,
+          State.ExecutionContexts.Active.Branches.get<state>[instruction['id']]
+        >
+
+    : never
 
   export type Branch<
     state extends ProgramState,
     instruction extends IBranch,
-  > = state // TODO
+  > = 
+    State.Instructions.set<
+      state,
+      State.ExecutionContexts.Active.Branches.get<state>[instruction['id']]
+    >
 
   /** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
   type PopulateParams<
@@ -356,7 +397,7 @@ export namespace Instructions {
       infer param extends Param,
       ...infer remainingParams extends Param[],
     ]
-    ? state["stack"] extends [
+    ? State.Stack.get<state> extends [
         ...infer remainingStack extends Entry[],
         infer pop extends Entry,
       ]
@@ -396,7 +437,7 @@ export namespace Instructions {
           {
             locals: {},
             funcId: instruction['id'],
-            masks: [],
+            branches: {},
           }
         >,
         instruction['id'],
@@ -422,7 +463,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IEquals // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer b extends Entry,
       infer a extends Entry,
@@ -440,7 +481,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IEqualsZero // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer a extends Entry,
     ]
@@ -493,7 +534,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IGreaterThan // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer a extends Entry,
       infer b extends Entry,
@@ -511,7 +552,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IGreaterThanOrEqual // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer a extends Entry,
       infer b extends Entry,
@@ -534,7 +575,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IIf,
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer condition extends Entry,
     ]
@@ -568,7 +609,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends ILessThan // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer a extends Entry,
       infer b extends Entry,
@@ -586,7 +627,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends ILessThanOrEqual // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer a extends Entry,
       infer b extends Entry,
@@ -664,7 +705,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends IMultiply // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer b extends Entry,
       infer a extends Entry,
@@ -683,7 +724,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends INegate // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer a extends Entry,
     ]
@@ -741,7 +782,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends ISelect // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer b extends Entry,
       infer a extends Entry,
@@ -762,7 +803,7 @@ export namespace Instructions {
     state extends ProgramState,
     instruction extends ISubtract // unused
   > =
-    state["stack"] extends [
+    State.Stack.get<state> extends [
       ...infer remaining extends Entry[],
       infer b extends Entry,
       infer a extends Entry,

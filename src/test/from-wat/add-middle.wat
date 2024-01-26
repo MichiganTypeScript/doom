@@ -78,16 +78,16 @@
     )
 
     (global.set $__stack_end
-      ;;
+      ;; the end of the stack is the base + 1024 bytes
       (i32.and
 
-        ;;
+        ;; the base of the stack
         (i32.add
           (i32.const 1028)
           (i32.const 15)
         )
         
-        ;;
+        ;; the end of the stack
         (i32.const -16)
       )
     )

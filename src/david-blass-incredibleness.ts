@@ -1,28 +1,29 @@
-import type { entry } from './test/from-wat/if-else-nested.actual.js';
+import type { entry } from './test/from-wat/br-if.actual.js';
 import { State } from './state.js';
-type e = entry<[10, 1], true> // =>
+type e = entry<[1], true> // =>
 
 type stack = e['stack']; // =>
 
-type executionContexts = e['executionContexts'];
-type c0f = executionContexts[0]['funcId']; // =>
-type c0l = executionContexts[0]['locals']; // =>
-type c0m = executionContexts[0]['masks'];  // =>
+type ec = e['executionContexts'];
+type c0f = ec[0]['funcId']; // =>
+type c0l = ec[0]['locals']; // =>
+type c0b = ec[0]['branches'];  // =>
 
-type c1f = executionContexts[1]['funcId']; // =>
-type c1l = executionContexts[1]['locals']; // =>
-type c1m = executionContexts[1]['masks'];  // =>
+type c1f = ec[1]['funcId']; // =>
+type c1l = ec[1]['locals']; // =>
+type c1b = ec[1]['branches'];  // =>
 
-type c2f = executionContexts[2]['funcId']; // =>
-type c2l = executionContexts[2]['locals']; // =>
-type c2m = executionContexts[2]['masks'];  // =>
-
-type c3 = executionContexts[3]; // =>
-type c4 = executionContexts[4]; // =>
-type c5 = executionContexts[5]; // =>
+type c3 = ec[2]; // =>
+type c4 = ec[3]; // =>
 
 type memory = e['memory'];
 //   ^?
 
-type instructions = e['instructions']; // =>
-type instruction = State.Instructions.Active.get<e>; // =>
+type i = e['instructions']; // =>
+type a = State.Instructions.Active.get<e>; // =>
+type i0 = e['instructions'][0]; // =>
+type i1 = e['instructions'][1]; // =>
+type i2 = e['instructions'][2]; // =>
+type i3 = e['instructions'][3]; // =>
+type i4 = e['instructions'][4]; // =>
+type i5 = e['instructions'][5]; // =>

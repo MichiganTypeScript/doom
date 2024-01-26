@@ -22,16 +22,16 @@ Usage count (in Doom) is the number on the right
 | LocalGet          | 18967 | ✅           |
 | I32Const          | 17073 | ✅           |
 | I32Load           | 5853  | ✅           |
-| End               | 4218  | ✅ if        |
+| End               | 4218  | ✅           |
 | I32Add            | 4175  | ✅           |
 | LocalTee          | 4081  | ✅           |
 | Call              | 3824  | ✅           |
 | LocalSet          | 3602  | ✅           |
 | I32Store          | 3413  | ✅           |
-| BrIf              | 2041  | ⏸️ c-add     |
+| BrIf              | 2041  | ✅           |
 | If                | 1888  | ✅           |
-| Block             | 1692  | ⏸️ c-add     |
-| Br                | 1479  | ⏸️           |
+| Block             | 1692  | ✅           |
+| Br                | 1479  | ✅           |
 | I32Sub            | 1424  | ✅           |
 | I32Eqz            | 1198  | ✅           |
 | I32Shl            | 954   | ❌           |

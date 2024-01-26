@@ -219,7 +219,7 @@ pub fn handle_instructions(
 
             if this_context == Some("If") {
                 result.push((indent, format!("];")));
-            } else if this_context == Some("Else") {
+            } else if this_context == Some("Else") || this_context == Some("Block") {
                 result.push((indent - 1, format!("];")));
             } else {
                 panic!("unexpected context {:#?}", this_context);
@@ -244,7 +244,16 @@ pub fn handle_instructions(
         }
         Instruction::Block(block) => {
             let label = block.label.expect("blocks must have labels").name();
-            result.push((indent, format!("{{ kind: 'Block'; id: '${label}' }},")));
+            result.push((indent, format!("{{ kind: 'Block';")));
+            result.push((indent + 1, format!("id: '${label}';")));
+            result.push((indent + 1, format!("instructions: [")));
+
+            context.push("Block");
+
+            let block_instrs = vec![];
+            let block_branch = handle_instructions(func, instrs, indent + 2, block_instrs, context);
+            result.extend(block_branch);
+
             handle_instructions(func, instrs, indent, result, context)
         }
         _ => {

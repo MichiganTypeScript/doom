@@ -3,7 +3,7 @@ import { State } from "./state.js"
 import { WasmModule } from "./module.js";
 import { MemoryByAddress } from "./memory.js";
 
-export type Mask = 'If' | 'Else' | 'End';
+export type BranchId = string;
 
 export type ExecutionContext = {
   /** the current local variable values */
@@ -13,11 +13,9 @@ export type ExecutionContext = {
   funcId: string;
 
   /**
-   * a control flow mask
-   * 
-   * this tells the program to keep going until it reaches the desired statement
+   * a control flow helper that tells the program how to interpret the next when it hits a branch
    */
-  masks: Mask[];
+  branches: Record<BranchId, Instruction[]>;
 }
 
 export type ProgramState = {

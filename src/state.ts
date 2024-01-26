@@ -1,5 +1,5 @@
 import { Entry, Instruction } from "./instructions.js";
-import { ProgramState, ExecutionContext, evaluate, Mask } from "./program.js";
+import { ProgramState, ExecutionContext, evaluate } from "./program.js";
 import { Globals as GlobalsType } from "./module.js";
 import { MemoryAddress } from "./memory.js";
 import { Cast } from "./utils.js";
@@ -73,6 +73,12 @@ export namespace State {
 
   /** Helpers for Stack manipulation */
   export namespace Stack {
+    export type get<
+      state extends ProgramState,
+
+      RESULT extends Entry[] = state['stack']
+    > = RESULT
+    
     export type set<
       state extends ProgramState,
       stack extends Entry[],
@@ -206,7 +212,36 @@ export namespace State {
                   >;
 
                 funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                masks: State.ExecutionContexts.Active.get<state>['masks'];
+                branches: State.ExecutionContexts.Active.get<state>['branches'];
+              }
+              >
+        > = RESULT
+      }
+
+      export namespace Branches {
+        export type get<
+          state extends ProgramState
+        > =
+          State.ExecutionContexts.Active.get<state>['branches'];
+
+        
+        export type set<
+          state extends ProgramState,
+          id extends string,
+          instructions extends Instruction[],
+
+          RESULT extends ProgramState = 
+            State.ExecutionContexts.Active.set<
+              state,
+              {
+                branches: 
+                evaluate<
+                & State.ExecutionContexts.Active.Branches.get<state>
+                & { [k in id]: instructions }
+                >;
+
+                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
+                locals: State.ExecutionContexts.Active.get<state>['locals'];
               }
               >
         > = RESULT
