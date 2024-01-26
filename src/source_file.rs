@@ -99,7 +99,7 @@ impl ToString for SourceFile {
 >"
         );
 
-        format!("{imports}\n{types}\n{entry}")
+        format!("{imports}\n{types}\n{entry}\n")
     }
 }
 

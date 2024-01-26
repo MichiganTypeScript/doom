@@ -1,9 +1,15 @@
+# TODO List
+
+## Implementation improvements
+
 - memory offsets
 - bitwise numbers
 - table / element
 
-refactors
-- add a newline after each test
+## Refactors
 
-after everything works
+## Other
+
+### once Doom runs
+
 - publish as an NPM (lol)
