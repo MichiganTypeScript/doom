@@ -38,7 +38,7 @@ mod tests {
 
     fn skip_list() -> Vec<&'static str> {
         vec![
-            "c-add", //
+            // "c-add", //
         ]
     }
 

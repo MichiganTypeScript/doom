@@ -1,8 +1,7 @@
-import { ModuleField } from '../../module.ts'
-import { runProgram } from '../../program.ts'
+import { Func, runProgram } from '../../program.ts'
 
 type $__wasm_call_ctors<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -14,7 +13,7 @@ type $__wasm_call_ctors<
 > = RESULT
 
 type $entry<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$p0', '$p1'];
     result: number;
@@ -51,7 +50,7 @@ type $entry<
 > = RESULT
 
 type $_initialize<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -71,7 +70,7 @@ type $_initialize<
 > = RESULT
 
 type $stackSave<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -83,7 +82,7 @@ type $stackSave<
 > = RESULT
 
 type $stackRestore<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$p0'];
     result: number;
@@ -96,7 +95,7 @@ type $stackRestore<
 > = RESULT
 
 type $stackAlloc<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: ['$p0'];
     result: number;
@@ -115,7 +114,7 @@ type $stackAlloc<
 > = RESULT
 
 type $emscripten_stack_init<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -134,7 +133,7 @@ type $emscripten_stack_init<
 > = RESULT
 
 type $emscripten_stack_get_free<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -148,7 +147,7 @@ type $emscripten_stack_get_free<
 > = RESULT
 
 type $emscripten_stack_get_base<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -160,7 +159,7 @@ type $emscripten_stack_get_base<
 > = RESULT
 
 type $emscripten_stack_get_end<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -172,7 +171,7 @@ type $emscripten_stack_get_end<
 > = RESULT
 
 type $__errno_location<
-  RESULT extends ModuleField.Func = {
+  RESULT extends Func = {
     kind: 'func';
     params: [];
     result: number;
@@ -189,28 +188,27 @@ export type entry<
 > = runProgram<
   {
     stack: input;
-    module: {
-      func: {
-        $__wasm_call_ctors: $__wasm_call_ctors;
-        $entry: $entry;
-        $_initialize: $_initialize;
-        $stackSave: $stackSave;
-        $stackRestore: $stackRestore;
-        $stackAlloc: $stackAlloc;
-        $emscripten_stack_init: $emscripten_stack_init;
-        $emscripten_stack_get_free: $emscripten_stack_get_free;
-        $emscripten_stack_get_base: $emscripten_stack_get_base;
-        $emscripten_stack_get_end: $emscripten_stack_get_end;
-        $__errno_location: $__errno_location;
-      };
-      globals: {
-        $__stack_pointer: 5243920;
-        $__stack_end: 0;
-        $__stack_base: 0;
-      };
+    funcs: {
+      $__wasm_call_ctors: $__wasm_call_ctors;
+      $entry: $entry;
+      $_initialize: $_initialize;
+      $stackSave: $stackSave;
+      $stackRestore: $stackRestore;
+      $stackAlloc: $stackAlloc;
+      $emscripten_stack_init: $emscripten_stack_init;
+      $emscripten_stack_get_free: $emscripten_stack_get_free;
+      $emscripten_stack_get_base: $emscripten_stack_get_base;
+      $emscripten_stack_get_end: $emscripten_stack_get_end;
+      $__errno_location: $__errno_location;
+    };
+    globals: {
+      $__stack_pointer: 5243920;
+      $__stack_end: 0;
+      $__stack_base: 0;
     };
     memory: {};
     memorySize: 256;
+    indirect: ["$__wasm_call_ctors"];
   },
   debugMode
 >

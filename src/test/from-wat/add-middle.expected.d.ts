@@ -85,7 +85,7 @@ export type entry<
       $__stack_base: 0;
     };
     memory: {};
-    memorySize: 1;
+    memorySize: 256;
     indirect: ["$__wasm_call_ctors"];
   },
   debugMode

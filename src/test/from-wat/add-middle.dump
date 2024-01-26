@@ -340,9 +340,9 @@ Module {
                     kind: Normal(
                         B32 {
                             limits: Limits {
-                                min: 1,
+                                min: 256,
                                 max: Some(
-                                    1,
+                                    256,
                                 ),
                             },
                             shared: false,
@@ -353,7 +353,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2375,
+                        offset: 2379,
                     },
                     id: Some(
                         "__stack_pointer",
@@ -380,7 +380,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2433,
+                        offset: 2437,
                     },
                     id: Some(
                         "__stack_end",
@@ -407,7 +407,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 2481,
+                        offset: 2485,
                     },
                     id: Some(
                         "__stack_base",
@@ -434,7 +434,7 @@ Module {
             Table(
                 Table {
                     span: Span {
-                        offset: 2604,
+                        offset: 2608,
                     },
                     id: Some(
                         "__indirect_function_table",
@@ -461,7 +461,7 @@ Module {
             Elem(
                 Elem {
                     span: Span {
-                        offset: 2728,
+                        offset: 2732,
                     },
                     id: Some(
                         "e0",
@@ -471,7 +471,7 @@ Module {
                         table: Num(
                             0,
                             Span {
-                                offset: 2728,
+                                offset: 2732,
                             },
                         ),
                         offset: Expression {

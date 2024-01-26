@@ -93,7 +93,7 @@
     )
   )
 
-  (memory $memory (export "memory") 1 1)
+  (memory $memory (export "memory") 256 256)
 
   (global $__stack_pointer (mut i32) (i32.const 5243920))
   (global $__stack_end (mut i32) (i32.const 0))
