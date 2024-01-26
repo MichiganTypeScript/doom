@@ -1,6 +1,6 @@
-import type { entry } from './test/from-wat/if-else.actual.js';
+import type { entry } from './test/from-wat/if-else-nested.actual.js';
 import { State } from './state.js';
-type e = entry<[10, 2], true> // =>
+type e = entry<[10, 1], true> // =>
 
 type stack = e['stack']; // =>
 

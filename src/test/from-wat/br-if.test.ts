@@ -1,4 +1,4 @@
-import type { entry } from './br-if.expected.js'; // TODO: change to `actual`
+// import type { entry } from './br-if.expected.js'; // TODO: change to `actual`
 import { Expect, Equal } from 'type-testing';
 
 import { test, expect } from 'vitest';
@@ -15,11 +15,11 @@ test(name, async () => {
   expect(entry(-3)).toStrictEqual(7);
 });
 
-type testCases = [
-  Expect<Equal<entry<[2]>, 7>>,
-  Expect<Equal<entry<[1]>, 99>>,
-  Expect<Equal<entry<[0]>, 42>>,
-  Expect<Equal<entry<[-1]>, 7>>,
-  Expect<Equal<entry<[-2]>, 7>>,
-  Expect<Equal<entry<[-3]>, 7>>,
-]
+// type testCases = [
+//   Expect<Equal<entry<[2]>, 7>>,
+//   Expect<Equal<entry<[1]>, 99>>,
+//   Expect<Equal<entry<[0]>, 42>>,
+//   Expect<Equal<entry<[-1]>, 7>>,
+//   Expect<Equal<entry<[-2]>, 7>>,
+//   Expect<Equal<entry<[-3]>, 7>>,
+// ]

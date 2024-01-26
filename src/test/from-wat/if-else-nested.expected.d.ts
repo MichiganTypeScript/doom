@@ -1,0 +1,97 @@
+import { ModuleField } from '../../module.ts'
+import { runProgram } from '../../program.ts'
+
+type $example<
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$n', '$control'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$control' },
+      { kind: 'Const'; value: 1 },
+      { kind: 'Equals' },
+      { kind: 'If';
+        then: [
+          { kind: 'Const'; value: 101 },
+          { kind: 'LocalGet'; id: '$n' },
+          { kind: 'Add' },
+        ];
+        else: [
+          { kind: 'LocalGet'; id: '$control' },
+          { kind: 'Const'; value: 2 },
+          { kind: 'Equals' },
+          { kind: 'If';
+            then: [
+              { kind: 'Const'; value: 102 },
+              { kind: 'LocalGet'; id: '$n' },
+              { kind: 'Subtract' },
+            ];
+            else: [
+              { kind: 'LocalGet'; id: '$control' },
+              { kind: 'Const'; value: 3 },
+              { kind: 'GreaterThanOrEqual' },
+              { kind: 'If';
+                then: [
+                  { kind: 'LocalGet'; id: '$control' },
+                  { kind: 'Const'; value: 5 },
+                  { kind: 'GreaterThan' },
+                  { kind: 'If';
+                    then: [
+                      { kind: 'Const'; value: 103 },
+                      { kind: 'LocalGet'; id: '$n' },
+                      { kind: 'Multiply' },
+                    ];
+                    else: [
+                      { kind: 'Const'; value: 104 },
+                      { kind: 'LocalGet'; id: '$n' },
+                      { kind: 'Add' },
+                    ];
+                  },
+                ];
+                else: [
+                  { kind: 'Const'; value: 105 },
+                  { kind: 'LocalGet'; id: '$n' },
+                  { kind: 'Add' },
+                ];
+              },
+            ];
+          },
+        ];
+      },
+    ];
+  }
+> = RESULT
+
+type $entry<
+  RESULT extends ModuleField.Func = {
+    kind: 'func';
+    params: ['$a', '$b'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$a' },
+      { kind: 'LocalGet'; id: '$b' },
+      { kind: 'Call'; id: '$example' },
+    ];
+  }
+> = RESULT
+
+export type entry<
+  input extends number[] = [],
+  debugMode extends boolean = false
+> = runProgram<
+  {
+    stack: input;
+    module: {
+      func: {
+        $example: $example;
+        $entry: $entry;
+      };
+      globals: {};
+    };
+    memory: {};
+    memorySize: 0;
+  },
+  debugMode
+>
