@@ -55,33 +55,8 @@ Frame updateGrid(Frame frame) {
     return newFrame;
 }
 
-// Define a maximum size for the grid string
-#define MAX_GRID_SIZE 1000
-
-char* displayGrid(Frame frame) {
-    // - false is a space
-    // - true is an x
-    // - rows are separated by a newline
-
-    static char gridString[MAX_GRID_SIZE];
-    int position = 0;
-
-    for (int i = 0; i < frame.rows; i++) {
-        for (int j = 0; j < frame.columns; j++) {
-            if (position < MAX_GRID_SIZE - 2) {
-                gridString[position++] = frame.grid[i][j] ? 'x' : ' ';
-            }
-        }
-        if (position < MAX_GRID_SIZE - 2) {
-            gridString[position++] = '\n';
-        }
-    }
-    gridString[position] = '\0';
-    return gridString;
-}
-
 EMSCRIPTEN_KEEPALIVE
-char* entry(int iterations) {
+Frame entry(int iterations) {
     Frame frame;
     frame.rows = 9;
     frame.columns = 9;
@@ -108,7 +83,7 @@ char* entry(int iterations) {
         frame = updateGrid(frame);
     }
 
-    return displayGrid(frame);
+    return frame;
 }
 
 int main() {

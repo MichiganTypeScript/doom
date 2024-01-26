@@ -1,6 +1,7 @@
 {
-  "files.associations": {
-    "emscripten.h": "c"
-  },
-  "editor.rulers": []
+  // "files.associations": {
+  //   "emscripten.h": "c"
+  // },
+  "editor.rulers": [],
+  "C_Cpp.errorSquiggles": "disabled"
 }
