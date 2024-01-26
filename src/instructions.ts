@@ -9,6 +9,7 @@ import {
 } from "./program.js"
 import { Call as Apply, Numbers } from "hotscript"
 import { State } from "./state.js"
+import { BitwiseAnd } from "./binary.js"
 
 /*
  * No.
@@ -366,7 +367,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.Add<a, b>> // TODO THIS IS WRONG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            BitwiseAnd<a, b>
           ],
           state
         >
