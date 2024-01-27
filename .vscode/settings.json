@@ -3,5 +3,6 @@
   //   "emscripten.h": "c"
   // },
   "editor.rulers": [],
-  "C_Cpp.errorSquiggles": "disabled"
+  "C_Cpp.errorSquiggles": "disabled",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
