@@ -67,8 +67,8 @@ export type IConst = {
 }
 
 /** a synthetic instruction for repeating the instructions of a loop */
-export type IContinue = {
-  kind: "Continue"
+export type IEndLoop = {
+  kind: "EndLoop"
 
   id: string;
 
@@ -219,7 +219,7 @@ export type Instruction =
   | ICall
   | ICallIndirect
   | IConst
-  | IContinue
+  | IEndLoop
   | IEndFunction
   | IEquals
   | IEqualsZero
@@ -280,8 +280,8 @@ export type selectInstruction<
   : instruction extends IConst
   ? Instructions.Const<instruction, state>
 
-  : instruction extends IContinue
-  ? Instructions.Continue<instruction, state>
+  : instruction extends IEndLoop
+  ? Instructions.EndLoop<instruction, state>
 
   : instruction extends IEndFunction
   ? Instructions.EndFunction<instruction, state>
@@ -426,7 +426,7 @@ export namespace Instructions {
       ? condition extends 0
 
         // false branch
-        // nothing happens. we just pop the stack and continue on to the next instruction
+        // nothing happens. we just pop the stack and endLoop on to the next instruction
         ? State.Stack.set<
             remaining,
 
@@ -436,9 +436,7 @@ export namespace Instructions {
         // true branch
         // true indicates we _want_ to branch back.  so we do!
         : State.Instructions.set<
-            [
-              ...State.ExecutionContexts.Active.Branches.get<state>[instruction['id']],
-            ],
+            State.ExecutionContexts.Active.Branches.get<state>[instruction['id']],
 
             State.Stack.set<
               remaining,
@@ -566,17 +564,13 @@ export namespace Instructions {
       >
   > = RESULT
 
-  export type Continue<
-    instruction extends IContinue,
+  export type EndLoop<
+    instruction extends IEndLoop,
     state extends ProgramState,
 
     RESULT extends ProgramState =
-      State.Instructions.push<
-        {
-          kind: 'Loop',
-          id: instruction['id'],
-          instructions: instruction['instructions'],
-        },
+      State.Instructions.set<
+        instruction['instructions'],
         state
       >
   > = RESULT
@@ -869,25 +863,25 @@ export namespace Instructions {
     instruction extends ILoop,
     state extends ProgramState,
 
-    _withContinue extends Instruction[] = [
+    _withEndLoop extends Instruction[] = [
       ...instruction['instructions'],
       {
-        kind: 'Continue',
+        kind: 'EndLoop',
         id: instruction['id'],
 
-        // store the instructions _for this loop_ in the continue instruction in case we wanna revisit again later
-        instructions: instruction['instructions']
+        // store the instructions _for this loop_ in the endLoop instruction in case we wanna revisit again later
+        instructions: State.Instructions.get<state>,
       }
     ],
 
     RESULT extends ProgramState =
-    // cache this loop's following instructions for when we (more than likely) Branch to it later
-    State.ExecutionContexts.Active.Branches.merge<
-      instruction['id'],
-      _withContinue,
-      
+      // cache this loop's following instructions for when we (more than likely) Branch to it later
+      State.ExecutionContexts.Active.Branches.merge<
+        instruction['id'],
+        _withEndLoop,
+        
         State.Instructions.concat<
-        _withContinue,
+          _withEndLoop,
 
           state
         >

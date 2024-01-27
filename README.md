@@ -38,7 +38,7 @@ Usage count (in Doom) is the number on the right
 | I32Eq             | 823   | ✅           |
 | I32And            | 819   | ⏸️           |
 | I64Const          | 712   | ✅           |
-| Loop              | 638   | ❌           |
+| Loop              | 638   | ✅           |
 | Select            | 637   | ✅           |
 | Drop              | 504   | ❌           |
 | I32Or             | 488   | ❌           |

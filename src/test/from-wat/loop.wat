@@ -20,9 +20,9 @@
       i32.mul
       local.set $result
 
-      ;; if $i is less than 10 branch to outside the loop
+      ;; if $i is less than 3 branch to outside the loop
       local.get $i
-      i32.const 10
+      i32.const 3
       i32.lt_s
       br_if $my_loop
     )

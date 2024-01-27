@@ -101,7 +101,7 @@ Module {
                                     ),
                                 ),
                                 I32Const(
-                                    10,
+                                    3,
                                 ),
                                 I32LtS,
                                 BrIf(
@@ -144,7 +144,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 598,
+                        offset: 596,
                     },
                     id: Some(
                         "entry",

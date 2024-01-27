@@ -23,7 +23,7 @@ type $my_loop<
           { kind: 'Multiply' },
           { kind: 'LocalSet'; id: '$result' },
           { kind: 'LocalGet'; id: '$i' },
-          { kind: 'Const'; value: 10 },
+          { kind: 'Const'; value: 3 },
           { kind: 'LessThan' },
           { kind: 'BranchIf'; id: '$my_loop' },
         ];

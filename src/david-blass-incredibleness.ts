@@ -1,5 +1,5 @@
 import type { entry } from './test/from-wat/loop.actual.js';
-type e = entry<[3], true> // =>
+type e = entry<[1], true> // =>
 
 type stack = e['stack']; // =>
 
