@@ -22,7 +22,6 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.11.5",
-    "hotscript": "^1.0.13",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "type-testing": "^0.2.0",

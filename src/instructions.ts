@@ -1,15 +1,11 @@
 import {
-  Cast,
   Func,
   MemoryAddress,
   Param,
   ProgramState,
-  Reverse,
-  evaluate,
 } from "./program.js"
-import { Call as Apply, Numbers } from "hotscript"
 import { State } from "./state.js"
-import { BitwiseAnd } from "./binary.js"
+import * as TypeMath from "./ts-type-math/index.js"
 
 /*
  * No.
@@ -372,7 +368,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.Add<a, b>>
+            TypeMath.Add<a, b>
           ],
           state
         >
@@ -392,7 +388,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            BitwiseAnd<a, b>
+            TypeMath.BitwiseAnd<a, b>
           ],
           state
         >
@@ -598,7 +594,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.Equal<a, b>> extends true ? 1 : 0
+            TypeMath.Equal<a, b> extends true ? 1 : 0
           ],
 
           state
@@ -618,7 +614,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.Equal<a, 0>> extends true ? 1 : 0
+            TypeMath.Equal<a, 0> extends true ? 1 : 0
           ],
 
           state
@@ -681,7 +677,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.GreaterThan<a, b>> extends true ? 1 : 0
+            TypeMath.GreaterThan<a, b> extends true ? 1 : 0
           ],
 
           state
@@ -702,7 +698,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.GreaterThanOrEqual<a, b>> extends true ? 1 : 0
+            TypeMath.GreaterThanOrEqual<a, b> extends true ? 1 : 0
           ],
 
           state
@@ -766,7 +762,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.LessThan<a, b>> extends true ? 1 : 0
+            TypeMath.LessThan<a, b> extends true ? 1 : 0
           ],
           state
         >
@@ -786,7 +782,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.LessThanOrEqual<a, b>> extends true ? 1 : 0
+            TypeMath.LessThanOrEqual<a, b> extends true ? 1 : 0
           ],
           state
         >
@@ -807,10 +803,10 @@ export namespace Instructions {
             ...remaining,
 
             State.Memory.getByAddress<
-              Apply<Numbers.Add<
+              TypeMath.Add<
                 address,
                 instruction['offset']
-              >>,
+              >,
               state
             >
           ],
@@ -911,7 +907,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.Mul<a, b>>
+            TypeMath.Multiply<a, b>
           ],
 
           state
@@ -934,7 +930,7 @@ export namespace Instructions {
             ...remaining,
             a extends 0 // this check is only necessary due to a bug in hotscript: https://github.com/gvergnaud/hotscript/issues/117
             ? 0
-            : Apply<Numbers.Negate<a>>
+            : TypeMath.Negate<a>
           ],
 
           state
@@ -1030,7 +1026,7 @@ export namespace Instructions {
       ? State.Stack.set<
           [
             ...remaining,
-            Apply<Numbers.Sub<b, a>>
+            TypeMath.Subtract<b, a>
           ],
 
           state
@@ -1054,10 +1050,10 @@ export namespace Instructions {
 
           State.Memory.insert<
 
-            Apply<Numbers.Add<
+            TypeMath.Add<
               address,
               instruction['offset']
-            >>,
+            >,
 
             entry,
             state

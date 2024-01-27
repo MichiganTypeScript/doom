@@ -1,7 +1,6 @@
 import { Entry, Instruction } from "./instructions.js";
 import {
   BranchesById,
-  Cast,
   ExecutionContext,
   Func,
   FuncsById,
@@ -13,7 +12,7 @@ import {
   ProgramState,
   evaluate,
 } from "./program.js";
-import { Call, Numbers } from "hotscript";
+import * as TypeMath from "./ts-type-math/index.js";
 
 export namespace State {
   
@@ -29,7 +28,7 @@ export namespace State {
       state extends ProgramState,
 
       RESULT extends ProgramState = {
-        count: Call<Numbers.Add<state['count'], 1>>;
+        count: TypeMath.Add<state['count'], 1>;
 
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
@@ -378,7 +377,7 @@ export namespace State {
           params: infer params extends Param[];
           result: infer result extends number;
         }
-        ? Call<Numbers.Add<params['length'], result>>
+        ? TypeMath.Add<params['length'], result>
         : never
     > = RESULT
   }

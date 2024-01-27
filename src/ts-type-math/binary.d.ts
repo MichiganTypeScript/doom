@@ -1,5 +1,7 @@
-import { Call, Numbers, Strings } from "hotscript";
 import { Equal, Expect } from "type-testing";
+import { Div, Mod } from "./hotscript-fork/numbers/impl/division";
+import { Length } from "./hotscript-fork/strings/impl/length";
+import { Add } from ".";
 
 type PowersOfTwo = [
     /* 2**0  */ 1,
@@ -75,10 +77,10 @@ type Process<
 > =
   T extends 0
   ? _Acc
-  : Call<Numbers.Mod<T, 2>> extends infer remainder
+  : Mod<T, 2> extends infer remainder
     ? remainder extends 0
-      ? Process<Call<Numbers.Div<T, 2>>, `0${_Acc}`>
-      : Process<Call<Numbers.Div<T, 2>>, `1${_Acc}`>
+      ? Process<Div<T, 2>, `0${_Acc}`>
+      : Process<Div<T, 2>, `1${_Acc}`>
     :never;
 
 type Precision = 32;
@@ -87,7 +89,7 @@ type PadLeft<
   S extends string,
   N extends number
 > =
-  Call<Strings.Length<S>> extends N
+  Length<S> extends N
   ? S
   : PadLeft<`0${S}`, N>
 
@@ -112,7 +114,7 @@ type _ToDecimal<
   Binary extends string,
 
   _PowerOfTwo extends number = 0,
-  _NextPowerOfTwo extends number = Call<Numbers.Add<_PowerOfTwo, 1>>
+  _NextPowerOfTwo extends number = Add<_PowerOfTwo, 1>
 > =
   Binary extends `${infer Head}${infer Tail}`
 
@@ -123,13 +125,13 @@ type _ToDecimal<
       >
 
     : Head extends '1'
-      ? Call<Numbers.Add<
+      ? Add<
           _ToDecimal<
             Tail,
             _NextPowerOfTwo
           >,
           PowersOfTwo[_PowerOfTwo]
-        >>
+        >
 
       : never
   : 0

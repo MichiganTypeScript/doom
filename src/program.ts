@@ -16,7 +16,6 @@ export type Func = {
 export type LocalsById = Record<string, number>;
 export type BranchesById = Record<BranchId, Instruction[]>;
 export type FuncsById = Record<string, Func>;
-export type Cast<T, U> = T extends U ? T : never;
 export type Reverse<T extends any[]> =
   T extends [infer head, ...infer tail]
   ? [...Reverse<tail>, head]
