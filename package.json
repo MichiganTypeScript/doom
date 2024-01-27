@@ -15,6 +15,7 @@
     "compile:wat-to-wasm": "wat2wasm src/debug/code.wat --output src/debug/code.wasm",
     "test:wasm": "tsx src/test.ts",
     "test": "tsc --project tsconfig.test.json && vitest",
+    "test:create-new": "./src/test/create-new.sh",
     "test:rust": "cargo test",
     "throw-your-hands-up-in-the-air-and-raise-the-recursion-limit-like-you-just-dont-care": "tsx ./src/raise-the-recursion-limit-to-one-nonillion-lol.ts"
   },
