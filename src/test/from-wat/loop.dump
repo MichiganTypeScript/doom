@@ -1,0 +1,214 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "my_loop",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [
+                            Local {
+                                id: Some(
+                                    "i",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "result",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                        ],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "i",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "input",
+                                    ),
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "result",
+                                    ),
+                                ),
+                                Loop(
+                                    BlockType {
+                                        label: Some(
+                                            "my_loop",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "i",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "i",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "result",
+                                    ),
+                                ),
+                                I32Const(
+                                    2,
+                                ),
+                                I32Mul,
+                                LocalSet(
+                                    Id(
+                                        "result",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "i",
+                                    ),
+                                ),
+                                I32Const(
+                                    10,
+                                ),
+                                I32LtS,
+                                BrIf(
+                                    Id(
+                                        "my_loop",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "result",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "input",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 598,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "my_loop",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 6,
+    "I32Const": 4,
+    "LocalSet": 4,
+    "Loop": 1,
+    "I32Add": 1,
+    "I32Mul": 1,
+    "I32LtS": 1,
+    "BrIf": 1,
+    "End": 1,
+    "Call": 1,
+}

@@ -1,6 +1,6 @@
 import { Entry, Instruction } from "./instructions.js";
 import {
-  BranchesById as BranchesType,
+  BranchesById,
   Cast,
   ExecutionContext,
   Func,
@@ -16,6 +16,33 @@ import {
 import { Call, Numbers } from "hotscript";
 
 export namespace State {
+  
+  export namespace Count {
+    export type get<
+      state extends ProgramState,
+
+      RESULT extends number =
+        state['count']
+    > = RESULT
+
+    export type increment<
+      state extends ProgramState,
+
+      RESULT extends ProgramState = {
+        count: Call<Numbers.Add<state['count'], 1>>;
+
+        executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+        globals: state['globals'];
+        indirect: state['indirect'];
+        instructions: state['instructions'];
+        memory: state['memory'];
+        memorySize: state['memorySize'];
+        stack: state['stack'];
+      }
+    > = RESULT
+  }
+
 
   /** Helpers for Instruction manipulation */
   export namespace Instructions {
@@ -25,7 +52,8 @@ export namespace State {
 
       RESULT extends ProgramState = {
         instructions: instructions;
-  
+
+        count: state['count'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
         globals: state['globals'];
@@ -134,6 +162,7 @@ export namespace State {
       RESULT extends ProgramState = {
         stack: stack;
 
+        count: state['count'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
         globals: state['globals'];
@@ -151,7 +180,7 @@ export namespace State {
       RESULT extends ProgramState = 
         set<
           [
-            ...state['stack'],
+            ...get<state>,
             entry
           ],
           state
@@ -169,6 +198,7 @@ export namespace State {
       RESULT extends ProgramState = {
           executionContexts: executionContexts;
 
+          count: state['count'];
           funcs: state['funcs'];
           globals: state['globals'];
           indirect: state['indirect'];
@@ -238,7 +268,8 @@ export namespace State {
                 executionContext
               ]
             : never;
-  
+
+          count: state['count'];
           funcs: state['funcs'];
           globals: state['globals'];
           indirect: state['indirect'];
@@ -258,7 +289,7 @@ export namespace State {
         > = RESULT;
 
         
-        export type set<
+        export type insert<
           id extends string,
           value extends Entry,
           state extends ProgramState,
@@ -268,7 +299,7 @@ export namespace State {
               {
                 locals:
                   evaluate<
-                  & State.ExecutionContexts.Active.Locals.get<state>
+                  & Omit<State.ExecutionContexts.Active.Locals.get<state>, id>
                   & { [k in id]: value }
                   >;
 
@@ -284,31 +315,39 @@ export namespace State {
         export type get<
           state extends ProgramState,
 
-          RESULT extends BranchesType =
+          RESULT extends BranchesById =
             State.ExecutionContexts.Active.get<state>['branches']
         > = RESULT
 
-        
         export type set<
+          branches extends BranchesById,
+          state extends ProgramState,
+
+          RESULT extends ProgramState =
+            State.ExecutionContexts.Active.set<
+              {
+                branches: branches;
+                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
+                locals: State.ExecutionContexts.Active.get<state>['locals'];
+              },
+              state
+            >
+        > = RESULT
+
+        
+        export type merge<
           id extends string,
           instructions extends Instruction[],
           state extends ProgramState,
 
           RESULT extends ProgramState = 
-            State.ExecutionContexts.Active.set<
-              {
-                branches:
-                  evaluate<
-                  & State.ExecutionContexts.Active.Branches.get<state>
-                  & { [k in id]: instructions }
-                  >;
-
-                funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-                locals: State.ExecutionContexts.Active.get<state>['locals'];
-              },
-
+            set<
+              evaluate<
+              & Omit<State.ExecutionContexts.Active.Branches.get<state>, id>
+              & { [k in id]: instructions }
+              >,
               state
-              >
+            >
         > = RESULT
       }
     }
@@ -366,6 +405,7 @@ export namespace State {
           & globals
           >;
 
+        count: state['count'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
         indirect: state['indirect'];
@@ -404,6 +444,7 @@ export namespace State {
             & state['memory']
             & { [k in address]: entry }
 
+        count: state['count'];
         funcs: state['funcs'];
         globals: state['globals'];
         executionContexts: state['executionContexts'];

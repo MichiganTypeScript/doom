@@ -219,7 +219,10 @@ pub fn handle_instructions(
 
             if this_context == Some("If") {
                 result.push((indent, format!("];")));
-            } else if this_context == Some("Else") || this_context == Some("Block") {
+            } else if this_context == Some("Else")
+                || this_context == Some("Block")
+                || this_context == Some("Loop")
+            {
                 result.push((indent - 1, format!("];")));
             } else {
                 panic!("unexpected context {:#?}", this_context);
@@ -260,6 +263,25 @@ pub fn handle_instructions(
             let id = format_index(&call_indirect.table);
             result.push((indent, format!("{{ kind: 'CallIndirect'; id: '{id}' }},")));
             handle_instructions(func, instrs, indent, result, context)
+        }
+        Instruction::Loop(block_type) => {
+            result.push((indent, format!("{{ kind: 'Loop';")));
+            result.push((
+                indent + 1,
+                format!(
+                    "id: '${}';",
+                    block_type.label.expect("loops must have labels").name()
+                ),
+            ));
+            result.push((indent + 1, format!("instructions: [")));
+
+            context.push("Loop");
+
+            let loop_instrs = vec![];
+            let loop_branch = handle_instructions(func, instrs, indent + 2, loop_instrs, context);
+            result.extend(loop_branch);
+
+            handle_instructions(func, instrs, indent + 1, result, context)
         }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);

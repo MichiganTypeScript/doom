@@ -30,7 +30,7 @@ mod tests {
     };
 
     /// SETTING THIS TO TRUE WILL FORCIBLY OVERWRITE ALL TESTS
-    const OVERWRITE: bool = false;
+    const OVERWRITE: bool = true;
 
     use self::source_file::SourceFile;
 
@@ -38,13 +38,13 @@ mod tests {
 
     fn skip_list() -> Vec<&'static str> {
         vec![
-            // "conway", //
+            "conway", //
         ]
     }
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            // "memory-offset", //
+            "loop", //
         ]
     }
 

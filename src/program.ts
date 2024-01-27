@@ -1,4 +1,5 @@
 import { Entry, IHalt, Instruction, selectInstruction } from "./instructions.js"
+import { State } from "./state.js";
 
 export type MemoryAddress = number;
 export type MemoryByAddress = Record<MemoryAddress, number>
@@ -35,6 +36,9 @@ export type ExecutionContext = {
 }
 
 export type ProgramState = {
+  /** the number of instructions we've executed, useful for debugging */
+  count: number;
+
   /** a stack of execution contexts */
   executionContexts: ExecutionContext[];
 
@@ -68,6 +72,7 @@ export type runProgram<
 > =
   executeInstruction<
     {
+      count: 0;
       executionContexts: [];
       funcs: input['funcs'];
       globals: input['globals'];
@@ -86,6 +91,9 @@ export type evaluate<T> = {
   [K in keyof T]: T[K]
 } & unknown
 
+// set to `number` to disable
+export type StopAt = 28
+
 export type executeInstruction<
   state extends ProgramState,
   debugMode extends boolean = false,
@@ -99,9 +107,14 @@ export type executeInstruction<
   ? instruction extends IHalt
     ? state
 
+    : StopAt extends State.Count.get<state>
+    ? state
     : executeInstruction<
         selectInstruction<
-          state,
+
+          // increment the instruction counter
+          State.Count.increment<state>,
+          
           remainingInstructions,
           instruction
         >,

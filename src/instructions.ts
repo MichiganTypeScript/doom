@@ -70,6 +70,15 @@ export type IConst = {
   value: number;
 }
 
+/** a synthetic instruction for repeating the instructions of a loop */
+export type IContinue = {
+  kind: "Continue"
+
+  id: string;
+
+  instructions: Instruction[];
+}
+
 /** this isn't really a webassembly instruction, but it's a sentinel put here so that the program can understand when to cull execution contexts (i.e. after the function returns) */
 export type IEndFunction = {
   kind: "EndFunction"
@@ -157,6 +166,14 @@ export type ILocalTee = {
   id: string
 }
 
+export type ILoop = {
+  kind: "Loop"
+
+  id: string;
+
+  instructions: Instruction[];
+}
+
 export type IMultiply = {
   kind: "Multiply"
 }
@@ -206,6 +223,7 @@ export type Instruction =
   | ICall
   | ICallIndirect
   | IConst
+  | IContinue
   | IEndFunction
   | IEquals
   | IEqualsZero
@@ -221,6 +239,7 @@ export type Instruction =
   | ILocalGet
   | ILocalSet
   | ILocalTee
+  | ILoop
   | IMultiply
   | INegate
   | INop
@@ -264,6 +283,9 @@ export type selectInstruction<
 
   : instruction extends IConst
   ? Instructions.Const<instruction, state>
+
+  : instruction extends IContinue
+  ? Instructions.Continue<instruction, state>
 
   : instruction extends IEndFunction
   ? Instructions.EndFunction<instruction, state>
@@ -309,6 +331,9 @@ export type selectInstruction<
 
   : instruction extends ILocalTee
   ? Instructions.LocalTee<instruction, state>
+
+  : instruction extends ILoop
+  ? Instructions.Loop<instruction, state>
 
   : instruction extends IMultiply
   ? Instructions.Multiply<instruction, state>
@@ -384,7 +409,7 @@ export namespace Instructions {
         instruction['instructions'],
 
         // first cache existing instructions (as they are at this moment) in the execution context for when we break to this block later
-        State.ExecutionContexts.Active.Branches.set<
+        State.ExecutionContexts.Active.Branches.merge<
           instruction['id'],
           State.Instructions.get<state>,
 
@@ -413,8 +438,11 @@ export namespace Instructions {
           >
 
         // true branch
+        // true indicates we _want_ to branch back.  so we do!
         : State.Instructions.set<
-            State.ExecutionContexts.Active.Branches.get<state>[instruction['id']],
+            [
+              ...State.ExecutionContexts.Active.Branches.get<state>[instruction['id']],
+            ],
 
             State.Stack.set<
               remaining,
@@ -443,7 +471,7 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       // HELP: params are fed in reverse order and simply switching the infer statements order below for some reason doesn't work...
-      Reverse<params> extends [
+      params extends [
         infer param extends Param,
         ...infer remainingParams extends Param[],
       ]
@@ -456,7 +484,7 @@ export namespace Instructions {
             remainingParams,
 
             // set the locals to have the values from the stack that we just popped off
-            State.ExecutionContexts.Active.Locals.set<
+            State.ExecutionContexts.Active.Locals.insert<
               param,
               pop,
 
@@ -477,25 +505,26 @@ export namespace Instructions {
     state extends ProgramState,
 
     _func extends Func = State.Funcs.get<state>[instruction['id']],
+    _funcId extends string = instruction['id'],
 
     RESULT extends ProgramState =
       // add the instructions from this func onto the stack
       State.Instructions.concat<
         [
           ..._func['instructions'],
-          { kind: 'EndFunction', id: instruction['id'] }
+          { kind: 'EndFunction', id: _funcId }
         ],
 
         // first, pop things off the stack to populate params
         PopulateParams<
-          instruction['id'],
+          _funcId,
           _func['params'],
 
           // push a new execution context
           State.ExecutionContexts.push<
             {
-              locals: {},
-              funcId: instruction['id'],
+              locals: {}, // even though there are known locals for the function, they are added when they're set with LocalSet
+              funcId: _funcId,
               branches: {},
             },
             state
@@ -537,6 +566,21 @@ export namespace Instructions {
       State.Stack.push<
         instruction['value'],
 
+        state
+      >
+  > = RESULT
+
+  export type Continue<
+    instruction extends IContinue,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.push<
+        {
+          kind: 'Loop',
+          id: instruction['id'],
+          instructions: instruction['instructions'],
+        },
         state
       >
   > = RESULT
@@ -799,7 +843,7 @@ export namespace Instructions {
       ? State.Stack.set<
           remaining,
 
-          State.ExecutionContexts.Active.Locals.set<
+          State.ExecutionContexts.Active.Locals.insert<
             instruction['id'],
             entry,
             state
@@ -817,12 +861,41 @@ export namespace Instructions {
         ...infer remaining extends Entry[],
         infer entry extends Entry
       ]
-      ? State.ExecutionContexts.Active.Locals.set<
+      ? State.ExecutionContexts.Active.Locals.insert<
           instruction['id'],
           entry,
           state
         >
       : never
+  > = RESULT
+
+  export type Loop<
+    instruction extends ILoop,
+    state extends ProgramState,
+
+    _withContinue extends Instruction[] = [
+      ...instruction['instructions'],
+      {
+        kind: 'Continue',
+        id: instruction['id'],
+
+        // store the instructions _for this loop_ in the continue instruction in case we wanna revisit again later
+        instructions: instruction['instructions']
+      }
+    ],
+
+    RESULT extends ProgramState =
+    // cache this loop's following instructions for when we (more than likely) Branch to it later
+    State.ExecutionContexts.Active.Branches.merge<
+      instruction['id'],
+      _withContinue,
+      
+        State.Instructions.concat<
+        _withContinue,
+
+          state
+        >
+      >
   > = RESULT
 
   export type Multiply<
