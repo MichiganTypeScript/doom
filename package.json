@@ -16,8 +16,7 @@
     "test:wasm": "tsx src/test.ts",
     "test": "tsc --project tsconfig.test.json && vitest",
     "test:create-new": "./src/test/create-new.sh",
-    "test:rust": "cargo test",
-    "throw-your-hands-up-in-the-air-and-raise-the-recursion-limit-like-you-just-dont-care": "tsx ./src/raise-the-recursion-limit-to-one-nonillion-lol.ts"
+    "test:rust": "cargo test"
   },
   "keywords": [],
   "author": "",
@@ -25,8 +24,13 @@
   "devDependencies": {
     "@types/node": "^20.11.5",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3",
     "type-testing": "^0.2.0",
+    "typescript": "^5.3.3",
     "vitest": "^1.2.1"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "typescript@5.3.3": "patches/typescript@5.3.3.patch"
+    }
   }
 }

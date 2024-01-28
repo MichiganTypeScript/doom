@@ -1,0 +1,106 @@
+diff --git a/lib/tsc.js b/lib/tsc.js
+index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..5c930ad8c410dbe45fea3e5a4f662134613fe67b 100644
+--- a/lib/tsc.js
++++ b/lib/tsc.js
+@@ -6416,7 +6416,7 @@ var Diagnostics = {
+   Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom: diag(2584, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2584", "Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'."),
+   _0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later: diag(2585, 1 /* Error */, "_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_2585", "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later."),
+   Cannot_assign_to_0_because_it_is_a_constant: diag(2588, 1 /* Error */, "Cannot_assign_to_0_because_it_is_a_constant_2588", "Cannot assign to '{0}' because it is a constant."),
+-  Type_instantiation_is_excessively_deep_and_possibly_infinite: diag(2589, 1 /* Error */, "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589", "Type instantiation is excessively deep and possibly infinite."),
++  Type_instantiation_is_excessively_deep_and_possibly_infinite: diag(2589, 1 /* Error */, "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589", "Type instantiation is excessively deep and possibly infinite. (tsc) Also don't forget that you patched this shit so you can run Doom (lol? what were you thinking???) so you should probably not ever see this message."),
+   Expression_produces_a_union_type_that_is_too_complex_to_represent: diag(2590, 1 /* Error */, "Expression_produces_a_union_type_that_is_too_complex_to_represent_2590", "Expression produces a union type that is too complex to represent."),
+   Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig: diag(2591, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591", "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig."),
+   Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig: diag(2592, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592", "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig."),
+@@ -58080,7 +58080,7 @@ function createTypeChecker(host) {
+     let extraTypes;
+     let tailCount = 0;
+     while (true) {
+-      if (tailCount === 1e3) {
++      if (tailCount === Number.MAX_SAFE_INTEGER) {
+         error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+         return errorType;
+       }
+@@ -59117,7 +59117,7 @@ function createTypeChecker(host) {
+     if (!couldContainTypeVariables(type)) {
+       return type;
+     }
+-    if (instantiationDepth === 100 || instantiationCount >= 5e6) {
++    if (instantiationDepth === Number.MAX_SAFE_INTEGER || instantiationCount >= Number.MAX_SAFE_INTEGER) {
+       (_a = tracing) == null ? void 0 : _a.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
+       error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+       return errorType;
+diff --git a/lib/tsserver.js b/lib/tsserver.js
+index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..49f5fb01af7a096b5f0139c62b5c31c8ac0faa6d 100644
+--- a/lib/tsserver.js
++++ b/lib/tsserver.js
+@@ -9944,7 +9944,7 @@ var Diagnostics = {
+   Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom: diag(2584, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2584", "Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'."),
+   _0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later: diag(2585, 1 /* Error */, "_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_2585", "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later."),
+   Cannot_assign_to_0_because_it_is_a_constant: diag(2588, 1 /* Error */, "Cannot_assign_to_0_because_it_is_a_constant_2588", "Cannot assign to '{0}' because it is a constant."),
+-  Type_instantiation_is_excessively_deep_and_possibly_infinite: diag(2589, 1 /* Error */, "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589", "Type instantiation is excessively deep and possibly infinite."),
++  Type_instantiation_is_excessively_deep_and_possibly_infinite: diag(2589, 1 /* Error */, "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589", "Type instantiation is excessively deep and possibly infinite. (tsserver) Also don't forget that you patched this shit so you can run Doom (lol? what were you thinking???) so you should probably not ever see this message."),
+   Expression_produces_a_union_type_that_is_too_complex_to_represent: diag(2590, 1 /* Error */, "Expression_produces_a_union_type_that_is_too_complex_to_represent_2590", "Expression produces a union type that is too complex to represent."),
+   Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig: diag(2591, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591", "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig."),
+   Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig: diag(2592, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592", "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig."),
+@@ -62784,7 +62784,7 @@ function createTypeChecker(host) {
+     let extraTypes;
+     let tailCount = 0;
+     while (true) {
+-      if (tailCount === 1e3) {
++      if (tailCount === Number.MAX_SAFE_INTEGER) {
+         error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+         return errorType;
+       }
+@@ -63821,7 +63821,7 @@ function createTypeChecker(host) {
+     if (!couldContainTypeVariables(type)) {
+       return type;
+     }
+-    if (instantiationDepth === 100 || instantiationCount >= 5e6) {
++    if (instantiationDepth === Number.MAX_SAFE_INTEGER || instantiationCount >= Number.MAX_SAFE_INTEGER) {
+       (_a = tracing) == null ? void 0 : _a.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
+       error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+       return errorType;
+diff --git a/lib/typescript.js b/lib/typescript.js
+index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..69e0abaff66b487c2a81b19521eff821de4f3803 100644
+--- a/lib/typescript.js
++++ b/lib/typescript.js
+@@ -7726,7 +7726,7 @@ ${lanes.join("\n")}
+         Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom: diag(2584, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2584", "Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'."),
+         _0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later: diag(2585, 1 /* Error */, "_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_2585", "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later."),
+         Cannot_assign_to_0_because_it_is_a_constant: diag(2588, 1 /* Error */, "Cannot_assign_to_0_because_it_is_a_constant_2588", "Cannot assign to '{0}' because it is a constant."),
+-        Type_instantiation_is_excessively_deep_and_possibly_infinite: diag(2589, 1 /* Error */, "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589", "Type instantiation is excessively deep and possibly infinite."),
++        Type_instantiation_is_excessively_deep_and_possibly_infinite: diag(2589, 1 /* Error */, "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589", "Type instantiation is excessively deep and possibly infinite. (typescript) Also don't forget that you patched this shit so you can run Doom (lol? what were you thinking???) so you should probably not ever see this message."),
+         Expression_produces_a_union_type_that_is_too_complex_to_represent: diag(2590, 1 /* Error */, "Expression_produces_a_union_type_that_is_too_complex_to_represent_2590", "Expression produces a union type that is too complex to represent."),
+         Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig: diag(2591, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591", "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig."),
+         Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig: diag(2592, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592", "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig."),
+@@ -60551,7 +60551,7 @@ ${lanes.join("\n")}
+       let extraTypes;
+       let tailCount = 0;
+       while (true) {
+-        if (tailCount === 1e3) {
++        if (tailCount === Number.MAX_SAFE_INTEGER) {
+           error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+           return errorType;
+         }
+@@ -61588,7 +61588,7 @@ ${lanes.join("\n")}
+       if (!couldContainTypeVariables(type)) {
+         return type;
+       }
+-      if (instantiationDepth === 100 || instantiationCount >= 5e6) {
++      if (instantiationDepth === Number.MAX_SAFE_INTEGER || instantiationCount >= Number.MAX_SAFE_INTEGER) {
+         (_a = tracing) == null ? void 0 : _a.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
+         error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+         return errorType;
+diff --git a/lib/typingsInstaller.js b/lib/typingsInstaller.js
+index 1cfedae7028cbefb0f84b22c22d84f767d2db396..d69fab2379ad56c0f2e3d00a3bb225ad8754fa96 100644
+--- a/lib/typingsInstaller.js
++++ b/lib/typingsInstaller.js
+@@ -5793,7 +5793,7 @@ var Diagnostics = {
+   Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom: diag(2584, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2584", "Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'."),
+   _0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later: diag(2585, 1 /* Error */, "_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_2585", "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later."),
+   Cannot_assign_to_0_because_it_is_a_constant: diag(2588, 1 /* Error */, "Cannot_assign_to_0_because_it_is_a_constant_2588", "Cannot assign to '{0}' because it is a constant."),
+-  Type_instantiation_is_excessively_deep_and_possibly_infinite: diag(2589, 1 /* Error */, "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589", "Type instantiation is excessively deep and possibly infinite."),
++  Type_instantiation_is_excessively_deep_and_possibly_infinite: diag(2589, 1 /* Error */, "Type_instantiation_is_excessively_deep_and_possibly_infinite_2589", "Type instantiation is excessively deep and possibly infinite. (typingsInstaller) Also don't forget that you patched this shit so you can run Doom (lol? what were you thinking???) so you should probably not ever see this message."),
+   Expression_produces_a_union_type_that_is_too_complex_to_represent: diag(2590, 1 /* Error */, "Expression_produces_a_union_type_that_is_too_complex_to_represent_2590", "Expression produces a union type that is too complex to represent."),
+   Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig: diag(2591, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591", "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig."),
+   Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig: diag(2592, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592", "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig."),
