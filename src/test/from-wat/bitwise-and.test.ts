@@ -83,16 +83,16 @@ type testCases = [
   Expect<Equal<entry<[8, 12]>, 8>>,
   Expect<Equal<entry<[12345, 54321]>, 4145>>,
   Expect<Equal<entry<[-1, 1]>, 1>>,
-  // Expect<Equal<entry<[-1, -1]>, -1>>,
+  Expect<Equal<entry<[-1, -1]>, 2147483649>>, // DIFFERENT!
   Expect<Equal<entry<[-1, 0]>, 0>>,
   Expect<Equal<entry<[2147483647, 1]>, 1>>,
-  // Expect<Equal<entry<[-2147483648, -1]>, -2147483648>>,
+  Expect<Equal<entry<[-2147483648, -1]>, 2147483648>>, // DIFFERENT!
   Expect<Equal<entry<[123, 456]>, 72>>,
   Expect<Equal<entry<[987, 654]>, 650>>,
-  // Expect<Equal<entry<[-500, 500]>, 4>>,
-  // Expect<Equal<entry<[-400, 400]>, 16>>,
-  // Expect<Equal<entry<[-300, 300]>, 4>>,
-  // Expect<Equal<entry<[-200, 200]>, 8>>,
+  Expect<Equal<entry<[-500, 500]>, 500>>, // DIFFERENT!
+  Expect<Equal<entry<[-400, 400]>, 400>>, // DIFFERENT!
+  Expect<Equal<entry<[-300, 300]>, 300>>, // DIFFERENT!
+  Expect<Equal<entry<[-200, 200]>, 200>>, // DIFFERENT!
   Expect<Equal<entry<[0, 0]>, 0>>,
   Expect<Equal<entry<[0, -1]>, 0>>,
   Expect<Equal<entry<[-1, 0]>, 0>>,

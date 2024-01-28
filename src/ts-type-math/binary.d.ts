@@ -87,20 +87,42 @@ type Precision = 32;
 
 type PadLeft<
   S extends string,
-  N extends number
+  N extends number,
+
+  RESULT extends string =
+    Length<S> extends N
+    ? S
+    : PadLeft<`0${S}`, N>
+> = RESULT
+
+type Zero64Bit = "00000000000000000000000000000000";
+
+type IsNegative<
+  T extends number
 > =
-  Length<S> extends N
-  ? S
-  : PadLeft<`0${S}`, N>
+  `${T}` extends `-${string}`
+  ? true
+  : false
 
 type x = PadLeft<'', Precision>;
 //   ^?
 
-type To64Binary<T extends number> =
-  PadLeft<
-    Process<T>,
-    Precision
-  >
+type To64Binary<
+  T extends number,
+
+  UnsignedBinary extends string =
+    PadLeft<
+      Process<T>,
+      Precision
+    >,
+
+  RESULT extends string =
+    IsNegative<T> extends true
+      ? UnsignedBinary extends `${infer firstBit extends string}${infer rest extends string}`
+        ? `1${rest}`
+        : never
+      : UnsignedBinary
+> = RESULT
 
 type ReverseString<T extends string> =
   T extends `${infer Head}${infer Tail}`
@@ -155,6 +177,28 @@ type LookupBitAnd = {
   };
 }
 
+type LookupBitOr = {
+  '0': {
+    '0': '0';
+    '1': '1';
+  };
+  '1': {
+    '0': '1';
+    '1': '1';
+  };
+}
+
+type LookupBitXor = {
+  '0': {
+    '0': '0';
+    '1': '1';
+  };
+  '1': {
+    '0': '1';
+    '1': '0';
+  };
+}
+
 // QUESTION
 // maybe performance would be better if this were just `string`?
 type Bit = '0' | '1';
@@ -178,6 +222,22 @@ export type BitwiseAnd<
     ProcessLookup<To64Binary<T>, To64Binary<U>, LookupBitAnd>
   >
 
+export type BitwiseOr<
+  T extends number,
+  U extends number
+> =
+  ToDecimal<
+    ProcessLookup<To64Binary<T>, To64Binary<U>, LookupBitOr>
+  >
+
+export type BitwiseXor<
+  T extends number,
+  U extends number
+> =
+  ToDecimal<
+    ProcessLookup<To64Binary<T>, To64Binary<U>, LookupBitXor>
+  >
+
 type entry<T extends [number, number]> =
   T extends [
     infer a extends number,
@@ -186,43 +246,11 @@ type entry<T extends [number, number]> =
   ? BitwiseAnd<a, b>
   : never
 
-type b1 = To64Binary<1>; // =>
-type b2 = To64Binary<2>; // =>
+type b1 = To64Binary<-1>; // =>
+type b3 = Expect<Equal<"10000000000000000000000000000001", b1>>; // =>
+type b2 = To64Binary<-1>; // =>
 
 type y2 = ProcessLookup<b1, b2, LookupBitAnd>; // =>
 type y3 = ToDecimal<y2>; // =>
 
-type x1 = BitwiseAnd<1, 2>; // =>
-
-type testCases = [
-  Expect<Equal<entry<[1, 2]>, 0>>,
-  Expect<Equal<entry<[3, 7]>, 3>>,
-  Expect<Equal<entry<[0, 1]>, 0>>,
-  Expect<Equal<entry<[8, 12]>, 8>>,
-  Expect<Equal<entry<[12345, 54321]>, 4145>>,
-  Expect<Equal<entry<[-1, 1]>, 1>>,
-  // Expect<Equal<entry<[-1, -1]>, -1>>,
-  Expect<Equal<entry<[-1, 0]>, 0>>,
-  Expect<Equal<entry<[2147483647, 1]>, 1>>,
-  // Expect<Equal<entry<[-2147483648, -1]>, -2147483648>>,
-  Expect<Equal<entry<[123, 456]>, 72>>,
-  Expect<Equal<entry<[987, 654]>, 650>>,
-  // Expect<Equal<entry<[-500, 500]>, 4>>,
-  // Expect<Equal<entry<[-400, 400]>, 16>>,
-  // Expect<Equal<entry<[-300, 300]>, 4>>,
-  // Expect<Equal<entry<[-200, 200]>, 8>>,
-  Expect<Equal<entry<[0, 0]>, 0>>,
-  Expect<Equal<entry<[0, -1]>, 0>>,
-  Expect<Equal<entry<[-1, 0]>, 0>>,
-  Expect<Equal<entry<[100000, 10000]>, 1536>>,
-  Expect<Equal<entry<[200000, 20000]>, 3072>>,
-  Expect<Equal<entry<[300000, 30000]>, 4384>>,
-  Expect<Equal<entry<[400000, 40000]>, 6144>>,
-  Expect<Equal<entry<[500000, 50000]>, 33024>>,
-  Expect<Equal<entry<[600000, 60000]>, 8768>>,
-  Expect<Equal<entry<[700000, 70000]>, 96>>,
-  Expect<Equal<entry<[800000, 80000]>, 12288>>,
-  Expect<Equal<entry<[900000, 90000]>, 72576>>,
-  Expect<Equal<entry<[1000000, 100000]>, 66048>>,
-  Expect<Equal<entry<[1100000, 110000]>, 34976>>,
-]
+type x1 = BitwiseAnd<1, -1>; // =>

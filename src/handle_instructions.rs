@@ -287,6 +287,14 @@ pub fn handle_instructions(
             result.push((indent, format!("{{ kind: 'Drop' }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
+        Instruction::I32Or | Instruction::I64Or => {
+            result.push((indent, format!("{{ kind: 'Or' }},")));
+            handle_instructions(func, instrs, indent, result, context)
+        }
+        Instruction::I32Xor | Instruction::I64Xor => {
+            result.push((indent, format!("{{ kind: 'Xor' }},")));
+            handle_instructions(func, instrs, indent, result, context)
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

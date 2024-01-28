@@ -41,11 +41,11 @@ Usage count (in Doom) is the number on the right
 | Loop              | 638   | ✅           |
 | Select            | 637   | ✅           |
 | Drop              | 504   | ✅           |
-| I32Or             | 488   | ❌           |
+| I32Or             | 488   | ⏸️           |
 | I32Ne             | 483   | ❌           |
 | I32Mul            | 478   | ✅           |
 | I32Load8u         | 460   | ❌           |
-| I32Xor            | 411   | ❌           |
+| I32Xor            | 411   | ⏸️           |
 | I32GtS            | 365   | ✅           |
 | I64Load           | 357   | ✅           |
 | GlobalSet         | 349   | ✅           |
@@ -66,7 +66,7 @@ Usage count (in Doom) is the number on the right
 | I32LtU            | 139   | ✅           |
 | I64Add            | 130   | ✅           |
 | Unreachable       | 129   | ❌           |
-| I64Or             | 129   | ❌           |
+| I64Or             | 129   | ⏸️           |
 | I32GtU            | 118   | ✅           |
 | I64ExtendI32U     | 118   | ❌           |
 | BrTable           | 114   | ❌           |
@@ -87,7 +87,7 @@ Usage count (in Doom) is the number on the right
 | Nop               | 40    | ✅           |
 | F64Const          | 37    | ❌           |
 | I64GtU            | 35    | ✅           |
-| I64Xor            | 34    | ❌           |
+| I64Xor            | 34    | ⏸️           |
 | I32DivU           | 30    | ❌           |
 | I64Ne             | 30    | ❌           |
 | I64ExtendI32S     | 29    | ❌           |

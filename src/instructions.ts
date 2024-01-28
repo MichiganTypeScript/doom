@@ -188,6 +188,10 @@ export type INop = {
   ziltoid: "theOmniscient"
 }
 
+export type IOr = {
+  kind: "Or"
+}
+
 export type IReturn = {
   kind: "Return"
 
@@ -211,6 +215,10 @@ export type IStore = {
   offset: number;
 }
 
+export type IXor = {
+  kind: "Xor"
+}
+
 /** an item on the stack */
 export type Entry = number;
 
@@ -224,8 +232,8 @@ export type Instruction =
   | ICallIndirect
   | IConst
   | IDrop
-  | IEndLoop
   | IEndFunction
+  | IEndLoop
   | IEquals
   | IEqualsZero
   | IGlobalGet
@@ -244,10 +252,12 @@ export type Instruction =
   | IMultiply
   | INegate
   | INop
+  | IOr
   | IReturn
   | ISelect
   | IStore
   | ISubtract
+  | IXor
 
 
 export type selectInstruction<
@@ -348,6 +358,9 @@ export type selectInstruction<
   : instruction extends INop
   ? Instructions.Nop<instruction, state>
 
+  : instruction extends IOr
+  ? Instructions.Or<instruction, state>
+
   : instruction extends IReturn
   ? Instructions.Return<instruction, state>
 
@@ -359,6 +372,9 @@ export type selectInstruction<
 
   : instruction extends IStore
   ? Instructions.Store<instruction, state>
+
+  : instruction extends IXor
+  ? Instructions.Xor<instruction, state>
 
   : 'you forgot to handle an instruction'
 
@@ -964,6 +980,27 @@ export namespace Instructions {
       state
   > = RESULT;
 
+  export type Or<
+    instruction extends IOr, // unused
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          [
+            ...remaining,
+            TypeMath.BitwiseOr<b, a>
+          ],
+
+          state
+        >
+      : never
+  > = RESULT
+
   /**
    * If there are no values left on the stack, it returns nothing/void.
    * If there are the same amount of values left on the stack as specified in the function's type signature, it returns those values.
@@ -1076,6 +1113,27 @@ export namespace Instructions {
             entry,
             state
           >
+        >
+      : never
+  > = RESULT
+
+  export type Xor<
+    instruction extends IXor, // unused
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          [
+            ...remaining,
+            TypeMath.BitwiseXor<b, a>
+          ],
+
+          state
         >
       : never
   > = RESULT
