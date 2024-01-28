@@ -14,6 +14,7 @@
     "compile:c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
     "compile:wat-to-wasm": "wat2wasm src/debug/code.wat --output src/debug/code.wasm",
     "test:wasm": "tsx src/test.ts",
+    "test:evaluation-playground": "node src/debug/evaluate/evaluate-with-cli.cjs",
     "test": "tsc --project tsconfig.test.json && vitest",
     "test:create-new": "./src/test/create-new.sh",
     "test:rust": "cargo test"

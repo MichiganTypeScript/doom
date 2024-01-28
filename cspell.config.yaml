@@ -9,12 +9,15 @@ words:
   - Deque
   - emcc
   - errno
+  - Expecto
   - funcs
   - hotscript
   - indexmap
   - instrs
   - memcpy
   - memset
+  - Patronum
+  - Sarlacc
   - Trunc
   - typeconstraint
   - valtype
