@@ -40,7 +40,7 @@ Usage count (in Doom) is the number on the right
 | I64Const          | 712   | ✅           |
 | Loop              | 638   | ✅           |
 | Select            | 637   | ✅           |
-| Drop              | 504   | ❌           |
+| Drop              | 504   | ✅           |
 | I32Or             | 488   | ❌           |
 | I32Ne             | 483   | ❌           |
 | I32Mul            | 478   | ✅           |

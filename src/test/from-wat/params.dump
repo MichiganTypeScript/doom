@@ -12,13 +12,11 @@ Module {
                         offset: 11,
                     },
                     id: Some(
-                        "drop",
+                        "test",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [
-                            "dop",
-                        ],
+                        names: [],
                     },
                     kind: Inline {
                         locals: [],
@@ -26,15 +24,9 @@ Module {
                             instrs: [
                                 LocalGet(
                                     Id(
-                                        "first_arg",
+                                        "a",
                                     ),
                                 ),
-                                LocalGet(
-                                    Id(
-                                        "second_arg",
-                                    ),
-                                ),
-                                Drop,
                             ],
                         },
                     },
@@ -45,14 +37,7 @@ Module {
                                 params: [
                                     (
                                         Some(
-                                            "first_arg",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                    (
-                                        Some(
-                                            "second_arg",
+                                            "a",
                                         ),
                                         None,
                                         I32,
@@ -69,7 +54,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 165,
+                        offset: 227,
                     },
                     id: Some(
                         "entry",
@@ -86,17 +71,12 @@ Module {
                             instrs: [
                                 LocalGet(
                                     Id(
-                                        "second_arg",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "first_arg",
+                                        "third",
                                     ),
                                 ),
                                 Call(
                                     Id(
-                                        "drop",
+                                        "test",
                                     ),
                                 ),
                             ],
@@ -109,14 +89,21 @@ Module {
                                 params: [
                                     (
                                         Some(
-                                            "first_arg",
+                                            "first",
                                         ),
                                         None,
                                         I32,
                                     ),
                                     (
                                         Some(
-                                            "second_arg",
+                                            "second",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "third",
                                         ),
                                         None,
                                         I32,
@@ -138,7 +125,6 @@ Module {
 
 
 {
-    "LocalGet": 4,
-    "Drop": 1,
+    "LocalGet": 2,
     "Call": 1,
 }

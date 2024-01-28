@@ -66,6 +66,10 @@ export type IConst = {
   value: number;
 }
 
+export type IDrop = {
+  kind: "Drop"
+}
+
 /** a synthetic instruction for repeating the instructions of a loop */
 export type IEndLoop = {
   kind: "EndLoop"
@@ -219,6 +223,7 @@ export type Instruction =
   | ICall
   | ICallIndirect
   | IConst
+  | IDrop
   | IEndLoop
   | IEndFunction
   | IEquals
@@ -279,6 +284,9 @@ export type selectInstruction<
 
   : instruction extends IConst
   ? Instructions.Const<instruction, state>
+
+  : instruction extends IDrop
+  ? Instructions.Drop<instruction, state>
 
   : instruction extends IEndLoop
   ? Instructions.EndLoop<instruction, state>
@@ -464,10 +472,9 @@ export namespace Instructions {
     state extends ProgramState,
 
     RESULT extends ProgramState =
-      // HELP: params are fed in reverse order and simply switching the infer statements order below for some reason doesn't work...
       params extends [
-        infer param extends Param,
         ...infer remainingParams extends Param[],
+        infer param extends Param,
       ]
       ? State.Stack.get<state> extends [
           ...infer remainingStack extends Entry[],
@@ -517,7 +524,7 @@ export namespace Instructions {
           // push a new execution context
           State.ExecutionContexts.push<
             {
-              locals: {}, // even though there are known locals for the function, they are added when they're set with LocalSet
+              locals: {}, // even though there may be known locals for the function, they are added when they're set with LocalSet
               funcId: _funcId,
               branches: {},
             },
@@ -536,7 +543,7 @@ export namespace Instructions {
         ...infer remainder extends Entry[],
         infer index extends Entry, // it's sorta hard to tell because there are no MDN docs to go from on this but it does seem like the argument that comes before is in fact the index.  if instead the params come before... we'll just have to look up the count and pop accordingly.
       ]
-      ? 
+      ?
         State.Instructions.unshift<
           {
             kind: 'Call',
@@ -562,6 +569,23 @@ export namespace Instructions {
 
         state
       >
+  > = RESULT
+
+  export type Drop<
+    instruction extends IDrop, // unused
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer drop extends Entry, // dropped instruction
+      ]
+      ? State.Stack.set<
+          remaining,
+
+          state
+        >
+      : never
   > = RESULT
 
   export type EndLoop<

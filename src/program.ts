@@ -62,8 +62,10 @@ export type ProgramState = {
 
 export type ProgramInput = Pick<
   ProgramState,
-  "stack" | "memory" | "memorySize" | "indirect" | "funcs" | "globals"
->
+  | "memory" | "memorySize" | "indirect" | "funcs" | "globals"
+> & {
+  arguments: number[];
+}
 
 export type runProgram<
   input extends ProgramInput,
@@ -81,7 +83,9 @@ export type runProgram<
       ];
       memory: [];
       memorySize: input['memorySize'];
-      stack: input['stack'];
+
+      // since the stack is a stack, we need to reverse it
+      stack: input['arguments'];
     },
     debugMode
   >
@@ -91,7 +95,7 @@ export type evaluate<T> = {
 } & unknown
 
 // set to `number` to disable
-export type StopAt = number
+export type StopAt = 999
 
 export type executeInstruction<
   state extends ProgramState,

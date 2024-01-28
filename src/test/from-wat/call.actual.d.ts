@@ -39,11 +39,11 @@ type $entry<
 > = RESULT
 
 export type entry<
-  input extends number[] = [],
+  arguments extends number[] = [],
   debugMode extends boolean = false
 > = runProgram<
   {
-    stack: input;
+    arguments: arguments;
     funcs: {
       $get42: $get42;
       $get42Plus1: $get42Plus1;

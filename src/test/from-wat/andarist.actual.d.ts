@@ -35,11 +35,11 @@ type $entry<
 > = RESULT
 
 export type entry<
-  input extends number[] = [],
+  arguments extends number[] = [],
   debugMode extends boolean = false
 > = runProgram<
   {
-    stack: input;
+    arguments: arguments;
     funcs: {
       $andarist: $andarist;
       $entry: $entry;

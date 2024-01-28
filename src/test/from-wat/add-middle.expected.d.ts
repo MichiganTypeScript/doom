@@ -69,11 +69,11 @@ type $emscripten_stack_init<
 > = RESULT
 
 export type entry<
-  input extends number[] = [],
+  arguments extends number[] = [],
   debugMode extends boolean = false
 > = runProgram<
   {
-    stack: input;
+    arguments: arguments;
     funcs: {
       $__wasm_call_ctors: $__wasm_call_ctors;
       $entry: $entry;

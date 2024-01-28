@@ -283,6 +283,10 @@ pub fn handle_instructions(
 
             handle_instructions(func, instrs, indent + 1, result, context)
         }
+        Instruction::Drop => {
+            result.push((indent, format!("{{ kind: 'Drop' }},")));
+            handle_instructions(func, instrs, indent, result, context)
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

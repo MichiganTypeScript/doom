@@ -1,5 +1,5 @@
-import type { entry } from './test/from-wat/loop.actual.js';
-type e = entry<[1], true> // =>
+import type { entry } from './test/from-wat/drop.actual.js';
+type e = entry<[1, 2], true> // =>
 
 type stack = e['stack']; // =>
 
@@ -35,7 +35,7 @@ type i12=e['instructions'][12];// =>
 type i13=e['instructions'][13];// =>
 type i14=e['instructions'][14];// =>
 type i15=e['instructions'][15];// =>
-type i16=e['instructions'][16];// =>s
+type i16=e['instructions'][16];// =>
 type i17=e['instructions'][17];// =>
 type i18=e['instructions'][18];// =>
 type i19=e['instructions'][19];// =>

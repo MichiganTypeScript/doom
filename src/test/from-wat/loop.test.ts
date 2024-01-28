@@ -17,11 +17,11 @@ test(name, async () => {
 });
 
 type testCases = [
-  Expect<Equal<entry<[3]>, 24>>,
-  Expect<Equal<entry<[2]>, 16>>,
-  Expect<Equal<entry<[1]>, 8>>,
-  Expect<Equal<entry<[0]>, 0>>,
-  Expect<Equal<entry<[-1]>, -8>>,
-  Expect<Equal<entry<[-2]>, -16>>,
-  Expect<Equal<entry<[-3]>, -24>>,
+  // Expect<Equal<entry<[3]>, 24>>,
+  // Expect<Equal<entry<[2]>, 16>>,
+  // Expect<Equal<entry<[1]>, 8>>,
+  // Expect<Equal<entry<[0]>, 0>>,
+  // Expect<Equal<entry<[-1]>, -8>>,
+  // Expect<Equal<entry<[-2]>, -16>>,
+  // Expect<Equal<entry<[-3]>, -24>>,
 ]

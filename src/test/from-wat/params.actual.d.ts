@@ -1,21 +1,6 @@
 import { Func, runProgram } from '../../program.ts'
 
-type $localTee<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$x'];
-    result: number;
-    locals: ['$y'];
-    instructions: [
-      { kind: 'LocalGet'; id: '$x' },
-      { kind: 'LocalTee'; id: '$y' },
-      { kind: 'LocalGet'; id: '$y' },
-      { kind: 'Add' },
-    ];
-  }
-> = RESULT
-
-type $entry<
+type $test<
   RESULT extends Func = {
     kind: 'func';
     params: ['$a'];
@@ -23,7 +8,19 @@ type $entry<
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Call'; id: '$localTee' },
+    ];
+  }
+> = RESULT
+
+type $entry<
+  RESULT extends Func = {
+    kind: 'func';
+    params: ['$first', '$second', '$third'];
+    result: number;
+    locals: [];
+    instructions: [
+      { kind: 'LocalGet'; id: '$third' },
+      { kind: 'Call'; id: '$test' },
     ];
   }
 > = RESULT
@@ -35,7 +32,7 @@ export type entry<
   {
     arguments: arguments;
     funcs: {
-      $localTee: $localTee;
+      $test: $test;
       $entry: $entry;
     };
     globals: {};
