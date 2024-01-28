@@ -34,7 +34,7 @@ Usage count (in Doom) is the number on the right
 | ----------------- | ----- | ------------ |
 | I32Eqz            | 1198  | ✅           |
 | I32Eq             | 823   | ✅           |
-| I32Ne             | 483   | ❌           |
+| I32Ne             | 483   | ✅           |
 | I32GtS            | 365   | ✅           |
 | I32LtS            | 298   | ✅           |
 | I32GeS            | 213   | ✅           |
@@ -46,7 +46,7 @@ Usage count (in Doom) is the number on the right
 | I64LtU            | 62    | ✅           |
 | I64Eqz            | 57    | ✅           |
 | I64GtU            | 35    | ✅           |
-| I64Ne             | 30    | ❌           |
+| I64Ne             | 30    | ✅           |
 | I64Eq             | 26    | ✅           |
 | I64GeS            | 21    | ✅           |
 | I64LtS            | 19    | ✅           |
@@ -55,7 +55,7 @@ Usage count (in Doom) is the number on the right
 | I64GtS            | 5     | ✅           |
 | I64GeU            | 5     | ✅           |
 | F64Lt             | 4     | ✅           |
-| F64Ne             | 4     | ❌           |
+| F64Ne             | 4     | ✅           |
 | F64Eq             | 3     | ✅           |
 | F32Lt             | 1     | ✅           |
 | F64Ge             | 1     | ✅           |

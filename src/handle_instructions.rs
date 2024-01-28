@@ -299,6 +299,10 @@ pub fn handle_instructions(
             result.push((indent, format!("{{ kind: 'Unreachable' }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
+        Instruction::F32Ne | Instruction::F64Ne | Instruction::I32Ne | Instruction::I64Ne => {
+            result.push((indent, format!("{{ kind: 'NotEqual' }},")));
+            handle_instructions(func, instrs, indent, result, context)
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }

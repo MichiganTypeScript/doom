@@ -188,6 +188,10 @@ export type INop = {
   ziltoid: "theOmniscient"
 }
 
+export type INotEqual = {
+  kind: "NotEqual"
+}
+
 export type IOr = {
   kind: "Or"
 }
@@ -256,6 +260,7 @@ export type Instruction =
   | IMultiply
   | INegate
   | INop
+  | INotEqual
   | IOr
   | IReturn
   | ISelect
@@ -362,6 +367,9 @@ export type selectInstruction<
 
   : instruction extends INop
   ? Instructions.Nop<instruction, state>
+
+  : instruction extends INotEqual
+  ? Instructions.NotEqual<instruction, state>
 
   : instruction extends IOr
   ? Instructions.Or<instruction, state>
@@ -988,6 +996,27 @@ export namespace Instructions {
       state
   > = RESULT;
 
+  export type NotEqual<
+    instruction extends INotEqual, // unused
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer b extends Entry,
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          [
+            ...remaining,
+            TypeMath.NotEqual<b, a> extends true ? 1 : 0
+          ],
+
+          state
+        >
+      : never
+  > = RESULT
+
   export type Or<
     instruction extends IOr, // unused
     state extends ProgramState,
@@ -1148,7 +1177,7 @@ export namespace Instructions {
       ]
       ? State.Stack.set<
           [
-            ...remaining,
+            ...remaining, 
             TypeMath.BitwiseXor<b, a>
           ],
 
