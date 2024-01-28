@@ -44,7 +44,7 @@ mod tests {
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            // "loop", //
+            // "conway", //
         ]
     }
 

@@ -6,7 +6,7 @@ import { expect, test } from 'vitest';
 
 const name = 'memory';
 test(name, async () => {
-  const entry = await getWasm("from-wat", name);
+  const { entry } = await getWasm("from-wat", name);
   expect(entry(2)).toStrictEqual(3);
   expect(entry(1)).toStrictEqual(2);
   expect(entry(0)).toStrictEqual(1);

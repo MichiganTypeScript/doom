@@ -6,7 +6,7 @@ import { getWasm } from '../../utils.js';
 
 const name = 'br-if';
 test(name, async () => {
-  const entry = await getWasm("from-wat", name);
+  const { entry } = await getWasm("from-wat", name);
   expect(entry(2)).toStrictEqual(7);
   expect(entry(1)).toStrictEqual(99);
   expect(entry(0)).toStrictEqual(42);

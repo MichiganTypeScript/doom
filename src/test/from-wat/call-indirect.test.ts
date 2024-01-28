@@ -6,7 +6,7 @@ import { getWasm } from '../../utils.js';
 
 const name = 'call-indirect';
 test(name, async () => {
-  const entry = await getWasm("from-wat", name);
+  const { entry } = await getWasm("from-wat", name);
   expect(entry(3, 2)).toStrictEqual(5);
   expect(entry(2, 2)).toStrictEqual(4);
   expect(entry(1, 2)).toStrictEqual(3);

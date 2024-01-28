@@ -6,7 +6,7 @@ import { expect, test } from 'vitest';
 
 const name = 'local-set';
 test(name, async () => {
-  const entry = await getWasm("from-wat", name);
+  const { entry } = await getWasm("from-wat", name);
   expect(entry()).toStrictEqual(11);
 });
 

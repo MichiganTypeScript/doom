@@ -20,7 +20,7 @@ test("memory-offset example", async () => {
 
 const name = 'memory-offset';
 test(name, async () => {
-  const entry = await getWasm("from-wat", name);
+  const { entry } = await getWasm("from-wat", name);
   expect(entry(1, 2, 3)).toStrictEqual(4);
   expect(entry(10, 20, 30)).toStrictEqual(40);
   expect(entry(2, 3, 4)).toStrictEqual(5);

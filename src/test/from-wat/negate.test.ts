@@ -6,7 +6,7 @@ import { expect, test } from 'vitest';
 
 const name = 'negate';
 test(name, async () => {
-  const entry = await getWasm("from-wat", name);
+  const { entry } = await getWasm("from-wat", name);
   expect(entry(2)).toStrictEqual(-2);
   expect(entry(-1)).toStrictEqual(1);
   expect(entry(0)).toStrictEqual(-0); // Difference between TS and WASM
