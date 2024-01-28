@@ -17,135 +17,179 @@ It looks like it can be run with 4 MiB which equates to 64 pages.
 
 Usage count (in Doom) is the number on the right
 
+### Numeric Instructions
+
+#### Constants
+
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |
-| LocalGet          | 18967 | ✅           |
 | I32Const          | 17073 | ✅           |
-| I32Load           | 5853  | ✅           |
-| End               | 4218  | ✅           |
-| I32Add            | 4175  | ✅           |
-| LocalTee          | 4081  | ✅           |
-| Call              | 3824  | ✅           |
-| LocalSet          | 3602  | ✅           |
-| I32Store          | 3413  | ✅           |
-| BrIf              | 2041  | ✅           |
-| If                | 1888  | ✅           |
-| Block             | 1692  | ✅           |
-| Br                | 1479  | ✅           |
-| I32Sub            | 1424  | ✅           |
-| I32Eqz            | 1198  | ✅           |
-| I32Shl            | 954   | ❌           |
-| I32Eq             | 823   | ✅           |
-| I32And            | 819   | ⏸️           |
 | I64Const          | 712   | ✅           |
-| Loop              | 638   | ✅           |
-| Select            | 637   | ✅           |
-| Drop              | 504   | ✅           |
-| I32Or             | 488   | ⏸️           |
+| F64Const          | 37    | ✅           |
+| F32Const          | 4     | ✅           |
+
+#### Comparison
+
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| I32Eqz            | 1198  | ✅           |
+| I32Eq             | 823   | ✅           |
 | I32Ne             | 483   | ❌           |
-| I32Mul            | 478   | ✅           |
-| I32Load8u         | 460   | ❌           |
-| I32Xor            | 411   | ⏸️           |
 | I32GtS            | 365   | ✅           |
-| I64Load           | 357   | ✅           |
-| GlobalSet         | 349   | ✅           |
-| Return            | 324   | ✅           |
 | I32LtS            | 298   | ✅           |
-| I32Load16s        | 278   | ❌           |
-| I32Store8         | 253   | ❌           |
-| I32Rotl           | 240   | ❌           |
-| I32ShrU           | 234   | ❌           |
-| I32ShrS           | 230   | ❌           |
 | I32GeS            | 213   | ✅           |
-| I64Store          | 196   | ✅           |
-| I32Store16        | 188   | ❌           |
-| GlobalGet         | 179   | ✅           |
-| I32Load16u        | 176   | ❌           |
-| I32DivS           | 165   | ❌           |
 | I32LeS            | 155   | ✅           |
 | I32LtU            | 139   | ✅           |
-| I64Add            | 130   | ✅           |
-| Unreachable       | 129   | ✅           |
-| I64Or             | 129   | ⏸️           |
 | I32GtU            | 118   | ✅           |
-| I64ExtendI32U     | 118   | ❌           |
-| BrTable           | 114   | ❌           |
 | I32LeU            | 95    | ✅           |
-| CallIndirect      | 89    | ✅           |
-| I64ShrU           | 83    | ❌           |
-| I64Shl            | 80    | ❌           |
 | I32GeU            | 74    | ✅           |
-| I64And            | 73    | ⏸️           |
-| I32Load8s         | 71    | ❌           |
-| Else              | 70    | ✅           |
 | I64LtU            | 62    | ✅           |
 | I64Eqz            | 57    | ✅           |
-| I32WrapI64        | 53    | ❌           |
-| I64Sub            | 53    | ✅           |
-| I64Mul            | 46    | ✅           |
-| I32RemS           | 44    | ❌           |
-| Nop               | 40    | ✅           |
-| F64Const          | 37    | ❌           |
 | I64GtU            | 35    | ✅           |
-| I64Xor            | 34    | ⏸️           |
-| I32DivU           | 30    | ❌           |
 | I64Ne             | 30    | ❌           |
-| I64ExtendI32S     | 29    | ❌           |
 | I64Eq             | 26    | ✅           |
 | I64GeS            | 21    | ✅           |
 | I64LtS            | 19    | ✅           |
-| F64Mul            | 18    | ✅           |
-| I32RemU           | 13    | ❌           |
-| F64ConvertI32S    | 9     | ❌           |
 | I64LeU            | 8     | ✅           |
-| I64Clz            | 7     | ❌           |
-| I64Load32u        | 6     | ❌           |
-| F64Sub            | 5     | ✅           |
-| F64Add            | 5     | ✅           |
 | I64LeS            | 5     | ✅           |
 | I64GtS            | 5     | ✅           |
-| F64Neg            | 5     | ✅           |
 | I64GeU            | 5     | ✅           |
-| I32Clz            | 5     | ❌           |
-| F32Const          | 4     | ❌           |
 | F64Lt             | 4     | ✅           |
+| F64Ne             | 4     | ❌           |
+| F64Eq             | 3     | ✅           |
+| F32Lt             | 1     | ✅           |
+| F64Ge             | 1     | ✅           |
+
+#### Arithmetic
+
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| I32Add            | 4175  | ✅           |
+| I32Sub            | 1424  | ✅           |
+| I32Mul            | 478   | ✅           |
+| I32DivS           | 165   | ❌           |
+| I64Add            | 130   | ✅           |
+| I64Sub            | 53    | ✅           |
+| I64Mul            | 46    | ✅           |
+| I32RemS           | 44    | ❌           |
+| I32DivU           | 30    | ❌           |
+| F64Mul            | 18    | ✅           |
+| I32RemU           | 13    | ❌           |
+| F64Sub            | 5     | ✅           |
+| F64Add            | 5     | ✅           |
+| I64DivU           | 3     | ❌           |
+| F32Div            | 2     | ❌           |
+| F32Mul            | 2     | ✅           |
+| F32Add            | 1     | ✅           |
+| I64DivS           | 1     | ❌           |
+| F64Div            | 1     | ❌           |
+
+#### Conversion
+
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| I64ExtendI32U     | 118   | ❌           |
+| I32WrapI64        | 53    | ❌           |
+| I64ExtendI32S     | 29    | ❌           |
+| F64ConvertI32S    | 9     | ❌           |
 | F32ConvertI32S    | 4     | ❌           |
+| F64ReinterpretI64 | 3     | ❌           |
+| I64ReinterpretF64 | 3     | ❌           |
+| F64PromoteF32     | 2     | ❌           |
+| I32TruncF32S      | 1     | ❌           |
+| F32DemoteF64      | 1     | ❌           |
+| I32TruncF64U      | 1     | ❌           |
+| F64ConvertI32U    | 1     | ❌           |
+| I32TruncF64S      | 1     | ❌           |
+| I32ReinterpretF32 | 1     | ❌           |
+| F32ReinterpretI32 | 1     | ❌           |
+
+#### Floating Point Specific Instructions
+
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| F64Neg            | 5     | ✅           |
+| F32Abs            | 2     | ❌           |
+| F64Abs            | 1     | ❌           |
+
+#### Constants
+
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| I32Shl            | 954   | ❌           |
+| I32And            | 819   | ⏸️           |
+| I32Or             | 488   | ⏸️           |
+| I32Xor            | 411   | ⏸️           |
+| I32Rotl           | 240   | ❌           |
+| I32ShrU           | 234   | ❌           |
+| I32ShrS           | 230   | ❌           |
+| I64Or             | 129   | ⏸️           |
+| I64ShrU           | 83    | ❌           |
+| I64Shl            | 80    | ❌           |
+| I64And            | 73    | ⏸️           |
+| I64Xor            | 34    | ⏸️           |
+| I64Clz            | 7     | ❌           |
+| I32Clz            | 5     | ❌           |
+| I64Rotl           | 1     | ❌           |
+
+### Variable Instructions
+
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| LocalGet          | 18967 | ✅           |
+| LocalTee          | 4081  | ✅           |
+| LocalSet          | 3602  | ✅           |
+| GlobalSet         | 349   | ✅           |
+| GlobalGet         | 179   | ✅           |
+
+### Memory Instructions
+
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| I32Load           | 5853  | ✅           |
+| I32Store          | 3413  | ✅           |
+| I32Load8u         | 460   | ❌           |
+| I64Load           | 357   | ✅           |
+| I32Load16s        | 278   | ❌           |
+| I32Store8         | 253   | ❌           |
+| I64Store          | 196   | ✅           |
+| I32Store16        | 188   | ❌           |
+| I32Load16u        | 176   | ❌           |
+| I32Load8s         | 71    | ❌           |
+| I64Load32u        | 6     | ❌           |
 | F64Store          | 4     | ❌           |
 | I64Store32        | 4     | ❌           |
-| F64Ne             | 4     | ❌           |
-| F64ReinterpretI64 | 3     | ❌           |
-| I64DivU           | 3     | ❌           |
-| I64ReinterpretF64 | 3     | ❌           |
-| F64Eq             | 3     | ✅           |
 | F32Load           | 2     | ❌           |
-| F32Abs            | 2     | ❌           |
-| F64PromoteF32     | 2     | ❌           |
-| F32Div            | 2     | ❌           |
 | F32Store          | 2     | ❌           |
-| F32Mul            | 2     | ✅           |
 | F64Load           | 2     | ❌           |
 | I64Store8         | 2     | ❌           |
-| I64Rotl           | 1     | ❌           |
-| F32Add            | 1     | ✅           |
-| F32Lt             | 1     | ✅           |
-| I32TruncF32S      | 1     | ❌           |
-| I64DivS           | 1     | ❌           |
-| F32DemoteF64      | 1     | ❌           |
-| F64Div            | 1     | ❌           |
 | I64Load16s        | 1     | ❌           |
 | I64Load16u        | 1     | ❌           |
 | I64Load8s         | 1     | ❌           |
 | I64Load8u         | 1     | ❌           |
 | I64Load32s        | 1     | ❌           |
-| F64Ge             | 1     | ✅           |
-| I32TruncF64U      | 1     | ❌           |
-| F64ConvertI32U    | 1     | ❌           |
-| F64Abs            | 1     | ❌           |
-| I32TruncF64S      | 1     | ❌           |
 | I64Store16        | 1     | ❌           |
 | MemorySize        | 1     | ❌           |
-| I32ReinterpretF32 | 1     | ❌           |
-| F32ReinterpretI32 | 1     | ❌           |
+
+### Control Flow Instructions
+
+| Instruction       | Calls | Implemented? |
+| ----------------- | ----- | ------------ |
+| End               | 4218  | ✅           |
+| Call              | 3824  | ✅           |
+| BrIf              | 2041  | ✅           |
+| If                | 1888  | ✅           |
+| Block             | 1692  | ✅           |
+| Br                | 1479  | ✅           |
+| Drop              | 504   | ✅           |
+| Loop              | 638   | ✅           |
+| Select            | 637   | ✅           |
+| Return            | 324   | ✅           |
+| Unreachable       | 129   | ✅           |
+| BrTable           | 114   | ❌           |
+| CallIndirect      | 89    | ✅           |
+| Else              | 70    | ✅           |
+| Nop               | 40    | ✅           |
 
 <sub>⏸️ means things are in progress</sub>
 
