@@ -138,7 +138,6 @@ impl SourceFile {
             wast::core::ElemPayload::Indices(ref indices) => indices
                 .iter()
                 .map(format_index)
-                .map(|x| format!("\"{x}\""))
                 .collect(),
             _ => panic!("only Indices ElemPayload supported"),
         };

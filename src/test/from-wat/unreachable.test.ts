@@ -13,7 +13,11 @@ test(name, async () => {
 
 type testCases = [
   Expect<Equal<
-    entry<[]>['instructions'],
-    [{ kind: "Halt"; }]
+    entry<[]>['instructions']['length'],
+    1
+  >>,
+  Expect<Equal<
+    entry<[]>['instructions'][0]['kind'],
+    'Halt'
   >>,
 ]

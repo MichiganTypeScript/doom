@@ -45,6 +45,15 @@ export type IBranchIf = {
   id: string;
 }
 
+export type IBranchTable = {
+  kind: "BranchTable"
+
+  /** a block identifier */
+  branches: Record<number, string>;
+
+  default: string;
+}
+
 export type ICall = {
   kind: "Call"
 
@@ -120,6 +129,12 @@ export type IGreaterThanOrEqual = {
 /** not a webassembly instruction. used for debugging: tells the program to immediately Halt */
 export type IHalt = {
   kind: "Halt"
+
+  /** if Halting because of an unrecognized instruction, it's useful to append it here */
+  instruction?: Instruction;
+
+  /** an optional reason for the halt */
+  reason?: string;
 }
 
 export type IIf = {
@@ -236,6 +251,7 @@ export type Instruction =
   | IBlock
   | IBranch
   | IBranchIf
+  | IBranchTable
   | ICall
   | ICallIndirect
   | IConst
@@ -295,6 +311,9 @@ export type selectInstruction<
 
   : instruction extends IBranchIf
   ? Instructions.BranchIf<instruction, state>
+
+  : instruction extends IBranchTable
+  ? Instructions.BranchTable<instruction, state>
 
   : instruction extends ICall
   ? Instructions.Call<instruction, state>
@@ -392,7 +411,14 @@ export type selectInstruction<
   : instruction extends IXor
   ? Instructions.Xor<instruction, state>
 
-  : 'you forgot to handle an instruction'
+  : State.Instructions.push<
+      {
+        kind: 'Halt',
+        instruction: instruction,
+        reason: 'unrecognized instruction'
+      },
+      state
+    >
 
 export namespace Instructions {
   export type Add<
@@ -454,6 +480,16 @@ export namespace Instructions {
       >
   > = RESULT
 
+  export type Branch<
+    instruction extends IBranch,
+    state extends ProgramState,
+  > = 
+    State.Instructions.set<
+      State.ExecutionContexts.Active.Branches.get<state>[instruction['id']],
+
+      state
+    >
+
   export type BranchIf<
     instruction extends IBranchIf,
     state extends ProgramState,
@@ -487,15 +523,40 @@ export namespace Instructions {
       : never
   > = RESULT
 
-  export type Branch<
-    instruction extends IBranch,
+  export type BranchTable<
+    instruction extends IBranchTable,
     state extends ProgramState,
-  > = 
-    State.Instructions.set<
-      State.ExecutionContexts.Active.Branches.get<state>[instruction['id']],
 
-      state
-    >
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer index extends Entry,
+      ]
+
+      // the whole reason `BranchTable.branches` is an object instead of an array is to make it easy to check membership like we are here.  if there's a more efficient way to do this: that'd be great
+      ? index extends keyof instruction['branches']
+
+        // match found
+        ? State.Instructions.set<
+            State.ExecutionContexts.Active.Branches.get<state>[instruction['branches'][index]],
+
+            State.Stack.set<
+              remaining,
+              state
+            >
+          >
+
+        // no match found fallback to the default
+        : State.Instructions.set<
+            State.ExecutionContexts.Active.Branches.get<state>[instruction['default']],
+
+            State.Stack.set<
+              remaining,
+              state
+            >
+          >
+      : never
+  > = RESULT
 
   /** this functions purpose in life is to pop items off the stack according to a function's params and add them as locals */
   type PopulateParams<
@@ -503,7 +564,7 @@ export namespace Instructions {
     params extends Param[],
     state extends ProgramState,
 
-    RESULT extends ProgramState =
+    RESULT extends ProgramState = 
       params extends [
         ...infer remainingParams extends Param[],
         infer param extends Param,
@@ -1047,18 +1108,33 @@ export namespace Instructions {
     instruction extends IReturn,
     state extends ProgramState,
 
-    _stack extends Entry[] = [],
+    _Acc extends Entry[] = [],
 
     RESULT extends ProgramState =
-      _stack['length'] extends instruction['count']
-      ? State.Stack.set<
-          _stack,
-          state
+
+      // have we accumumlated enough values to return?
+      _Acc['length'] extends instruction['count']
+
+      // we can return now
+      ?
+        // set the stack to what remains in the accumulator
+        State.Stack.set<
+          _Acc,
+
+          // pop instructions until we reach a matching `EndFunction` instruction
+          State.Instructions.popUntil<
+            { kind: 'EndFunction', id: State.ExecutionContexts.Active.get<state>['funcId'] },
+            state
+          >
+          
         >
+
+      // we need to recurse more to grab more values off the stack
       : state['stack'] extends [
           ...infer remaining extends Entry[],
           infer pop extends Entry,
         ]
+
         ? Return<
             instruction,
 
@@ -1067,12 +1143,16 @@ export namespace Instructions {
               state
             >,
 
+            // add this value to the accumulator
             [
-              ..._stack,
+              ..._Acc,
               pop
             ]
           >
         : never
+
+    // RESULT extends ProgramState =
+    //   State.Stack.
   > = RESULT
 
   export type Select<
@@ -1160,7 +1240,7 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.push<
-        { kind: 'Halt' },
+        { kind: 'Halt', reason: "reached an Unreachable instruction.  you prolly deserve the debugging session that's coming next" },
         state
       >
   > = RESULT;

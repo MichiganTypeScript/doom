@@ -100,6 +100,31 @@ export namespace State {
 
     > = RESULT
 
+    export type popUntil<
+      instruction extends Instruction,
+      state extends ProgramState,
+
+      RESULT extends ProgramState =
+        get<state> extends [
+          infer discarded extends Instruction,
+          ...infer remaining extends Instruction[],
+        ]
+        ? discarded extends instruction
+
+          // we found the matching instruction: we can dipset
+          ? state
+
+          // we didn't find the matching instruction: we have to keep popping
+          : popUntil<
+              instruction,
+              set<
+                remaining,
+                state
+              >
+            >
+        : never
+    > = RESULT
+
     export type push<
       instruction extends Instruction,
       state extends ProgramState,

@@ -1,0 +1,215 @@
+Module {
+    span: Span {
+        offset: 131,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 141,
+                    },
+                    id: Some(
+                        "switch_like",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Block(
+                                    BlockType {
+                                        label: Some(
+                                            "B0",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                Block(
+                                    BlockType {
+                                        label: Some(
+                                            "B1",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                Block(
+                                    BlockType {
+                                        label: Some(
+                                            "B2",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                Block(
+                                    BlockType {
+                                        label: Some(
+                                            "B3",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "p",
+                                    ),
+                                ),
+                                BrTable(
+                                    BrTableIndices {
+                                        labels: [
+                                            Id(
+                                                "B2",
+                                            ),
+                                            Id(
+                                                "B1",
+                                            ),
+                                            Id(
+                                                "B0",
+                                            ),
+                                        ],
+                                        default: Id(
+                                            "B3",
+                                        ),
+                                    },
+                                ),
+                                End(
+                                    None,
+                                ),
+                                I32Const(
+                                    100,
+                                ),
+                                Return,
+                                End(
+                                    None,
+                                ),
+                                I32Const(
+                                    101,
+                                ),
+                                Return,
+                                End(
+                                    None,
+                                ),
+                                I32Const(
+                                    102,
+                                ),
+                                Return,
+                                End(
+                                    None,
+                                ),
+                                I32Const(
+                                    103,
+                                ),
+                                Return,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "p",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 830,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "switch_like",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "Block": 4,
+    "End": 4,
+    "I32Const": 4,
+    "Return": 4,
+    "LocalGet": 2,
+    "BrTable": 1,
+    "Call": 1,
+}

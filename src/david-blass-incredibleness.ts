@@ -1,5 +1,5 @@
-import type { entry } from './test/from-wat/drop.actual.js';
-type e = entry<[1, 2], true> // =>
+import type { entry } from './test/from-wat/br-table.actual.js';
+type e = entry<[4], true> // =>
 
 type stack = e['stack']; // =>
 
@@ -42,3 +42,8 @@ type i19=e['instructions'][19];// =>
 type i20=e['instructions'][20];// =>
 
 type g = e['globals']; // =>
+
+type b0 = ec[1]['branches']['$B0']; // =>
+type b1 = ec[1]['branches']['$B1']; // =>
+type b2 = ec[1]['branches']['$B2']; // =>
+type b3 = ec[1]['branches']['$B3']; // =>

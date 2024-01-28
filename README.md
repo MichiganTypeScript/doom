@@ -1,17 +1,12 @@
 # Doom but in TypeScript Types
 
+This is a WebAssembly runtime implemented purely in TypeScript types.  The basic idea is that you can turn C code (or just straight WebAssembly) into a TypeScript type (as in, with no JavaScript runtime code) that will compile the instructions.
+
 ## Technical details
 
 Doom's resolution is 320x200.
 
 It looks like it can be run with 4 MiB which equates to 64 pages.
-
-## Links
-
-- https://diekmann.github.io/wasm-fizzbuzz/doom
-- https://diekmann.github.io/wasm-fizzbuzz/doom/doom.wasm
-- https://doom.fandom.com/wiki/Doom_source_code_files
-- https://github.com/eliben/wasm-wat-samples
 
 ## Progress
 
@@ -186,7 +181,7 @@ Usage count (in Doom) is the number on the right
 | Select            | 637   | ✅           |
 | Return            | 324   | ✅           |
 | Unreachable       | 129   | ✅           |
-| BrTable           | 114   | ❌           |
+| BrTable           | 114   | ✅           |
 | CallIndirect      | 89    | ✅           |
 | Else              | 70    | ✅           |
 | Nop               | 40    | ✅           |
@@ -209,3 +204,11 @@ EVERY effort has been taken to not support something that Doom doesn't explicitl
 10. technically multiple function tables are possible, but Doom doesn't use it.  I bet you know what I'm gonna say next. :)  Same for multiple elements.
 11. dynamic dispatch is a fun topic.  in WASM the calling convention means that when you call a function you first pop items off the stack equal to the number of params for that func.  but when you `call_indirect` an element from the function lookup table, you hit the problem of needing to first know _how man_ items you're supposed to pop.  anyone that's tried to do functional programming in languages you shouldn't \*cough cough Go cough cough\* will know that the way most people get around this is to set an upper bound on the number of items you can recursively pop off the stack.  But what number should that limit be set at?? You gotta know what I'm gonna say next at this point.  Doom has a maximum of 7 arguments, so that's the maximum (plus the optional 1 return type, which makes 8).
 12. TypeScript is patched with [a pnpm patch](https://pnpm.io/cli/patch) to set the recursion limit to Number.MAX_SAFE_INTEGER (instead of 100, lol).  Hopefully it's painfully obvious that you can't run a program like Doom without a heck of a lot more than 100 loops (which, loops take up recursion count).
+
+## Links
+
+- https://diekmann.github.io/wasm-fizzbuzz/doom
+- https://diekmann.github.io/wasm-fizzbuzz/doom/doom.wasm
+- https://doom.fandom.com/wiki/Doom_source_code_files
+- https://github.com/eliben/wasm-wat-samples
+- https://github.com/WebAssembly/testsuite

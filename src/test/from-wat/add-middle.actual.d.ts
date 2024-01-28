@@ -86,7 +86,7 @@ export type entry<
     };
     memory: {};
     memorySize: 256;
-    indirect: ["$__wasm_call_ctors"];
+    indirect: ['$__wasm_call_ctors'];
   },
   debugMode
 >

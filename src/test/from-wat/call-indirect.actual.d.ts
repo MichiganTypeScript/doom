@@ -57,7 +57,7 @@ export type entry<
     globals: {};
     memory: {};
     memorySize: 0;
-    indirect: ["$add"];
+    indirect: ['$add'];
   },
   debugMode
 >

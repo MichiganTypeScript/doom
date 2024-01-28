@@ -2,11 +2,11 @@
 
 ## Implementation improvements
 
-- bitwise numbers
-
 ## Refactors
 
 ## Other
+
+- some way to evaluate a type from the CLI
 
 ### once Doom runs
 

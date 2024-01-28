@@ -30,8 +30,7 @@ pub fn handle_instructions(
         }
         Instruction::Call(index) => {
             let id = format_index(index);
-
-            result.push((indent, format!("{{ kind: 'Call'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'Call'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::I32Const(value) => {
@@ -62,22 +61,22 @@ pub fn handle_instructions(
         }
         Instruction::LocalGet(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'LocalGet'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'LocalGet'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::LocalSet(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'LocalSet'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'LocalSet'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::GlobalGet(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'GlobalGet'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'GlobalGet'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::GlobalSet(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'GlobalSet'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'GlobalSet'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::Return => {
@@ -93,7 +92,7 @@ pub fn handle_instructions(
         }
         Instruction::LocalTee(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'LocalTee'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'LocalTee'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::I32Mul | Instruction::I64Mul | Instruction::F32Mul | Instruction::F64Mul => {
@@ -237,12 +236,12 @@ pub fn handle_instructions(
         }
         Instruction::Br(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'Branch'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'Branch'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::BrIf(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'BranchIf'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'BranchIf'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::Block(block) => {
@@ -261,7 +260,7 @@ pub fn handle_instructions(
         }
         Instruction::CallIndirect(call_indirect) => {
             let id = format_index(&call_indirect.table);
-            result.push((indent, format!("{{ kind: 'CallIndirect'; id: '{id}' }},")));
+            result.push((indent, format!("{{ kind: 'CallIndirect'; id: {id} }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
         Instruction::Loop(block_type) => {
@@ -301,6 +300,23 @@ pub fn handle_instructions(
         }
         Instruction::F32Ne | Instruction::F64Ne | Instruction::I32Ne | Instruction::I64Ne => {
             result.push((indent, format!("{{ kind: 'NotEqual' }},")));
+            handle_instructions(func, instrs, indent, result, context)
+        }
+        Instruction::BrTable(br_table) => {
+            let branches = br_table
+                .labels
+                .iter()
+                .enumerate()
+                .map(|(index, label)| format!("{}: {}", index, format_index(label)))
+                .collect::<Vec<String>>()
+                .join(", ");
+
+            let default_label = format_index(&br_table.default);
+
+            result.push((indent, format!("{{ kind: 'BranchTable';")));
+            result.push((indent + 1, format!("branches: {{ {branches} }};")));
+            result.push((indent + 1, format!("default: {default_label};")));
+            result.push((indent, format!("}}")));
             handle_instructions(func, instrs, indent, result, context)
         }
         _ => {

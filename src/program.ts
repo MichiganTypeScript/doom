@@ -95,7 +95,7 @@ export type evaluate<T> = {
 } & unknown
 
 // set to `number` to disable
-export type StopAt = 999
+export type StopAt = number
 
 export type executeInstruction<
   state extends ProgramState,
