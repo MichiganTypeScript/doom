@@ -65,7 +65,7 @@ Usage count (in Doom) is the number on the right
 | I32LeS            | 155   | ✅           |
 | I32LtU            | 139   | ✅           |
 | I64Add            | 130   | ✅           |
-| Unreachable       | 129   | ❌           |
+| Unreachable       | 129   | ✅           |
 | I64Or             | 129   | ⏸️           |
 | I32GtU            | 118   | ✅           |
 | I64ExtendI32U     | 118   | ❌           |

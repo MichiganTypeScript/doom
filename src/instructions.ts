@@ -215,6 +215,10 @@ export type IStore = {
   offset: number;
 }
 
+export type IUnreachable = {
+  kind: "Unreachable"
+}
+
 export type IXor = {
   kind: "Xor"
 }
@@ -257,6 +261,7 @@ export type Instruction =
   | ISelect
   | IStore
   | ISubtract
+  | IUnreachable
   | IXor
 
 
@@ -372,6 +377,9 @@ export type selectInstruction<
 
   : instruction extends IStore
   ? Instructions.Store<instruction, state>
+
+  : instruction extends IUnreachable
+  ? Instructions.Unreachable<instruction, state>
 
   : instruction extends IXor
   ? Instructions.Xor<instruction, state>
@@ -1116,6 +1124,17 @@ export namespace Instructions {
         >
       : never
   > = RESULT
+
+  export type Unreachable<
+    instruction extends IUnreachable,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.push<
+        { kind: 'Halt' },
+        state
+      >
+  > = RESULT;
 
   export type Xor<
     instruction extends IXor, // unused

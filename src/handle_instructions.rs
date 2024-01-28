@@ -295,6 +295,10 @@ pub fn handle_instructions(
             result.push((indent, format!("{{ kind: 'Xor' }},")));
             handle_instructions(func, instrs, indent, result, context)
         }
+        Instruction::Unreachable => {
+            result.push((indent, format!("{{ kind: 'Unreachable' }},")));
+            handle_instructions(func, instrs, indent, result, context)
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }
