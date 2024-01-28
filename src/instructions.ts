@@ -14,6 +14,10 @@ import * as TypeMath from "./ts-type-math/index.js"
  * That's all.
  */
 
+export type IAbsoluteValue = {
+  kind: "AbsoluteValue"
+}
+
 export type IAdd = {
   kind: "Add"
 }
@@ -246,6 +250,7 @@ export type IXor = {
 export type Entry = number;
 
 export type Instruction =
+  | IAbsoluteValue
   | IAdd
   | IAnd
   | IBlock
@@ -297,7 +302,10 @@ export type selectInstruction<
       initialState
     >
 > =
-  instruction extends IAdd
+  instruction extends IAbsoluteValue
+  ? Instructions.AbsoluteValue<instruction, state>
+
+  : instruction extends IAdd
   ? Instructions.Add<instruction, state>
 
   : instruction extends IAnd
@@ -421,6 +429,26 @@ export type selectInstruction<
     >
 
 export namespace Instructions {
+  export type AbsoluteValue<
+    instruction extends IAbsoluteValue, // unused
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remainingStack extends Entry[],
+        infer a extends Entry,
+      ]
+      ? State.Stack.set<
+          [
+            ...remainingStack,
+            TypeMath.AbsoluteValue<a>
+          ],
+          state
+        >
+      : never
+  > = RESULT
+  
+  
   export type Add<
     instruction extends IAdd, // unused
     state extends ProgramState,

@@ -104,10 +104,10 @@ Usage count (in Doom) is the number on the right
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |
 | F64Neg            | 5     | ✅           |
-| F32Abs            | 2     | ❌           |
-| F64Abs            | 1     | ❌           |
+| F32Abs            | 2     | ✅           |
+| F64Abs            | 1     | ✅           |
 
-#### Constants
+#### Bitwise
 
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |

@@ -1,0 +1,118 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "abs_f64",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "x",
+                                    ),
+                                ),
+                                F64Abs,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "x",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                ],
+                                results: [
+                                    F64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 90,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "abs_f64",
+                                    ),
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                ],
+                                results: [
+                                    F64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 2,
+    "F64Abs": 1,
+    "Call": 1,
+}

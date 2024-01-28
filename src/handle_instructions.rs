@@ -319,6 +319,10 @@ pub fn handle_instructions(
             result.push((indent, format!("}}")));
             handle_instructions(func, instrs, indent, result, context)
         }
+        Instruction::F32Abs | Instruction::F64Abs => {
+            result.push((indent, format!("{{ kind: 'AbsoluteValue' }},")));
+            handle_instructions(func, instrs, indent, result, context)
+        }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
         }
