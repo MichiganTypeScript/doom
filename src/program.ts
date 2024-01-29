@@ -41,6 +41,8 @@ export type ProgramState = {
   /** a stack of execution contexts */
   executionContexts: ExecutionContext[];
 
+  activeExecutionContext: ExecutionContext;
+
   funcs: FuncsById;
 
   globals: GlobalsById;
@@ -73,6 +75,11 @@ export type runProgram<
 > =
   executeInstruction<
     {
+      activeExecutionContext: {
+        locals: {};
+        funcId: "root";
+        branches: {};
+      };
       count: 0;
       executionContexts: [];
       funcs: input['funcs'];

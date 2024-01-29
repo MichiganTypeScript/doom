@@ -30,6 +30,7 @@ export namespace State {
       RESULT extends ProgramState = {
         count: TypeMath.Add<state['count'], 1>;
 
+        activeExecutionContext: state['activeExecutionContext'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
         globals: state['globals'];
@@ -52,6 +53,7 @@ export namespace State {
       RESULT extends ProgramState = {
         instructions: instructions;
 
+        activeExecutionContext: state['activeExecutionContext'];
         count: state['count'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
@@ -186,6 +188,7 @@ export namespace State {
       RESULT extends ProgramState = {
         stack: stack;
 
+        activeExecutionContext: state['activeExecutionContext'];
         count: state['count'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
@@ -222,6 +225,7 @@ export namespace State {
       RESULT extends ProgramState = {
           executionContexts: executionContexts;
 
+          activeExecutionContext: state['activeExecutionContext'];
           count: state['count'];
           funcs: state['funcs'];
           globals: state['globals'];
@@ -238,30 +242,50 @@ export namespace State {
       executionContext extends ExecutionContext,
       state extends ProgramState,
 
-      RESULT extends ProgramState = set<
-        [
+      RESULT extends ProgramState = {
+        executionContexts: [
           ...state['executionContexts'],
-          executionContext
-        ],
+          // add the old active execution context to the stack
+          state['activeExecutionContext']
+        ];
 
-        state
-      >
+        // set the new one
+        activeExecutionContext: executionContext;
+        count: state['count'];
+        funcs: state['funcs'];
+        globals: state['globals'];
+        indirect: state['indirect'];
+        instructions: state['instructions'];
+        memory: state['memory'];
+        memorySize: state['memorySize'];
+        stack: state['stack'];
+      }
     > = RESULT
 
     /** pop a brand new execution context */
     export type pop<
       state extends ProgramState,
 
-      RESULT extends ProgramState = set<
-        state['executionContexts'] extends [
-          ...infer remaining extends ExecutionContext[],
-          infer dropped extends ExecutionContext,
-        ]
-        ? remaining
-        : never,
+      RESULT extends ProgramState = 
+      state['executionContexts'] extends [
+        ...infer remaining extends ExecutionContext[],
+        infer active extends ExecutionContext,
+      ]
+      ? {
+          executionContexts: remaining;
 
-        state
-      >
+          // set the new one
+          activeExecutionContext: active;
+          count: state['count'];
+          funcs: state['funcs'];
+          globals: state['globals'];
+          indirect: state['indirect'];
+          instructions: state['instructions'];
+          memory: state['memory'];
+          memorySize: state['memorySize'];
+          stack: state['stack'];
+        }
+      : never
     > = RESULT
 
     export namespace Active {
@@ -269,12 +293,7 @@ export namespace State {
         state extends ProgramState,
 
         RESULT extends ExecutionContext =
-          state['executionContexts'] extends [
-            ...infer remaining extends ExecutionContext[],
-            infer active extends ExecutionContext,
-          ]
-          ? active
-          : never
+          state['activeExecutionContext']
       > = RESULT
 
       export type set<
@@ -282,18 +301,10 @@ export namespace State {
         state extends ProgramState,
 
         RESULT extends ProgramState = {
-          executionContexts:
-            state['executionContexts'] extends [
-              ...infer remaining extends ExecutionContext[],
-              infer oldActive extends ExecutionContext, // throw away the old active
-            ]
-            ? [
-                ...remaining,
-                executionContext
-              ]
-            : never;
-
+          activeExecutionContext: executionContext;
+          
           count: state['count'];
+          executionContexts: state['executionContexts']
           funcs: state['funcs'];
           globals: state['globals'];
           indirect: state['indirect'];
@@ -429,6 +440,7 @@ export namespace State {
           & globals
           >;
 
+        activeExecutionContext: state['activeExecutionContext'];
         count: state['count'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
@@ -468,6 +480,7 @@ export namespace State {
             & state['memory']
             & { [k in address]: entry }
 
+        activeExecutionContext: state['activeExecutionContext'];
         count: state['count'];
         funcs: state['funcs'];
         globals: state['globals'];
