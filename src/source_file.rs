@@ -8,6 +8,13 @@ use wast::core::Elem;
 
 use crate::utils::format_index;
 
+struct MemoryData {
+    index: i32,
+    name: String,
+    data: String,
+    readonly: bool,
+}
+
 /// This represents is a literal TypeScript file that is the final build output of the program
 pub struct SourceFile {
     /// WASM module-level globals
@@ -24,6 +31,9 @@ pub struct SourceFile {
 
     /// table ref elements
     indirect: RefCell<Vec<String>>,
+
+    // MemoryData by id
+    data: RefCell<IndexMap<String, MemoryData>>,
 }
 
 impl fmt::Debug for SourceFile {
@@ -34,6 +44,31 @@ impl fmt::Debug for SourceFile {
 
 impl ToString for SourceFile {
     fn to_string(&self) -> String {
+        // example
+        // type $hi = "hi";
+        let mut data_types = String::from("");
+
+        let mut readonly_data = vec![];
+        let mut mutable_data = vec![];
+
+        self.data.borrow().iter().for_each(|(_name, MemoryData { data, name, readonly, index })| {
+            data_types.push_str(&format!("type {name} = `{data}`;\n"));
+
+            if *readonly {
+                mutable_data.push(format!("      & StoreString<{}, {}>", index, name));
+                readonly_data.push(format!("      {}: {};", index, name));
+            } else {
+                mutable_data.push(format!("      & StoreString<{}, {}>", index, name));
+            }
+        });
+
+        let memory = if !mutable_data.is_empty() {
+            self.add_import("../../ts-type-math/store.js", "StoreString");
+            format!("\n{}\n    ", mutable_data.join("\n"))
+        } else {
+            "{}".to_string()
+        };
+
         let imports = self
             .imports
             .borrow()
@@ -91,7 +126,7 @@ impl ToString for SourceFile {
 {funcs}
     }};
     globals: {{{globals}}};
-    memory: {{}};
+    memory: {memory};
     memorySize: {memory_size};
     indirect: [{indirect}];
   }},
@@ -99,18 +134,19 @@ impl ToString for SourceFile {
 >"
         );
 
-        format!("{imports}\n{types}\n{entry}\n")
+        format!("{imports}\n{types}\n{entry}\n{data_types}")
     }
 }
 
 impl SourceFile {
     pub fn new() -> Self {
         SourceFile {
+            data: RefCell::new(IndexMap::new()),
             globals: RefCell::new(IndexMap::new()),
             imports: RefCell::new(IndexMap::new()),
-            types: RefCell::new(IndexMap::new()),
-            memory: RefCell::new((0, 0)),
             indirect: RefCell::new(Vec::new()),
+            memory: RefCell::new((0, 0)),
+            types: RefCell::new(IndexMap::new()),
         }
     }
 
@@ -135,13 +171,16 @@ impl SourceFile {
 
     pub fn add_element(&self, element: &Elem) {
         let strings: Vec<String> = match element.payload {
-            wast::core::ElemPayload::Indices(ref indices) => indices
-                .iter()
-                .map(format_index)
-                .collect(),
+            wast::core::ElemPayload::Indices(ref indices) => indices.iter().map(format_index).collect(),
             _ => panic!("only Indices ElemPayload supported"),
         };
 
         self.indirect.borrow_mut().extend(strings);
+    }
+
+    pub fn add_data(&self, index: i32, name: String, data: String) {
+        let readonly = name.starts_with("$_rodata");
+
+        self.data.borrow_mut().insert(name.clone(), MemoryData { name, data, readonly, index });
     }
 }

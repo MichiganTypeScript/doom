@@ -1,0 +1,28 @@
+import { expect, test } from 'vitest'
+import { getWasmMemory } from '../../utils.js'
+import type { entry } from './hello-world.actual.js'
+import { Equal, Expect } from 'type-testing';
+import { ProgramState } from '../../program.js';
+
+const greeting = `Greetings humans, I am Ziltoid... the omniscient.
+I have come far from across the Omniverse.
+You shall fetch me your universe's ultimate cup of coffee... Black!
+You have five Earth minutes.
+Make it perfect!`;
+
+const name = 'hello-world';
+test(name, async () => {
+  const entry = getWasmMemory("from-c", name);
+  expect(await entry(0)).toStrictEqual(greeting);
+});
+
+type FromMemory<
+  state extends ProgramState,
+> = state['memory'][1024];
+
+type x = entry<[]>;
+//   ^?
+
+type testCases = [
+  // Expect<Equal<entry<[]>, typeof greeting>>,
+]

@@ -1,4 +1,5 @@
 import { Func, runProgram } from '../../program.ts'
+import { StoreString } from '../../ts-type-math/store.js'
 
 type $__wasm_call_ctors<
   RESULT extends Func = {
@@ -1875,9 +1876,12 @@ export type entry<
       $__stack_end: 0;
       $__stack_base: 0;
     };
-    memory: {};
+    memory: 
+      & StoreString<1024, $_rodata>
+    ;
     memorySize: 256;
     indirect: ['$__wasm_call_ctors'];
   },
   debugMode
 >
+type $_rodata = `                                                                          `;

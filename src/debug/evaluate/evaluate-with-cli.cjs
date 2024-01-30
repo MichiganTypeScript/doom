@@ -14,6 +14,7 @@ const phrases = [
 ]
 
 console.log(phrases[Math.floor(Math.random() * phrases.length)]);
+console.log();
 
 const evaluateType = async () => {
   // Read the TypeScript file

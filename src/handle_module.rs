@@ -1,7 +1,8 @@
 use crate::handle_instructions::handle_func;
 use crate::source_file::SourceFile;
 use std::collections::HashMap;
-use wast::core::{Func, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField};
+use std::str;
+use wast::core::{DataVal, Func, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField};
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
     source.add_import("../../program.ts", "Func");
@@ -137,7 +138,30 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
                 source.add_element(element);
             }
             ModuleField::Data(data) => {
-                dbg!(data);
+                let mut name = "$".to_string() + data.id.expect("data to have a name").name();
+                name = name.replace('.', "_");
+
+                let index = match &data.kind {
+                    wast::core::DataKind::Active { memory: _, offset } => match offset.instrs.first().unwrap() {
+                        Instruction::I32Const(index) => index,
+                        _ => panic!("offset should only be i32.const"),
+                    },
+                    _ => panic!("only Active DataKind supported"),
+                };
+
+                let s = data
+                    .data
+                    .iter()
+                    .map(|x| match x {
+                        DataVal::Integral(_) => panic!("data should only be strings"),
+                        DataVal::String(x) => {
+                            str::from_utf8(x).unwrap().to_string() // Fix: Convert the result of str::from_utf8() to a String
+                        }
+                    })
+                    .collect::<Vec<String>>()
+                    .join(", ");
+
+                source.add_data(*index, name, s);
             }
             ModuleField::Import(_) => {
                 dbg!(field);

@@ -92,7 +92,9 @@ export type runProgram<
       instructions: [
         { kind: "Call", id: "$entry" }
       ];
-      memory: [];
+
+      // copy readonly memory into memory registers
+      memory: input['memory'];
       memorySize: input['memorySize'];
 
       // since the stack is a stack, we need to reverse it

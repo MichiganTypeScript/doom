@@ -1,4 +1,7 @@
 
-import { entry } from "../../test/from-wat/loop.actual.js";
+import { entry } from "../../test/from-c/hello-world.actual.js";
+import { ReadMemory } from "../../ts-type-math/store.js";
 
-export type Evaluate = entry<[3]>; // =>
+type e = entry<[3], true>; // =>
+
+export type Evaluate = ReadMemory<e> // =>

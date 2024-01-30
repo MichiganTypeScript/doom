@@ -100,7 +100,6 @@ export namespace State {
             state
           >
         : never
-
     > = RESULT
 
     export type popUntil<
@@ -463,6 +462,7 @@ export namespace State {
 
       RESULT extends Entry =
         // no idea why this Cast is needed, but it is
+        // @ts-ignore TODO
         get<state>[address]
     > = RESULT
 

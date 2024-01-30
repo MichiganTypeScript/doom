@@ -40,3 +40,11 @@ export const getWasmMemory = (
   }
   return output
 }
+
+type RemoveNullTerminator<T extends string> =
+  T extends `${infer A}${infer B}`
+  ? `${A extends "\0" ? "" : A}${RemoveNullTerminator<B>}`
+  : T;
+
+type Example = RemoveNullTerminator<`Make it perfect!\u0000`>;
+//   ^?
