@@ -38,13 +38,15 @@ mod tests {
 
     fn skip_list() -> Vec<&'static str> {
         vec![
-            "conway", //
+            // "conway", //
         ]
     }
 
     fn focus_list() -> Vec<&'static str> {
         vec![
             // "conway", //
+            // "if-else-nested",
+            // "if-else",
         ]
     }
 

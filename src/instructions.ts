@@ -1,8 +1,10 @@
 import {
+  CorePrimitive,
   Func,
   MemoryAddress,
   Param,
   ProgramState,
+  StorageBits,
 } from "./program.js"
 import { State } from "./state.js"
 import * as TypeMath from "./ts-type-math/index.js"
@@ -147,21 +149,70 @@ export type IIf = {
   then: Instruction[];
   else: Instruction[];
 }
-
-export type ILoad = {
-  kind: "Load"
-
-  align: number;
-
-  offset: number;
-}
-
 export type ILessThan = {
   kind: "LessThan"
 }
 
 export type ILessThanOrEqual = {
   kind: "LessThanOrEqual"
+}
+
+///////// LOAD INSTRUCTIONS /////////
+export type II32Load = {
+  kind: "I32Load";
+  offset: number
+}
+export type II64Load = {
+  kind: "I64Load";
+  offset: number
+}
+export type IF32Load = {
+  kind: "F32Load";
+  offset: number
+}
+export type IF64Load = {
+  kind: "F64Load";
+  offset: number
+}
+export type II32Load8s = {
+  kind: "I32Load8s";
+  offset: number
+}
+export type II32Load8u = {
+  kind: "I32Load8u";
+  offset: number
+}
+export type II32Load16s = {
+  kind: "I32Load16s";
+  offset: number
+}
+export type II32Load16u = {
+  kind: "I32Load16u";
+  offset: number
+}
+export type II64Load8s = {
+  kind: "I64Load8s";
+  offset: number
+}
+export type II64Load8u = {
+  kind: "I64Load8u";
+  offset: number
+}
+export type II64Load16s = {
+  kind: "I64Load16s";
+  offset: number
+}
+export type II64Load16u = {
+  kind: "I64Load16u";
+  offset: number
+}
+export type II64Load32s = {
+  kind: "I64Load32s";
+  offset: number
+}
+export type II64Load32u = {
+  kind: "I64Load32u";
+  offset: number
 }
 
 export type ILocalGet = {
@@ -230,12 +281,46 @@ export type ISubtract = {
   kind: "Subtract"
 }
 
-export type IStore = {
-  kind: "Store"
+///////// STORE INSTRUCTIONS /////////
+export type II32Store = {
+  kind: "I32Store";
+  offset: number
+}
+export type II64Store = {
+  kind: "I64Store";
+  offset: number
+}
+export type IF32Store = {
+  kind: "F32Store";
+  offset: number
+}
+export type IF64Store = {
+  kind: "F64Store";
+  offset: number
+}
+export type II32Store8 = {
+  kind: "I32Store8";
+  offset: number
+}
+export type II32Store16 = {
+  kind: "I32Store16";
+  offset: number
+}
+export type II64Store8 = {
+  kind: "I64Store8";
+  offset: number
+}
+export type II64Store16 = {
+  kind: "I64Store16";
+  offset: number
+}
+export type II64Store32 = {
+  kind: "I64Store32";
+  offset: number
+}
 
-  align: number;
-
-  offset: number;
+export type IShiftLeft = {
+  kind: "ShiftLeft"
 }
 
 export type IUnreachable = {
@@ -273,7 +358,22 @@ export type Instruction =
   | IIf
   | ILessThan
   | ILessThanOrEqual
-  | ILoad
+
+  | II32Load
+  | II64Load
+  | IF32Load
+  | IF64Load
+  | II32Load8s
+  | II32Load8u
+  | II32Load16s
+  | II32Load16u
+  | II64Load8s
+  | II64Load8u
+  | II64Load16s
+  | II64Load16u
+  | II64Load32s
+  | II64Load32u
+
   | ILocalGet
   | ILocalSet
   | ILocalTee
@@ -285,7 +385,17 @@ export type Instruction =
   | IOr
   | IReturn
   | ISelect
-  | IStore
+
+  | II32Store
+  | II64Store
+  | IF32Store
+  | IF64Store
+  | II32Store8
+  | II32Store16
+  | II64Store8
+  | II64Store16
+  | II64Store32
+
   | ISubtract
   | IUnreachable
   | IXor
@@ -305,120 +415,70 @@ export type selectInstruction<
   instruction extends IAbsoluteValue
   ? Instructions.AbsoluteValue<instruction, state>
 
-  : instruction extends IAdd
-  ? Instructions.Add<instruction, state>
+  : instruction extends IAdd                ? Instructions.Add<instruction, state>
+  : instruction extends IAnd                ? Instructions.And<instruction, state>
+  : instruction extends IBlock              ? Instructions.Block<instruction, state>
+  : instruction extends IBranch             ? Instructions.Branch<instruction, state>
+  : instruction extends IBranchIf           ? Instructions.BranchIf<instruction, state>
+  : instruction extends IBranchTable        ? Instructions.BranchTable<instruction, state>
+  : instruction extends ICall               ? Instructions.Call<instruction, state>
+  : instruction extends ICallIndirect       ? Instructions.CallIndirect<instruction, state>
+  : instruction extends IConst              ? Instructions.Const<instruction, state>
+  : instruction extends IDrop               ? Instructions.Drop<instruction, state>
+  : instruction extends IEndLoop            ? Instructions.EndLoop<instruction, state>
+  : instruction extends IEndFunction        ? Instructions.EndFunction<instruction, state>
+  : instruction extends IEquals             ? Instructions.Equals<instruction, state>
+  : instruction extends IEqualsZero         ? Instructions.EqualsZero<instruction, state>
+  : instruction extends IGlobalGet          ? Instructions.GlobalGet<instruction, state>
+  : instruction extends IGlobalSet          ? Instructions.GlobalSet<instruction, state>
+  : instruction extends IGreaterThan        ? Instructions.GreaterThan<instruction, state>
+  : instruction extends IGreaterThanOrEqual ? Instructions.GreaterThanOrEqual<instruction, state>
+  : instruction extends IHalt               ? Instructions.Halt<instruction, state>
+  : instruction extends IIf                 ? Instructions.If<instruction, state>
+  : instruction extends ILessThan           ? Instructions.LessThan<instruction, state>
+  : instruction extends ILessThanOrEqual    ? Instructions.LessThanOrEqual<instruction, state>
 
-  : instruction extends IAnd
-  ? Instructions.And<instruction, state>
+  : instruction extends II32Load            ? Instructions.I32Load<instruction, state>
+  : instruction extends II64Load            ? Instructions.I64Load<instruction, state>
+  : instruction extends IF32Load            ? Instructions.F32Load<instruction, state>
+  : instruction extends IF64Load            ? Instructions.F64Load<instruction, state>
+  : instruction extends II32Load8s          ? Instructions.I32Load8s<instruction, state>
+  : instruction extends II32Load8u          ? Instructions.I32Load8u<instruction, state>
+  : instruction extends II32Load16s         ? Instructions.I32Load16s<instruction, state>
+  : instruction extends II32Load16u         ? Instructions.I32Load16u<instruction, state>
+  : instruction extends II64Load8s          ? Instructions.I64Load8s<instruction, state>
+  : instruction extends II64Load8u          ? Instructions.I64Load8u<instruction, state>
+  : instruction extends II64Load16s         ? Instructions.I64Load16s<instruction, state>
+  : instruction extends II64Load16u         ? Instructions.I64Load16u<instruction, state>
+  : instruction extends II64Load32s         ? Instructions.I64Load32s<instruction, state>
+  : instruction extends II64Load32u         ? Instructions.I64Load32u<instruction, state>
 
-  : instruction extends IBlock
-  ? Instructions.Block<instruction, state>
+  : instruction extends ILocalGet           ? Instructions.LocalGet<instruction, state>
+  : instruction extends ILocalSet           ? Instructions.LocalSet<instruction, state>
+  : instruction extends ILocalTee           ? Instructions.LocalTee<instruction, state>
+  : instruction extends ILoop               ? Instructions.Loop<instruction, state>
+  : instruction extends IMultiply           ? Instructions.Multiply<instruction, state>
+  : instruction extends INegate             ? Instructions.Negate<instruction, state>
+  : instruction extends INop                ? Instructions.Nop<instruction, state>
+  : instruction extends INotEqual           ? Instructions.NotEqual<instruction, state>
+  : instruction extends IOr                 ? Instructions.Or<instruction, state>
+  : instruction extends IReturn             ? Instructions.Return<instruction, state>
+  : instruction extends ISelect             ? Instructions.Select<instruction, state>
+  : instruction extends ISubtract           ? Instructions.Subtract<instruction, state>
 
-  : instruction extends IBranch
-  ? Instructions.Branch<instruction, state>
+  : instruction extends II32Store           ? Instructions.I32Store<instruction, state>
+  : instruction extends II64Store           ? Instructions.I64Store<instruction, state>
+  : instruction extends IF32Store           ? Instructions.F32Store<instruction, state>
+  : instruction extends IF64Store           ? Instructions.F64Store<instruction, state>
+  : instruction extends II32Store8          ? Instructions.I32Store8<instruction, state>
+  : instruction extends II32Store16         ? Instructions.I32Store16<instruction, state>
+  : instruction extends II64Store8          ? Instructions.I64Store8<instruction, state>
+  : instruction extends II64Store16         ? Instructions.I64Store16<instruction, state>
+  : instruction extends II64Store32         ? Instructions.I64Store32<instruction, state>
 
-  : instruction extends IBranchIf
-  ? Instructions.BranchIf<instruction, state>
 
-  : instruction extends IBranchTable
-  ? Instructions.BranchTable<instruction, state>
-
-  : instruction extends ICall
-  ? Instructions.Call<instruction, state>
-
-  : instruction extends ICallIndirect
-  ? Instructions.CallIndirect<instruction, state>
-
-  : instruction extends IConst
-  ? Instructions.Const<instruction, state>
-
-  : instruction extends IDrop
-  ? Instructions.Drop<instruction, state>
-
-  : instruction extends IEndLoop
-  ? Instructions.EndLoop<instruction, state>
-
-  : instruction extends IEndFunction
-  ? Instructions.EndFunction<instruction, state>
-
-  : instruction extends IEquals
-  ? Instructions.Equals<instruction, state>
-
-  : instruction extends IEqualsZero
-  ? Instructions.EqualsZero<instruction, state>
-
-  : instruction extends IGlobalGet
-  ? Instructions.GlobalGet<instruction, state>
-
-  : instruction extends IGlobalSet
-  ? Instructions.GlobalSet<instruction, state>
-
-  : instruction extends IGreaterThan
-  ? Instructions.GreaterThan<instruction, state>
-
-  : instruction extends IGreaterThanOrEqual
-  ? Instructions.GreaterThanOrEqual<instruction, state>
-
-  : instruction extends IHalt
-  ? Instructions.Halt<instruction, state>
-
-  : instruction extends IIf
-  ? Instructions.If<instruction, state>
-
-  : instruction extends ILessThan
-  ? Instructions.LessThan<instruction, state>
-
-  : instruction extends ILessThanOrEqual
-  ? Instructions.LessThanOrEqual<instruction, state>
-
-  : instruction extends ILoad
-  ? Instructions.Load<instruction, state>
-
-  : instruction extends ILocalGet
-  ? Instructions.LocalGet<instruction, state>
-
-  : instruction extends ILocalSet
-  ? Instructions.LocalSet<instruction, state>
-
-  : instruction extends ILocalTee
-  ? Instructions.LocalTee<instruction, state>
-
-  : instruction extends ILoop
-  ? Instructions.Loop<instruction, state>
-
-  : instruction extends IMultiply
-  ? Instructions.Multiply<instruction, state>
-
-  : instruction extends INegate
-  ? Instructions.Negate<instruction, state>
-
-  : instruction extends INop
-  ? Instructions.Nop<instruction, state>
-
-  : instruction extends INotEqual
-  ? Instructions.NotEqual<instruction, state>
-
-  : instruction extends IOr
-  ? Instructions.Or<instruction, state>
-
-  : instruction extends IReturn
-  ? Instructions.Return<instruction, state>
-
-  : instruction extends ISelect
-  ? Instructions.Select<instruction, state>
-
-  : instruction extends ISubtract
-  ? Instructions.Subtract<instruction, state>
-
-  : instruction extends IStore
-  ? Instructions.Store<instruction, state>
-
-  : instruction extends IUnreachable
-  ? Instructions.Unreachable<instruction, state>
-
-  : instruction extends IXor
-  ? Instructions.Xor<instruction, state>
-
+  : instruction extends IUnreachable        ? Instructions.Unreachable<instruction, state>
+  : instruction extends IXor                ? Instructions.Xor<instruction, state>
   : State.Instructions.push<
       {
         kind: 'Halt',
@@ -928,8 +988,8 @@ export namespace Instructions {
       : never
   > = RESULT
 
-  export type Load<
-    instruction extends ILoad,
+  export type I32Load<
+    instruction extends II32Load,
     state extends ProgramState,
 
     RESULT extends ProgramState =
@@ -953,6 +1013,197 @@ export namespace Instructions {
           state
         >
       : never
+  > = RESULT
+
+  export type I64Load<
+    instruction extends II64Load,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      state['stack'] extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress
+      ]
+      ? State.Stack.set<
+          [
+            ...remaining,
+
+            State.Memory.getByAddress<
+              TypeMath.Add<
+                address,
+                instruction['offset']
+              >,
+              state
+            >
+          ],
+
+          state
+        >
+      : never
+  > = RESULT
+
+  export type F32Load<
+    instruction extends IF32Load,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      state['stack'] extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress
+      ]
+      ? State.Stack.set<
+          [
+            ...remaining,
+
+            State.Memory.getByAddress<
+              TypeMath.Add<
+                address,
+                instruction['offset']
+              >,
+              state
+            >
+          ],
+
+          state
+        >
+      : never
+  > = RESULT
+
+  export type F64Load<
+    instruction extends IF64Load,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      state['stack'] extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress
+      ]
+      ? State.Stack.set<
+          [
+            ...remaining,
+
+            State.Memory.getByAddress<
+              TypeMath.Add<
+                address,
+                instruction['offset']
+              >,
+              state
+            >
+          ],
+
+          state
+        >
+      : never
+  > = RESULT
+
+  export type I32Load8s<
+    instruction extends II32Load8s,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I32Load8u<
+    instruction extends II32Load8u,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I32Load16s<
+    instruction extends II32Load16s,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I32Load16u<
+    instruction extends II32Load16u,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Load8s<
+    instruction extends II64Load8s,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Load8u<
+    instruction extends II64Load8u,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Load16s<
+    instruction extends II64Load16s,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Load16u<
+    instruction extends II64Load16u,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Load32s<
+    instruction extends II64Load32s,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Load32u<
+    instruction extends II64Load32u,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
   > = RESULT
 
   export type LocalGet<
@@ -1234,10 +1485,9 @@ export namespace Instructions {
       : never
   > = RESULT
 
-  export type Store<
-    instruction extends IStore, // unused
+  export type I32Store<
+    instruction extends II32Store,
     state extends ProgramState,
-    // TODO: gotta grab the offset from somewhere
 
     RESULT extends ProgramState =
       State.Stack.get<state> extends [
@@ -1260,6 +1510,142 @@ export namespace Instructions {
           >
         >
       : never
+  > = RESULT
+
+  export type I64Store<
+    instruction extends II64Store,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress,
+        infer entry extends Entry,
+      ]
+      ? State.Stack.set<
+          remaining,
+
+          State.Memory.insert<
+
+            TypeMath.Add<
+              address,
+              instruction['offset']
+            >,
+
+            entry,
+            state
+          >
+        >
+      : never
+  > = RESULT
+
+  export type F32Store<
+    instruction extends IF32Store,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress,
+        infer entry extends Entry,
+      ]
+      ? State.Stack.set<
+          remaining,
+
+          State.Memory.insert<
+
+            TypeMath.Add<
+              address,
+              instruction['offset']
+            >,
+
+            entry,
+            state
+          >
+        >
+      : never
+  > = RESULT
+
+  export type F64Store<
+    instruction extends IF64Store,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress,
+        infer entry extends Entry,
+      ]
+      ? State.Stack.set<
+          remaining,
+
+          State.Memory.insert<
+
+            TypeMath.Add<
+              address,
+              instruction['offset']
+            >,
+
+            entry,
+            state
+          >
+        >
+      : never
+  > = RESULT
+
+  export type I32Store8<
+    instruction extends II32Store8,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I32Store16<
+    instruction extends II32Store16,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Store8<
+    instruction extends II64Store8,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Store16<
+    instruction extends II64Store16,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type I64Store32<
+    instruction extends II64Store32,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
   > = RESULT
 
   export type Unreachable<

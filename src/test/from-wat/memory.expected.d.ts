@@ -11,7 +11,7 @@ type $storeValue<
       { kind: 'Const'; value: 4 },
       { kind: 'Multiply' },
       { kind: 'LocalGet'; id: '$value' },
-      { kind: 'Store'; offset: 0; align: 4 },
+      { kind: 'I32Store'; offset: 0 },
     ];
   }
 > = RESULT
@@ -26,7 +26,7 @@ type $loadValue<
       { kind: 'LocalGet'; id: '$index' },
       { kind: 'Const'; value: 4 },
       { kind: 'Multiply' },
-      { kind: 'Load'; offset: 0; align: 4 },
+      { kind: 'I32Load'; offset: 0 },
     ];
   }
 > = RESULT

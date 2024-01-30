@@ -156,20 +156,16 @@ export namespace State {
         >
     > = RESULT
 
-
-    export namespace Active {
-      export type get<
-        state extends ProgramState,
-
-        RESULT extends Instruction =
-          State.Instructions.get<state> extends [
-            infer active extends Instruction,
-            ...infer remaining extends Instruction[],
-          ]
-          ? active
-          : never
-      > = RESULT
-    }
+    export type Unimplemented<
+      state extends ProgramState,
+      instruction extends Instruction,
+      
+      RESULT extends ProgramState =
+        push<
+        { kind: 'Halt', reason: "Unimplemented Instruction", instruction: instruction },
+          state
+        >
+    > = RESULT
   }
 
   /** Helpers for Stack manipulation */

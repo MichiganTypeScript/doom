@@ -1,83 +1,82 @@
 use core::panic;
-use std::collections::VecDeque;
+use std::{collections::VecDeque, vec};
 
-use wast::core::{Func, Instruction, MemArg};
+use wast::core::{Func, Instruction};
 
 use crate::utils::format_index;
 
-#[allow(clippy::useless_format)]
 pub fn handle_instructions(
     func: &Func,
     instrs: &mut VecDeque<&Instruction>,
-    indent: usize,
-    output: Vec<(usize, String)>,
+    indent: &mut usize,
     context: &mut Vec<&str>,
 ) -> Vec<(usize, String)> {
-    let instruction_first = instrs.pop_front();
+    let mut result: Vec<(usize, String)> = vec![];
 
-    if instruction_first.is_none() {
-        return output;
+    while let Some(instruction) = instrs.pop_front() {
+        result.extend(handle_instruction(
+            func,
+            instrs,
+            instruction,
+            indent,
+            context,
+        ));
     }
 
-    let mut result = output;
+    result
+}
 
-    let instruction = &instruction_first.expect("should not be possible");
-
+#[allow(clippy::useless_format)]
+fn handle_instruction(
+    func: &Func,
+    instrs: &mut VecDeque<&Instruction>,
+    instruction: &Instruction,
+    indent: &mut usize,
+    context: &mut Vec<&str>,
+) -> Vec<(usize, String)> {
     match instruction {
         Instruction::I32Add | Instruction::I64Add | Instruction::F32Add | Instruction::F64Add => {
-            result.push((indent, format!("{{ kind: 'Add' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Add' }},"))]
         }
         Instruction::Call(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'Call'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Call'; id: {id} }},"))]
         }
         Instruction::I32Const(value) => {
-            result.push((indent, format!("{{ kind: 'Const'; value: {value} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
         }
         Instruction::I64Const(value) => {
-            result.push((indent, format!("{{ kind: 'Const'; value: {value} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
         }
         Instruction::F32Const(raw_bits) => {
             let value = f32::from_bits(raw_bits.bits).to_string();
-            result.push((indent, format!("{{ kind: 'Const'; value: {value} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
         }
         Instruction::F64Const(raw_bits) => {
             let value = f64::from_bits(raw_bits.bits).to_string();
-            result.push((indent, format!("{{ kind: 'Const'; value: {value} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
         }
         Instruction::I32Sub | Instruction::I64Sub | Instruction::F32Sub | Instruction::F64Sub => {
-            result.push((indent, format!("{{ kind: 'Subtract' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Subtract' }},"))]
         }
         Instruction::I32Eqz | Instruction::I64Eqz => {
-            result.push((indent, format!("{{ kind: 'EqualsZero' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'EqualsZero' }},"))]
         }
         Instruction::LocalGet(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'LocalGet'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'LocalGet'; id: {id} }},"))]
         }
         Instruction::LocalSet(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'LocalSet'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'LocalSet'; id: {id} }},"))]
         }
         Instruction::GlobalGet(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'GlobalGet'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'GlobalGet'; id: {id} }},"))]
         }
         Instruction::GlobalSet(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'GlobalSet'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'GlobalSet'; id: {id} }},"))]
         }
         Instruction::Return => {
             let count = func
@@ -87,69 +86,168 @@ pub fn handle_instructions(
                 .expect("must have a return type")
                 .results
                 .len();
-            result.push((indent, format!("{{ kind: 'Return'; count: {count} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Return'; count: {count} }},"))]
         }
         Instruction::LocalTee(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'LocalTee'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'LocalTee'; id: {id} }},"))]
         }
         Instruction::I32Mul | Instruction::I64Mul | Instruction::F32Mul | Instruction::F64Mul => {
-            result.push((indent, format!("{{ kind: 'Multiply' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Multiply' }},"))]
         }
 
-        Instruction::I32Load(MemArg {
-            offset,
-            align,
-            memory: _,
-        })
-        | Instruction::I64Load(MemArg {
-            offset,
-            align,
-            memory: _,
-        }) => {
-            result.push((
-                indent,
-                format!("{{ kind: 'Load'; offset: {offset}; align: {align} }},"),
-            ));
-            handle_instructions(func, instrs, indent, result, context)
+        Instruction::I32Load(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I32Load'; offset: {} }},", mem_arg.offset),
+            )]
         }
-        Instruction::I32Store(MemArg {
-            offset,
-            align,
-            memory: _,
-        })
-        | Instruction::I64Store(MemArg {
-            offset,
-            align,
-            memory: _,
-        }) => {
-            result.push((
-                indent,
-                format!("{{ kind: 'Store'; offset: {offset}; align: {align} }},"),
-            ));
-            handle_instructions(func, instrs, indent, result, context)
+        Instruction::I64Load(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Load'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::F32Load(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'F32Load'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::F64Load(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'F64Load'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I32Load8s(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I32Load8s'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I32Load8u(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I32Load8u'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I32Load16s(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I32Load16s'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I32Load16u(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I32Load16u'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Load8s(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Load8s'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Load8u(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Load8u'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Load16s(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Load16s'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Load16u(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Load16u'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Load32s(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Load32s'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Load32u(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Load32u'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I32Store(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I32Store'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Store(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Store'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::F32Store(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'F32Store'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::F64Store(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'F64Store'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I32Store8(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I32Store8'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I32Store16(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I32Store16'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Store8(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Store8'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Store16(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Store16'; offset: {} }},", mem_arg.offset),
+            )]
+        }
+        Instruction::I64Store32(mem_arg) => {
+            vec![(
+                *indent,
+                format!("{{ kind: 'I64Store32'; offset: {} }},", mem_arg.offset),
+            )]
         }
         Instruction::I32And | Instruction::I64And => {
-            result.push((indent, format!("{{ kind: 'And' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'And' }},"))]
         }
         Instruction::I32Eq | Instruction::I64Eq | Instruction::F32Eq | Instruction::F64Eq => {
-            result.push((indent, format!("{{ kind: 'Equals' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Equals' }},"))]
         }
         Instruction::Nop => {
-            result.push((
-                indent,
+            vec![(
+                *indent,
                 format!("{{ kind: 'Nop'; ziltoid: 'theOmniscient' }},"),
-            ));
-            handle_instructions(func, instrs, indent, result, context)
+            )]
         }
         Instruction::F32Neg | Instruction::F64Neg => {
-            result.push((indent, format!("{{ kind: 'Negate' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Negate' }},"))]
         }
         Instruction::I32GeS
         | Instruction::I64GeS
@@ -157,8 +255,7 @@ pub fn handle_instructions(
         | Instruction::I64GeU
         | Instruction::F32Ge
         | Instruction::F64Ge => {
-            result.push((indent, format!("{{ kind: 'GreaterThanOrEqual' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual' }},"))]
         }
         Instruction::I32GtS
         | Instruction::I64GtS
@@ -166,8 +263,7 @@ pub fn handle_instructions(
         | Instruction::I64GtU
         | Instruction::F32Gt
         | Instruction::F64Gt => {
-            result.push((indent, format!("{{ kind: 'GreaterThan' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'GreaterThan' }},"))]
         }
         Instruction::I32LtS
         | Instruction::I64LtS
@@ -175,8 +271,7 @@ pub fn handle_instructions(
         | Instruction::I64LtU
         | Instruction::F32Lt
         | Instruction::F64Lt => {
-            result.push((indent, format!("{{ kind: 'LessThan' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'LessThan' }},"))]
         }
         Instruction::I32LeS
         | Instruction::I64LeS
@@ -184,123 +279,120 @@ pub fn handle_instructions(
         | Instruction::I64LeU
         | Instruction::F32Le
         | Instruction::F64Le => {
-            result.push((indent, format!("{{ kind: 'LessThanOrEqual' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual' }},"))]
         }
         Instruction::If(_) => {
-            result.push((indent, format!("{{ kind: 'If';")));
-
-            result.push((indent + 1, format!("then: [")));
-
             context.push("If");
 
-            let then_instrs = vec![];
-            let then_branch = handle_instructions(func, instrs, indent + 2, then_instrs, context);
-            result.extend(then_branch);
+            let then_instrs = handle_instructions(func, instrs, &mut (*indent + 2), context);
 
-            handle_instructions(func, instrs, indent, result, context)
+            let thing = vec![
+                (*indent, format!("{{ kind: 'If';")),
+                (*indent + 1, format!("then: [")),
+            ]
+            .into_iter()
+            .chain(then_instrs)
+            .collect::<Vec<(usize, String)>>();
+            *indent -= 2;
+            thing
         }
         Instruction::Else(_) => {
-            result.push((indent - 1, format!("];")));
-            result.push((indent - 1, format!("else: [")));
-
             context.pop(); // remove the "If" context that came before
             context.push("Else");
 
-            let else_instrs = vec![];
-            let else_branch = handle_instructions(func, instrs, indent, else_instrs, context);
-            result.extend(else_branch);
+            let else_instrs = handle_instructions(func, instrs, &mut (indent.clone()), context);
 
-            handle_instructions(func, instrs, indent, result, context)
+            vec![
+                (*indent - 1, format!("];")),      // end the "then" context
+                (*indent - 1, format!("else: [")), // start the "else" context
+            ]
+            .into_iter()
+            .chain(else_instrs)
+            .collect::<Vec<(usize, String)>>()
         }
         Instruction::End(_) => {
             let this_context = context.pop();
 
-            if this_context == Some("If") {
-                result.push((indent, format!("];")));
+            let pop = if this_context == Some("If") {
+                (*indent, format!("];"))
             } else if this_context == Some("Else")
                 || this_context == Some("Block")
                 || this_context == Some("Loop")
             {
-                result.push((indent - 1, format!("];")));
+                (*indent - 1, format!("];"))
             } else {
                 panic!("unexpected context {:#?}", this_context);
-            }
+            };
 
-            result.push((indent - 2, format!("}},")));
-            handle_instructions(func, instrs, indent - 2, result, context)
+            let thing = vec![pop, (*indent - 2, format!("}},"))];
+            *indent -= 2;
+            thing
         }
         Instruction::Select(_) => {
-            result.push((indent, format!("{{ kind: 'Select' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Select' }},"))]
         }
         Instruction::Br(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'Branch'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Branch'; id: {id} }},"))]
         }
         Instruction::BrIf(index) => {
             let id = format_index(index);
-            result.push((indent, format!("{{ kind: 'BranchIf'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'BranchIf'; id: {id} }},"))]
         }
         Instruction::Block(block) => {
             let label = block.label.expect("blocks must have labels").name();
-            result.push((indent, format!("{{ kind: 'Block';")));
-            result.push((indent + 1, format!("id: '${label}';")));
-            result.push((indent + 1, format!("instructions: [")));
 
             context.push("Block");
+            let nest = handle_instructions(func, instrs, &mut (*indent + 2), context);
 
-            let block_instrs = vec![];
-            let block_branch = handle_instructions(func, instrs, indent + 2, block_instrs, context);
-            result.extend(block_branch);
-
-            handle_instructions(func, instrs, indent, result, context)
+            vec![
+                (*indent, format!("{{ kind: 'Block';")),
+                (*indent + 1, format!("id: '${label}';")),
+                (*indent + 1, format!("instructions: [")),
+            ]
+            .into_iter()
+            .chain(nest)
+            .collect::<Vec<(usize, String)>>()
         }
         Instruction::CallIndirect(call_indirect) => {
             let id = format_index(&call_indirect.table);
-            result.push((indent, format!("{{ kind: 'CallIndirect'; id: {id} }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'CallIndirect'; id: {id} }},"))]
         }
         Instruction::Loop(block_type) => {
-            result.push((indent, format!("{{ kind: 'Loop';")));
-            result.push((
-                indent + 1,
-                format!(
-                    "id: '${}';",
-                    block_type.label.expect("loops must have labels").name()
-                ),
-            ));
-            result.push((indent + 1, format!("instructions: [")));
-
             context.push("Loop");
+            let nest = handle_instructions(func, instrs, &mut (*indent + 2), context);
 
-            let loop_instrs = vec![];
-            let loop_branch = handle_instructions(func, instrs, indent + 2, loop_instrs, context);
-            result.extend(loop_branch);
-
-            handle_instructions(func, instrs, indent + 1, result, context)
+            let thing = vec![
+                (*indent, format!("{{ kind: 'Loop';")),
+                (
+                    *indent + 1,
+                    format!(
+                        "id: '${}';",
+                        block_type.label.expect("loops must have labels").name()
+                    ),
+                ),
+                (*indent + 1, format!("instructions: [")),
+            ]
+            .into_iter()
+            .chain(nest)
+            .collect::<Vec<(usize, String)>>();
+            *indent -= 2;
+            thing
         }
         Instruction::Drop => {
-            result.push((indent, format!("{{ kind: 'Drop' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Drop' }},"))]
         }
         Instruction::I32Or | Instruction::I64Or => {
-            result.push((indent, format!("{{ kind: 'Or' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Or' }},"))]
         }
         Instruction::I32Xor | Instruction::I64Xor => {
-            result.push((indent, format!("{{ kind: 'Xor' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Xor' }},"))]
         }
         Instruction::Unreachable => {
-            result.push((indent, format!("{{ kind: 'Unreachable' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'Unreachable' }},"))]
         }
         Instruction::F32Ne | Instruction::F64Ne | Instruction::I32Ne | Instruction::I64Ne => {
-            result.push((indent, format!("{{ kind: 'NotEqual' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'NotEqual' }},"))]
         }
         Instruction::BrTable(br_table) => {
             let branches = br_table
@@ -313,15 +405,22 @@ pub fn handle_instructions(
 
             let default_label = format_index(&br_table.default);
 
-            result.push((indent, format!("{{ kind: 'BranchTable';")));
-            result.push((indent + 1, format!("branches: {{ {branches} }};")));
-            result.push((indent + 1, format!("default: {default_label};")));
-            result.push((indent, format!("}}")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![
+                (*indent, format!("{{ kind: 'BranchTable';")),
+                (*indent + 1, format!("branches: {{ {branches} }};")),
+                (*indent + 1, format!("default: {default_label};")),
+                (*indent, format!("}}")),
+            ]
         }
         Instruction::F32Abs | Instruction::F64Abs => {
-            result.push((indent, format!("{{ kind: 'AbsoluteValue' }},")));
-            handle_instructions(func, instrs, indent, result, context)
+            vec![(*indent, format!("{{ kind: 'AbsoluteValue' }},"))]
+        }
+        Instruction::I32Shl | Instruction::I64Shl => {
+            vec![(*indent, format!("{{ kind: 'ShiftLeft' }},"))]
+        }
+
+        Instruction::I64ExtendI32U => {
+            vec![(*indent, format!("{{ kind: 'Extend8Unsigned' }},"))]
         }
         _ => {
             panic!("not implemented instruction {:#?}", instruction);
@@ -341,11 +440,12 @@ pub fn handle_func(func: &Func) -> String {
                 .collect::<Vec<String>>()
                 .join(", ");
 
+            let indent = &mut 3;
+
             let instructions = handle_instructions(
                 func,
                 &mut expression.instrs.iter().collect(),
-                3,
-                vec![],
+                indent,
                 &mut vec![],
             )
             .iter()

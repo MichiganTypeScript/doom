@@ -20,6 +20,8 @@ export type Reverse<T extends any[]> =
   T extends [infer head, ...infer tail]
   ? [...Reverse<tail>, head]
   : []
+export type CorePrimitive = 'i32' | 'i64' | 'f32' | 'f64';
+export type StorageBits = 8 | 16 | 32 | 64;
 
 export type ExecutionContext = {
   /** the current local variable values */
