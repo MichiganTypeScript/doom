@@ -1,6 +1,8 @@
-import { Entry, IHalt, Instruction, selectInstruction } from "./instructions.js"
+import { IHalt, Instruction, selectInstruction } from "./instructions.js"
 import { State } from "./state.js";
 
+/** an item on the stack */
+export type Entry = number;
 export type MemoryAddress = number;
 export type MemoryByAddress = Record<MemoryAddress, number>
 export type BranchId = string;

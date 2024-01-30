@@ -1,7 +1,8 @@
-import { Entry, Instruction } from "./instructions.js";
+import { Instruction } from "./instructions.js";
 import {
   BranchesById,
   ExecutionContext,
+  Entry,
   Func,
   FuncsById,
   GlobalsById,
