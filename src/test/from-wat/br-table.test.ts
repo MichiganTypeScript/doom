@@ -6,7 +6,7 @@ import { getWasm } from '../../utils.js';
 
 const name = 'br-table';
 test(name, async () => {
-  const { entry } = await getWasm("from-wat", name);
+  const entry = await getWasm("from-wat", name);
   expect(entry( 4)).toStrictEqual(100); // default
   expect(entry( 3)).toStrictEqual(100); // default
   expect(entry( 2)).toStrictEqual(103); // $B2

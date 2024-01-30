@@ -1,19 +1,17 @@
 use crate::handle_instructions::handle_func;
 use crate::source_file::SourceFile;
 use std::collections::HashMap;
-use wast::core::{
-    Func, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField,
-};
+use wast::core::{Func, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField};
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
     source.add_import("../../program.ts", "Func");
     source.add_import("../../program.ts", "runProgram");
 
     let name = "$".to_string()
-      + func
-          .id
-          .unwrap_or_else(|| panic!("need to implement no name funcs but it looks like I can skirt by without having to do any of it"))
-          .name();
+        + func
+            .id
+            .unwrap_or_else(|| panic!("need to implement no name funcs but it looks like I can skirt by without having to do any of it"))
+            .name();
 
     let params_and_result = func
         .ty
@@ -65,10 +63,7 @@ fn handle_module_field_global(source: &SourceFile, global: &Global) {
             panic!("imported globals are not supported");
         }
         GlobalKind::Inline(inline) => {
-            let first = inline
-                .instrs
-                .first()
-                .expect("inline global to have at least one instruction");
+            let first = inline.instrs.first().expect("inline global to have at least one instruction");
             match first {
                 Instruction::I32Const(value) => value.to_string(),
                 _ => {
@@ -134,21 +129,25 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
                 handle_module_field_memory(source, memory);
             }
             ModuleField::Table(table) => {
+                // handled by ModuleField::Elem
                 dbg!(table);
             }
             ModuleField::Elem(element) => {
                 // it's assumed there's exactly one table and exactly one element
                 source.add_element(element);
             }
-
-            ModuleField::Export(_) | ModuleField::Import(_) | ModuleField::Data(_) => {
-                dbg!(field);
-                panic!("unintentionally not implemented module field");
+            ModuleField::Data(data) => {
+                dbg!(data);
             }
-            ModuleField::Tag(_)
-            | ModuleField::Custom(_)
-            | ModuleField::Start(_)
-            | ModuleField::Rec(_) => {
+            ModuleField::Import(_) => {
+                dbg!(field);
+                panic!("you must be unwell.  handling imports is FAR beyond the scope of this project.");
+            }
+            ModuleField::Export(_) => {
+                // handled by ModuleField::Func
+                panic!("compile your wasm to use inline exports instead of module exports")
+            }
+            ModuleField::Tag(_) | ModuleField::Custom(_) | ModuleField::Start(_) | ModuleField::Rec(_) => {
                 dbg!(field);
                 panic!("intentionally not implemented module field");
             }

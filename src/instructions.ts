@@ -110,6 +110,18 @@ export type IShiftLeft = {
   kind: "ShiftLeft"
 }
 
+export type IShiftRight = {
+  kind: "ShiftRight"
+}
+
+export type IRotateLeft = {
+  kind: "RotateLeft"
+}
+
+export type IRotateRight = {
+  kind: "RotateRight"
+}
+
 /**************
  * Variable Instructions
  **************/
@@ -430,6 +442,9 @@ export type Instruction =
   | IOr
   | IXor
   | IShiftLeft
+  | IShiftRight
+  | IRotateLeft
+  | IRotateRight
 
   /**************
    * Variable Instructions
@@ -534,10 +549,13 @@ export type selectInstruction<
   : instruction extends INegate        ? Instructions.Negate<instruction, state>
 
   /* Bitwise Instructions */
-  : instruction extends IAnd       ? Instructions.And<instruction, state>
-  : instruction extends IOr        ? Instructions.Or<instruction, state>
-  : instruction extends IXor       ? Instructions.Xor<instruction, state>
-  : instruction extends IShiftLeft ? Instructions.ShiftLeft<instruction, state>
+  : instruction extends IAnd         ? Instructions.And<instruction, state>
+  : instruction extends IOr          ? Instructions.Or<instruction, state>
+  : instruction extends IXor         ? Instructions.Xor<instruction, state>
+  : instruction extends IShiftLeft   ? Instructions.ShiftLeft<instruction, state>
+  : instruction extends IShiftRight  ? Instructions.ShiftRight<instruction, state>
+  : instruction extends IRotateLeft  ? Instructions.RotateLeft<instruction, state>
+  : instruction extends IRotateRight ? Instructions.RotateRight<instruction, state>
 
   /**************
    * Variable Instructions
@@ -973,6 +991,39 @@ export namespace Instructions {
 
   export type ShiftLeft<
     instruction extends IShiftLeft,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type ShiftRight<
+    instruction extends IShiftRight,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type RotateLeft<
+    instruction extends IRotateLeft,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.Unimplemented<
+        state,
+        instruction
+      >
+  > = RESULT
+
+  export type RotateRight<
+    instruction extends IRotateRight,
     state extends ProgramState,
 
     RESULT extends ProgramState =
@@ -1763,7 +1814,7 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
 
-      // have we accumumlated enough values to return?
+      // have we accumulated enough values to return?
       _Acc['length'] extends instruction['count']
 
       // we can return now

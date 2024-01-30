@@ -43,7 +43,7 @@ test('or example', () => {
 
 const name = 'bitwise-or';
 test(name, async () => {
-  const { entry } = await getWasm("from-wat", name);
+  const entry = await getWasm("from-wat", name);
   expect(entry(1, 2)).toStrictEqual(3);
   expect(entry(3, 7)).toStrictEqual(7);
   expect(entry(0, 1)).toStrictEqual(1);

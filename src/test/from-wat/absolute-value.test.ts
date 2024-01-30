@@ -1,12 +1,12 @@
 import { Expect, Equal } from 'type-testing';
-import type { entry } from './absolute-value.expected.js'; // TODO, change to actual
+import type { entry } from './absolute-value.expected.js';
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../../utils.js';
 
 const name = 'absolute-value';
 test(name, async () => {
-  const { entry } = await getWasm("from-wat", name);
+  const entry = await getWasm("from-wat", name);
   expect(entry(-1.0)).toStrictEqual(1.0);
   expect(entry(2.0)).toStrictEqual(2.0);
   expect(entry(-3.5)).toStrictEqual(3.5);

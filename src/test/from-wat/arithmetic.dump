@@ -1,0 +1,2197 @@
+Module {
+    span: Span {
+        offset: 4,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Memory(
+                Memory {
+                    span: Span {
+                        offset: 14,
+                    },
+                    id: Some(
+                        "memory",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "memory",
+                        ],
+                    },
+                    kind: Normal(
+                        B32 {
+                            limits: Limits {
+                                min: 1,
+                                max: None,
+                            },
+                            shared: false,
+                        },
+                    ),
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 66,
+                    },
+                    id: Some(
+                        "F32Add",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                F32Add,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                ],
+                                results: [
+                                    F32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 187,
+                    },
+                    id: Some(
+                        "F64Add",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                F64Add,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                ],
+                                results: [
+                                    F64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 309,
+                    },
+                    id: Some(
+                        "I32Add",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32Add,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 431,
+                    },
+                    id: Some(
+                        "I64Add",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I64Add,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                ],
+                                results: [
+                                    I64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 553,
+                    },
+                    id: Some(
+                        "F32Div",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                F32Div,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                ],
+                                results: [
+                                    F32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 674,
+                    },
+                    id: Some(
+                        "F64Div",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                F64Div,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                ],
+                                results: [
+                                    F64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 797,
+                    },
+                    id: Some(
+                        "I32DivS",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32DivS,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 923,
+                    },
+                    id: Some(
+                        "I64DivS",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I64DivS,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                ],
+                                results: [
+                                    I64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1049,
+                    },
+                    id: Some(
+                        "I32DivU",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32DivU,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1175,
+                    },
+                    id: Some(
+                        "I64DivU",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I64DivU,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                ],
+                                results: [
+                                    I64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1300,
+                    },
+                    id: Some(
+                        "F32Mul",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                F32Mul,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                ],
+                                results: [
+                                    F32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1421,
+                    },
+                    id: Some(
+                        "F64Mul",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                F64Mul,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                ],
+                                results: [
+                                    F64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1543,
+                    },
+                    id: Some(
+                        "I32Mul",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32Mul,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1665,
+                    },
+                    id: Some(
+                        "I64Mul",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I64Mul,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                ],
+                                results: [
+                                    I64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1788,
+                    },
+                    id: Some(
+                        "I32RemS",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32RemS,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1914,
+                    },
+                    id: Some(
+                        "I32RemU",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32RemU,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 2099,
+                    },
+                    id: Some(
+                        "F32Sub",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                F32Sub,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                ],
+                                results: [
+                                    F32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 2220,
+                    },
+                    id: Some(
+                        "F64Sub",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                F64Sub,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                ],
+                                results: [
+                                    F64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 2342,
+                    },
+                    id: Some(
+                        "I32Sub",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I32Sub,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 2464,
+                    },
+                    id: Some(
+                        "I64Sub",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                I64Sub,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                ],
+                                results: [
+                                    I64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 2574,
+                    },
+                    id: Some(
+                        "arithmetic",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [
+                            Local {
+                                id: Some(
+                                    "index",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                        ],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F32Add_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F32Add_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "F32Add",
+                                    ),
+                                ),
+                                F32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 3739,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F64Add_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F64Add_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "F64Add",
+                                    ),
+                                ),
+                                F64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 10,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 3849,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32Add_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32Add_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I32Add",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 20,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 3960,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64Add_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64Add_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I64Add",
+                                    ),
+                                ),
+                                I64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 30,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4071,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F32Div_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F32Div_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "F32Div",
+                                    ),
+                                ),
+                                F32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 40,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4182,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F64Div_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F64Div_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "F64Div",
+                                    ),
+                                ),
+                                F64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 50,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4293,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32DivS_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32DivS_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I32DivS",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 60,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4407,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64DivS_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64DivS_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I64DivS",
+                                    ),
+                                ),
+                                I64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 70,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4521,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32DivU_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32DivU_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I32DivU",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 80,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4635,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64DivU_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64DivU_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I64DivU",
+                                    ),
+                                ),
+                                I64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 90,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4749,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F32Mul_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F32Mul_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "F32Mul",
+                                    ),
+                                ),
+                                F32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 100,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4860,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F64Mul_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F64Mul_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "F64Mul",
+                                    ),
+                                ),
+                                F64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 110,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 4972,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32Mul_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32Mul_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I32Mul",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 120,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 5084,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64Mul_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64Mul_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I64Mul",
+                                    ),
+                                ),
+                                I64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 130,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 5196,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32RemS_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32RemS_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I32RemS",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 140,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 5311,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32RemU_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32RemU_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I32RemU",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 150,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 5426,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F32Sub_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F32Sub_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "F32Sub",
+                                    ),
+                                ),
+                                F32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 160,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 5538,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F64Sub_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "F64Sub_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "F64Sub",
+                                    ),
+                                ),
+                                F64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 170,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 5650,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32Sub_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I32Sub_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I32Sub",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 180,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 5762,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "index",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64Sub_a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "I64Sub_b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "I64Sub",
+                                    ),
+                                ),
+                                I64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 190,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 5874,
+                                            },
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "F32Add_a",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F32Add_b",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F64Add_a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "F64Add_b",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32Add_a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32Add_b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64Add_a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64Add_b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "F32Div_a",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F32Div_b",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F64Div_a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "F64Div_b",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32DivS_a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32DivS_b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64DivS_a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64DivS_b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32DivU_a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32DivU_b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64DivU_a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64DivU_b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "F32Mul_a",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F32Mul_b",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F64Mul_a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "F64Mul_b",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32Mul_a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32Mul_b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64Mul_a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64Mul_b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32RemS_a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32RemS_b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32RemU_a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32RemU_b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F32Sub_a",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F32Sub_b",
+                                        ),
+                                        None,
+                                        F32,
+                                    ),
+                                    (
+                                        Some(
+                                            "F64Sub_a",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "F64Sub_b",
+                                        ),
+                                        None,
+                                        F64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32Sub_a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I32Sub_b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64Sub_a",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                    (
+                                        Some(
+                                            "I64Sub_b",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                ],
+                                results: [],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 100,
+    "Call": 20,
+    "I32Store": 7,
+    "I64Store": 5,
+    "F32Store": 4,
+    "F64Store": 4,
+    "F32Add": 1,
+    "F64Add": 1,
+    "I32Add": 1,
+    "I64Add": 1,
+    "F32Div": 1,
+    "F64Div": 1,
+    "I32DivS": 1,
+    "I64DivS": 1,
+    "I32DivU": 1,
+    "I64DivU": 1,
+    "F32Mul": 1,
+    "F64Mul": 1,
+    "I32Mul": 1,
+    "I64Mul": 1,
+    "I32RemS": 1,
+    "I32RemU": 1,
+    "F32Sub": 1,
+    "F64Sub": 1,
+    "I32Sub": 1,
+    "I64Sub": 1,
+    "I32Const": 1,
+    "LocalSet": 1,
+}

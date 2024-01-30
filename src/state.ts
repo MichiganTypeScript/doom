@@ -432,7 +432,6 @@ export namespace State {
 
         globals:
           evaluate<
-          // TODO: maybe should omit this global?
           & Omit<get<state>, keyof globals>
           & globals
           >;

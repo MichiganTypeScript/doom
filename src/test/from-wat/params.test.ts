@@ -6,7 +6,7 @@ import { getWasm } from '../../utils.js';
 
 const name = 'params';
 test(name, async () => {
-  const { entry } = await getWasm("from-wat", name);
+  const entry = await getWasm("from-wat", name);
   expect(entry(1, 2, 3)).toStrictEqual(3);
   expect(entry(2, 3, 4)).toStrictEqual(4);
 });

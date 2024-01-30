@@ -33,7 +33,7 @@ test('if-else example', () => {
 
 const name = 'if-else-nested';
 test(name, async () => {
-  const { entry } = await getWasm("from-wat", name);
+  const entry = await getWasm("from-wat", name);
   expect(entry(10, 0)).toStrictEqual(115);
   expect(entry(10, 1)).toStrictEqual(111);
   expect(entry(10, 2)).toStrictEqual(92);

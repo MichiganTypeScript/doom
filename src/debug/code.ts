@@ -13,7 +13,8 @@ export const getWasm = async () => {
 getWasm().then(({ memory, entry }) => {
   const buffer = new Uint8Array(memory.buffer);
 
-  const ptr = entry(5);
+  const ptr = entry(4);
+  console.log({ ptr, b: buffer.slice(1024) });
 
   let str = '';
 

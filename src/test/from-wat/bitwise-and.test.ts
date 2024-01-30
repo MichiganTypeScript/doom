@@ -43,7 +43,7 @@ test('and example', () => {
 
 const name = 'bitwise-and';
 test(name, async () => {
-  const { entry } = await getWasm("from-wat", name);
+  const entry = await getWasm("from-wat", name);
   expect(example(1, 2)).toStrictEqual(0);
   expect(example(3, 7)).toStrictEqual(3);
   expect(example(0, 1)).toStrictEqual(0);

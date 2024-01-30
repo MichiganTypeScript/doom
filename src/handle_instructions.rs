@@ -124,9 +124,15 @@ fn handle_instruction(
         Instruction::I32Shl | Instruction::I64Shl => {
             vec![(*indent, format!("{{ kind: 'ShiftLeft' }},"))]
         }
-        // RightShift
-        // LeftRotate
-        // RightRotate
+        Instruction::I32ShrS | Instruction::I32ShrU | Instruction::I64ShrS | Instruction::I64ShrU => {
+            vec![(*indent, format!("{{ kind: 'ShiftRight' }},"))]
+        }
+        Instruction::I32Rotl | Instruction::I64Rotl => {
+            vec![(*indent, format!("{{ kind: 'RotateLeft' }},"))]
+        }
+        Instruction::I32Rotr | Instruction::I64Rotr => {
+            vec![(*indent, format!("{{ kind: 'RotateRight' }},"))]
+        }
         // CountLeadingZeros
         // CountTrailingZeros
         // PopulationCount

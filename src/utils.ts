@@ -4,15 +4,39 @@ import path from 'path';
 export const getWasm = async <
   entry = (x?: number, y?: number, z?: number) => number
 >(
-  directory: string,
-  filePath: string
+  testDirectory: string,
+  testName: string
 ) => {
-  const wasmPath = path.join(__dirname, 'test', directory, `${filePath}.wasm`);
+  const wasmPath = path.join(__dirname, 'test', testDirectory, `${testName}.wasm`);
   const wasmBuffer = await readFile(wasmPath);
   const wasmModule = await WebAssembly.compile(wasmBuffer);
   const instance = await WebAssembly.instantiate(wasmModule);
-  return instance.exports as {
-    memory: WebAssembly.Memory;
-    entry: entry;
+  return instance.exports.entry as entry;
+}
+
+export const getWasmMemory = (
+  testDirectory: string,
+  testName: string,
+) => async <
+  Input extends number[],
+>(...input: Input) => {
+  const wasmPath = path.join(__dirname, 'test', testDirectory, `${testName}.wasm`);
+  const wasmBuffer = await readFile(wasmPath);
+  const wasmModule = await WebAssembly.compile(wasmBuffer);
+  const instance = await WebAssembly.instantiate(wasmModule);
+  const { exports } = instance;
+  const { memory, entry } = exports as {
+    entry: (...input: Input) => number;
+    memory: WebAssembly.Memory
   };
+
+  const buffer = new Uint8Array(memory.buffer);
+
+  const pointer = entry(...input);
+
+  let output = '';
+  for (let i = pointer; buffer[i]; i++) {
+    output += String.fromCharCode(buffer[i]);
+  }
+  return output
 }
