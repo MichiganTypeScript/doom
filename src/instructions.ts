@@ -244,6 +244,10 @@ export type ILoop = {
   instructions: Instruction[];
 }
 
+export type IMemorySize = {
+  kind: "MemorySize"
+}
+
 export type IMultiply = {
   kind: "Multiply"
 }
@@ -378,6 +382,7 @@ export type Instruction =
   | ILocalSet
   | ILocalTee
   | ILoop
+  | IMemorySize
   | IMultiply
   | INegate
   | INop
@@ -457,6 +462,7 @@ export type selectInstruction<
   : instruction extends ILocalSet           ? Instructions.LocalSet<instruction, state>
   : instruction extends ILocalTee           ? Instructions.LocalTee<instruction, state>
   : instruction extends ILoop               ? Instructions.Loop<instruction, state>
+  : instruction extends IMemorySize         ? Instructions.MemorySize<instruction, state>
   : instruction extends IMultiply           ? Instructions.Multiply<instruction, state>
   : instruction extends INegate             ? Instructions.Negate<instruction, state>
   : instruction extends INop                ? Instructions.Nop<instruction, state>
@@ -1281,6 +1287,17 @@ export namespace Instructions {
 
           state
         >
+      >
+  > = RESULT
+
+  export type MemorySize<
+    instruction extends IMemorySize,
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Stack.push<
+        state['memorySize'],
+        state
       >
   > = RESULT
 

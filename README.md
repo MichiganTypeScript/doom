@@ -164,7 +164,7 @@ Usage count (in Doom) is the number on the right
 | I64Load8u         | 1     | ❌           |
 | I64Load32s        | 1     | ❌           |
 | I64Store16        | 1     | ❌           |
-| MemorySize        | 1     | ❌           |
+| MemorySize        | 1     | ✅           |
 
 ### Control Flow Instructions
 

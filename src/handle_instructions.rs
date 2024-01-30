@@ -419,6 +419,9 @@ fn handle_instruction(
             vec![(*indent, format!("{{ kind: 'ShiftLeft' }},"))]
         }
 
+        Instruction::MemorySize(_) => {
+            vec![(*indent, format!("{{ kind: 'MemorySize' }},"))]
+        }
         Instruction::I64ExtendI32U => {
             vec![(*indent, format!("{{ kind: 'Extend8Unsigned' }},"))]
         }
