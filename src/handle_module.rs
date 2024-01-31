@@ -5,7 +5,7 @@ use std::str;
 use wast::core::{DataVal, Func, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField};
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
-    source.add_import("../../program.ts", "Func");
+    source.add_import("../../types.ts", "Func");
     source.add_import("../../program.ts", "runProgram");
 
     let name = "$".to_string()

@@ -1,5 +1,5 @@
-import { Entry, ProgramState } from "../program.js"
-import { State } from '../state.js'
+import type { Entry, ProgramState } from "../types.js"
+import type { State } from '../state.js'
 import * as TypeMath from "../ts-type-math/index.js"
 
 export type IEqualsZero = {

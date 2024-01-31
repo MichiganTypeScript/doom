@@ -1,6 +1,6 @@
-import { Entry, Func, Param, ProgramState } from "../program.js";
-import { State } from '../state.js'
-import { Instruction } from "./instructions.js";
+import type { Entry, Func, Param, ProgramState } from "../types.js";
+import type { State } from '../state.js'
+import type { Instruction } from "./instructions.ts";
 
 export type IBlock = {
   kind: "Block"

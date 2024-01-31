@@ -1,5 +1,5 @@
-import { ProgramState } from "../program.js";
-import { State } from '../state.js'
+import type { ProgramState } from "../types.js";
+import type { State } from '../state.js'
 
 export type IConst = {
   kind: "Const"

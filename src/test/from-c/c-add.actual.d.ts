@@ -1,4 +1,5 @@
-import { Func, runProgram } from '../../program.ts'
+import { Func } from '../../types.ts'
+import { runProgram } from '../../program.ts'
 
 type $__wasm_call_ctors<
   RESULT extends Func = {

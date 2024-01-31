@@ -1,5 +1,5 @@
-import { Instruction } from "./instructions/instructions.js";
-import {
+import type { Instruction } from "./instructions/instructions.js";
+import type {
   BranchesById,
   ExecutionContext,
   Entry,
@@ -12,7 +12,7 @@ import {
   Param,
   ProgramState,
   evaluate,
-} from "./program.js";
+} from "./types.js";
 import * as TypeMath from "./ts-type-math/index.js";
 
 export namespace State {

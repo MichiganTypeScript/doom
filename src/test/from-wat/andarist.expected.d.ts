@@ -1,4 +1,5 @@
-import { Func, runProgram } from '../../program.ts'
+import { Func } from '../../types.ts'
+import { runProgram } from '../../program.ts'
 
 type $andarist<
   RESULT extends Func = {

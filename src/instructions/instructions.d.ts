@@ -1,14 +1,14 @@
-import { ProgramState } from "../program.js"
-import { State } from "../state.js"
-import { ArithmeticInstruction, HandleArithmeticInstructions } from "./arithmetic.js"
-import { BitwiseInstruction, HandleBitwiseInstructions } from "./bitwise.js"
-import { HandleComparisonInstruction, ComparisonInstruction } from "./comparison.js"
-import { HandleConstInstruction, ConstInstruction } from "./const.js"
-import { ControlFlowInstruction, HandleControlFlowInstructions } from "./control-flow.js"
-import { FloatingPointInstruction, HandleFloatingPointInstructions } from "./floating-point.js"
-import { HandleMemoryInstructions, MemoryInstruction } from "./memory.js"
-import { HandleSyntheticInstructions, SyntheticInstruction } from "./synthetic.js"
-import { HandleVariableInstructions, VariableInstruction } from "./variable.js"
+import type { ProgramState } from "../types.js"
+import type { State } from "../state.js"
+import type { ArithmeticInstruction, HandleArithmeticInstructions } from "./arithmetic.js"
+import type { BitwiseInstruction, HandleBitwiseInstructions } from "./bitwise.js"
+import type { HandleComparisonInstruction, ComparisonInstruction } from "./comparison.js"
+import type { HandleConstInstruction, ConstInstruction } from "./const.js"
+import type { ControlFlowInstruction, HandleControlFlowInstructions } from "./control-flow.js"
+import type { FloatingPointInstruction, HandleFloatingPointInstructions } from "./floating-point.js"
+import type { HandleMemoryInstructions, MemoryInstruction } from "./memory.ts"
+import type { HandleSyntheticInstructions, SyntheticInstruction } from "./synthetic.ts"
+import type { HandleVariableInstructions, VariableInstruction } from "./variable.ts"
 
 export type Instruction =
   | ConstInstruction
@@ -60,11 +60,8 @@ export type selectInstruction<
   ? HandleSyntheticInstructions<instruction, state>
 
   // Global Fallback
-  : State.Instructions.push<
-      {
-        kind: 'Halt',
-        instruction: instruction,
-        reason: 'unrecognized instruction'
-      },
+  : State.Error<
+      instruction,
+      'unrecognized instruction',
       state
     >

@@ -1,4 +1,5 @@
-import { Func, runProgram } from '../../program.ts'
+import { Func } from '../../types.ts'
+import { runProgram } from '../../program.ts'
 import { StoreString } from '../../ts-type-math/store.js'
 
 type $__wasm_call_ctors<
