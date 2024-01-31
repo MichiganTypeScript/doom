@@ -8,7 +8,7 @@
   (func $F32Add (param $a f32) (param $b f32) (result f32)
     local.get $a
     local.get $b
-   f32.add
+    f32.add
   )
 
   ;; F64Add
@@ -36,7 +36,7 @@
   (func $F32Div (param $a f32) (param $b f32) (result f32)
     local.get $a
     local.get $b
-   f32.div
+    f32.div
   )
 
   ;; F64Div
@@ -78,7 +78,7 @@
   (func $F32Mul (param $a f32) (param $b f32) (result f32)
     local.get $a
     local.get $b
-   f32.mul
+    f32.mul
   )
 
   ;; F64Mul
@@ -122,7 +122,7 @@
   (func $F32Sub (param $a f32) (param $b f32) (result f32)
     local.get $a
     local.get $b
-   f32.sub
+    f32.sub
   )
 
   ;; F64Sub
@@ -183,114 +183,114 @@
     local.get $F64Add_a
     local.get $F64Add_b
     call $F64Add
-    f64.store offset=10
+    f64.store offset=8
 
     local.get $index
     local.get $I32Add_a
     local.get $I32Add_b
     call $I32Add
-    i32.store offset=20
+    i32.store offset=16
 
     local.get $index
     local.get $I64Add_a
     local.get $I64Add_b
     call $I64Add
-    i64.store offset=30
+    i64.store offset=24
 
     local.get $index
     local.get $F32Div_a
     local.get $F32Div_b
     call $F32Div
-    f32.store offset=40
+    f32.store offset=32
 
     local.get $index
     local.get $F64Div_a
     local.get $F64Div_b
     call $F64Div
-    f64.store offset=50
+    f64.store offset=40
 
     local.get $index
     local.get $I32DivS_a
     local.get $I32DivS_b
     call $I32DivS
-    i32.store offset=60
+    i32.store offset=48
 
     local.get $index
     local.get $I64DivS_a
     local.get $I64DivS_b
     call $I64DivS
-    i64.store offset=70
+    i64.store offset=56
 
     local.get $index
     local.get $I32DivU_a
     local.get $I32DivU_b
     call $I32DivU
-    i32.store offset=80
+    i32.store offset=64
 
     local.get $index
     local.get $I64DivU_a
     local.get $I64DivU_b
     call $I64DivU
-    i64.store offset=90
+    i64.store offset=72
 
     local.get $index
     local.get $F32Mul_a
     local.get $F32Mul_b
     call $F32Mul
-    f32.store offset=100
+    f32.store offset=80
 
     local.get $index
     local.get $F64Mul_a
     local.get $F64Mul_b
     call $F64Mul
-    f64.store offset=110
+    f64.store offset=88
 
     local.get $index
     local.get $I32Mul_a
     local.get $I32Mul_b
     call $I32Mul
-    i32.store offset=120
+    i32.store offset=96
 
     local.get $index
     local.get $I64Mul_a
     local.get $I64Mul_b
     call $I64Mul
-    i64.store offset=130
+    i64.store offset=104
 
     local.get $index
     local.get $I32RemS_a
     local.get $I32RemS_b
     call $I32RemS
-    i32.store offset=140
+    i32.store offset=112
 
     local.get $index
     local.get $I32RemU_a
     local.get $I32RemU_b
     call $I32RemU
-    i32.store offset=150
+    i32.store offset=120
 
     local.get $index
     local.get $F32Sub_a
     local.get $F32Sub_b
     call $F32Sub
-    f32.store offset=160
+    f32.store offset=128
 
     local.get $index
     local.get $F64Sub_a
     local.get $F64Sub_b
     call $F64Sub
-    f64.store offset=170
+    f64.store offset=136
 
     local.get $index
     local.get $I32Sub_a
     local.get $I32Sub_b
     call $I32Sub
-    i32.store offset=180
+    i32.store offset=144
 
     local.get $index
     local.get $I64Sub_a
     local.get $I64Sub_b
     call $I64Sub
-    i64.store offset=190
+    i64.store offset=152
   )
 )

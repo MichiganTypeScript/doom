@@ -12,7 +12,7 @@ type $__wasm_call_ctors<
   }
 > = RESULT
 
-type $uppercase<
+type $entry<
   RESULT extends Func = {
     kind: 'func';
     params: ['$p0'];
@@ -251,7 +251,7 @@ export type entry<
     arguments: arguments;
     funcs: {
       $__wasm_call_ctors: $__wasm_call_ctors;
-      $uppercase: $uppercase;
+      $entry: $entry;
       $_initialize: $_initialize;
       $islower: $islower;
       $toupper: $toupper;

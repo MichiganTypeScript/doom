@@ -5,7 +5,7 @@
   (type $t3 (func (param i32)))
   (func $__wasm_call_ctors (type $t2)
     (call $emscripten_stack_init))
-  (func $uppercase (export "uppercase") (type $t1) (param $p0 i32) (result i32)
+  (func $entry (export "entry") (type $t1) (param $p0 i32) (result i32)
     (local $l1 i32) (local $l2 i32) (local $l3 i32) (local $l4 i32) (local $l5 i32) (local $l6 i32) (local $l7 i32) (local $l8 i32) (local $l9 i32) (local $l10 i32) (local $l11 i32) (local $l12 i32) (local $l13 i32) (local $l14 i32)
     (local.set $l1
       (global.get $__stack_pointer))

@@ -138,12 +138,12 @@ Module {
                         offset: 214,
                     },
                     id: Some(
-                        "uppercase",
+                        "entry",
                     ),
                     name: None,
                     exports: InlineExport {
                         names: [
-                            "uppercase",
+                            "entry",
                         ],
                     },
                     kind: Inline {
@@ -310,7 +310,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 776,
+                                                offset: 768,
                                             },
                                         ),
                                     },
@@ -327,7 +327,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 869,
+                                                offset: 861,
                                             },
                                         ),
                                     },
@@ -417,7 +417,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 1238,
+                                                offset: 1230,
                                             },
                                         ),
                                     },
@@ -455,7 +455,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 1393,
+                                                offset: 1385,
                                             },
                                         ),
                                     },
@@ -539,7 +539,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1722,
+                        offset: 1714,
                     },
                     id: Some(
                         "_initialize",
@@ -599,7 +599,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1886,
+                        offset: 1878,
                     },
                     id: Some(
                         "islower",
@@ -656,7 +656,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2044,
+                        offset: 2036,
                     },
                     id: Some(
                         "toupper",
@@ -729,7 +729,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2246,
+                        offset: 2238,
                     },
                     id: Some(
                         "stackSave",
@@ -772,7 +772,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2345,
+                        offset: 2337,
                     },
                     id: Some(
                         "stackRestore",
@@ -826,7 +826,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2475,
+                        offset: 2467,
                     },
                     id: Some(
                         "stackAlloc",
@@ -917,7 +917,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2804,
+                        offset: 2796,
                     },
                     id: Some(
                         "emscripten_stack_init",
@@ -972,7 +972,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 3077,
+                        offset: 3069,
                     },
                     id: Some(
                         "emscripten_stack_get_free",
@@ -1021,7 +1021,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 3256,
+                        offset: 3248,
                     },
                     id: Some(
                         "emscripten_stack_get_base",
@@ -1064,7 +1064,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 3384,
+                        offset: 3376,
                     },
                     id: Some(
                         "emscripten_stack_get_end",
@@ -1107,7 +1107,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 3509,
+                        offset: 3501,
                     },
                     id: Some(
                         "__errno_location",
@@ -1148,7 +1148,7 @@ Module {
             Table(
                 Table {
                     span: Span {
-                        offset: 3609,
+                        offset: 3601,
                     },
                     id: Some(
                         "__indirect_function_table",
@@ -1179,7 +1179,7 @@ Module {
             Memory(
                 Memory {
                     span: Span {
-                        offset: 3695,
+                        offset: 3687,
                     },
                     id: Some(
                         "memory",
@@ -1206,7 +1206,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 3740,
+                        offset: 3732,
                     },
                     id: Some(
                         "__stack_pointer",
@@ -1233,7 +1233,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 3798,
+                        offset: 3790,
                     },
                     id: Some(
                         "__stack_end",
@@ -1260,7 +1260,7 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 3846,
+                        offset: 3838,
                     },
                     id: Some(
                         "__stack_base",
@@ -1287,7 +1287,7 @@ Module {
             Elem(
                 Elem {
                     span: Span {
-                        offset: 3895,
+                        offset: 3887,
                     },
                     id: Some(
                         "e0",
@@ -1297,7 +1297,7 @@ Module {
                         table: Num(
                             0,
                             Span {
-                                offset: 3895,
+                                offset: 3887,
                             },
                         ),
                         offset: Expression {

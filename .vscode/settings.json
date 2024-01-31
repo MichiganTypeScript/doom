@@ -4,5 +4,6 @@
   // },
   "editor.rulers": [],
   "C_Cpp.errorSquiggles": "disabled",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "errorLens.excludePatterns": ["**/david-blass-incredibleness.ts"]
 }

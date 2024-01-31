@@ -5,7 +5,8 @@ import {
   ProgramState,
   Entry,
 } from "./program.js"
-import { State } from "./state.js"
+import { State, State } from "./state.js"
+import { $stackSave } from "./test/from-c/uppercase.actual.js"
 import * as TypeMath from "./ts-type-math/index.js"
 
 /*
@@ -862,8 +863,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -873,8 +874,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -995,8 +996,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1006,8 +1007,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1017,8 +1018,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1028,8 +1029,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1146,10 +1147,8 @@ export namespace Instructions {
             ...remaining,
 
             State.Memory.getByAddress<
-              TypeMath.Add<
-                address,
-                instruction['offset']
-              >,
+              address,
+              instruction['offset'],
               state
             >
           ],
@@ -1173,10 +1172,8 @@ export namespace Instructions {
             ...remaining,
 
             State.Memory.getByAddress<
-              TypeMath.Add<
-                address,
-                instruction['offset']
-              >,
+              address,
+              instruction['offset'],
               state
             >
           ],
@@ -1200,10 +1197,8 @@ export namespace Instructions {
             ...remaining,
 
             State.Memory.getByAddress<
-              TypeMath.Add<
-                address,
-                instruction['offset']
-              >,
+              address,
+              instruction['offset'],
               state
             >
           ],
@@ -1227,10 +1222,8 @@ export namespace Instructions {
             ...remaining,
 
             State.Memory.getByAddress<
-              TypeMath.Add<
-                address,
-                instruction['offset']
-              >,
+              address,
+              instruction['offset'],
               state
             >
           ],
@@ -1246,8 +1239,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1256,10 +1249,24 @@ export namespace Instructions {
     state extends ProgramState,
 
     RESULT extends ProgramState =
-      State.Instructions.Unimplemented<
-        state,
-        instruction
-      >
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress,
+      ]
+      ? State.Stack.set<
+          [
+            ...remaining,
+            State.Memory.getByAddress<
+              address,
+              instruction['offset'],
+              state
+            >
+          ],
+          state
+        >
+      : State.Error<instruction, "insufficient stack", state>
+
+      // check if it's negative and less than 256 because if so we can just grab it as is
   > = RESULT
 
   export type I32Load16s<
@@ -1268,8 +1275,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1279,8 +1286,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1290,8 +1297,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1301,8 +1308,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1312,8 +1319,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1323,8 +1330,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1334,8 +1341,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1345,12 +1352,12 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
-
+  // TODO this is wrong
   export type I32Store<
     instruction extends II32Store,
     state extends ProgramState,
@@ -1365,19 +1372,20 @@ export namespace Instructions {
           remaining,
 
           State.Memory.insert<
-
-            TypeMath.Add<
-              address,
-              instruction['offset']
-            >,
-
-            entry,
+            address,
+            instruction['offset'],
+            [entry], // WRONG!
             state
           >
         >
-      : never
+      : State.Error<
+          instruction,
+          "I32Store: stack is empty",
+          state
+        >
   > = RESULT
 
+  // TODO this is wrong
   export type I64Store<
     instruction extends II64Store,
     state extends ProgramState,
@@ -1392,19 +1400,16 @@ export namespace Instructions {
           remaining,
 
           State.Memory.insert<
-
-            TypeMath.Add<
-              address,
-              instruction['offset']
-            >,
-
-            entry,
+            address,
+            instruction['offset'],
+            [entry], // WRONG!
             state
           >
         >
       : never
   > = RESULT
 
+  // TODO this is wrong
   export type F32Store<
     instruction extends IF32Store,
     state extends ProgramState,
@@ -1419,19 +1424,16 @@ export namespace Instructions {
           remaining,
 
           State.Memory.insert<
-
-            TypeMath.Add<
-              address,
-              instruction['offset']
-            >,
-
-            entry,
+            address,
+            instruction['offset'],
+            [entry], // WRONG!
             state
           >
         >
       : never
   > = RESULT
 
+  // TODO this is wrong
   export type F64Store<
     instruction extends IF64Store,
     state extends ProgramState,
@@ -1446,13 +1448,9 @@ export namespace Instructions {
           remaining,
 
           State.Memory.insert<
-
-            TypeMath.Add<
-              address,
-              instruction['offset']
-            >,
-
-            entry,
+            address,
+            instruction['offset'],
+            [entry], // WRONG!
             state
           >
         >
@@ -1464,10 +1462,25 @@ export namespace Instructions {
     state extends ProgramState,
 
     RESULT extends ProgramState =
-      State.Instructions.Unimplemented<
-        state,
-        instruction
-      >
+      State.Stack.get<state> extends [
+        ...infer remaining extends Entry[],
+        infer address extends MemoryAddress,
+        infer entry extends Entry,
+      ]
+      ? // if it happens to already be less than 256 (i.e. a u8), then we can store it as is and skip all the bitwise conversion nonsense
+        TypeMath.LessThan<entry, 256> extends true
+        ? State.Stack.set<
+            remaining,
+
+            State.Memory.insert<
+              address,
+              instruction['offset'],
+              [entry],
+              state
+            >
+          >
+        : State.Instructions.Unimplemented<instruction, state>
+      : State.Error<instruction, "insufficient stack", state>
   > = RESULT
 
   export type I32Store16<
@@ -1476,8 +1489,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1487,8 +1500,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1498,8 +1511,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 
@@ -1509,8 +1522,8 @@ export namespace Instructions {
 
     RESULT extends ProgramState =
       State.Instructions.Unimplemented<
-        state,
-        instruction
+        instruction,
+        state
       >
   > = RESULT
 

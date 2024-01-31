@@ -2,7 +2,7 @@ export {
   Add
 } from './hotscript-fork/numbers/impl/addition.ts'
 export { Abs as AbsoluteValue } from './hotscript-fork/numbers/impl/absolute.ts';
-export { BitwiseAnd, BitwiseOr, BitwiseXor } from './binary';
+export { IsNegative, BitwiseAnd, BitwiseOr, BitwiseXor } from './binary';
 export { Equal, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual, NotEqual } from './hotscript-fork/numbers/impl/compare.ts';
 export {
   Mul as Multiply

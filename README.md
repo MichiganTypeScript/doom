@@ -112,17 +112,17 @@ Usage count (in Doom) is the number on the right
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |
 | I32Shl            | 954   | ❌           |
-| I32And            | 819   | ⏸️           |
-| I32Or             | 488   | ⏸️           |
-| I32Xor            | 411   | ⏸️           |
+| I32And            | 819   | 🐛           |
+| I32Or             | 488   | 🐛           |
+| I32Xor            | 411   | 🐛           |
 | I32Rotl           | 240   | ❌           |
 | I32ShrU           | 234   | ❌           |
 | I32ShrS           | 230   | ❌           |
-| I64Or             | 129   | ⏸️           |
+| I64Or             | 129   | 🐛           |
 | I64ShrU           | 83    | ❌           |
 | I64Shl            | 80    | ❌           |
-| I64And            | 73    | ⏸️           |
-| I64Xor            | 34    | ⏸️           |
+| I64And            | 73    | 🐛           |
+| I64Xor            | 34    | 🐛           |
 | I64Clz            | 7     | ❌           |
 | I32Clz            | 5     | ❌           |
 | I64Rotl           | 1     | ❌           |
@@ -141,13 +141,13 @@ Usage count (in Doom) is the number on the right
 
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |
-| I32Load           | 5853  | ✅           |
-| I32Store          | 3413  | ✅           |
-| I32Load8u         | 460   | ❌           |
-| I64Load           | 357   | ✅           |
+| I32Load           | 5853  | 🐛           |
+| I32Store          | 3413  | 🐛           |
+| I32Load8u         | 460   | ✅           |
+| I64Load           | 357   | 🐛           |
 | I32Load16s        | 278   | ❌           |
-| I32Store8         | 253   | ❌           |
-| I64Store          | 196   | ✅           |
+| I32Store8         | 253   | ✅           |
+| I64Store          | 196   | 🐛           |
 | I32Store16        | 188   | ❌           |
 | I32Load16u        | 176   | ❌           |
 | I32Load8s         | 71    | ❌           |
@@ -187,6 +187,7 @@ Usage count (in Doom) is the number on the right
 | Nop               | 40    | ✅           |
 
 <sub>⏸️ means things are in progress</sub>
+<sub>🐛 means things are known problems</sub>
 
 ## Design decisions
 

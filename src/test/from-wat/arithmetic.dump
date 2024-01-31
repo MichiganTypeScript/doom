@@ -92,7 +92,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 187,
+                        offset: 188,
                     },
                     id: Some(
                         "F64Add",
@@ -150,7 +150,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 309,
+                        offset: 310,
                     },
                     id: Some(
                         "I32Add",
@@ -208,7 +208,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 431,
+                        offset: 432,
                     },
                     id: Some(
                         "I64Add",
@@ -266,7 +266,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 553,
+                        offset: 554,
                     },
                     id: Some(
                         "F32Div",
@@ -324,7 +324,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 674,
+                        offset: 676,
                     },
                     id: Some(
                         "F64Div",
@@ -382,7 +382,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 797,
+                        offset: 799,
                     },
                     id: Some(
                         "I32DivS",
@@ -440,7 +440,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 923,
+                        offset: 925,
                     },
                     id: Some(
                         "I64DivS",
@@ -498,7 +498,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1049,
+                        offset: 1051,
                     },
                     id: Some(
                         "I32DivU",
@@ -556,7 +556,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1175,
+                        offset: 1177,
                     },
                     id: Some(
                         "I64DivU",
@@ -614,7 +614,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1300,
+                        offset: 1302,
                     },
                     id: Some(
                         "F32Mul",
@@ -672,7 +672,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1421,
+                        offset: 1424,
                     },
                     id: Some(
                         "F64Mul",
@@ -730,7 +730,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1543,
+                        offset: 1546,
                     },
                     id: Some(
                         "I32Mul",
@@ -788,7 +788,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1665,
+                        offset: 1668,
                     },
                     id: Some(
                         "I64Mul",
@@ -846,7 +846,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1788,
+                        offset: 1791,
                     },
                     id: Some(
                         "I32RemS",
@@ -904,7 +904,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1914,
+                        offset: 1917,
                     },
                     id: Some(
                         "I32RemU",
@@ -962,7 +962,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2099,
+                        offset: 2102,
                     },
                     id: Some(
                         "F32Sub",
@@ -1020,7 +1020,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2220,
+                        offset: 2224,
                     },
                     id: Some(
                         "F64Sub",
@@ -1078,7 +1078,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2342,
+                        offset: 2346,
                     },
                     id: Some(
                         "I32Sub",
@@ -1136,7 +1136,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2464,
+                        offset: 2468,
                     },
                     id: Some(
                         "I64Sub",
@@ -1194,7 +1194,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2574,
+                        offset: 2578,
                     },
                     id: Some(
                         "arithmetic",
@@ -1250,7 +1250,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 3739,
+                                                offset: 3743,
                                             },
                                         ),
                                     },
@@ -1278,11 +1278,11 @@ Module {
                                 F64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 10,
+                                        offset: 8,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 3849,
+                                                offset: 3853,
                                             },
                                         ),
                                     },
@@ -1310,11 +1310,11 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 20,
+                                        offset: 16,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 3960,
+                                                offset: 3963,
                                             },
                                         ),
                                     },
@@ -1342,11 +1342,11 @@ Module {
                                 I64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 30,
+                                        offset: 24,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4071,
+                                                offset: 4074,
                                             },
                                         ),
                                     },
@@ -1374,11 +1374,11 @@ Module {
                                 F32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 40,
+                                        offset: 32,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4182,
+                                                offset: 4185,
                                             },
                                         ),
                                     },
@@ -1406,11 +1406,11 @@ Module {
                                 F64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 50,
+                                        offset: 40,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4293,
+                                                offset: 4296,
                                             },
                                         ),
                                     },
@@ -1438,11 +1438,11 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 60,
+                                        offset: 48,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4407,
+                                                offset: 4410,
                                             },
                                         ),
                                     },
@@ -1470,11 +1470,11 @@ Module {
                                 I64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 70,
+                                        offset: 56,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4521,
+                                                offset: 4524,
                                             },
                                         ),
                                     },
@@ -1502,11 +1502,11 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 80,
+                                        offset: 64,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4635,
+                                                offset: 4638,
                                             },
                                         ),
                                     },
@@ -1534,11 +1534,11 @@ Module {
                                 I64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 90,
+                                        offset: 72,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4749,
+                                                offset: 4752,
                                             },
                                         ),
                                     },
@@ -1566,11 +1566,11 @@ Module {
                                 F32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 100,
+                                        offset: 80,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4860,
+                                                offset: 4863,
                                             },
                                         ),
                                     },
@@ -1598,11 +1598,11 @@ Module {
                                 F64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 110,
+                                        offset: 88,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4972,
+                                                offset: 4974,
                                             },
                                         ),
                                     },
@@ -1630,11 +1630,11 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 120,
+                                        offset: 96,
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 5084,
+                                                offset: 5085,
                                             },
                                         ),
                                     },
@@ -1662,7 +1662,7 @@ Module {
                                 I64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 130,
+                                        offset: 104,
                                         memory: Num(
                                             0,
                                             Span {
@@ -1694,7 +1694,7 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 140,
+                                        offset: 112,
                                         memory: Num(
                                             0,
                                             Span {
@@ -1726,7 +1726,7 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 150,
+                                        offset: 120,
                                         memory: Num(
                                             0,
                                             Span {
@@ -1758,7 +1758,7 @@ Module {
                                 F32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 160,
+                                        offset: 128,
                                         memory: Num(
                                             0,
                                             Span {
@@ -1790,7 +1790,7 @@ Module {
                                 F64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 170,
+                                        offset: 136,
                                         memory: Num(
                                             0,
                                             Span {
@@ -1822,7 +1822,7 @@ Module {
                                 I32Store(
                                     MemArg {
                                         align: 4,
-                                        offset: 180,
+                                        offset: 144,
                                         memory: Num(
                                             0,
                                             Span {
@@ -1854,7 +1854,7 @@ Module {
                                 I64Store(
                                     MemArg {
                                         align: 8,
-                                        offset: 190,
+                                        offset: 152,
                                         memory: Num(
                                             0,
                                             Span {

@@ -13,10 +13,23 @@ import {
   ProgramState,
   evaluate,
 } from "./program.js";
+import { U8Decimal } from "./ts-type-math/conversion.js";
 import * as TypeMath from "./ts-type-math/index.js";
 
 export namespace State {
-  
+  export type Error<
+    instruction extends Instruction,
+    reason extends string,
+
+    state extends ProgramState,
+
+    RESULT extends ProgramState =
+      State.Instructions.push<
+        { kind: 'Halt', reason: reason, instruction: instruction },
+        state
+      >
+  > = RESULT
+
   export namespace Count {
     export type get<
       state extends ProgramState,
@@ -157,8 +170,8 @@ export namespace State {
     > = RESULT
 
     export type Unimplemented<
-      state extends ProgramState,
       instruction extends Instruction,
+      state extends ProgramState,
       
       RESULT extends ProgramState =
         push<
@@ -458,23 +471,52 @@ export namespace State {
 
     export type getByAddress<
       address extends MemoryAddress,
+      offset extends number,
       state extends ProgramState,
 
       RESULT extends Entry =
-        // no idea why this Cast is needed, but it is
-        // @ts-ignore TODO
-        get<state>[address]
+        get<state>[TypeMath.Add<address, offset>]
+    > = RESULT
+
+    type CollectBytes<
+      bytes extends number[],
+      address extends number,
+
+      _Acc extends Record<number, number> = {},
+
+      RESULT extends Record<number, number> =
+        bytes extends [
+          infer head extends number, // WASM is little-endian so these go in first
+          ...infer tail extends number[]
+        ]
+        ? CollectBytes<
+            tail,
+            TypeMath.Add<address, 1>,
+            _Acc & { [k in address]: head }
+          >
+        : _Acc
     > = RESULT
 
     export type insert<
       address extends MemoryAddress,
-      entry extends Entry,
+      offset extends number,
+      bytes extends number[],
+
       state extends ProgramState,
+
+      _update extends Record<number, number> =
+        CollectBytes<
+          bytes,
+          TypeMath.Add<address, offset>
+        >,
 
       RESULT extends ProgramState = {
         memory:
+            // & Omit<state['memory'], keyof _update>
+            evaluate<
             & state['memory']
-            & { [k in address]: entry }
+            & _update
+            >;
 
         activeExecutionContext: state['activeExecutionContext'];
         count: state['count'];

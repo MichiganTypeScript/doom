@@ -97,7 +97,7 @@ type PadLeft<
 
 type Zero64Bit = "00000000000000000000000000000000";
 
-type IsNegative<
+export type IsNegative<
   T extends number
 > =
   `${T}` extends `-${string}`
