@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { getWasmMemory } from '../../utils.js'
 import type { entry } from './hello-world.actual.js'
 import { Equal, Expect } from 'type-testing';
-import { ProgramState } from '../../program.js';
+import { ReadMemory } from '../../ts-type-math/store.js';
 
 const greeting = `Greetings humans, I am Ziltoid... the omniscient.
 I have come far from across the Omniverse.
@@ -16,13 +16,8 @@ test(name, async () => {
   expect(await entry(0)).toStrictEqual(greeting);
 });
 
-type FromMemory<
-  state extends ProgramState,
-> = state['memory'][1024];
-
-type x = entry<[]>;
-//   ^?
+type Greeting = ReadMemory<entry<[], true>>;
 
 type testCases = [
-  // Expect<Equal<entry<[]>, typeof greeting>>,
+  Expect<Equal<Greeting, typeof greeting>>,
 ]

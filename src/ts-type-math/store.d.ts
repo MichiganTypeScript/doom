@@ -68,7 +68,7 @@ export type StoreString<
     >
 > = RESULT;
 
-type x = StoreString<1024, "Let's hope this works..">;
+type x = StoreString<1024, "Let's hope this works..\u0000">;
 //   ^?
 type y = StoreString<2048, "but it prolly wont">;
 
@@ -81,7 +81,7 @@ export type ReadUntilNullTerminator<
 
   RESULT extends string =
     memory[address] extends infer Char
-    ? Char extends '\0'
+    ? Char extends 0
       ? ''
       : `${
           Convert.U8Decimal.ToAscii<Cast<Char, U8Decimal>>
