@@ -1,4 +1,4 @@
-import { Instruction } from "./instructions.js";
+import { Instruction } from "./instructions/instructions.js";
 import {
   BranchesById,
   ExecutionContext,
@@ -13,7 +13,6 @@ import {
   ProgramState,
   evaluate,
 } from "./program.js";
-import { U8Decimal } from "./ts-type-math/conversion.js";
 import * as TypeMath from "./ts-type-math/index.js";
 
 export namespace State {

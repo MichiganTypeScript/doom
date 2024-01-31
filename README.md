@@ -49,11 +49,11 @@ Usage count (in Doom) is the number on the right
 | I64LeS            | 5     | ✅           |
 | I64GtS            | 5     | ✅           |
 | I64GeU            | 5     | ✅           |
-| F64Lt             | 4     | ✅           |
-| F64Ne             | 4     | ✅           |
-| F64Eq             | 3     | ✅           |
-| F32Lt             | 1     | ✅           |
-| F64Ge             | 1     | ✅           |
+| F64Lt             | 4     | ❌           |
+| F64Ne             | 4     | ❌           |
+| F64Eq             | 3     | ❌           |
+| F32Lt             | 1     | ❌           |
+| F64Ge             | 1     | ❌           |
 
 #### Arithmetic
 
@@ -68,14 +68,14 @@ Usage count (in Doom) is the number on the right
 | I64Mul            | 46    | ✅           |
 | I32RemS           | 44    | ❌           |
 | I32DivU           | 30    | ❌           |
-| F64Mul            | 18    | ✅           |
+| F64Mul            | 18    | ❌           |
 | I32RemU           | 13    | ❌           |
-| F64Sub            | 5     | ✅           |
-| F64Add            | 5     | ✅           |
+| F64Sub            | 5     | ❌           |
+| F64Add            | 5     | ❌           |
 | I64DivU           | 3     | ❌           |
 | F32Div            | 2     | ❌           |
-| F32Mul            | 2     | ✅           |
-| F32Add            | 1     | ✅           |
+| F32Mul            | 2     | ❌           |
+| F32Add            | 1     | ❌           |
 | I64DivS           | 1     | ❌           |
 | F64Div            | 1     | ❌           |
 

@@ -1,4 +1,5 @@
-import { IHalt, Instruction, selectInstruction } from "./instructions.js"
+import { Instruction, selectInstruction } from "./instructions/instructions.js"
+import { IHalt } from "./instructions/synthetic.js";
 import { State } from "./state.js";
 
 /** an item on the stack */
@@ -108,7 +109,7 @@ export type evaluate<T> = {
 } & unknown
 
 // set to `number` to disable
-export type StopAt = 21
+export type StopAt = number
 
 export type executeInstruction<
   state extends ProgramState,
