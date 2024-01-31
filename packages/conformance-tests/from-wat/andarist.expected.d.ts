@@ -1,4 +1,4 @@
-import { Func, runProgram } from 'wasm-to-typescript-types'
+import type { Func, runProgram } from 'wasm-to-typescript-types'
 
 type $andarist<
   RESULT extends Func = {

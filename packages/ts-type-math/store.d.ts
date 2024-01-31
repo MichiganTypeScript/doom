@@ -1,6 +1,6 @@
-import { Ascii, U8Binary, U8Decimal } from "./conversion.js";
-import { Convert } from "./conversion.js";
-import type { Add } from './hotscript-fork/numbers/impl/addition.js'
+import type { Ascii, U8Binary, U8Decimal } from "./conversion.jd.t";
+import type { Convert } from "./conversion.jd.t";
+import type { Add } from './hotscript-fork/numbers/impl/addition.d.ts'
 
 type AsciiToU8Decimal<T extends string> =
   T extends `${infer Char extends Ascii}${infer Rest}`

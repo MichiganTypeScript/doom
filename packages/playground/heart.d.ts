@@ -1,5 +1,5 @@
-import { DisplayFrame, SetPixels, CreateCanvas } from "../helpers";
-import { A, M, Z } from "../constants";
+import type { DisplayFrame, SetPixels, CreateCanvas } from "../helpers.d.ts";
+import type { A, M, Z } from "../constants.d.ts";
 
 type Frame0 = CreateCanvas<8, 10, A>;
 

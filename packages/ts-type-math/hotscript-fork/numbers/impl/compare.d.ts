@@ -6,7 +6,7 @@ import type {
   Sign,
   Num,
 } from "./utils.ts";
-import { Equal as _Equal } from "../../helpers.ts";
+import type { Equal as _Equal } from "../../helpers.d.ts";
 
 export type CompareLength<
   T extends any[],

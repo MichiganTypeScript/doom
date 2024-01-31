@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
-import { getWasmMemory } from '../utils.js'
-import type { entry } from './hello-world.actual.js'
-import { Equal, Expect } from 'type-testing';
-import { ReadMemory } from 'ts-type-math';
+import { getWasmMemory } from '../utils.ts'
+import type { entry } from './hello-world.actual.d.ts'
+import type { Equal, Expect } from 'type-testing';
+import type { ReadMemory } from 'ts-type-math';
 
 const greeting = `Greetings humans, I am Ziltoid... the omniscient.
 I have come far from across the Omniverse.

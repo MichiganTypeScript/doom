@@ -1,6 +1,9 @@
 /** sure would be nice for this to be a TypeScript file, but neither tsx nor deno seem to want to do that */
 
-const { createProgram, forEachChild, isTypeAliasDeclaration } = require('typescript');
+import { stackSize } from './determine-stack-size.mjs';
+
+import ts from 'typescript';
+const { createProgram, forEachChild, isTypeAliasDeclaration } = ts;
 
 const phrases = [
   "Expecto Patronum!",
@@ -18,7 +21,7 @@ console.log();
 
 const evaluateType = async () => {
   // Read the TypeScript file
-  const fileName = './evaluate/evaluation-playground.ts';
+  const fileName = './evaluate/evaluation-playground.d.ts';
   const program = createProgram([fileName], {});
   const sourceFile = program.getSourceFile(fileName);
 
@@ -50,12 +53,13 @@ const evaluateType = async () => {
   const type = checker.getTypeAtLocation(typeAlias);
   const typeString = checker.typeToString(type);
 
-  console.log("");
   console.log(typeString);
   console.log("");
 
   // Stop the timer
   console.timeEnd("Type Evaluation Time");
+
+  console.log("Maximum recursions:", stackSize());
 };
 
 evaluateType().catch(console.error);

@@ -1,4 +1,4 @@
-import { U8Hex, Nibble } from "./conversion";
+import type { U8Hex, Nibble } from "./conversion.d.ts";
 
 export namespace BitwiseU8Hex {
   export type And<

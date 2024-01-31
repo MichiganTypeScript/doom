@@ -1,7 +1,7 @@
-import { Equal, Expect } from "type-testing";
-import { Div, Mod } from "./hotscript-fork/numbers/impl/division.js";
-import { Length } from "./hotscript-fork/strings/impl/length.js";
-import { Add } from "./index.js";
+import type { Equal, Expect } from "type-testing";
+import type { Div, Mod } from "./hotscript-fork/numbers/impl/division.d.ts";
+import type { Length } from "./hotscript-fork/strings/impl/length.d.ts";
+import type { Add } from './hotscript-fork/numbers/impl/addition.d.ts';
 
 type PowersOfTwo = [
     /* 2**0  */ 1,

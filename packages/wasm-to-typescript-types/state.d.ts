@@ -1,4 +1,4 @@
-import type { Instruction } from "./instructions/instructions.js";
+import type { Instruction } from "./instructions/instructions.d.ts";
 import type {
   BranchesById,
   Entry,
@@ -12,8 +12,10 @@ import type {
   Param,
   ProgramState,
   evaluate,
-} from "./types.js";
+} from "./types.d.ts";
 import * as TypeMath from "ts-type-math";
+
+type X = TypeMath.Add<1, 2> // =>
 
 export namespace State {
   export type Error<

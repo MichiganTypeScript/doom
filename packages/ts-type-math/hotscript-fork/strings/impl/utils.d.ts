@@ -1,5 +1,5 @@
-import { Add } from "../../numbers/impl/addition.js";
-import { Mul } from "../../numbers/impl/multiply.js";
+import type { Add } from "../../numbers/impl/addition.d.ts";
+import type { Mul } from "../../numbers/impl/multiply.d.ts";
 
 export namespace StringIterator {
   type Iter = [string, number];

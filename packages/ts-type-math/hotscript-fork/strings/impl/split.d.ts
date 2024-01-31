@@ -1,4 +1,4 @@
-import * as H from "../../helpers.ts";
+import type * as H from "../../helpers.d.ts";
 
 type ConcatSplits<
   Parts extends string[],

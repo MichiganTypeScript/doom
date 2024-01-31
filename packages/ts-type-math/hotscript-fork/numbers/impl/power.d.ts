@@ -1,4 +1,4 @@
-import {
+import type {
   ToNumber,
   MakeDigitNumber,
   FromDigitNumber,
@@ -9,8 +9,8 @@ import {
   ToDigitNumber,
   ToString,
   Digit,
-} from "./utils.js";
-import { PowerDigits } from "./digits/power.js";
+} from "./utils.d.ts";
+import type { PowerDigits } from "./digits/power.d.ts";
 
 type PowerSign<S extends "" | "-", U extends DigitNumber> = S extends "-"
   ? Num<U> extends [...Digit[], 0 | 2 | 4 | 6 | 8]

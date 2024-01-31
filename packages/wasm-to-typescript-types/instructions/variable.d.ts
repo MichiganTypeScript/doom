@@ -1,5 +1,5 @@
-import type { Entry, ProgramState } from "../types.js";
-import type { State } from '../state.js'
+import type { Entry, ProgramState } from "../types.d.ts";
+import type { State } from '../state.d.ts'
 
 export type ILocalGet = {
   kind: "LocalGet"

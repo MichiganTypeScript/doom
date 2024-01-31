@@ -1,5 +1,5 @@
-import { Expect, Equal } from 'type-testing';
-import { Convert } from './conversion.js';
+import type { Expect, Equal } from 'type-testing';
+import type { Convert } from './conversion.d.ts';
 
 // type tests_U8HexToU8Decimal = [
 //   Expect<Equal<Convert.U8Hex.ToU8Decimal<"00">, 0>>,

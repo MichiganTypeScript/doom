@@ -1,4 +1,4 @@
-import {
+import type {
   ToNumber,
   MakeDigitNumber,
   FromDigitNumber,
@@ -10,8 +10,8 @@ import {
   ToString,
   MulSign,
   Digit,
-} from "./utils.ts";
-import { DivDigits, ModDigits, DivModDigits } from "./digits/division.js";
+} from "./utils.d.ts";
+import type { DivDigits, ModDigits, DivModDigits } from "./digits/division.d.ts";
 
 export type DivDigitNumbers<
   T extends DigitNumber,

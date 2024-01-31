@@ -1,7 +1,7 @@
-import { Instruction, selectInstruction } from "./instructions/instructions.js"
-import { IHalt } from "./instructions/synthetic.js";
-import { State } from "./state.js";
-import { ProgramInput, ProgramState, evaluate } from "./types.js";
+import type { Instruction, selectInstruction } from "./instructions/instructions.d.ts"
+import type { IHalt } from "./instructions/synthetic.d.ts";
+import type { State } from "./state.d.ts";
+import type { ProgramInput, ProgramState, evaluate } from "./types.d.ts";
 
 // set to `number` to disable
 export type StopAt = number

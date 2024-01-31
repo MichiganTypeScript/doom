@@ -1,8 +1,8 @@
-import { Expect, Equal } from 'type-testing';
-import type { entry } from "./select.actual.js"
+import type { Expect, Equal } from 'type-testing';
+import type { entry } from "./select.actual.d.ts"
 
 
-import { getWasm } from '../utils.js'
+import { getWasm } from '../utils.ts'
 import { expect, test } from 'vitest';
 
 const name = 'select';

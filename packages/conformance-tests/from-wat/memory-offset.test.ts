@@ -1,7 +1,7 @@
-import { Expect, Equal } from 'type-testing';
-import type { entry } from "./memory-offset.actual.js"
+import type { Expect, Equal } from 'type-testing';
+import type { entry } from "./memory-offset.actual.d.ts"
 
-import { getWasm } from '../utils.js'
+import { getWasm } from '../utils.ts'
 import { expect, test } from 'vitest';
 
 const example = (a: number, b: number, c: number) => {

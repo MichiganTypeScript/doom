@@ -75,7 +75,7 @@ impl ToString for SourceFile {
             .iter()
             .map(|(package, imports)| {
                 format!(
-                    "import {{ {} }} from '{}'\n",
+                    "import type {{ {} }} from '{}'\n",
                     imports.iter().cloned().collect::<Vec<String>>().join(", "),
                     package
                 )

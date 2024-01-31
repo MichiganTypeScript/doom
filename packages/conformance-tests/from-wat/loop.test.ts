@@ -1,8 +1,8 @@
-import { Expect, Equal } from 'type-testing';
+import type { Expect, Equal } from 'type-testing';
 import type { entry } from './loop.actual.d.ts'
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.js'
+import { getWasm } from '../utils.ts'
 
 const name = 'loop';
 test(name, async () => {

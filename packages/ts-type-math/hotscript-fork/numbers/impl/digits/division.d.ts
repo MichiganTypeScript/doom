@@ -1,7 +1,7 @@
-import { Digit, Digits, TrimZeros } from "../utils.ts";
-import { CompareDigits } from "../compare.ts";
-import { AddDigits } from "./addition..dts";
-import { SubDigits } from "./substraction.ts";
+import type { Digit, Digits, TrimZeros } from "../utils.d.ts";
+import type { CompareDigits } from "../compare.d.ts";
+import type { AddDigits } from "./addition.d.ts";
+import type { SubDigits } from "./substraction.d.ts";
 
 export type Rest<T extends Digit[]> = T extends [
   Digit,

@@ -1,4 +1,4 @@
-import type { Digit } from "../utils.js";
+import type { Digit } from "../utils.d.ts";
 
 type AddDigitTable = [
   [

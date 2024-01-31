@@ -1,7 +1,7 @@
 // Original impl https://gist.github.com/sno2/7dac868ec6d11abb75250ce5e2b36041
 
-import { Add } from "../../numbers/impl/addition.js";
-import { StringIterator as StrIter } from "./utils.ts";
+import type { Add } from "../../numbers/impl/addition.d.ts";
+import type { StringIterator as StrIter } from "./utils.d.ts";
 
 // Implementation of the following algorithm:
 //

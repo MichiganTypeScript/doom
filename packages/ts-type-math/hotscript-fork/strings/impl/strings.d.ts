@@ -1,6 +1,6 @@
-export * from "./split.js";
-export * from "./trim.js";
-export * from "./replace.js";
-export * from "./repeat.js";
-export * from "./compare.js";
-export * from "./length.js";
+export type * from "./split.d.ts";
+export type * from "./trim.d.ts";
+export type * from "./replace.d.ts";
+export type * from "./repeat.d.ts";
+export type * from "./compare.d.ts";
+export type * from "./length.d.ts";

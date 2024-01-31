@@ -1,5 +1,5 @@
-import { Expect, Equal } from 'type-testing';
-// import { BitwiseU8Hex } from './bitwise';
+import type { Expect, Equal } from 'type-testing';
+// import type { BitwiseU8Hex } from './bitwise.d.ts';
 
 type tests_HexToDecimal = [
   // (parseInt("ef", 16) & parseInt("ab", 16)).toString(16)

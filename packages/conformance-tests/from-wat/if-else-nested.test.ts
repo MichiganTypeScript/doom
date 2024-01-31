@@ -1,7 +1,7 @@
-import { Expect, Equal } from 'type-testing';
-import type { entry } from "./if-else-nested.actual.js"
+import type { Expect, Equal } from 'type-testing';
+import type { entry } from "./if-else-nested.actual.d.ts"
 
-import { getWasm } from '../utils.js'
+import { getWasm } from '../utils.ts'
 import { expect, test } from 'vitest';
 
 /** the motivating example for this test */

@@ -1,7 +1,7 @@
-import { Add } from "./addition.js";
-import { AddDigits } from "./digits/addition..dts";
-import { Digit, Num, ToDigitNumber, ToString } from "./utils.js";
-import { Sub } from "./substraction.js";
+import type { Add } from "./addition.d.ts";
+import type { AddDigits } from "./digits/addition.d.ts";
+import type { Digit, Num, ToDigitNumber, ToString } from "./utils.d.ts";
+import type { Sub } from "./substraction.d.ts";
 
 export type SequenceOfDigits<
   T extends number,

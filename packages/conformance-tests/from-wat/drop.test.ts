@@ -1,9 +1,9 @@
 // import type { entry } from "./drop.actual.ts"
-import { Expect, Equal } from "type-testing";
-import { Func } from 'wasm-to-typescript-types'
+import type { Expect, Equal } from "type-testing";
+import type { Func } from 'wasm-to-typescript-types'
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.js'
+import { getWasm } from '../utils.ts'
 
 const name = 'drop';
 test(name, async () => {

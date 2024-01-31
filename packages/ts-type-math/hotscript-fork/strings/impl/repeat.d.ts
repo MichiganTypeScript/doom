@@ -1,5 +1,5 @@
-import { DivMod } from "../../numbers/impl/division.js";
-import { Sub } from "../../numbers/impl/substraction.js";
+import type { DivMod } from "../../numbers/impl/division.d.ts";
+import type { Sub } from "../../numbers/impl/substraction.d.ts";
 
 // The below algorithm is based on the following one :
 //

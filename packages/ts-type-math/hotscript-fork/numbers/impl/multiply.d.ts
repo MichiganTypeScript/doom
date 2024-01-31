@@ -1,4 +1,4 @@
-import {
+import type {
   ToNumber,
   MakeDigitNumber,
   FromDigitNumber,
@@ -9,8 +9,8 @@ import {
   ToDigitNumber,
   ToString,
   MulSign,
-} from "./utils.ts";
-import { MulDigits } from "./digits/multiply.js";
+} from "./utils.d.ts";
+import type { MulDigits } from "./digits/multiply.d.ts";
 
 export type MulDigitNumbers<
   T extends DigitNumber,

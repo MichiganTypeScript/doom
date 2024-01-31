@@ -1,6 +1,6 @@
-import { Digit } from "../utils.ts";
-import { AddDigits } from "./addition..dts";
-import { SubDigits } from "./substraction.ts";
+import type { Digit } from "../utils.d.ts";
+import type { AddDigits } from "./addition.d.ts";
+import type { SubDigits } from "./substraction.ts";
 
 export type MulX2<T extends Digit[]> = AddDigits<T, T>;
 export type MulX3<T extends Digit[]> = AddDigits<T, MulX2<T>>;

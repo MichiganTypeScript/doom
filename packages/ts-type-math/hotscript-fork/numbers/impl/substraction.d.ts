@@ -1,5 +1,5 @@
-import { AddDigits } from "./digits/addition..dts";
-import {
+import type { AddDigits } from "./digits/addition.d.ts";
+import type {
   DigitNumber,
   FromDigitNumber,
   InvertSign,
@@ -11,8 +11,8 @@ import {
   ToNumber,
   ToString,
 } from "./utils.ts";
-import { CompareDigits } from "./compare.js";
-import { SubDigits } from "./digits/substraction.js";
+import type { CompareDigits } from "./compare.d.ts";
+import type { SubDigits } from "./digits/substraction.d.ts";
 
 type SubDigitNumbers<
   T extends DigitNumber,

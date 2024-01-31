@@ -1,6 +1,6 @@
-import type { ProgramState } from "../types.js";
-import type { Instruction } from "./instructions.js";
-import type { State } from '../state.js'
+import type { ProgramState } from "../types.d.ts";
+import type { Instruction } from "./instructions.d.ts";
+import type { State } from '../state.d.ts'
 
 /** this isn't really a webassembly instruction, but it's a sentinel put here so that the program can understand when to cull execution contexts (i.e. after the function returns) */
 export type IEndFunction = {

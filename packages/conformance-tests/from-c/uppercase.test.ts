@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
-import { getWasmMemory } from '../utils.js'
-import type { entry } from './uppercase.actual.js'
-import { Equal, Expect } from 'type-testing';
-import { ReadMemory } from 'ts-type-math';
+import type { getWasmMemory } from '../utils.d.ts'
+import type { entry } from './uppercase.actual.d.ts'
+import type { Equal, Expect } from 'type-testing';
+import type { ReadMemory } from 'ts-type-math';
 
 const name = 'uppercase';
 test(name, async () => {

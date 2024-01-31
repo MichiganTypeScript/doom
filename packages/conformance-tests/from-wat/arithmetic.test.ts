@@ -19,11 +19,11 @@
 // I32Sub
 // I64Sub
 
-import { Expect, Equal } from 'type-testing';
+import type { Expect, Equal } from 'type-testing';
 import type { entry } from './arithmetic.actual.d.ts';
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.js'
+import { getWasm } from '../utils.ts'
 
 const name = 'arithmetic';
 test(name, async () => {

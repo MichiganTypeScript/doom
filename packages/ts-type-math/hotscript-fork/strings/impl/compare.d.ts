@@ -1,6 +1,6 @@
-import { Compare as NumbersCompare } from '../../numbers/impl/compare.js'
-import { StringToTuple } from "./split.ts";
-import { Equal as _Equal } from "../../helpers.ts";
+import type { Compare as NumbersCompare } from '../../numbers/impl/compare.d.ts'
+import type { StringToTuple } from "./split.d.ts";
+import type { Equal as _Equal } from "../../helpers.d.ts";
 
 // prettier-ignore
 type ascii = {

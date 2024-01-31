@@ -1,5 +1,5 @@
-import { Func, runProgram } from 'wasm-to-typescript-types'
-import { StoreString } from '../../ts-type-math/store.js'
+import type { Func, runProgram } from 'wasm-to-typescript-types'
+import type { StoreString } from 'ts-type-math'
 
 type $__wasm_call_ctors<
   RESULT extends Func = {
