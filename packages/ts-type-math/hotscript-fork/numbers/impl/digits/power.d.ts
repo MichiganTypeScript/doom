@@ -1,6 +1,6 @@
-import type { Digit, TrimZeros } from "../utils..d.ts";
-import type { _DivModDigits } from "./division.d.tss";
-import type { MulDigits } from "./multiply.d.tss";
+import type { Digit, TrimZeros } from "../utils.d.ts";
+import type { _DivModDigits } from "./division.d.ts";
+import type { MulDigits } from "./multiply.d.ts";
 
 export type PowerDigits<
   T extends Digit[],

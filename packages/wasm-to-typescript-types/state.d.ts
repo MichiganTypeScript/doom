@@ -15,8 +15,6 @@ import type {
 } from "./types.d.ts";
 import * as TypeMath from "ts-type-math";
 
-type X = TypeMath.Add<1, 2> // =>
-
 export namespace State {
   export type Error<
     instruction extends Instruction,

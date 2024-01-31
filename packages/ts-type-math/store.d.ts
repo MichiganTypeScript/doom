@@ -1,5 +1,5 @@
-import type { Ascii, U8Binary, U8Decimal } from "./conversion.jd.t";
-import type { Convert } from "./conversion.jd.t";
+import type { Ascii, U8Binary, U8Decimal } from "./conversion.d.ts";
+import type { Convert } from "./conversion.d.ts";
 import type { Add } from './hotscript-fork/numbers/impl/addition.d.ts'
 
 type AsciiToU8Decimal<T extends string> =

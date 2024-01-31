@@ -1,8 +1,8 @@
 export type U8Binary = keyof Catalog.U8BinaryToU8Decimal;
 export type U8Decimal = keyof Catalog.U8DecimalToAscii;
 export type Ascii = keyof Catalog.AsciiToU8Decimal;
-export type Nibble = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
-export type U8Hex = `${Nibble}${Nibble}`;
+// export type Nibble = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
+// export type U8Hex = `${Nibble}${Nibble}`;
 
 // ASCII is used here to mean _extended ASCII_ (8-bit)
 

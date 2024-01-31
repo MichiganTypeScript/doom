@@ -82,7 +82,7 @@ mod tests {
     }
 
     fn get_wat_files() -> Vec<DirEntry> {
-        fs::read_dir("../packages/conformance-tests/from-wat/")
+        fs::read_dir("./packages/conformance-tests/from-wat/")
             .unwrap()
             .flatten()
             .filter_map(|dir_entry| {
@@ -108,7 +108,7 @@ mod tests {
     }
 
     fn get_c_files() -> Vec<DirEntry> {
-        fs::read_dir("../packages/conformance-tests/from-c/")
+        fs::read_dir("./packages/conformance-tests/from-c/")
             .unwrap()
             .flatten()
             .filter_map(|dir_entry| {
