@@ -1,7 +1,9 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "strict": true
-  }
+  "extends": "./tsconfig.base.json",
+  "references": [
+    { "path": "./packages/conformance-tests" },
+    { "path": "./packages/playground" },
+    { "path": "./packages/wasm-to-typescript-types" },
+    { "path": "./packages/ts-type-math" }
+  ]
 }

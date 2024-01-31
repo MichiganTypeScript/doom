@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "strict": true,
-    "noEmit": true
-  },
-  "include": ["src/test/from-wat/*.test.ts"]
-}

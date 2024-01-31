@@ -9,22 +9,79 @@ patchedDependencies:
     hash: thz7rmcz3sxhzypl6gvqf35jlq
     path: patches/typescript@5.3.3.patch
 
-devDependencies:
-  '@types/node':
-    specifier: ^20.11.5
-    version: 20.11.5
-  tsx:
-    specifier: ^4.7.0
-    version: 4.7.0
-  type-testing:
-    specifier: ^0.2.0
-    version: 0.2.0
-  typescript:
-    specifier: ^5.3.3
-    version: 5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq)
-  vitest:
-    specifier: ^1.2.1
-    version: 1.2.1(@types/node@20.11.5)
+importers:
+
+  .:
+    devDependencies:
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq)
+
+  packages/conformance-tests:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.5
+        version: 20.11.5
+      conformance-tests:
+        specifier: workspace:*
+        version: 'link:'
+      ts-type-math:
+        specifier: workspace:*
+        version: link:../ts-type-math
+      type-testing:
+        specifier: ^0.2.0
+        version: 0.2.0
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq)
+      vitest:
+        specifier: ^1.2.1
+        version: 1.2.1(@types/node@20.11.5)
+      wasm-to-typescript-types:
+        specifier: workspace:*
+        version: link:../wasm-to-typescript-types
+
+  packages/playground:
+    dependencies:
+      conformance-tests:
+        specifier: workspace:*
+        version: link:../conformance-tests
+      ts-type-math:
+        specifier: workspace:*
+        version: link:../ts-type-math
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq)
+      wasm-to-typescript-types:
+        specifier: workspace:*
+        version: link:../wasm-to-typescript-types
+
+  packages/ts-type-math:
+    dependencies:
+      '@types/ramda':
+        specifier: ^0.29.10
+        version: 0.29.10
+      ramda:
+        specifier: 0.29.1
+        version: 0.29.1
+      type-testing:
+        specifier: ^0.2.0
+        version: 0.2.0
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq)
+
+  packages/wasm-to-typescript-types:
+    dependencies:
+      ts-type-math:
+        specifier: workspace:*
+        version: link:../ts-type-math
+      type-testing:
+        specifier: ^0.2.0
+        version: 0.2.0
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq)
 
 packages:
 
@@ -364,6 +421,12 @@ packages:
       undici-types: 5.26.5
     dev: true
 
+  /@types/ramda@0.29.10:
+    resolution: {integrity: sha512-0BzWVKtSEtignlk+XBuK88Il5wzQwbRVfEkzE8iKm02NYHMGQ/9ffB05M+zXhTCqo50DOIAT9pNSJsjFMMG4rQ==}
+    dependencies:
+      types-ramda: 0.29.7
+    dev: false
+
   /@vitest/expect@1.2.1:
     resolution: {integrity: sha512-/bqGXcHfyKgFWYwIgFr1QYDaR9e64pRKxgBNWNXPefPFRhgm+K3+a/dS0cUGEreWngets3dlr8w8SBRw2fCfFQ==}
     dependencies:
@@ -549,12 +612,6 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /get-tsconfig@4.7.2:
-    resolution: {integrity: sha512-wuMsz4leaj5hbGgg4IvDU0bqJagpftG5l5cXIAvo8uZrqn0NJqwtfupTN00VnkQJPcIRrxYrm1Ue24btpCha2A==}
-    dependencies:
-      resolve-pkg-maps: 1.0.0
-    dev: true
-
   /human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
@@ -691,12 +748,12 @@ packages:
       react-is: 18.2.0
     dev: true
 
+  /ramda@0.29.1:
+    resolution: {integrity: sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==}
+    dev: false
+
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
-    dev: true
-
-  /resolve-pkg-maps@1.0.0:
-    resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
     dev: true
 
   /rollup@4.9.5:
@@ -781,16 +838,9 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: true
 
-  /tsx@4.7.0:
-    resolution: {integrity: sha512-I+t79RYPlEYlHn9a+KzwrvEwhJg35h/1zHsLC2JXvhC2mdynMv6Zxzvhv5EMV6VF5qJlLlkSnMVvdZV3PSIGcg==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-    dependencies:
-      esbuild: 0.19.11
-      get-tsconfig: 4.7.2
-    optionalDependencies:
-      fsevents: 2.3.3
-    dev: true
+  /ts-toolbelt@9.6.0:
+    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
+    dev: false
 
   /type-detect@4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
@@ -800,13 +850,17 @@ packages:
   /type-testing@0.2.0:
     resolution: {integrity: sha512-HAf4o9LjUAh9xEIXZTNm+ak2tjTgK64QhTlT/D8UNedII2/eagdEbtbaVK6920K7+QBrwfvxpjPGlfWVKZ+MZQ==}
     engines: {node: '>= 20.x'}
-    dev: true
+
+  /types-ramda@0.29.7:
+    resolution: {integrity: sha512-8KBxZGJwUF3MpRkkJauSpvfHXk8Ssq15QXGuCBTDGeKd9PfheokkC3wAKRV3djej9O31Qa5M7Owsg8hF0GjtAw==}
+    dependencies:
+      ts-toolbelt: 9.6.0
+    dev: false
 
   /typescript@5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq):
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: true
     patched: true
 
   /ufo@1.3.2:

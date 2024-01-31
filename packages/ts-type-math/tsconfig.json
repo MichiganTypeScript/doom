@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // "skipLibCheck": true
+  },
+  "include": ["store.d.ts"]
+}

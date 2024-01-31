@@ -1,0 +1,13 @@
+# TODO List
+
+## Implementation improvements
+
+- instead of `arguments extends number[]` it should be a tuple of the exact required number of arguments
+
+## Refactors
+
+## Other
+
+### once Doom runs
+
+- publish as an NPM (lol)

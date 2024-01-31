@@ -63,7 +63,7 @@ impl ToString for SourceFile {
         });
 
         let memory = if !mutable_data.is_empty() {
-            self.add_import("../../ts-type-math/store.js", "StoreString");
+            self.add_import("ts-type-math", "StoreString");
             format!("\n{}\n    ", mutable_data.join("\n"))
         } else {
             "{}".to_string()

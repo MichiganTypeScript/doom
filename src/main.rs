@@ -15,10 +15,10 @@ extern crate pretty_assertions;
 
 fn main() {
     let current_dir = std::env::current_dir().unwrap();
-    let wat_path = current_dir.join("src/debug/doom/doom.wat");
+    let wat_path = current_dir.join("../packages/playground/doom/doom.wat");
     let wat = fs::read_to_string(wat_path).unwrap();
-    let output = wat_to_dts(wat, "src/debug/doom/doom.dump").to_string();
-    fs::write("src/debug/code.d.ts", output).unwrap();
+    let output = wat_to_dts(wat, "../packages/playground/doom/doom.dump").to_string();
+    fs::write("../packages/playground/code.d.ts", output).unwrap();
 }
 
 #[cfg(test)]
@@ -63,10 +63,7 @@ mod tests {
     /// this function consults skip_list and focus_list to determine if a test should be run
     fn should_run(dir_entry: &DirEntry) -> bool {
         let path = dir_entry.path().with_extension("");
-        let file_name = path
-            .file_name()
-            .and_then(OsStr::to_str)
-            .expect("invalid file name");
+        let file_name = path.file_name().and_then(OsStr::to_str).expect("invalid file name");
 
         // focusing takes precedence over skipping
         if is_focused(file_name) {
@@ -85,7 +82,7 @@ mod tests {
     }
 
     fn get_wat_files() -> Vec<DirEntry> {
-        fs::read_dir("src/test/from-wat/")
+        fs::read_dir("../packages/conformance-tests/from-wat/")
             .unwrap()
             .flatten()
             .filter_map(|dir_entry| {
@@ -111,7 +108,7 @@ mod tests {
     }
 
     fn get_c_files() -> Vec<DirEntry> {
-        fs::read_dir("src/test/from-c/")
+        fs::read_dir("../packages/conformance-tests/from-c/")
             .unwrap()
             .flatten()
             .filter_map(|dir_entry| {
@@ -142,21 +139,14 @@ mod tests {
         // convert the .wat file to a .wasm file (also validates the .wat)
         let output = Command::new("wat2wasm")
             .arg(&wat_input.path())
-            .args([
-                "--output",
-                &wat_input.path().with_extension("wasm").to_string_lossy(),
-            ])
+            .args(["--output", &wat_input.path().with_extension("wasm").to_string_lossy()])
             .output()
             .expect("failed to execute wat2wasm");
 
         if !output.status.success() {
             // Print the standard error output
             let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
-            println!(
-                "wat2wasm failed for {:?}: {}",
-                wat_input.path().file_name(),
-                stderr
-            );
+            println!("wat2wasm failed for {:?}: {}", wat_input.path().file_name(), stderr);
             panic!("wat2wasm failed");
         }
     }
@@ -166,12 +156,7 @@ mod tests {
         // println!("parsing wat and dumping: {:?}", &wat_file);
 
         let wat = fs::read_to_string(wat_file).unwrap();
-        let dump_path = dir_entry
-            .path()
-            .with_extension("dump")
-            .to_str()
-            .unwrap()
-            .to_owned();
+        let dump_path = dir_entry.path().with_extension("dump").to_str().unwrap().to_owned();
 
         wat_to_dts(wat, &dump_path)
     }
@@ -196,10 +181,7 @@ mod tests {
         // convert the .wat file to a .wasm file (also validates the .wat)
         let output = Command::new("emcc")
             .arg(&c_input.path())
-            .args([
-                "-o",
-                &c_input.path().with_extension("wasm").to_string_lossy(),
-            ]) // output target
+            .args(["-o", &c_input.path().with_extension("wasm").to_string_lossy()]) // output target
             .arg("-g") // preserve debug information
             .arg("-O0") // no optimizations
             .args(["-s", "STANDALONE_WASM"]) // setting
@@ -210,11 +192,7 @@ mod tests {
         if !output.status.success() {
             // Print the standard error output
             let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
-            println!(
-                "emcc failed for {:?}: {}",
-                c_input.path().file_name(),
-                stderr
-            );
+            println!("emcc failed for {:?}: {}", c_input.path().file_name(), stderr);
             panic!("emcc failed");
         }
     }
@@ -233,10 +211,7 @@ mod tests {
             .arg("--disable-reference-types")
             .arg("--generate-names")
             .arg("--fold-exprs")
-            .args([
-                "--output",
-                &wasm_input.with_extension("wat").to_string_lossy(),
-            ]) // output target
+            .args(["--output", &wasm_input.with_extension("wat").to_string_lossy()]) // output target
             .output()
             .expect("failed to execute wat2wasm");
 

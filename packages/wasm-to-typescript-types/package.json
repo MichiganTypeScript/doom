@@ -1,0 +1,15 @@
+{
+  "name": "wasm-to-typescript-types",
+  "type": "module",
+  "private": true,
+  "version": "0.0.0",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "ts-type-math": "workspace:*",
+    "type-testing": "^0.2.0",
+    "typescript": "5.3.3"
+  }
+}
