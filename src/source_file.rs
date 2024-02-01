@@ -34,6 +34,9 @@ pub struct SourceFile {
 
     // MemoryData by id
     data: RefCell<IndexMap<String, MemoryData>>,
+
+    /// the arguments constraint to the entry function
+    args: RefCell<String>,
 }
 
 impl fmt::Debug for SourceFile {
@@ -113,9 +116,12 @@ impl ToString for SourceFile {
 
         let indirect = self.indirect.borrow().to_owned().join(", ");
 
+        // look for the `$entry` type and use the number of params it has to create a tuple like [number, number] for each
+        let arguments = self.args.borrow();
+
         let entry = format!(
             "export type entry<
-  arguments extends number[] = [],
+  arguments extends {arguments},
   debugMode extends boolean = false
 > = runProgram<
   {{
@@ -139,6 +145,7 @@ impl ToString for SourceFile {
 impl SourceFile {
     pub fn new() -> Self {
         SourceFile {
+            args: RefCell::new(String::from("")),
             data: RefCell::new(IndexMap::new()),
             globals: RefCell::new(IndexMap::new()),
             imports: RefCell::new(IndexMap::new()),
@@ -180,5 +187,9 @@ impl SourceFile {
         let readonly = name.starts_with("$_rodata");
 
         self.data.borrow_mut().insert(name.clone(), MemoryData { name, data, readonly, index });
+    }
+
+    pub fn set_args(&self, args: String) {
+        self.args.replace(args);
     }
 }

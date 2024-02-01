@@ -146,7 +146,7 @@
     i64.sub
   )
 
-  (func $arithmetic
+  (func $entry
     (param $F32Add_a f32)  (param $F32Add_b f32)
     (param $F64Add_a f64)  (param $F64Add_b f64)
     (param $I32Add_a i32)  (param $I32Add_b i32)

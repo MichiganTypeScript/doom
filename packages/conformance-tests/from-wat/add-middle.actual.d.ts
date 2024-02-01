@@ -69,7 +69,7 @@ type $emscripten_stack_init<
 > = RESULT
 
 export type entry<
-  arguments extends number[] = [],
+  arguments extends [number, number],
   debugMode extends boolean = false
 > = runProgram<
   {

@@ -280,7 +280,7 @@ type $I64Sub<
   }
 > = RESULT
 
-type $arithmetic<
+type $entry<
   RESULT extends Func = {
     kind: 'func';
     params: ['$F32Add_a', '$F32Add_b', '$F64Add_a', '$F64Add_b', '$I32Add_a', '$I32Add_b', '$I64Add_a', '$I64Add_b', '$F32Div_a', '$F32Div_b', '$F64Div_a', '$F64Div_b', '$I32DivS_a', '$I32DivS_b', '$I64DivS_a', '$I64DivS_b', '$I32DivU_a', '$I32DivU_b', '$I64DivU_a', '$I64DivU_b', '$F32Mul_a', '$F32Mul_b', '$F64Mul_a', '$F64Mul_b', '$I32Mul_a', '$I32Mul_b', '$I64Mul_a', '$I64Mul_b', '$I32RemS_a', '$I32RemS_b', '$I32RemU_a', '$I32RemU_b', '$F32Sub_a', '$F32Sub_b', '$F64Sub_a', '$F64Sub_b', '$I32Sub_a', '$I32Sub_b', '$I64Sub_a', '$I64Sub_b'];
@@ -394,7 +394,7 @@ type $arithmetic<
 > = RESULT
 
 export type entry<
-  arguments extends number[] = [],
+  arguments extends [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number],
   debugMode extends boolean = false
 > = runProgram<
   {
@@ -420,7 +420,7 @@ export type entry<
       $F64Sub: $F64Sub;
       $I32Sub: $I32Sub;
       $I64Sub: $I64Sub;
-      $arithmetic: $arithmetic;
+      $entry: $entry;
     };
     globals: {};
     memory: {};

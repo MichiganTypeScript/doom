@@ -25,7 +25,7 @@ type $entry<
 > = RESULT
 
 export type entry<
-  arguments extends number[] = [],
+  arguments extends [],
   debugMode extends boolean = false
 > = runProgram<
   {

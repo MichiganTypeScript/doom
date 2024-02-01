@@ -44,9 +44,9 @@ mod tests {
 
     fn focus_list() -> Vec<&'static str> {
         vec![
-            // "conway", //
-            // "if-else-nested",
-            // "if-else",
+            // "add-middle", //
+                          // "if-else-nested",
+                          // "if-else",
         ]
     }
 

@@ -14,6 +14,10 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
             .unwrap_or_else(|| panic!("need to implement no name funcs but it looks like I can skirt by without having to do any of it"))
             .name();
 
+    if name == "$entry" {
+        source.set_args(String::from("[]"));
+    }
+
     let params_and_result = func
         .ty
         .inline
@@ -28,6 +32,11 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
                 })
                 .collect::<Vec<String>>()
                 .join(", ");
+
+            if name == "$entry" {
+                let internals = (0..function_type.params.len()).map(|_| "number").collect::<Vec<&str>>().join(", ");
+                source.set_args(format!("[{internals}]"));
+            }
 
             let result = "number";
 

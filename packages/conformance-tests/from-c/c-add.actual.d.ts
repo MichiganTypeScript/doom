@@ -183,7 +183,7 @@ type $__errno_location<
 > = RESULT
 
 export type entry<
-  arguments extends number[] = [],
+  arguments extends [number, number],
   debugMode extends boolean = false
 > = runProgram<
   {

@@ -11,5 +11,5 @@ test(name, async () => {
 });
 
 type testCases = [
-  Expect<Equal<entry, 4>>,
+  Expect<Equal<entry<[]>, 4>>,
 ]
