@@ -2,19 +2,13 @@
   "name": "playground",
   "type": "module",
   "version": "0.0.0",
-  "dependencies": {
-    "typescript": "5.3.3",
-    "tsx": "^4.7.0",
-    "ts-type-math": "workspace:*",
-    "conformance-tests": "workspace:*",
-    "wasm-to-typescript-types": "workspace:*"
-  },
   "scripts": {
     "c-to-wasm": "emcc code.c -o code.wasm -g -O3 -s STANDALONE_WASM --no-entry",
     "wasm-to-wat": "wasm2wat code.wasm --enable-code-metadata --inline-exports --inline-imports --disable-reference-types --generate-names --fold-exprs --output=code.wat",
     "c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
     "wat-to-wasm": "wat2wasm code.wat --output code.wasm",
     "stack-size": "node --stack-size=8000 ./evaluate/determine-stack-size.mjs",
+    "test": "vitest",
     "playground": "node --stack-size=8000 ./evaluate/evaluate-with-cli.mjs"
   }
 }

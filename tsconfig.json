@@ -10,9 +10,8 @@
       "wasm-to-typescript-types": [
         "./packages/wasm-to-typescript-types/index.d.ts"
       ],
-      "conformance-tests": ["./packages/conformance-tests"],
-      "ts-type-math": ["./packages/ts-type-math/index.d.ts"],
-      "playground": ["./packages/playground"]
+      "conformance-tests/*": ["./packages/conformance-tests/*"],
+      "ts-type-math": ["./packages/ts-type-math/index.d.ts"]
     }
   }
 }

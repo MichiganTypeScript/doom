@@ -70,27 +70,23 @@ export type StoreString<
 
 type x = StoreString<1024, "Let's hope this works..\u0000">;
 //   ^?
-type y = StoreString<2048, "but it prolly wont">;
-
-type Cast<T, U> = T extends U ? T : U;
+type y = ReadMemory<{ memory: x, stack: [1024] }>
+//   ^?
 
 export type ReadUntilNullTerminator<
   memory extends Record<number, U8Decimal>,
 
   address extends number,
-
-  RESULT extends string =
-    memory[address] extends infer Char
-    ? Char extends 0
-      ? ''
-      : `${
-          Convert.U8Decimal.ToAscii<Cast<Char, U8Decimal>>
-        }${
-          ReadUntilNullTerminator<memory, Add<1, address>>
-        }`
-    : never
-
-> = RESULT;
+> =
+  memory[address] extends 0
+  ? ''
+  : `${
+      memory[address] extends U8Decimal
+      ? Convert.U8Decimal.ToAscii<memory[address]>
+      : ''
+    }${
+      ReadUntilNullTerminator<memory, Add<1, address>>
+    }`
 
 export type ReadMemory<
   state extends {

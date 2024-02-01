@@ -16,8 +16,8 @@ test(name, async () => {
   expect(await entry(0)).toStrictEqual(greeting);
 });
 
-// type Greeting = ReadMemory<entry<[], true>>;
+type Greeting = ReadMemory<entry<[], true>>;
 
-// type testCases = [
-//   Expect<Equal<Greeting, typeof greeting>>,
-// ]
+type testCases = [
+  Expect<Equal<Greeting, typeof greeting>>,
+]

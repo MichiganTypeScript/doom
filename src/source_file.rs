@@ -44,8 +44,6 @@ impl fmt::Debug for SourceFile {
 
 impl ToString for SourceFile {
     fn to_string(&self) -> String {
-        // example
-        // type $hi = "hi";
         let mut data_types = String::from("");
 
         let mut readonly_data = vec![];

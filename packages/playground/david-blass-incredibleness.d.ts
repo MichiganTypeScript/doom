@@ -1,9 +1,9 @@
-import type { entry } from 'conformance-tests/from-wat/add.actual.d.ts'
-import { ReadMemory } from 'ts-type-math';
+// @ts-nocheck
+import { entry } from 'conformance-tests/from-wat/add.actual'; import type { ReadMemory } from 'ts-type-math';
 type e = entry<[97, 2], true> // =>
 
 type stack = e['stack'] // =>
-type m = ReadMemory<e> // =>
+// type m = ReadMemory<e> // =>
 
 type ec = e['executionContexts']
 type c0f = ec[0]['funcId'] // =>

@@ -5,11 +5,5 @@
   "type": "module",
   "scripts": {
     "build": "tsc"
-  },
-  "dependencies": {
-    "@types/ramda": "^0.29.10",
-    "ramda": "0.29.1",
-    "type-testing": "^0.2.0",
-    "typescript": "5.3.3"
   }
 }
