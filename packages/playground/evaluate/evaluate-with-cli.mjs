@@ -1,28 +1,34 @@
 /** sure would be nice for this to be a TypeScript file, but neither tsx nor deno seem to want to do that */
 
 import { stackSize } from './determine-stack-size.mjs';
-
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import ts from 'typescript';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const { createProgram, forEachChild, isTypeAliasDeclaration } = ts;
-
-const phrases = [
-  "Expecto Patronum!",
-  "Here's to escaping the Sarlacc pit.",
-  "May your mana *cough cough* err. recursion limit.. never run out",
-  "Achieve victory and return with honor",
-  "You're probably going to need a bigger boat",
-  "You're going off to great places, today is your day",
-  "The truth is out there",
-  "10 bucks says what comes next starts with \"RangeError: Maximum call stack size exceeded at `instantiateTypes`\"",
-]
-
-console.log(phrases[Math.floor(Math.random() * phrases.length)]);
-console.log();
 
 const evaluateType = async () => {
   // Read the TypeScript file
   const fileName = './evaluate/evaluation-playground.d.ts';
-  const program = createProgram([fileName], {});
+
+  // Read tsconfig.json
+  const projectRoot = path.resolve(__dirname, '../../../');
+  const tsConfigPath = path.resolve(projectRoot, './tsconfig.json');
+  const configFile = ts.readConfigFile(tsConfigPath, ts.sys.readFile);
+
+  // Parse tsconfig.json
+  const parsedTsConfig = ts.parseJsonConfigFileContent(
+    configFile.config,
+    ts.sys,
+    path.dirname(tsConfigPath),
+  );
+
+  const program = createProgram([fileName], {
+    ...parsedTsConfig.options,
+    baseUrl: projectRoot,
+  });
   const sourceFile = program.getSourceFile(fileName);
 
   // Ensure the source file is loaded
@@ -61,5 +67,19 @@ const evaluateType = async () => {
 
   console.log("Maximum recursions:", stackSize());
 };
+
+const phrases = [
+  "Expecto Patronum!",
+  "Here's to escaping the Sarlacc pit.",
+  "May your mana *cough cough* err. recursion limit.. never run out",
+  "Achieve victory and return with honor",
+  "You're probably going to need a bigger boat",
+  "You're going off to great places, today is your day",
+  "The truth is out there",
+  "10 bucks says what comes next starts with \"RangeError: Maximum call stack size exceeded at `instantiateTypes`\"",
+]
+
+console.log(phrases[Math.floor(Math.random() * phrases.length)]);
+console.log();
 
 evaluateType().catch(console.error);
