@@ -51,6 +51,9 @@ test(name, async () => {
   expect(await entry(3)).toStrictEqual(e3);
 });
 
+// type x = entry<[0]>;
+//   ^?
+
 type testCases = [
   // Expect<Equal<entry<[0]>, typeof e0>>,
   // Expect<Equal<entry<[1]>, typeof e1>>,

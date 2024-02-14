@@ -74,7 +74,7 @@ const phrases = [
   "May your mana *cough cough* err. recursion limit.. never run out",
   "Achieve victory and return with honor",
   "You're probably going to need a bigger boat",
-  "You're going off to great places, today is your day",
+  "You're off to great places, today is your day!",
   "The truth is out there",
   "10 bucks says what comes next starts with \"RangeError: Maximum call stack size exceeded at `instantiateTypes`\"",
 ]

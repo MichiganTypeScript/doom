@@ -3,108 +3,48 @@ import type { entry } from './bitwise-and.actual.d.ts'
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils.ts'
-
-const example = (a: number, b: number) => {
-  return a & b
-}
-
-test('and example', () => {
-  expect(example(1, 2)).toStrictEqual(0);
-  expect(example(3, 7)).toStrictEqual(3);
-  expect(example(0, 1)).toStrictEqual(0);
-  expect(example(8, 12)).toStrictEqual(8);
-  expect(example(12345, 54321)).toStrictEqual(4145);
-  expect(example(-1, 1)).toStrictEqual(1);
-  expect(example(-1, -1)).toStrictEqual(-1);
-  expect(example(-1, 0)).toStrictEqual(0);
-  expect(example(2147483647, 1)).toStrictEqual(1);
-  expect(example(-2147483648, -1)).toStrictEqual(-2147483648);
-  expect(example(123, 456)).toStrictEqual(72);
-  expect(example(987, 654)).toStrictEqual(650);
-  expect(example(-500, 500)).toStrictEqual(4);
-  expect(example(-400, 400)).toStrictEqual(16);
-  expect(example(-300, 300)).toStrictEqual(4);
-  expect(example(-200, 200)).toStrictEqual(8);
-  expect(example(0, 0)).toStrictEqual(0);
-  expect(example(0, -1)).toStrictEqual(0);
-  expect(example(-1, 0)).toStrictEqual(0);
-  expect(example(100000, 10000)).toStrictEqual(1536);
-  expect(example(200000, 20000)).toStrictEqual(3072);
-  expect(example(300000, 30000)).toStrictEqual(4384);
-  expect(example(400000, 40000)).toStrictEqual(6144);
-  expect(example(500000, 50000)).toStrictEqual(33024);
-  expect(example(600000, 60000)).toStrictEqual(8768);
-  expect(example(700000, 70000)).toStrictEqual(96);
-  expect(example(800000, 80000)).toStrictEqual(12288);
-  expect(example(900000, 90000)).toStrictEqual(72576);
-  expect(example(1000000, 100000)).toStrictEqual(66048);
-  expect(example(1100000, 110000)).toStrictEqual(34976);
-})
+import { bitwiseAndTests } from '../../ts-type-math/test-cases/bitwise.ts';
 
 const name = 'bitwise-and';
 test(name, async () => {
-  const entry = await getWasm("from-wat", name);
-  expect(example(1, 2)).toStrictEqual(0);
-  expect(example(3, 7)).toStrictEqual(3);
-  expect(example(0, 1)).toStrictEqual(0);
-  expect(example(8, 12)).toStrictEqual(8);
-  expect(example(12345, 54321)).toStrictEqual(4145);
-  expect(example(-1, 1)).toStrictEqual(1);
-  expect(example(-1, -1)).toStrictEqual(-1);
-  expect(example(-1, 0)).toStrictEqual(0);
-  expect(example(2147483647, 1)).toStrictEqual(1);
-  expect(example(-2147483648, -1)).toStrictEqual(-2147483648);
-  expect(example(123, 456)).toStrictEqual(72);
-  expect(example(987, 654)).toStrictEqual(650);
-  expect(example(-500, 500)).toStrictEqual(4);
-  expect(example(-400, 400)).toStrictEqual(16);
-  expect(example(-300, 300)).toStrictEqual(4);
-  expect(example(-200, 200)).toStrictEqual(8);
-  expect(example(0, 0)).toStrictEqual(0);
-  expect(example(0, -1)).toStrictEqual(0);
-  expect(example(-1, 0)).toStrictEqual(0);
-  expect(example(100000, 10000)).toStrictEqual(1536);
-  expect(example(200000, 20000)).toStrictEqual(3072);
-  expect(example(300000, 30000)).toStrictEqual(4384);
-  expect(example(400000, 40000)).toStrictEqual(6144);
-  expect(example(500000, 50000)).toStrictEqual(33024);
-  expect(example(600000, 60000)).toStrictEqual(8768);
-  expect(example(700000, 70000)).toStrictEqual(96);
-  expect(example(800000, 80000)).toStrictEqual(12288);
-  expect(example(900000, 90000)).toStrictEqual(72576);
-  expect(example(1000000, 100000)).toStrictEqual(66048);
-  expect(example(1100000, 110000)).toStrictEqual(34976);
+  const entry = await getWasm('from-wat', name);
+  expect(bitwiseAndTests).toHaveLength(24);
+  bitwiseAndTests.forEach(({ a, b, e }) => {
+    expect(entry(a, b) >>>0).toStrictEqual(e);
+  });
 });
 
+type i = 2
+type a = T[i]['a']     // =>
+type b = T[i]['b']     // =>
+type e = T[i]['e']     // =>
+type t = entry<[a, b]> // =>
+
+type T = typeof bitwiseAndTests;
+
 type testCases = [
-  // Expect<Equal<entry<[1, 2]>, 0>>,
-  // Expect<Equal<entry<[3, 7]>, 3>>,
-  // Expect<Equal<entry<[0, 1]>, 0>>,
-  // Expect<Equal<entry<[8, 12]>, 8>>,
-  // Expect<Equal<entry<[12345, 54321]>, 4145>>,
-  // Expect<Equal<entry<[-1, 1]>, 1>>,
-  // Expect<Equal<entry<[-1, -1]>, 2147483649>>, // DIFFERENT!
-  // Expect<Equal<entry<[-1, 0]>, 0>>,
-  // Expect<Equal<entry<[2147483647, 1]>, 1>>,
-  // Expect<Equal<entry<[-2147483648, -1]>, 2147483648>>, // DIFFERENT!
-  // Expect<Equal<entry<[123, 456]>, 72>>,
-  // Expect<Equal<entry<[987, 654]>, 650>>,
-  // Expect<Equal<entry<[-500, 500]>, 500>>, // DIFFERENT!
-  // Expect<Equal<entry<[-400, 400]>, 400>>, // DIFFERENT!
-  // Expect<Equal<entry<[-300, 300]>, 300>>, // DIFFERENT!
-  // Expect<Equal<entry<[-200, 200]>, 200>>, // DIFFERENT!
-  // Expect<Equal<entry<[0, 0]>, 0>>,
-  // Expect<Equal<entry<[0, -1]>, 0>>,
-  // Expect<Equal<entry<[-1, 0]>, 0>>,
-  // Expect<Equal<entry<[100000, 10000]>, 1536>>,
-  // Expect<Equal<entry<[200000, 20000]>, 3072>>,
-  // Expect<Equal<entry<[300000, 30000]>, 4384>>,
-  // Expect<Equal<entry<[400000, 40000]>, 6144>>,
-  // Expect<Equal<entry<[500000, 50000]>, 33024>>,
-  // Expect<Equal<entry<[600000, 60000]>, 8768>>,
-  // Expect<Equal<entry<[700000, 70000]>, 96>>,
-  // Expect<Equal<entry<[800000, 80000]>, 12288>>,
-  // Expect<Equal<entry<[900000, 90000]>, 72576>>,
-  // Expect<Equal<entry<[1000000, 100000]>, 66048>>,
-  // Expect<Equal<entry<[1100000, 110000]>, 34976>>,
+  Expect<Equal<entry<[T[ 0]['a'], T[ 0]['b']]>, T[ 0]['e']>>,
+  Expect<Equal<entry<[T[ 1]['a'], T[ 1]['b']]>, T[ 1]['e']>>,
+  Expect<Equal<entry<[T[ 2]['a'], T[ 2]['b']]>, T[ 2]['e']>>,
+  Expect<Equal<entry<[T[ 3]['a'], T[ 3]['b']]>, T[ 3]['e']>>,
+  Expect<Equal<entry<[T[ 4]['a'], T[ 4]['b']]>, T[ 4]['e']>>,
+  Expect<Equal<entry<[T[ 5]['a'], T[ 5]['b']]>, T[ 5]['e']>>,
+  Expect<Equal<entry<[T[ 6]['a'], T[ 6]['b']]>, T[ 6]['e']>>,
+  Expect<Equal<entry<[T[ 7]['a'], T[ 7]['b']]>, T[ 7]['e']>>,
+  Expect<Equal<entry<[T[ 8]['a'], T[ 8]['b']]>, T[ 8]['e']>>,
+  Expect<Equal<entry<[T[ 9]['a'], T[ 9]['b']]>, T[ 9]['e']>>,
+  Expect<Equal<entry<[T[10]['a'], T[10]['b']]>, T[10]['e']>>,
+  Expect<Equal<entry<[T[11]['a'], T[11]['b']]>, T[11]['e']>>,
+  Expect<Equal<entry<[T[12]['a'], T[12]['b']]>, T[12]['e']>>,
+  Expect<Equal<entry<[T[13]['a'], T[13]['b']]>, T[13]['e']>>,
+  Expect<Equal<entry<[T[14]['a'], T[14]['b']]>, T[14]['e']>>,
+  Expect<Equal<entry<[T[15]['a'], T[15]['b']]>, T[15]['e']>>,
+  Expect<Equal<entry<[T[16]['a'], T[16]['b']]>, T[16]['e']>>,
+  Expect<Equal<entry<[T[17]['a'], T[17]['b']]>, T[17]['e']>>,
+  Expect<Equal<entry<[T[18]['a'], T[18]['b']]>, T[18]['e']>>,
+  Expect<Equal<entry<[T[19]['a'], T[19]['b']]>, T[19]['e']>>,
+  Expect<Equal<entry<[T[20]['a'], T[20]['b']]>, T[20]['e']>>,
+  Expect<Equal<entry<[T[21]['a'], T[21]['b']]>, T[21]['e']>>,
+  Expect<Equal<entry<[T[22]['a'], T[22]['b']]>, T[22]['e']>>,
+  Expect<Equal<entry<[T[23]['a'], T[23]['b']]>, T[23]['e']>>,
 ]

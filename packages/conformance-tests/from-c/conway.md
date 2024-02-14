@@ -9,6 +9,7 @@ I32Add      56
 End         43
 BrIf        38
 Block       27
+I32And      26
 I32Eqz      22
 Loop        16
 Br          16
@@ -33,7 +34,9 @@ Drop        1
 
 I32Load     94
 I32Store    59
-I32And      26
+
+I32Xor      1
+
 I32LtS      14
 I32LtU      5
 I32LeS      2
@@ -41,7 +44,6 @@ I32GeS      2
 I32LeU      2
 I32GeU      2
 I32GtU      1
-I32Xor      1
 
 ## Not Done
 

@@ -207,7 +207,7 @@ test.each(shiftRightSignedTests)('$a >> $b === $expected', ({
 
   // the extra `>>> 0` is to convert the result to an unsigned 32-bit integer
   // just as a matter of convenience, we treat all numbers as unsigned 32-bit integers
-  expect(a >> b >>> 0).toBe(expected);
+  expect((a >> b) >>> 0).toBe(expected);
 });
 
 type testSRs = [
