@@ -135,10 +135,20 @@ export type ShiftLeft<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
-      instruction,
-      state
-    >
+    State.Stack.get<state> extends [
+      ...infer remaining extends Entry[],
+      infer b extends Entry,
+      infer a extends Entry,
+    ]
+    ? State.Stack.set<
+        [
+          ...remaining, 
+          TypeMath.ShiftLeft<b, a>
+        ],
+
+        state
+      >
+    : never
 > = RESULT
 
 export type ShiftRight<

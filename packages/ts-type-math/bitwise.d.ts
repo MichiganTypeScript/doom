@@ -1,5 +1,7 @@
 // import type { U8Hex, Nibble } from "./conversion.d.ts";
 
+import { Bit, To32Binary, ToDecimal } from "./binary";
+
 // export namespace BitwiseU8Hex {
 //   export type And<
 //     a extends U8Hex,
@@ -938,3 +940,72 @@
 //     "f": "0"
 //   };
 // }
+
+
+type LookupBitAnd = {
+  '0': {
+    '0': '0';
+    '1': '0';
+  };
+  '1': {
+    '0': '0';
+    '1': '1';
+  };
+}
+
+type LookupBitOr = {
+  '0': {
+    '0': '0';
+    '1': '1';
+  };
+  '1': {
+    '0': '1';
+    '1': '1';
+  };
+}
+
+type LookupBitXor = {
+  '0': {
+    '0': '0';
+    '1': '1';
+  };
+  '1': {
+    '0': '1';
+    '1': '0';
+  };
+}
+
+type ProcessLookup<
+A extends string,
+B extends string,
+Lookup extends Record<Bit, Record<Bit, Bit>>,
+> =
+A extends `${infer AHead extends Bit}${infer ATail extends string}`
+? B extends `${infer BHead extends Bit}${infer BTail extends string}`
+  ? `${Lookup[AHead][BHead]}${ProcessLookup<ATail, BTail, Lookup>}`
+  : never // should always be equal number of digits
+: ''
+
+export type BitwiseAnd<
+  T extends number,
+  U extends number
+> =
+  ToDecimal<
+    ProcessLookup<To32Binary<T>, To32Binary<U>, LookupBitAnd>
+  >
+
+export type BitwiseOr<
+  T extends number,
+  U extends number
+> =
+  ToDecimal<
+    ProcessLookup<To32Binary<T>, To32Binary<U>, LookupBitOr>
+  >
+
+export type BitwiseXor<
+  T extends number,
+  U extends number
+> =
+  ToDecimal<
+    ProcessLookup<To32Binary<T>, To32Binary<U>, LookupBitXor>
+  >

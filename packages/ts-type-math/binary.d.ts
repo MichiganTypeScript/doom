@@ -1,4 +1,3 @@
-import type { Equal, Expect } from "type-testing";
 import type { Div, Mod } from "./hotscript-fork/numbers/impl/division.d.ts";
 import type { Length } from "./hotscript-fork/strings/impl/length.d.ts";
 import type { Add } from './hotscript-fork/numbers/impl/addition.d.ts';
@@ -72,7 +71,7 @@ type PowersOfTwo = [
 
 type Process<
   T extends number,
-  
+
   _Acc extends string = ''
 > =
   T extends 0
@@ -95,8 +94,6 @@ type PadLeft<
     : PadLeft<`0${S}`, N>
 > = RESULT
 
-type Zero64Bit = "00000000000000000000000000000000";
-
 export type IsNegative<
   T extends number
 > =
@@ -104,10 +101,7 @@ export type IsNegative<
   ? true
   : false
 
-type x = PadLeft<'', Precision>;
-//   ^?
-
-type To64Binary<
+export type To32Binary<
   T extends number,
 
   UnsignedBinary extends string =
@@ -129,7 +123,9 @@ type ReverseString<T extends string> =
   ? `${ReverseString<Tail>}${Head}`
   : ''
 
-type ToDecimal<T extends string> =
+// QUESTION: I have lookup tables for 0-255 (from both binary and decimal).  Would it be better or faster to just check that object real quick first and return that value if it exists?
+
+export type ToDecimal<T extends string> =
   _ToDecimal<ReverseString<T>>;
 
 type _ToDecimal<
@@ -158,99 +154,6 @@ type _ToDecimal<
       : never
   : 0
 
-type Input = 100;
-
-type BinaryNumber = To64Binary<Input>;
-//   ^?
-
-type DecimalNumber = ToDecimal<BinaryNumber>;
-//   ^?
-
-type LookupBitAnd = {
-  '0': {
-    '0': '0';
-    '1': '0';
-  };
-  '1': {
-    '0': '0';
-    '1': '1';
-  };
-}
-
-type LookupBitOr = {
-  '0': {
-    '0': '0';
-    '1': '1';
-  };
-  '1': {
-    '0': '1';
-    '1': '1';
-  };
-}
-
-type LookupBitXor = {
-  '0': {
-    '0': '0';
-    '1': '1';
-  };
-  '1': {
-    '0': '1';
-    '1': '0';
-  };
-}
-
 // QUESTION
 // maybe performance would be better if this were just `string`?
-type Bit = '0' | '1';
-
-type ProcessLookup<
-  A extends string,
-  B extends string,
-  Lookup extends Record<Bit, Record<Bit, Bit>>,
-> =
-  A extends `${infer AHead extends Bit}${infer ATail extends string}`
-  ? B extends `${infer BHead extends Bit}${infer BTail extends string}`
-    ? `${Lookup[AHead][BHead]}${ProcessLookup<ATail, BTail, Lookup>}`
-    : never // should always be equal number of digits
-  : ''
-
-export type BitwiseAnd<
-  T extends number,
-  U extends number
-> =
-  ToDecimal<
-    ProcessLookup<To64Binary<T>, To64Binary<U>, LookupBitAnd>
-  >
-
-export type BitwiseOr<
-  T extends number,
-  U extends number
-> =
-  ToDecimal<
-    ProcessLookup<To64Binary<T>, To64Binary<U>, LookupBitOr>
-  >
-
-export type BitwiseXor<
-  T extends number,
-  U extends number
-> =
-  ToDecimal<
-    ProcessLookup<To64Binary<T>, To64Binary<U>, LookupBitXor>
-  >
-
-type entry<T extends [number, number]> =
-  T extends [
-    infer a extends number,
-    infer b extends number
-  ]
-  ? BitwiseAnd<a, b>
-  : never
-
-type b1 = To64Binary<-1>; // =>
-type b3 = Expect<Equal<"10000000000000000000000000000001", b1>>; // =>
-type b2 = To64Binary<-1>; // =>
-
-type y2 = ProcessLookup<b1, b2, LookupBitAnd>; // =>
-type y3 = ToDecimal<y2>; // =>
-
-type x1 = BitwiseAnd<1, -1>; // =>
+export type Bit = '0' | '1';

@@ -13,7 +13,7 @@ console.log(
 
               // change the desired bitwise operation here
               //                    v
-              const innerValue = (~j).toString(16)
+              const innerValue = (j ^ i).toString(16)
               return {
                 [innerKey]: innerValue
               }

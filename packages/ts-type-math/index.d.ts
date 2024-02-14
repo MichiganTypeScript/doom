@@ -1,8 +1,10 @@
-export type { Add } from './hotscript-fork/numbers/impl/addition.d.ts'
-export type { Abs as AbsoluteValue } from './hotscript-fork/numbers/impl/absolute.d.ts';
-export type { IsNegative, BitwiseAnd, BitwiseOr, BitwiseXor } from './binary.d.ts';
-export type { Equal, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual, NotEqual } from './hotscript-fork/numbers/impl/compare.d.ts';
-export type { Mul as Multiply } from './hotscript-fork/numbers/impl/multiply.d.ts'
-export type { Negate } from './hotscript-fork/numbers/impl/negate.d.ts'
-export type { Sub as Subtract } from './hotscript-fork/numbers/impl/substraction.d.ts'
-export type { StoreString, ReadMemory } from './store.d.ts'
+export type { Add } from './hotscript-fork/numbers/impl/addition'
+export type { Abs as AbsoluteValue } from './hotscript-fork/numbers/impl/absolute'
+export type { IsNegative } from './binary'
+export type { BitwiseAnd, BitwiseOr, BitwiseXor } from './bitwise'
+export type { Equal, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual, NotEqual } from './hotscript-fork/numbers/impl/compare'
+export type { Mul as Multiply } from './hotscript-fork/numbers/impl/multiply'
+export type { Negate } from './hotscript-fork/numbers/impl/negate'
+export type { Sub as Subtract } from './hotscript-fork/numbers/impl/substraction'
+export type { StoreString, ReadMemory } from './store'
+export type { ShiftLeft } from './shift'

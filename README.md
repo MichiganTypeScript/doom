@@ -111,7 +111,7 @@ Usage count (in Doom) is the number on the right
 
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |
-| I32Shl            | 954   | ❌           |
+| I32Shl            | 954   | ✅           |
 | I32And            | 819   | 🐛           |
 | I32Or             | 488   | 🐛           |
 | I32Xor            | 411   | 🐛           |

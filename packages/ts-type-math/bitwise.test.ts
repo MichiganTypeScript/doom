@@ -1,5 +1,11 @@
 import type { Expect, Equal } from 'type-testing';
+import { test, expect } from "vitest";
 // import type { BitwiseU8Hex } from './bitwise.d.ts';
+
+const bitwiseAnd = (a: number, b: number) => a & b;
+const bitwiseOr = (a: number, b: number) => a | b;
+const bitwiseXor = (a: number, b: number) => a ^ b;
+
 
 type tests_HexToDecimal = [
   // (parseInt("ef", 16) & parseInt("ab", 16)).toString(16)
@@ -44,5 +50,7 @@ type tests_HexToDecimal = [
   // Expect<Equal<BitwiseU8Hex.Not<"ab">, "54">>,
   // Expect<Equal<BitwiseU8Hex.Not<"cd">, "32">>,
   // Expect<Equal<BitwiseU8Hex.Not<"ef">, "10">>,
-
 ]
+
+test('bitwise', () => {
+});
