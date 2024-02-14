@@ -292,7 +292,7 @@ type $countAliveNeighbors<
                               { kind: 'LocalSet'; id: '$l72' },
                               { kind: 'LocalGet'; id: '$l72' },
                               { kind: 'LocalGet'; id: '$l71' },
-                              { kind: 'ShiftRight' },
+                              { kind: 'ShiftRight', signed: true },
                               { kind: 'LocalSet'; id: '$l73' },
                               { kind: 'LocalGet'; id: '$l73' },
                               { kind: 'EqualsZero' },
@@ -515,7 +515,7 @@ type $updateGrid<
                       { kind: 'LocalSet'; id: '$l39' },
                       { kind: 'LocalGet'; id: '$l39' },
                       { kind: 'LocalGet'; id: '$l38' },
-                      { kind: 'ShiftRight' },
+                      { kind: 'ShiftRight', signed: true },
                       { kind: 'LocalSet'; id: '$l40' },
                       { kind: 'Block';
                         id: '$B4';
@@ -1006,7 +1006,7 @@ type $displayGrid<
                           { kind: 'LocalSet'; id: '$l39' },
                           { kind: 'LocalGet'; id: '$l39' },
                           { kind: 'LocalGet'; id: '$l38' },
-                          { kind: 'ShiftRight' },
+                          { kind: 'ShiftRight', signed: true },
                           { kind: 'LocalSet'; id: '$l40' },
                           { kind: 'Const'; value: 36 },
                           { kind: 'LocalSet'; id: '$l41' },

@@ -8,117 +8,117 @@ export type IMemorySize = {
 }
 
 export type II32Load = {
-  kind: "I32Load";
+  kind: "I32Load"
   offset: number
 }
 
 export type II64Load = {
-  kind: "I64Load";
+  kind: "I64Load"
   offset: number
 }
 
 export type IF32Load = {
-  kind: "F32Load";
+  kind: "F32Load"
   offset: number
 }
 
 export type IF64Load = {
-  kind: "F64Load";
+  kind: "F64Load"
   offset: number
 }
 
 export type II32Load8s = {
-  kind: "I32Load8s";
+  kind: "I32Load8s"
   offset: number
 }
 
 export type II32Load8u = {
-  kind: "I32Load8u";
+  kind: "I32Load8u"
   offset: number
 }
 
 export type II32Load16s = {
-  kind: "I32Load16s";
+  kind: "I32Load16s"
   offset: number
 }
 
 export type II32Load16u = {
-  kind: "I32Load16u";
+  kind: "I32Load16u"
   offset: number
 }
 
 export type II64Load8s = {
-  kind: "I64Load8s";
+  kind: "I64Load8s"
   offset: number
 }
 
 export type II64Load8u = {
-  kind: "I64Load8u";
+  kind: "I64Load8u"
   offset: number
 }
 
 export type II64Load16s = {
-  kind: "I64Load16s";
+  kind: "I64Load16s"
   offset: number
 }
 
 export type II64Load16u = {
-  kind: "I64Load16u";
+  kind: "I64Load16u"
   offset: number
 }
 
 export type II64Load32s = {
-  kind: "I64Load32s";
+  kind: "I64Load32s"
   offset: number
 }
 
 export type II64Load32u = {
-  kind: "I64Load32u";
+  kind: "I64Load32u"
   offset: number
 }
 
 export type II32Store = {
-  kind: "I32Store";
+  kind: "I32Store"
   offset: number
 }
 
 export type II64Store = {
-  kind: "I64Store";
+  kind: "I64Store"
   offset: number
 }
 
 export type IF32Store = {
-  kind: "F32Store";
+  kind: "F32Store"
   offset: number
 }
 
 export type IF64Store = {
-  kind: "F64Store";
+  kind: "F64Store"
   offset: number
 }
 
 export type II32Store8 = {
-  kind: "I32Store8";
+  kind: "I32Store8"
   offset: number
 }
 
 export type II32Store16 = {
-  kind: "I32Store16";
+  kind: "I32Store16"
   offset: number
 }
 
 export type II64Store8 = {
-  kind: "I64Store8";
+  kind: "I64Store8"
   offset: number
 }
 
 export type II64Store16 = {
-  kind: "I64Store16";
+  kind: "I64Store16"
   offset: number
 }
 
 export type II64Store32 = {
-  kind: "I64Store32";
+  kind: "I64Store32"
   offset: number
 }
 

@@ -116,8 +116,8 @@ Usage count (in Doom) is the number on the right
 | I32Or             | 488   | 🐛           |
 | I32Xor            | 411   | 🐛           |
 | I32Rotl           | 240   | ❌           |
-| I32ShrU           | 234   | ❌           |
-| I32ShrS           | 230   | ❌           |
+| I32ShrU           | 234   | ✅           |
+| I32ShrS           | 230   | ✅           |
 | I64Or             | 129   | 🐛           |
 | I64ShrU           | 83    | ❌           |
 | I64Shl            | 80    | ❌           |
@@ -214,3 +214,9 @@ EVERY effort has been taken to not support something that Doom doesn't explicitl
 - https://doom.fandom.com/wiki/Doom_source_code_files
 - https://github.com/eliben/wasm-wat-samples
 - https://github.com/WebAssembly/testsuite
+
+## Tour of Ridiculous Types
+
+> _"we're not in Kansas anymore"_
+
+- [ShiftRight](./packages/ts-type-math/shift.d.ts)

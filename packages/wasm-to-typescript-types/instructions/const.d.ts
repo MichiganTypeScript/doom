@@ -1,14 +1,14 @@
-import type { ProgramState } from "../types.d.ts";
+import type { ProgramState } from "../types.d.ts"
 import type { State } from '../state.d.ts'
 
 export type IConst = {
   kind: "Const"
 
   /** a constant value */
-  value: number;
+  value: number
 }
 
-export type ConstInstruction = IConst;
+export type ConstInstruction = IConst
 
 export type Const<
   instruction extends IConst,

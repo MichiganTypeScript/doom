@@ -6,46 +6,46 @@ export type IBlock = {
   kind: "Block"
 
   /** a block identifier */
-  id: string;
+  id: string
 
-  instructions: Instruction[];
+  instructions: Instruction[]
 }
 
 export type IBranch = {
   kind: "Branch"
 
   /** a block identifier */
-  id: string;
+  id: string
 }
 
 export type IBranchIf = {
   kind: "BranchIf"
 
   /** a block identifier */
-  id: string;
+  id: string
 }
 
 export type IBranchTable = {
   kind: "BranchTable"
 
   /** a block identifier */
-  branches: Record<number, string>;
+  branches: Record<number, string>
 
-  default: string;
+  default: string
 }
 
 export type ICall = {
   kind: "Call"
 
   /** a function identifier */
-  id: string;
+  id: string
 }
 
 export type ICallIndirect = {
   kind: "CallIndirect"
 
   /** a function identifier */
-  id: string;
+  id: string
 }
 
 export type IDrop = {
@@ -55,16 +55,16 @@ export type IDrop = {
 export type IIf = {
   kind: "If"
 
-  then: Instruction[];
-  else: Instruction[];
+  then: Instruction[]
+  else: Instruction[]
 }
 
 export type ILoop = {
   kind: "Loop"
 
-  id: string;
+  id: string
 
-  instructions: Instruction[];
+  instructions: Instruction[]
 }
 
 export type INop = {

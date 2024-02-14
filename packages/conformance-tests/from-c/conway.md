@@ -23,6 +23,7 @@ Call        6
 I32Sub      6
 Return      4
 I32Eq       3
+I32ShrS     3
 I32Shl      3
 I32Ne       1
 Select      1
@@ -44,4 +45,4 @@ I32Xor      1
 
 ## Not Done
 
-I32ShrS     3
+nothing!

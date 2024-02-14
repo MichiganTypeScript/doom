@@ -1,0 +1,79 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Func(
+                Func {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                LocalGet(
+                                    Id(
+                                        "num",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "by",
+                                    ),
+                                ),
+                                I32ShrU,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "num",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "by",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 2,
+    "I32ShrU": 1,
+}

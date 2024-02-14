@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   typescript@5.3.3:
-    hash: thz7rmcz3sxhzypl6gvqf35jlq
+    hash: dwgnzxkqpo62b2zlabiujkvmsu
     path: patches/typescript@5.3.3.patch
 
 importers:
@@ -30,7 +30,7 @@ importers:
         version: 0.2.0
       typescript:
         specifier: 5.3.3
-        version: 5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq)
+        version: 5.3.3(patch_hash=dwgnzxkqpo62b2zlabiujkvmsu)
       vitest:
         specifier: ^1.2.1
         version: 1.2.1(@types/node@20.11.5)
@@ -839,7 +839,7 @@ packages:
       ts-toolbelt: 9.6.0
     dev: false
 
-  /typescript@5.3.3(patch_hash=thz7rmcz3sxhzypl6gvqf35jlq):
+  /typescript@5.3.3(patch_hash=dwgnzxkqpo62b2zlabiujkvmsu):
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true

@@ -1,5 +1,5 @@
 diff --git a/lib/tsc.js b/lib/tsc.js
-index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..5c930ad8c410dbe45fea3e5a4f662134613fe67b 100644
+index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..c8cabf0ca8007b57d32231ac84a148bf44b1986e 100644
 --- a/lib/tsc.js
 +++ b/lib/tsc.js
 @@ -6416,7 +6416,7 @@ var Diagnostics = {
@@ -11,7 +11,28 @@ index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..5c930ad8c410dbe45fea3e5a4f662134
    Expression_produces_a_union_type_that_is_too_complex_to_represent: diag(2590, 1 /* Error */, "Expression_produces_a_union_type_that_is_too_complex_to_represent_2590", "Expression produces a union type that is too complex to represent."),
    Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig: diag(2591, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591", "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig."),
    Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig: diag(2592, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592", "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig."),
-@@ -58080,7 +58080,7 @@ function createTypeChecker(host) {
+@@ -6613,8 +6613,8 @@ var Diagnostics = {
+   It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tagged_template_expression_which_cannot_be_invoked: diag(2796, 1 /* Error */, "It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tag_2796", "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked."),
+   A_mixin_class_that_extends_from_a_type_variable_containing_an_abstract_construct_signature_must_also_be_declared_abstract: diag(2797, 1 /* Error */, "A_mixin_class_that_extends_from_a_type_variable_containing_an_abstract_construct_signature_must_also_2797", "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'."),
+   The_declaration_was_marked_as_deprecated_here: diag(2798, 1 /* Error */, "The_declaration_was_marked_as_deprecated_here_2798", "The declaration was marked as deprecated here."),
+-  Type_produces_a_tuple_type_that_is_too_large_to_represent: diag(2799, 1 /* Error */, "Type_produces_a_tuple_type_that_is_too_large_to_represent_2799", "Type produces a tuple type that is too large to represent."),
+-  Expression_produces_a_tuple_type_that_is_too_large_to_represent: diag(2800, 1 /* Error */, "Expression_produces_a_tuple_type_that_is_too_large_to_represent_2800", "Expression produces a tuple type that is too large to represent."),
++  Type_produces_a_tuple_type_that_is_too_large_to_represent: diag(2799, 1 /* Error */, "Type_produces_a_tuple_type_that_is_too_large_to_represent_2799", "Type produces a tuple type that is too large to represent. YOLO tsc"),
++  Expression_produces_a_tuple_type_that_is_too_large_to_represent: diag(2800, 1 /* Error */, "Expression_produces_a_tuple_type_that_is_too_large_to_represent_2800", "Expression produces a tuple type that is too large to represent. YOLO tsc"),
+   This_condition_will_always_return_true_since_this_0_is_always_defined: diag(2801, 1 /* Error */, "This_condition_will_always_return_true_since_this_0_is_always_defined_2801", "This condition will always return true since this '{0}' is always defined."),
+   Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher: diag(2802, 1 /* Error */, "Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es201_2802", "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher."),
+   Cannot_assign_to_private_method_0_Private_methods_are_not_writable: diag(2803, 1 /* Error */, "Cannot_assign_to_private_method_0_Private_methods_are_not_writable_2803", "Cannot assign to private method '{0}'. Private methods are not writable."),
+@@ -56747,7 +56747,8 @@ function createTypeChecker(host) {
+           addElement(type, 8 /* Variadic */, (_a = target.labeledElementDeclarations) == null ? void 0 : _a[i]);
+         } else if (isTupleType(type)) {
+           const elements = getElementTypes(type);
+-          if (elements.length + expandedTypes.length >= 1e4) {
++          if (elements.length + expandedTypes.length >= 1e40) {
++            console.log("yolo tsc", elements.length, expandedTypes.length);
+             error(
+               currentNode,
+               isPartOfTypeNode(currentNode) ? Diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent : Diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent
+@@ -58080,7 +58081,7 @@ function createTypeChecker(host) {
      let extraTypes;
      let tailCount = 0;
      while (true) {
@@ -20,7 +41,7 @@ index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..5c930ad8c410dbe45fea3e5a4f662134
          error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
          return errorType;
        }
-@@ -59117,7 +59117,7 @@ function createTypeChecker(host) {
+@@ -59117,7 +59118,7 @@ function createTypeChecker(host) {
      if (!couldContainTypeVariables(type)) {
        return type;
      }
@@ -30,7 +51,7 @@ index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..5c930ad8c410dbe45fea3e5a4f662134
        error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
        return errorType;
 diff --git a/lib/tsserver.js b/lib/tsserver.js
-index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..49f5fb01af7a096b5f0139c62b5c31c8ac0faa6d 100644
+index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..82fb3a50eb127e593f98a76ee576c74c933713a6 100644
 --- a/lib/tsserver.js
 +++ b/lib/tsserver.js
 @@ -9944,7 +9944,7 @@ var Diagnostics = {
@@ -42,7 +63,28 @@ index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..49f5fb01af7a096b5f0139c62b5c31c8
    Expression_produces_a_union_type_that_is_too_complex_to_represent: diag(2590, 1 /* Error */, "Expression_produces_a_union_type_that_is_too_complex_to_represent_2590", "Expression produces a union type that is too complex to represent."),
    Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig: diag(2591, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591", "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig."),
    Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig: diag(2592, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592", "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig."),
-@@ -62784,7 +62784,7 @@ function createTypeChecker(host) {
+@@ -10141,8 +10141,8 @@ var Diagnostics = {
+   It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tagged_template_expression_which_cannot_be_invoked: diag(2796, 1 /* Error */, "It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tag_2796", "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked."),
+   A_mixin_class_that_extends_from_a_type_variable_containing_an_abstract_construct_signature_must_also_be_declared_abstract: diag(2797, 1 /* Error */, "A_mixin_class_that_extends_from_a_type_variable_containing_an_abstract_construct_signature_must_also_2797", "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'."),
+   The_declaration_was_marked_as_deprecated_here: diag(2798, 1 /* Error */, "The_declaration_was_marked_as_deprecated_here_2798", "The declaration was marked as deprecated here."),
+-  Type_produces_a_tuple_type_that_is_too_large_to_represent: diag(2799, 1 /* Error */, "Type_produces_a_tuple_type_that_is_too_large_to_represent_2799", "Type produces a tuple type that is too large to represent."),
+-  Expression_produces_a_tuple_type_that_is_too_large_to_represent: diag(2800, 1 /* Error */, "Expression_produces_a_tuple_type_that_is_too_large_to_represent_2800", "Expression produces a tuple type that is too large to represent."),
++  Type_produces_a_tuple_type_that_is_too_large_to_represent: diag(2799, 1 /* Error */, "Type_produces_a_tuple_type_that_is_too_large_to_represent_2799", "Type produces a tuple type that is too large to represent. YOLO tsserver"),
++  Expression_produces_a_tuple_type_that_is_too_large_to_represent: diag(2800, 1 /* Error */, "Expression_produces_a_tuple_type_that_is_too_large_to_represent_2800", "Expression produces a tuple type that is too large to represent. YOLO tsserver"),
+   This_condition_will_always_return_true_since_this_0_is_always_defined: diag(2801, 1 /* Error */, "This_condition_will_always_return_true_since_this_0_is_always_defined_2801", "This condition will always return true since this '{0}' is always defined."),
+   Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher: diag(2802, 1 /* Error */, "Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es201_2802", "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher."),
+   Cannot_assign_to_private_method_0_Private_methods_are_not_writable: diag(2803, 1 /* Error */, "Cannot_assign_to_private_method_0_Private_methods_are_not_writable_2803", "Cannot assign to private method '{0}'. Private methods are not writable."),
+@@ -61451,7 +61451,8 @@ function createTypeChecker(host) {
+           addElement(type, 8 /* Variadic */, (_a = target.labeledElementDeclarations) == null ? void 0 : _a[i]);
+         } else if (isTupleType(type)) {
+           const elements = getElementTypes(type);
+-          if (elements.length + expandedTypes.length >= 1e4) {
++          if (elements.length + expandedTypes.length >= 1e40) {
++            console.log("yolo tsserver", elements.length, expandedTypes.length);
+             error2(
+               currentNode,
+               isPartOfTypeNode(currentNode) ? Diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent : Diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent
+@@ -62784,7 +62785,7 @@ function createTypeChecker(host) {
      let extraTypes;
      let tailCount = 0;
      while (true) {
@@ -51,7 +93,7 @@ index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..49f5fb01af7a096b5f0139c62b5c31c8
          error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
          return errorType;
        }
-@@ -63821,7 +63821,7 @@ function createTypeChecker(host) {
+@@ -63821,7 +63822,7 @@ function createTypeChecker(host) {
      if (!couldContainTypeVariables(type)) {
        return type;
      }
@@ -61,7 +103,7 @@ index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..49f5fb01af7a096b5f0139c62b5c31c8
        error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
        return errorType;
 diff --git a/lib/typescript.js b/lib/typescript.js
-index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..69e0abaff66b487c2a81b19521eff821de4f3803 100644
+index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..d1719a78e7ec7ed54661260bab3fd886851d6a7d 100644
 --- a/lib/typescript.js
 +++ b/lib/typescript.js
 @@ -7726,7 +7726,7 @@ ${lanes.join("\n")}
@@ -73,7 +115,28 @@ index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..69e0abaff66b487c2a81b19521eff821
          Expression_produces_a_union_type_that_is_too_complex_to_represent: diag(2590, 1 /* Error */, "Expression_produces_a_union_type_that_is_too_complex_to_represent_2590", "Expression produces a union type that is too complex to represent."),
          Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig: diag(2591, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591", "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig."),
          Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig: diag(2592, 1 /* Error */, "Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592", "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig."),
-@@ -60551,7 +60551,7 @@ ${lanes.join("\n")}
+@@ -7923,8 +7923,8 @@ ${lanes.join("\n")}
+         It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tagged_template_expression_which_cannot_be_invoked: diag(2796, 1 /* Error */, "It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tag_2796", "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked."),
+         A_mixin_class_that_extends_from_a_type_variable_containing_an_abstract_construct_signature_must_also_be_declared_abstract: diag(2797, 1 /* Error */, "A_mixin_class_that_extends_from_a_type_variable_containing_an_abstract_construct_signature_must_also_2797", "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'."),
+         The_declaration_was_marked_as_deprecated_here: diag(2798, 1 /* Error */, "The_declaration_was_marked_as_deprecated_here_2798", "The declaration was marked as deprecated here."),
+-        Type_produces_a_tuple_type_that_is_too_large_to_represent: diag(2799, 1 /* Error */, "Type_produces_a_tuple_type_that_is_too_large_to_represent_2799", "Type produces a tuple type that is too large to represent."),
+-        Expression_produces_a_tuple_type_that_is_too_large_to_represent: diag(2800, 1 /* Error */, "Expression_produces_a_tuple_type_that_is_too_large_to_represent_2800", "Expression produces a tuple type that is too large to represent."),
++        Type_produces_a_tuple_type_that_is_too_large_to_represent: diag(2799, 1 /* Error */, "Type_produces_a_tuple_type_that_is_too_large_to_represent_2799", "Type produces a tuple type that is too large to represent. YOLO typescript"),
++        Expression_produces_a_tuple_type_that_is_too_large_to_represent: diag(2800, 1 /* Error */, "Expression_produces_a_tuple_type_that_is_too_large_to_represent_2800", "Expression produces a tuple type that is too large to represent. YOLO typescript"),
+         This_condition_will_always_return_true_since_this_0_is_always_defined: diag(2801, 1 /* Error */, "This_condition_will_always_return_true_since_this_0_is_always_defined_2801", "This condition will always return true since this '{0}' is always defined."),
+         Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher: diag(2802, 1 /* Error */, "Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es201_2802", "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher."),
+         Cannot_assign_to_private_method_0_Private_methods_are_not_writable: diag(2803, 1 /* Error */, "Cannot_assign_to_private_method_0_Private_methods_are_not_writable_2803", "Cannot assign to private method '{0}'. Private methods are not writable."),
+@@ -59218,7 +59218,8 @@ ${lanes.join("\n")}
+             addElement(type, 8 /* Variadic */, (_a = target.labeledElementDeclarations) == null ? void 0 : _a[i]);
+           } else if (isTupleType(type)) {
+             const elements = getElementTypes(type);
+-            if (elements.length + expandedTypes.length >= 1e4) {
++            if (elements.length + expandedTypes.length >= 1e40) {
++              console.log("yolo typescript", elements.length, expandedTypes.length);
+               error2(
+                 currentNode,
+                 isPartOfTypeNode(currentNode) ? Diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent : Diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent
+@@ -60551,7 +60552,7 @@ ${lanes.join("\n")}
        let extraTypes;
        let tailCount = 0;
        while (true) {
@@ -82,7 +145,7 @@ index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..69e0abaff66b487c2a81b19521eff821
            error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
            return errorType;
          }
-@@ -61588,7 +61588,7 @@ ${lanes.join("\n")}
+@@ -61588,7 +61589,7 @@ ${lanes.join("\n")}
        if (!couldContainTypeVariables(type)) {
          return type;
        }
@@ -92,7 +155,7 @@ index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..69e0abaff66b487c2a81b19521eff821
          error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
          return errorType;
 diff --git a/lib/typingsInstaller.js b/lib/typingsInstaller.js
-index 1cfedae7028cbefb0f84b22c22d84f767d2db396..d69fab2379ad56c0f2e3d00a3bb225ad8754fa96 100644
+index 1cfedae7028cbefb0f84b22c22d84f767d2db396..b8491d2f2c8285d4fd78dd16a313bc7235948d40 100644
 --- a/lib/typingsInstaller.js
 +++ b/lib/typingsInstaller.js
 @@ -5793,7 +5793,7 @@ var Diagnostics = {

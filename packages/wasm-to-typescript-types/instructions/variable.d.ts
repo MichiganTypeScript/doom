@@ -1,4 +1,4 @@
-import type { Entry, ProgramState } from "../types.d.ts";
+import type { Entry, ProgramState } from "../types.d.ts"
 import type { State } from '../state.d.ts'
 
 export type ILocalGet = {

@@ -1,5 +1,5 @@
-import type { ProgramState } from "../types.d.ts";
-import type { Instruction } from "./instructions.d.ts";
+import type { ProgramState } from "../types.d.ts"
+import type { Instruction } from "./instructions.d.ts"
 import type { State } from '../state.d.ts'
 
 /** this isn't really a webassembly instruction, but it's a sentinel put here so that the program can understand when to cull execution contexts (i.e. after the function returns) */
@@ -7,16 +7,16 @@ export type IEndFunction = {
   kind: "EndFunction"
 
   /** a function identifier */
-  id: string;
+  id: string
 }
 
 /** a synthetic instruction for repeating the instructions of a loop */
 export type IEndLoop = {
   kind: "EndLoop"
 
-  id: string;
+  id: string
 
-  instructions: Instruction[];
+  instructions: Instruction[]
 }
 
 /** not a webassembly instruction. used for debugging: tells the program to immediately Halt */
@@ -24,10 +24,10 @@ export type IHalt = {
   kind: "Halt"
 
   /** if Halting because of an unrecognized instruction, it's useful to append it here */
-  instruction?: Instruction;
+  instruction?: Instruction
 
   /** an optional reason for the halt */
-  reason?: string;
+  reason?: string
 }
 
 export type SyntheticInstruction =
@@ -77,4 +77,4 @@ export type EndLoop<
 export type Halt<
   instruction extends IHalt,
   state extends ProgramState,
-> = state;
+> = state

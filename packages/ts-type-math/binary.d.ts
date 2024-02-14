@@ -157,3 +157,11 @@ type _ToDecimal<
 // QUESTION
 // maybe performance would be better if this were just `string`?
 export type Bit = '0' | '1';
+
+export type SignBit<
+  Binary extends string,
+  RESULT extends Bit =
+    Binary extends `${infer Head extends Bit}${string}`
+    ? Head
+    : never
+> = RESULT;

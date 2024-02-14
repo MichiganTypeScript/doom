@@ -43,7 +43,7 @@ type $entry<
       { kind: 'LocalSet'; id: '$l6' },
       { kind: 'LocalGet'; id: '$l6' },
       { kind: 'LocalGet'; id: '$l5' },
-      { kind: 'ShiftRight' },
+      { kind: 'ShiftRight', signed: true },
       { kind: 'LocalSet'; id: '$l7' },
       { kind: 'LocalGet'; id: '$l7' },
       { kind: 'Call'; id: '$toupper' },
