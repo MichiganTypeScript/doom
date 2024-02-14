@@ -113,8 +113,8 @@ Usage count (in Doom) is the number on the right
 | ----------------- | ----- | ------------ |
 | I32Shl            | 954   | ✅           |
 | I32And            | 819   | ✅           |
-| I32Or             | 488   | 🐛           |
-| I32Xor            | 411   | 🐛           |
+| I32Or             | 488   | ✅           |
+| I32Xor            | 411   | ✅           |
 | I32Rotl           | 240   | ❌           |
 | I32ShrU           | 234   | ✅           |
 | I32ShrS           | 230   | ✅           |
