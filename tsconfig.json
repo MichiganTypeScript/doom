@@ -9,11 +9,17 @@
     "allowImportingTsExtensions": true,
     "paths": {
       "wasm-to-typescript-types": [
-        "./packages/wasm-to-typescript-types/index.d.ts"
+        "./packages/wasm-to-typescript-types/index.d.ts",
       ],
-      "conformance-tests/*": ["./packages/conformance-tests/*"],
-      "ts-type-math": ["./packages/ts-type-math/index.d.ts"],
-      "playground/*": ["./packages/playground/*"]
+      "conformance-tests/*": [
+        "./packages/conformance-tests/*",
+      ],
+      "ts-type-math": [
+        "./packages/ts-type-math/index.d.ts",
+      ],
+      "playground/*": [
+        "./packages/playground/*",
+      ],
     }
   },
   "exclude": [
@@ -42,7 +48,7 @@
     // "./packages/conformance-tests/from-wat/loop.test.ts",
     // "./packages/conformance-tests/from-wat/memory-offset.test.ts",
     // "./packages/conformance-tests/from-wat/memory-size.test.ts",
-    // "./packages/conformance-tests/from-wat/memory.test.ts",
+    // "./packages/conformance-tests/from-wat/memory.test.ts", // the stinker
     // "./packages/conformance-tests/from-wat/negate.test.ts",
     // "./packages/conformance-tests/from-wat/nop.test.ts",
     // "./packages/conformance-tests/from-wat/not-equal.test.ts",
