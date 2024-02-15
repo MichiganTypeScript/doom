@@ -39,5 +39,4 @@ type testCases = [
   Expect<Equal<entry<[-10e3]>, 10e3>>,
   Expect<Equal<entry<[-1.7976931348623157e+308]>, 1.7976931348623157e+308 /* (Max Double) */>>,
   Expect<Equal<entry<[-5e-324]>, 5e-324 /* (Min Subnormal Double) */>>,
-  // Expect<Equal<entry<[-Infinity]>, Infinity>>, there ain't no Infinity in TypeScript types
 ]
