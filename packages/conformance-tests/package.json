@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "pnpm build && vitest",
+    "test": "vitest",
     "test:create-new": "./create-new.sh"
   }
 }

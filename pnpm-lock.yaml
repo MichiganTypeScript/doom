@@ -22,6 +22,9 @@ importers:
       ramda:
         specifier: 0.29.1
         version: 0.29.1
+      ts-arithmetic:
+        specifier: ^0.1.1
+        version: 0.1.1
       tsx:
         specifier: ^4.7.0
         version: 4.7.0
@@ -806,6 +809,10 @@ packages:
   /tinyspy@2.2.0:
     resolution: {integrity: sha512-d2eda04AN/cPOR89F7Xv5bK/jrQEhmcLFe6HFldoeO9AJtps+fqEnh486vnT/8y4bw38pSyxDcTCAq+Ks2aJTg==}
     engines: {node: '>=14.0.0'}
+    dev: false
+
+  /ts-arithmetic@0.1.1:
+    resolution: {integrity: sha512-3VqgsRgzaYfj+zKWn+7O66ifHwbOOnT2BoOrHwdEUBz7az0DetoZOS20+juNJh1klgzvWEi2Qxden41pomOUAQ==}
     dev: false
 
   /ts-toolbelt@9.6.0:

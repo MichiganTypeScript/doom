@@ -1,7 +1,7 @@
 import type { Entry, MemoryAddress, ProgramState } from "../types.d.ts";
 import type { State } from '../state.d.ts'
 import * as TypeMath from "ts-type-math"
-
+import { U8Binary } from "../../ts-type-math/conversion";
 
 export type IMemorySize = {
   kind: "MemorySize"
@@ -252,14 +252,26 @@ export type I32Load<
         [
           ...remaining,
 
-          State.Memory.getByAddress<
-            address,
-            instruction['offset'],
-            state
+          TypeMath.Load.I32<
+            State.Memory.getByAddress<
+              address,
+              instruction['offset'],
+              4,
+              state
+            >
           >
         ],
 
+        // State.Instructions.debug<
+        //     State.Memory.getByAddress<
+        //       address,
+        //       instruction['offset'],
+        //       4,
+        //       state
+        //     >,
+          // TypeMath.Add<address, instruction['offset']>,
         state
+        // >
       >
     : never
 > = RESULT
@@ -277,11 +289,14 @@ export type I64Load<
         [
           ...remaining,
 
-          State.Memory.getByAddress<
-            address,
-            instruction['offset'],
-            state
-          >
+          // TypeMath.Convert.U8Binary.ToU8Decimal<
+          //   State.Memory.getByAddress<
+          //     address,
+          //     instruction['offset'],
+          //     8,
+          //     state
+          //   >
+          // >
         ],
 
         state
@@ -302,11 +317,14 @@ export type F32Load<
         [
           ...remaining,
 
-          State.Memory.getByAddress<
-            address,
-            instruction['offset'],
-            state
-          >
+          // TypeMath.Convert.U8Binary.To32Decimal<
+          //   State.Memory.getByAddress<
+          //     address,
+          //     instruction['offset'],
+          //     4,
+          //     state
+          //   > & U8Binary
+          // > // TODO
         ],
 
         state
@@ -327,11 +345,15 @@ export type F64Load<
         [
           ...remaining,
 
-          State.Memory.getByAddress<
-            address,
-            instruction['offset'],
-            state
-          >
+          // TypeMath.Convert.U8Binary.ToU8Decimal<
+
+          //   State.Memory.getByAddress<
+          //     address,
+          //     instruction['offset'],
+          //     8,
+          //     state
+          //   > & U8Binary
+          // > // TODO
         ],
 
         state
@@ -344,7 +366,7 @@ export type I32Load8s<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -362,11 +384,15 @@ export type I32Load8u<
     ? State.Stack.set<
         [
           ...remaining,
+
           State.Memory.getByAddress<
             address,
             instruction['offset'],
+            1,
             state
-          >
+          > extends [infer byte extends U8Binary]
+          ? TypeMath.Convert.U8Binary.ToU8Decimal<byte>
+          : never
         ],
         state
       >
@@ -380,7 +406,7 @@ export type I32Load16s<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -391,7 +417,7 @@ export type I32Load16u<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -402,7 +428,7 @@ export type I64Load8s<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -413,7 +439,7 @@ export type I64Load8u<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -424,7 +450,7 @@ export type I64Load16s<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -435,7 +461,7 @@ export type I64Load16u<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -446,7 +472,7 @@ export type I64Load32s<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -457,13 +483,12 @@ export type I64Load32u<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
 > = RESULT
 
-// TODO this is wrong
 export type I32Store<
   instruction extends II32Store,
   state extends ProgramState,
@@ -480,7 +505,7 @@ export type I32Store<
         State.Memory.insert<
           address,
           instruction['offset'],
-          [entry], // WRONG!
+          TypeMath.Store.I32<entry>,
           state
         >
       >
@@ -508,7 +533,7 @@ export type I64Store<
         State.Memory.insert<
           address,
           instruction['offset'],
-          [entry], // WRONG!
+          [], // WRONG!
           state
         >
       >
@@ -532,7 +557,7 @@ export type F32Store<
         State.Memory.insert<
           address,
           instruction['offset'],
-          [entry], // WRONG!
+          [], // WRONG!
           state
         >
       >
@@ -556,7 +581,7 @@ export type F64Store<
         State.Memory.insert<
           address,
           instruction['offset'],
-          [entry], // WRONG!
+          [], // WRONG!
           state
         >
       >
@@ -573,19 +598,26 @@ export type I32Store8<
       infer address extends MemoryAddress,
       infer entry extends Entry,
     ]
-    ? // if it happens to already be less than 256 (i.e. a u8), then we can store it as is and skip all the bitwise conversion nonsense
-      TypeMath.LessThan<entry, 256> extends true
-      ? State.Stack.set<
+    ?
+      State.Stack.set<
           remaining,
 
           State.Memory.insert<
             address,
             instruction['offset'],
-            [entry],
+
+            TypeMath.Store.I32<entry> extends [
+              infer firstBit extends string,
+              infer secondBit extends string,
+              infer thirdBit extends string,
+              infer fourthBit extends string,
+            ]
+            ? [fourthBit]
+            : never,
+
             state
           >
         >
-      : State.Instructions.Unimplemented<instruction, state>
     : State.Error<instruction, "insufficient stack", state>
 > = RESULT
 
@@ -594,7 +626,7 @@ export type I32Store16<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -605,7 +637,7 @@ export type I64Store8<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -616,7 +648,7 @@ export type I64Store16<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -627,7 +659,7 @@ export type I64Store32<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >

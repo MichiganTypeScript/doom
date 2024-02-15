@@ -40,5 +40,3 @@ export const getWasmMemory = (
   }
   return output
 }
-
-export type Thing = 1;

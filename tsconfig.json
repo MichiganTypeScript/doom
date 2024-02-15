@@ -15,5 +15,44 @@
       "ts-type-math": ["./packages/ts-type-math/index.d.ts"],
       "playground/*": ["./packages/playground/*"]
     }
-  }
+  },
+  "exclude": [
+    // "./packages/conformance-tests/from-c/*.test.ts", // stay
+    // "./packages/conformance-tests/from-wat/*.test.ts", // stay
+    // "./packages/conformance-tests/from-wat/absolute-value.test.ts",
+    // "./packages/conformance-tests/from-wat/add-middle.test.ts",
+    // "./packages/conformance-tests/from-wat/add.test.ts",
+    // "./packages/conformance-tests/from-wat/andarist.test.ts",
+    // "./packages/conformance-tests/from-wat/arithmetic.test.ts",
+    // "./packages/conformance-tests/from-wat/bitwise-and.test.ts",
+    // "./packages/conformance-tests/from-wat/bitwise-or.test.ts",
+    // "./packages/conformance-tests/from-wat/bitwise-xor.test.ts",
+    // "./packages/conformance-tests/from-wat/br-if.test.ts",
+    // "./packages/conformance-tests/from-wat/br-table.test.ts",
+    // "./packages/conformance-tests/from-wat/call-indirect.test.ts",
+    // "./packages/conformance-tests/from-wat/call.test.ts",
+    // "./packages/conformance-tests/from-wat/drop.test.ts",
+    // "./packages/conformance-tests/from-wat/equals-zero.test.ts",
+    // "./packages/conformance-tests/from-wat/equal.test.ts",
+    // "./packages/conformance-tests/from-wat/globals.test.ts",
+    // "./packages/conformance-tests/from-wat/if-else-nested.test.ts",
+    // "./packages/conformance-tests/from-wat/if-else.test.ts",
+    // "./packages/conformance-tests/from-wat/local-set.test.ts",
+    // "./packages/conformance-tests/from-wat/local-tee.test.ts",
+    // "./packages/conformance-tests/from-wat/loop.test.ts",
+    // "./packages/conformance-tests/from-wat/memory-offset.test.ts",
+    // "./packages/conformance-tests/from-wat/memory-size.test.ts",
+    // "./packages/conformance-tests/from-wat/memory.test.ts",
+    // "./packages/conformance-tests/from-wat/negate.test.ts",
+    // "./packages/conformance-tests/from-wat/nop.test.ts",
+    // "./packages/conformance-tests/from-wat/not-equal.test.ts",
+    // "./packages/conformance-tests/from-wat/params.test.ts",
+    // "./packages/conformance-tests/from-wat/return.test.ts",
+    // "./packages/conformance-tests/from-wat/select.test.ts",
+    // "./packages/conformance-tests/from-wat/shift-left.test.ts",
+    // "./packages/conformance-tests/from-wat/shift-right-signed.test.ts",
+    // "./packages/conformance-tests/from-wat/shift-right-unsigned.test.ts",
+    // "./packages/conformance-tests/from-wat/subtract.test.ts",
+    // "./packages/conformance-tests/from-wat/unreachable.test.ts",
+  ]
 }

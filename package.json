@@ -8,12 +8,14 @@
     "test:math": "pnpm --filter ts-type-math run test",
     "test:create-new": "pnpm --filter conformance-tests run test:create-new",
     "test:rust": "cargo test",
-    "test": "pnpm run test:rust && CI=true pnpm run test:conformance && CI=true pnpm run test:math"
+    "test": "pnpm run test:rust && CI=true pnpm run test:math && CI=true pnpm run test:conformance && pnpm run build",
+    "build": "tsc"
   },
   "dependencies": {
     "@types/node": "^20.11.5",
     "@types/ramda": "^0.29.10",
     "ramda": "0.29.1",
+    "ts-arithmetic": "^0.1.1",
     "tsx": "^4.7.0",
     "type-testing": "^0.2.0",
     "typescript": "5.3.3",

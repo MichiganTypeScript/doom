@@ -28,6 +28,8 @@ export type IHalt = {
 
   /** an optional reason for the halt */
   reason?: string
+
+  stuff?: any
 }
 
 export type SyntheticInstruction =

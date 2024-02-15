@@ -10,7 +10,9 @@ export type Entry = number;
 
 export type MemoryAddress = number;
 
-export type MemoryByAddress = Record<MemoryAddress, number>
+export type MemoryValue = string;
+
+export type MemoryByAddress = Record<MemoryAddress, MemoryValue>
 
 export type BranchId = string;
 

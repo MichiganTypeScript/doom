@@ -1,6 +1,8 @@
+import { To32Binary } from "./binary";
 import type { Ascii, U8Binary, U8Decimal } from "./conversion.d.ts";
 import type { Convert } from "./conversion.d.ts";
 import type { Add } from './hotscript-fork/numbers/impl/addition.d.ts'
+import type { SplitToBytes } from "./split.d.ts";
 
 type AsciiToU8Decimal<T extends string> =
   T extends `${infer Char extends Ascii}${infer Rest}`
@@ -22,12 +24,6 @@ type U8BinaryToAscii<T extends U8Binary[]> =
   ? `${Convert.U8Binary.ToAscii<digit>}${U8BinaryToAscii<rest>}`
   : '';
 
-type dtoa = U8DecimalToAscii<AsciiToU8Decimal<"from ascii to decimal and back">>;
-//   ^?
-
-type atod = U8BinaryToAscii<AsciiToU8Binary<"from ascii to binary and back">>;
-//   ^?
-
 type _StoreString<
   Index extends number,
   T extends string,
@@ -44,7 +40,7 @@ type _StoreString<
         & _Acc
         & {
             [I in Index]:
-              Convert.Ascii.ToU8Decimal<Char>
+              Convert.Ascii.ToU8Binary<Char>
               // Char
           }
       >
@@ -68,21 +64,18 @@ export type StoreString<
     >
 > = RESULT;
 
-type x = StoreString<1024, "Let's hope this works..\u0000">;
-//   ^?
-type y = ReadMemory<{ memory: x, stack: [1024] }>
-//   ^?
+export type NullTerminatorBinary = "00000000";
 
 export type ReadUntilNullTerminator<
-  memory extends Record<number, U8Decimal>,
+  memory extends Record<number, string>,
 
   address extends number,
 > =
-  memory[address] extends 0
+  memory[address] extends NullTerminatorBinary
   ? ''
   : `${
-      memory[address] extends U8Decimal
-      ? Convert.U8Decimal.ToAscii<memory[address]>
+      memory[address] extends U8Binary
+      ? Convert.U8Binary.ToAscii<memory[address]>
       : ''
     }${
       ReadUntilNullTerminator<memory, Add<1, address>>
@@ -91,7 +84,7 @@ export type ReadUntilNullTerminator<
 export type ReadMemory<
   state extends {
     stack: number[]
-    memory: Record<number, U8Decimal>
+    memory: Record<number, string>
   },
 
   _startAddress extends number =
@@ -103,3 +96,15 @@ export type ReadMemory<
       _startAddress
     >
 > = RESULT
+
+export namespace Store {
+  export type I32<
+    i32 extends number,
+
+    RESULT extends string[] =
+      SplitToBytes<
+        To32Binary<i32>
+      >
+  > = RESULT
+}
+

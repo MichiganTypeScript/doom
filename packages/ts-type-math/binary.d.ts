@@ -1,6 +1,7 @@
 import type { Div, Mod } from "./hotscript-fork/numbers/impl/division.d.ts";
 import type { Length } from "./hotscript-fork/strings/impl/length.d.ts";
-import type { Add } from './hotscript-fork/numbers/impl/addition.d.ts';
+// import type { Add } from './hotscript-fork/numbers/impl/addition.d.ts';
+import type { Add } from "ts-arithmetic"
 
 type PowersOfTwo = [
     /* 2**0  */ 1,
@@ -110,6 +111,7 @@ export type To32Binary<
       Precision
     >,
 
+  // TODO potential for bugs here because we're not actually doing negative numbers really
   RESULT extends string =
     IsNegative<T> extends true
       ? UnsignedBinary extends `${infer firstBit extends string}${infer rest extends string}`

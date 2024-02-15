@@ -9,6 +9,7 @@ import type {
   LocalsById,
   MemoryAddress,
   MemoryByAddress,
+  MemoryValue,
   Param,
   ProgramState,
   evaluate,
@@ -167,7 +168,21 @@ export namespace State {
         >
     > = RESULT
 
-    export type Unimplemented<
+    export type debug<
+      stuff extends any,
+      state extends ProgramState,
+
+      RESULT extends ProgramState =
+        State.Instructions.unshift<
+          {
+            kind: "Halt",
+            stuff: stuff,
+          },
+          state
+        >
+    > = RESULT
+
+    export type unimplemented<
       instruction extends Instruction,
       state extends ProgramState,
       
@@ -470,22 +485,26 @@ export namespace State {
     export type getByAddress<
       address extends MemoryAddress,
       offset extends number,
-      state extends ProgramState,
+      bytes extends number,
 
-      RESULT extends Entry =
-        get<state>[TypeMath.Add<address, offset>]
-    > = RESULT
+      state extends ProgramState,
+    > =
+      TypeMath.Load.ReadBytes<
+        bytes,
+        get<state>,
+        TypeMath.Add<address, offset>
+      >
 
     type CollectBytes<
-      bytes extends number[],
+      bytes extends MemoryValue[],
       address extends number,
 
-      _Acc extends Record<number, number> = {},
+      _Acc extends Record<number, MemoryValue> = {},
 
-      RESULT extends Record<number, number> =
+      RESULT extends Record<number, MemoryValue> =
         bytes extends [
-          infer head extends number, // WASM is little-endian so these go in first
-          ...infer tail extends number[]
+          infer head extends MemoryValue, // WASM is little-endian so these go in first
+          ...infer tail extends MemoryValue[]
         ]
         ? CollectBytes<
             tail,
@@ -498,7 +517,7 @@ export namespace State {
     export type insert<
       address extends MemoryAddress,
       offset extends number,
-      bytes extends number[],
+      bytes extends MemoryValue[],
 
       state extends ProgramState,
 

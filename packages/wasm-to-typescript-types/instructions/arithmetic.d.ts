@@ -119,7 +119,7 @@ export type Divide<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -130,7 +130,7 @@ export type Remainder<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >

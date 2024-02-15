@@ -178,7 +178,7 @@ export type RotateLeft<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
@@ -189,7 +189,7 @@ export type RotateRight<
   state extends ProgramState,
 
   RESULT extends ProgramState =
-    State.Instructions.Unimplemented<
+    State.Instructions.unimplemented<
       instruction,
       state
     >
