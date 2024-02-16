@@ -1,7 +1,5 @@
-import type { entry } from "conformance-tests/from-wat/memory.actual.d.ts";
-// 1900ms
-type e = entry<[2]>; // =>
-
+// import type { entry } from "conformance-tests/from-wat/memory.actual.d.ts";
+// type e = entry<[2]>; // =>
 
 // import type { e } from '../add/add.d.ts';
 // type e = entry<[97, 10], true>; // =>
@@ -14,7 +12,6 @@ type e = entry<[2]>; // =>
 // import type { ReadMemory } from "ts-type-math";
 // export type Evaluate = ReadMemory<e> // =>
 
-
-// type e = 1;
+type e = 1;
 
 export type Evaluate = e // =>

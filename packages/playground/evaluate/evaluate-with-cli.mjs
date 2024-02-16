@@ -25,11 +25,18 @@ const evaluateType = async () => {
     path.dirname(tsConfigPath),
   );
 
+  const startTime = performance.now();
+
+  // https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API
+
   const program = createProgram([fileName], {
     ...parsedTsConfig.options,
     baseUrl: projectRoot,
   });
+  const programTime = performance.now();
+
   const sourceFile = program.getSourceFile(fileName);
+  const getSourceFileTime = performance.now();
 
   // Ensure the source file is loaded
   if (!sourceFile) {
@@ -43,29 +50,42 @@ const evaluateType = async () => {
       typeAlias = node;
     }
   });
+  const getTypeAliasTime = performance.now();
 
   // Ensure the type alias is found
   if (!typeAlias) {
     throw new Error('Type alias "Evaluate" not found');
   }
 
-  // Start the timer
-  console.time("Type Evaluation Time");
 
   // Get the checker to obtain type information
   const checker = program.getTypeChecker();
+  const checkerTime = performance.now();
 
-  // Print the type
+  // Get the type of the type alias
   const type = checker.getTypeAtLocation(typeAlias);
+  const getTypeAtLocationTime = performance.now();
+  
+  // get the string representation of the type
   const typeString = checker.typeToString(type);
+  const typeToStringTime = performance.now();
 
-  // Stop the timer
-  console.log("Maximum recursions:", stackSize());
-  console.timeEnd("Type Evaluation Time");
-  console.log("");
+  const time = {
+    programTime: Math.round(Number(programTime - startTime)),
+    getSourceFileTime: Math.round(Number(getSourceFileTime - programTime)),
+    getTypeAliasTime: Math.round(Number(getTypeAliasTime - getSourceFileTime)),
+    checkerTime: Math.round(Number(checkerTime - getTypeAliasTime)),
+    getTypeAtLocation: Math.round(Number(getTypeAtLocationTime - checkerTime)),
+    typeToString: Math.round(Number(typeToStringTime - getTypeAtLocationTime)),
+    totalTime: Math.round(Number(typeToStringTime - startTime)),
+  };
 
+  console.log("maximum recursions", stackSize());
+  // uncomment below to get a full time readout, but really getTimeAtLocation is the one that matters
+  // console.log("time (ms) | program", time.programTime, "| getSourceFile", time.getSourceFileTime, "| getTypeAlias", time.getTypeAliasTime, "| checker", time.checkerTime, "| getTypeAtLocation ", time.getTypeAtLocation, "| typeToString ", time.typeToString, "| total", time.totalTime);
+  console.log("time (ms)", time.getTypeAtLocation);
+  console.log();
   console.log(typeString);
-
   console.log()
 };
 
