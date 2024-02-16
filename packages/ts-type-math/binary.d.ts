@@ -102,10 +102,6 @@ export type IsNegative<
   ? true
   : false
 
-// check out global.d.ts to see this exact thing declared there
-// UNCOMMENT below to see something weird.  Run `pnpm playground` and see how this changes the result.  The result when using the global is the one that's wrong
-type Satisfies<T, U extends T> = U;
-
 export type To32Binary<
   T extends number,
 
@@ -113,15 +109,16 @@ export type To32Binary<
     PadLeft<
       Process<T>,
       Precision
-    >
-> =
-Satisfies<string,
-  true extends IsNegative<T>
-  ? UnsignedBinary extends `${infer firstBit extends string}${infer rest extends string}`
-    ? `1${rest}`
-    : never
-  : UnsignedBinary
->
+    >,
+
+  // TODO potential for bugs here because we're not actually doing negative numbers really
+  RESULT extends string =
+    IsNegative<T> extends true
+      ? UnsignedBinary extends `${infer firstBit extends string}${infer rest extends string}`
+        ? `1${rest}`
+        : never
+      : UnsignedBinary
+> = RESULT
 
 type ReverseString<T extends string> =
   T extends `${infer Head}${infer Tail}`
