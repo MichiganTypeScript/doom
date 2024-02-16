@@ -1,10 +1,9 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $if<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$n', '$control'];
-    result: number;
+type $if = Satisfies<Func, {
+  kind: 'func';
+  params: ['$n', '$control'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$n' },
@@ -21,22 +20,19 @@ type $if<
       },
       { kind: 'Add' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Call'; id: '$if' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number, number],

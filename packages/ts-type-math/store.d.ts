@@ -28,24 +28,23 @@ type _StoreString<
   Index extends number,
   T extends string,
 
-  _Acc extends Record<number, string> = {},
-
-  RESULT extends Record<number, string> =
-    T extends `${infer Char extends Ascii}${infer Rest extends string}`
-    ?
-      _StoreString<
-        Add<1, Index>,
-        Rest,
-        
-        & _Acc
-        & {
-            [I in Index]:
-              Convert.Ascii.ToU8Binary<Char>
-              // Char
-          }
-      >
-    : _Acc
-> = RESULT
+  _Acc extends Record<number, string> = {}
+> = Satisfies<Record<number, string>,
+  T extends `${infer Char extends Ascii}${infer Rest extends string}`
+  ?
+    _StoreString<
+      Add<1, Index>,
+      Rest,
+      
+      & _Acc
+      & {
+          [I in Index]:
+            Convert.Ascii.ToU8Binary<Char>
+            // Char
+        }
+    >
+  : _Acc
+>
 
 export type evaluate<T> = {
   [K in keyof T]: T[K]
@@ -53,16 +52,15 @@ export type evaluate<T> = {
 
 export type StoreString<
   StartingIndex extends number,
-  Input extends string,
-
-  RESULT extends Record<number, string> =
-    evaluate<
-      _StoreString<
-        StartingIndex,
-        Input
-      >
+  Input extends string
+> = Satisfies<Record<number, string>,
+  evaluate<
+    _StoreString<
+      StartingIndex,
+      Input
     >
-> = RESULT;
+  >
+>
 
 export type NullTerminatorBinary = "00000000";
 
@@ -88,23 +86,21 @@ export type ReadMemory<
   },
 
   _startAddress extends number =
-    state['stack'][0],
-
-  RESULT extends string =
-    ReadUntilNullTerminator<
-      state['memory'],
-      _startAddress
-    >
-> = RESULT
+    state['stack'][0]
+> = Satisfies<string,
+  ReadUntilNullTerminator<
+    state['memory'],
+    _startAddress
+  >
+>
 
 export namespace Store {
   export type I32<
-    i32 extends number,
-
-    RESULT extends string[] =
-      SplitToBytes<
-        To32Binary<i32>
-      >
-  > = RESULT
+    i32 extends number
+  > = Satisfies<string[],
+    SplitToBytes<
+      To32Binary<i32>
+    >
+  >
 }
 

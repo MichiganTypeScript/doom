@@ -88,12 +88,11 @@ type Precision = 32;
 type PadLeft<
   S extends string,
   N extends number,
-
-  RESULT extends string =
-    Length<S> extends N
-    ? S
-    : PadLeft<`0${S}`, N>
-> = RESULT
+> = Satisfies<string,
+  Length<S> extends N
+  ? S
+  : PadLeft<`0${S}`, N>
+>
 
 export type IsNegative<
   T extends number
@@ -109,16 +108,15 @@ export type To32Binary<
     PadLeft<
       Process<T>,
       Precision
-    >,
-
+    >
+> = Satisfies<string,
   // TODO potential for bugs here because we're not actually doing negative numbers really
-  RESULT extends string =
-    IsNegative<T> extends true
-      ? UnsignedBinary extends `${infer firstBit extends string}${infer rest extends string}`
-        ? `1${rest}`
-        : never
-      : UnsignedBinary
-> = RESULT
+  IsNegative<T> extends true
+  ? UnsignedBinary extends `${infer firstBit extends string}${infer rest extends string}`
+    ? `1${rest}`
+    : never
+  : UnsignedBinary
+>
 
 type ReverseString<T extends string> =
   T extends `${infer Head}${infer Tail}`
@@ -161,9 +159,9 @@ type _ToDecimal<
 export type Bit = '0' | '1';
 
 export type SignBit<
-  Binary extends string,
-  RESULT extends Bit =
-    Binary extends `${infer Head extends Bit}${string}`
+  Binary extends string
+> = Satisfies<Bit,
+  Binary extends `${infer Head extends Bit}${string}`
     ? Head
     : never
-> = RESULT;
+>

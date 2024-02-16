@@ -41,173 +41,165 @@ export type ComparisonInstruction =
 
 export type HandleComparisonInstruction<
   instruction extends ComparisonInstruction,
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  instruction extends IEquals
+  ? Equals<instruction, state>
 
-  RESULT extends ProgramState =
-    instruction extends IEquals
-    ? Equals<instruction, state>
+  : instruction extends IEqualsZero
+  ? EqualsZero<instruction, state>
+  
+  : instruction extends INotEqual
+  ? NotEqual<instruction, state>
+  
+  : instruction extends IGreaterThan
+  ? GreaterThan<instruction, state>
+  
+  : instruction extends ILessThan
+  ? LessThan<instruction, state>
+  
+  : instruction extends IGreaterThanOrEqual
+  ? GreaterThanOrEqual<instruction, state>
+  
+  : instruction extends ILessThanOrEqual
+  ? LessThanOrEqual<instruction, state>
 
-    : instruction extends IEqualsZero
-    ? EqualsZero<instruction, state>
-    
-    : instruction extends INotEqual
-    ? NotEqual<instruction, state>
-    
-    : instruction extends IGreaterThan
-    ? GreaterThan<instruction, state>
-    
-    : instruction extends ILessThan
-    ? LessThan<instruction, state>
-    
-    : instruction extends IGreaterThanOrEqual
-    ? GreaterThanOrEqual<instruction, state>
-    
-    : instruction extends ILessThanOrEqual
-    ? LessThanOrEqual<instruction, state>
-
-    : never
-> = RESULT
+  : never
+>
 
 export type EqualsZero<
   instruction extends IEqualsZero, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.Equal<a, 0> extends true ? 1 : 0
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.Equal<a, 0> extends true ? 1 : 0
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type Equals<
   instruction extends IEquals, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.Equal<a, b> extends true ? 1 : 0
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.Equal<a, b> extends true ? 1 : 0
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type NotEqual<
   instruction extends INotEqual, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.NotEqual<b, a> extends true ? 1 : 0
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.NotEqual<b, a> extends true ? 1 : 0
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type GreaterThan<
   instruction extends IGreaterThan, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer a extends Entry,
+    infer b extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.GreaterThan<a, b> extends true ? 1 : 0
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-      infer b extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.GreaterThan<a, b> extends true ? 1 : 0
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type LessThan<
   instruction extends ILessThan, // unused
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-      infer b extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.LessThan<a, b> extends true ? 1 : 0
-        ],
-        state
-      >
-    : never
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer a extends Entry,
+    infer b extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.LessThan<a, b> extends true ? 1 : 0
+      ],
+      state
+    >
+  : never
+>
 
 export type GreaterThanOrEqual<
   instruction extends IGreaterThanOrEqual, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer a extends Entry,
+    infer b extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.GreaterThanOrEqual<a, b> extends true ? 1 : 0
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-      infer b extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.GreaterThanOrEqual<a, b> extends true ? 1 : 0
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type LessThanOrEqual<
   instruction extends ILessThanOrEqual, // unused
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer a extends Entry,
-      infer b extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.LessThanOrEqual<a, b> extends true ? 1 : 0
-        ],
-        state
-      >
-    : never
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer a extends Entry,
+    infer b extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.LessThanOrEqual<a, b> extends true ? 1 : 0
+      ],
+      state
+    >
+  : never
+>

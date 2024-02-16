@@ -1,10 +1,9 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $switch_like<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p'];
-    result: number;
+type $switch_like = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Block';
@@ -41,21 +40,18 @@ type $switch_like<
       { kind: 'Const'; value: 103 },
       { kind: 'Return'; count: 1 },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'Call'; id: '$switch_like' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number],

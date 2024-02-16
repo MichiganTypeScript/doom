@@ -42,155 +42,147 @@ export type BitwiseInstruction =
 
 export type HandleBitwiseInstructions<
   instruction extends BitwiseInstruction,
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  instruction extends IAnd
+  ? And<instruction, state>
 
-  RESULT extends ProgramState =
-    instruction extends IAnd
-    ? And<instruction, state>
+  : instruction extends IOr
+  ? Or<instruction, state>
 
-    : instruction extends IOr
-    ? Or<instruction, state>
+  : instruction extends IXor
+  ? Xor<instruction, state>
 
-    : instruction extends IXor
-    ? Xor<instruction, state>
+  : instruction extends IShiftLeft
+  ? ShiftLeft<instruction, state>
 
-    : instruction extends IShiftLeft
-    ? ShiftLeft<instruction, state>
+  : instruction extends IShiftRight
+  ? ShiftRight<instruction, state>
 
-    : instruction extends IShiftRight
-    ? ShiftRight<instruction, state>
+  : instruction extends IRotateLeft
+  ? RotateLeft<instruction, state>
 
-    : instruction extends IRotateLeft
-    ? RotateLeft<instruction, state>
+  : instruction extends IRotateRight
+  ? RotateRight<instruction, state>
 
-    : instruction extends IRotateRight
-    ? RotateRight<instruction, state>
-
-    : never
-> = RESULT
+  : never
+>
 
 export type And<
   instruction extends IAnd, // unused
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.BitwiseAnd<a, b>
-        ],
-        state
-      >
-    : never
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.BitwiseAnd<a, b>
+      ],
+      state
+    >
+  : never
+>
 
 export type Or<
   instruction extends IOr, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.BitwiseOr<b, a>
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.BitwiseOr<b, a>
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type Xor<
   instruction extends IXor, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining, 
+        TypeMath.BitwiseXor<b, a>
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining, 
-          TypeMath.BitwiseXor<b, a>
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type ShiftLeft<
   instruction extends IShiftLeft,
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining, 
+        TypeMath.ShiftLeft<b, a>
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining, 
-          TypeMath.ShiftLeft<b, a>
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type ShiftRight<
   instruction extends IShiftRight,
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining, 
+        TypeMath.ShiftRight<b, a, instruction['signed']>
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining, 
-          TypeMath.ShiftRight<b, a, instruction['signed']>
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type RotateLeft<
   instruction extends IRotateLeft,
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Instructions.unimplemented<
-      instruction,
-      state
-    >
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Instructions.unimplemented<
+    instruction,
+    state
+  >
+>
 
 export type RotateRight<
   instruction extends IRotateRight,
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Instructions.unimplemented<
-      instruction,
-      state
-    >
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Instructions.unimplemented<
+    instruction,
+    state
+  >
+>

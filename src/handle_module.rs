@@ -41,25 +41,24 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
             let result = "number";
 
             format!(
-                "    params: [{params}];
-    result: {result};"
+                "  params: [{params}];
+  result: {result};"
             )
         })
         .unwrap_or(String::from(
-            "    params: [];
-    result: number;",
+            "  params: [];
+  result: number;",
         ));
 
     let instructions_and_locals = handle_func(func);
 
     let output = format!(
-        "type {name}<
-  RESULT extends Func = {{
-    kind: 'func';
+        "type {name} = Satisfies<Func, {{
+  kind: 'func';
 {params_and_result}
 {instructions_and_locals}
-  }}
-> = RESULT\n"
+}}>
+"
     );
 
     source.add_type(name, output);

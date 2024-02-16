@@ -22,68 +22,60 @@ export namespace Convert {
 
   export namespace U8Decimal {
     export type ToU8Binary<
-      decimal extends U8Decimal,
-
-      RESULT extends U8Binary =
-        Catalog.U8DecimalToU8Binary[decimal]
-    > = RESULT;
+      decimal extends U8Decimal
+    > = Satisfies<U8Binary,
+      Catalog.U8DecimalToU8Binary[decimal]
+    >
 
     export type ToAscii<
-      ascii extends U8Decimal,
-
-      RESULT extends Ascii =
-        Catalog.U8DecimalToAscii[ascii]
-    > = RESULT;
+      ascii extends U8Decimal
+    > = Satisfies<Ascii,
+      Catalog.U8DecimalToAscii[ascii]
+    >
   }
 
   export namespace U8Binary {
     export type ToU8Decimal<
-      binary extends U8Binary,
-
-      RESULT extends U8Decimal =
-        Catalog.U8BinaryToU8Decimal[binary]
-    > = RESULT;
+      binary extends U8Binary
+    > = Satisfies<U8Decimal,
+      Catalog.U8BinaryToU8Decimal[binary]
+    >
 
     export type ToAscii<
-      ascii extends U8Binary,
-
-      RESULT extends Ascii =
-        Catalog.U8BinaryToAscii[ascii]
-    > = RESULT;
+      ascii extends U8Binary
+    > = Satisfies<Ascii,
+      Catalog.U8BinaryToAscii[ascii]
+    >
   }
 
   export namespace U32Decimal {
     export type ToU32Binary<
-      decimal extends number,
-
-      RESULT extends string =
-        To32Binary<decimal>
-    > = RESULT;
+      decimal extends number
+    > = Satisfies<string,
+      To32Binary<decimal>
+    >
   }
 
   export namespace U32Binary {
     export type ToU32Decimal<
-      binary extends U32Binary,
-
-      RESULT extends number =
-        ToDecimal<binary>
-    > = RESULT;
+      binary extends U32Binary
+    > = Satisfies<number,
+      ToDecimal<binary>
+    >
   }
 
   export namespace Ascii {
     export type ToU8Decimal<
-      ascii extends Ascii,
-
-      RESULT extends U8Decimal =
-        Catalog.AsciiToU8Decimal[ascii]
-    > = RESULT;
+      ascii extends Ascii
+    > = Satisfies<U8Decimal,
+      Catalog.AsciiToU8Decimal[ascii]
+    >
 
     export type ToU8Binary<
-      ascii extends Ascii,
-
-      RESULT extends U8Binary =
-        Catalog.AsciiToU8Binary[ascii]
-    > = RESULT;
+      ascii extends Ascii
+    > = Satisfies<U8Binary,
+      Catalog.AsciiToU8Binary[ascii]
+    >
   }
 }
 

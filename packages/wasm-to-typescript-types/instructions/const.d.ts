@@ -12,21 +12,20 @@ export type ConstInstruction = IConst
 
 export type Const<
   instruction extends IConst,
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.push<
+    instruction['value'],
 
-  RESULT extends ProgramState =
-    State.Stack.push<
-      instruction['value'],
-
-      state
-    >
-> = RESULT
+    state
+  >
+>
 
 export type HandleConstInstruction<
   instruction extends ConstInstruction,
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    instruction extends IConst ? Const<instruction, state>
-    : never
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  instruction extends IConst
+  ? Const<instruction, state>
+  : never
+>

@@ -1,29 +1,25 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $test<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a'];
-    result: number;
+type $test = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$first', '$second', '$third'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$first', '$second', '$third'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$third' },
       { kind: 'Call'; id: '$test' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number, number, number],

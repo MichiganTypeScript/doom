@@ -1,10 +1,9 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $andarist<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$x'];
-    result: number;
+type $andarist = Satisfies<Func, {
+  kind: 'func';
+  params: ['$x'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$x' },
@@ -18,21 +17,18 @@ type $andarist<
       { kind: 'Const'; value: 7 },
       { kind: 'Add' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'Call'; id: '$andarist' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number],

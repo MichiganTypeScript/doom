@@ -1,22 +1,19 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $__wasm_call_ctors<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $__wasm_call_ctors = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$emscripten_stack_init' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: ['$stack_pointer', '$stack_size', '$this_stack', '$stack_a', '$stack_b', '$result'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -46,14 +43,12 @@ type $entry<
       { kind: 'LocalGet'; id: '$result' },
       { kind: 'Return'; count: 1 },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_init<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_init = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 5243920 },
@@ -65,8 +60,7 @@ type $emscripten_stack_init<
       { kind: 'And' },
       { kind: 'GlobalSet'; id: '$__stack_end' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number, number],

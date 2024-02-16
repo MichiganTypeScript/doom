@@ -1,290 +1,249 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $F32Add<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $F32Add = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Add' },
     ];
-  }
-> = RESULT
+}>
 
-type $F64Add<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $F64Add = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Add' },
     ];
-  }
-> = RESULT
+}>
 
-type $I32Add<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I32Add = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Add' },
     ];
-  }
-> = RESULT
+}>
 
-type $I64Add<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I64Add = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Add' },
     ];
-  }
-> = RESULT
+}>
 
-type $F32Div<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $F32Div = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Divide' },
     ];
-  }
-> = RESULT
+}>
 
-type $F64Div<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $F64Div = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Divide' },
     ];
-  }
-> = RESULT
+}>
 
-type $I32DivS<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I32DivS = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Divide' },
     ];
-  }
-> = RESULT
+}>
 
-type $I64DivS<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I64DivS = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Divide' },
     ];
-  }
-> = RESULT
+}>
 
-type $I32DivU<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I32DivU = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Divide' },
     ];
-  }
-> = RESULT
+}>
 
-type $I64DivU<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I64DivU = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Divide' },
     ];
-  }
-> = RESULT
+}>
 
-type $F32Mul<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $F32Mul = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Multiply' },
     ];
-  }
-> = RESULT
+}>
 
-type $F64Mul<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $F64Mul = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Multiply' },
     ];
-  }
-> = RESULT
+}>
 
-type $I32Mul<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I32Mul = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Multiply' },
     ];
-  }
-> = RESULT
+}>
 
-type $I64Mul<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I64Mul = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Multiply' },
     ];
-  }
-> = RESULT
+}>
 
-type $I32RemS<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I32RemS = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Remainder' },
     ];
-  }
-> = RESULT
+}>
 
-type $I32RemU<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I32RemU = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Remainder' },
     ];
-  }
-> = RESULT
+}>
 
-type $F32Sub<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $F32Sub = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Subtract' },
     ];
-  }
-> = RESULT
+}>
 
-type $F64Sub<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $F64Sub = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Subtract' },
     ];
-  }
-> = RESULT
+}>
 
-type $I32Sub<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I32Sub = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Subtract' },
     ];
-  }
-> = RESULT
+}>
 
-type $I64Sub<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a', '$b'];
-    result: number;
+type $I64Sub = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a', '$b'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Subtract' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$F32Add_a', '$F32Add_b', '$F64Add_a', '$F64Add_b', '$I32Add_a', '$I32Add_b', '$I64Add_a', '$I64Add_b', '$F32Div_a', '$F32Div_b', '$F64Div_a', '$F64Div_b', '$I32DivS_a', '$I32DivS_b', '$I64DivS_a', '$I64DivS_b', '$I32DivU_a', '$I32DivU_b', '$I64DivU_a', '$I64DivU_b', '$F32Mul_a', '$F32Mul_b', '$F64Mul_a', '$F64Mul_b', '$I32Mul_a', '$I32Mul_b', '$I64Mul_a', '$I64Mul_b', '$I32RemS_a', '$I32RemS_b', '$I32RemU_a', '$I32RemU_b', '$F32Sub_a', '$F32Sub_b', '$F64Sub_a', '$F64Sub_b', '$I32Sub_a', '$I32Sub_b', '$I64Sub_a', '$I64Sub_b'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$F32Add_a', '$F32Add_b', '$F64Add_a', '$F64Add_b', '$I32Add_a', '$I32Add_b', '$I64Add_a', '$I64Add_b', '$F32Div_a', '$F32Div_b', '$F64Div_a', '$F64Div_b', '$I32DivS_a', '$I32DivS_b', '$I64DivS_a', '$I64DivS_b', '$I32DivU_a', '$I32DivU_b', '$I64DivU_a', '$I64DivU_b', '$F32Mul_a', '$F32Mul_b', '$F64Mul_a', '$F64Mul_b', '$I32Mul_a', '$I32Mul_b', '$I64Mul_a', '$I64Mul_b', '$I32RemS_a', '$I32RemS_b', '$I32RemU_a', '$I32RemU_b', '$F32Sub_a', '$F32Sub_b', '$F64Sub_a', '$F64Sub_b', '$I32Sub_a', '$I32Sub_b', '$I64Sub_a', '$I64Sub_b'];
+  result: number;
     locals: ['$index'];
     instructions: [
       { kind: 'Const'; value: 0 },
@@ -390,8 +349,7 @@ type $entry<
       { kind: 'Call'; id: '$I64Sub' },
       { kind: 'I64Store'; offset: 152 },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number],

@@ -1,10 +1,9 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $selectBranch<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$condition'];
-    result: number;
+type $selectBranch = Satisfies<Func, {
+  kind: 'func';
+  params: ['$condition'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 10 },
@@ -12,21 +11,18 @@ type $selectBranch<
       { kind: 'LocalGet'; id: '$condition' },
       { kind: 'Select' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'Call'; id: '$selectBranch' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number],

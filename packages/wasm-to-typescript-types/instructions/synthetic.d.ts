@@ -39,42 +39,39 @@ export type SyntheticInstruction =
 
 export type HandleSyntheticInstructions<
   instruction extends SyntheticInstruction,
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  instruction extends IEndLoop
+  ? EndLoop<instruction, state>
 
-  RESULT extends ProgramState =
-    instruction extends IEndLoop
-    ? EndLoop<instruction, state>
-
-    : instruction extends IEndFunction
-    ? EndFunction<instruction, state>
-    
-    : instruction extends IHalt
-    ? Halt<instruction, state>
+  : instruction extends IEndFunction
+  ? EndFunction<instruction, state>
+  
+  : instruction extends IHalt
+  ? Halt<instruction, state>
 
   : never
-> = RESULT
+>
 
 export type EndFunction<
   instruction extends IEndFunction, // unused
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    // pop the active execution context
-    State.ExecutionContexts.pop<
-      state
-    >
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  // pop the active execution context
+  State.ExecutionContexts.pop<
+    state
+  >
+>
 
 export type EndLoop<
   instruction extends IEndLoop,
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Instructions.set<
-      instruction['instructions'],
-      state
-    >
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Instructions.set<
+    instruction['instructions'],
+    state
+  >
+>
 
 export type Halt<
   instruction extends IHalt,

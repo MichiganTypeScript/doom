@@ -1,22 +1,19 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $__wasm_call_ctors<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $__wasm_call_ctors = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$emscripten_stack_init' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0', '$p1'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0', '$p1'];
+  result: number;
     locals: ['$l2', '$l3', '$l4', '$l5', '$l6', '$l7'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -46,14 +43,12 @@ type $entry<
       { kind: 'LocalGet'; id: '$l7' },
       { kind: 'Return'; count: 1 },
     ];
-  }
-> = RESULT
+}>
 
-type $_initialize<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $_initialize = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Block';
@@ -66,39 +61,33 @@ type $_initialize<
         ];
       },
     ];
-  }
-> = RESULT
+}>
 
-type $stackSave<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $stackSave = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
     ];
-  }
-> = RESULT
+}>
 
-type $stackRestore<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0'];
-    result: number;
+type $stackRestore = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
     ];
-  }
-> = RESULT
+}>
 
-type $stackAlloc<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0'];
-    result: number;
+type $stackAlloc = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0'];
+  result: number;
     locals: ['$l1', '$l2'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -110,14 +99,12 @@ type $stackAlloc<
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
       { kind: 'LocalGet'; id: '$l1' },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_init<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_init = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 5243920 },
@@ -129,58 +116,49 @@ type $emscripten_stack_init<
       { kind: 'And' },
       { kind: 'GlobalSet'; id: '$__stack_end' },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_get_free<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_get_free = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
       { kind: 'GlobalGet'; id: '$__stack_end' },
       { kind: 'Subtract' },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_get_base<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_get_base = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_base' },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_get_end<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_get_end = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_end' },
     ];
-  }
-> = RESULT
+}>
 
-type $__errno_location<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $__errno_location = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 1024 },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number, number],

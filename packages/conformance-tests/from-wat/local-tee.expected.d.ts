@@ -1,10 +1,9 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $localTee<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$x'];
-    result: number;
+type $localTee = Satisfies<Func, {
+  kind: 'func';
+  params: ['$x'];
+  result: number;
     locals: ['$y'];
     instructions: [
       { kind: 'LocalGet'; id: '$x' },
@@ -12,21 +11,18 @@ type $localTee<
       { kind: 'LocalGet'; id: '$y' },
       { kind: 'Add' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'Call'; id: '$localTee' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number],

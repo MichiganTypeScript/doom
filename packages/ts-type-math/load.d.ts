@@ -28,11 +28,10 @@ export namespace Load {
       >
 
   export type I32<
-    bytes extends string[],
-
-    RESULT extends number =
-      ToDecimal<
-        JoinBytes<bytes>
-      >
-  > = RESULT
+    bytes extends string[]
+  > = Satisfies<number,
+    ToDecimal<
+      JoinBytes<bytes>
+    >
+  >
 }

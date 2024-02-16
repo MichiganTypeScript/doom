@@ -31,107 +31,101 @@ export type ArithmeticInstruction =
 
 export type HandleArithmeticInstructions<
   instruction extends ArithmeticInstruction,
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  instruction extends IAdd
+  ? Add<instruction, state>
+  
+  : instruction extends ISubtract
+  ? Subtract<instruction, state>
+  
+  : instruction extends IMultiply
+  ? Multiply<instruction, state>
+  
+  : instruction extends IDivide
+  ? Divide<instruction, state>
+  
+  : instruction extends IRemainder
+  ? Remainder<instruction, state>
 
-  RESULT extends ProgramState =
-    instruction extends IAdd
-    ? Add<instruction, state>
-    
-    : instruction extends ISubtract
-    ? Subtract<instruction, state>
-    
-    : instruction extends IMultiply
-    ? Multiply<instruction, state>
-    
-    : instruction extends IDivide
-    ? Divide<instruction, state>
-    
-    : instruction extends IRemainder
-    ? Remainder<instruction, state>
-
-    : never
-> = RESULT
+  : never
+>
 
 export type Add<
   instruction extends IAdd, // unused
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.Add<a, b>
-        ],
-        state
-      >
-    : never
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.Add<a, b>
+      ],
+      state
+    >
+  : never
+>
 
 export type Subtract<
   instruction extends ISubtract, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.Subtract<b, a>
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.Subtract<b, a>
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type Multiply<
   instruction extends IMultiply, // unused
-  state extends ProgramState,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Stack.get<state> extends [
+    ...infer remaining extends Entry[],
+    infer b extends Entry,
+    infer a extends Entry,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        TypeMath.Multiply<a, b>
+      ],
 
-  RESULT extends ProgramState =
-    State.Stack.get<state> extends [
-      ...infer remaining extends Entry[],
-      infer b extends Entry,
-      infer a extends Entry,
-    ]
-    ? State.Stack.set<
-        [
-          ...remaining,
-          TypeMath.Multiply<a, b>
-        ],
-
-        state
-      >
-    : never
-> = RESULT
+      state
+    >
+  : never
+>
 
 export type Divide<
   instruction extends IDivide,
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Instructions.unimplemented<
-      instruction,
-      state
-    >
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Instructions.unimplemented<
+    instruction,
+    state
+  >
+>
 
 export type Remainder<
   instruction extends IRemainder,
-  state extends ProgramState,
-
-  RESULT extends ProgramState =
-    State.Instructions.unimplemented<
-      instruction,
-      state
-    >
-> = RESULT
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.Instructions.unimplemented<
+    instruction,
+    state
+  >
+>

@@ -1,23 +1,20 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 import type { StoreString } from 'ts-type-math'
 
-type $__wasm_call_ctors<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $__wasm_call_ctors = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$emscripten_stack_init' },
     ];
-  }
-> = RESULT
+}>
 
-type $countAliveNeighbors<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0', '$p1', '$p2', '$p3', '$p4', '$p5'];
-    result: number;
+type $countAliveNeighbors = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0', '$p1', '$p2', '$p3', '$p4', '$p5'];
+  result: number;
     locals: ['$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14', '$l15', '$l16', '$l17', '$l18', '$l19', '$l20', '$l21', '$l22', '$l23', '$l24', '$l25', '$l26', '$l27', '$l28', '$l29', '$l30', '$l31', '$l32', '$l33', '$l34', '$l35', '$l36', '$l37', '$l38', '$l39', '$l40', '$l41', '$l42', '$l43', '$l44', '$l45', '$l46', '$l47', '$l48', '$l49', '$l50', '$l51', '$l52', '$l53', '$l54', '$l55', '$l56', '$l57', '$l58', '$l59', '$l60', '$l61', '$l62', '$l63', '$l64', '$l65', '$l66', '$l67', '$l68', '$l69', '$l70', '$l71', '$l72', '$l73', '$l74', '$l75', '$l76', '$l77', '$l78', '$l79', '$l80', '$l81', '$l82', '$l83'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -354,14 +351,12 @@ type $countAliveNeighbors<
       },
       { kind: 'Return'; count: 0 },
     ];
-  }
-> = RESULT
+}>
 
-type $updateGrid<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0', '$p1', '$p2'];
-    result: number;
+type $updateGrid = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0', '$p1', '$p2'];
+  result: number;
     locals: ['$l3', '$l4', '$l5', '$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14', '$l15', '$l16', '$l17', '$l18', '$l19', '$l20', '$l21', '$l22', '$l23', '$l24', '$l25', '$l26', '$l27', '$l28', '$l29', '$l30', '$l31', '$l32', '$l33', '$l34', '$l35', '$l36', '$l37', '$l38', '$l39', '$l40', '$l41', '$l42', '$l43', '$l44', '$l45', '$l46', '$l47', '$l48', '$l49', '$l50', '$l51', '$l52', '$l53', '$l54', '$l55', '$l56', '$l57', '$l58', '$l59', '$l60', '$l61', '$l62', '$l63', '$l64', '$l65', '$l66', '$l67', '$l68', '$l69', '$l70', '$l71', '$l72', '$l73', '$l74', '$l75', '$l76', '$l77', '$l78', '$l79', '$l80', '$l81', '$l82', '$l83', '$l84', '$l85', '$l86', '$l87', '$l88', '$l89', '$l90', '$l91', '$l92', '$l93', '$l94', '$l95', '$l96', '$l97', '$l98', '$l99', '$l100', '$l101', '$l102', '$l103', '$l104', '$l105', '$l106', '$l107', '$l108', '$l109', '$l110', '$l111', '$l112', '$l113', '$l114', '$l115', '$l116', '$l117', '$l118', '$l119', '$l120', '$l121', '$l122'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -847,14 +842,12 @@ type $updateGrid<
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
       { kind: 'Return'; count: 0 },
     ];
-  }
-> = RESULT
+}>
 
-type $displayGrid<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0', '$p1', '$p2'];
-    result: number;
+type $displayGrid = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0', '$p1', '$p2'];
+  result: number;
     locals: ['$l3', '$l4', '$l5', '$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14', '$l15', '$l16', '$l17', '$l18', '$l19', '$l20', '$l21', '$l22', '$l23', '$l24', '$l25', '$l26', '$l27', '$l28', '$l29', '$l30', '$l31', '$l32', '$l33', '$l34', '$l35', '$l36', '$l37', '$l38', '$l39', '$l40', '$l41', '$l42', '$l43', '$l44', '$l45', '$l46', '$l47', '$l48', '$l49', '$l50', '$l51', '$l52', '$l53', '$l54', '$l55', '$l56', '$l57', '$l58', '$l59', '$l60', '$l61', '$l62', '$l63', '$l64', '$l65', '$l66'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -1127,14 +1120,12 @@ type $displayGrid<
       { kind: 'LocalGet'; id: '$l66' },
       { kind: 'Return'; count: 1 },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0'];
+  result: number;
     locals: ['$l1', '$l2', '$l3', '$l4', '$l5', '$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14', '$l15', '$l16', '$l17', '$l18', '$l19', '$l20', '$l21', '$l22', '$l23', '$l24', '$l25', '$l26', '$l27', '$l28', '$l29', '$l30', '$l31', '$l32', '$l33', '$l34', '$l35', '$l36', '$l37', '$l38', '$l39', '$l40', '$l41', '$l42', '$l43', '$l44', '$l45', '$l46', '$l47', '$l48', '$l49', '$l50', '$l51', '$l52', '$l53', '$l54', '$l55', '$l56', '$l57', '$l58', '$l59', '$l60', '$l61', '$l62', '$l63', '$l64', '$l65', '$l66', '$l67', '$l68', '$l69', '$l70', '$l71'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -1423,14 +1414,12 @@ type $entry<
       { kind: 'LocalGet'; id: '$l69' },
       { kind: 'Return'; count: 1 },
     ];
-  }
-> = RESULT
+}>
 
-type $_initialize<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $_initialize = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Block';
@@ -1443,14 +1432,12 @@ type $_initialize<
         ];
       },
     ];
-  }
-> = RESULT
+}>
 
-type $__memcpy<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0', '$p1', '$p2'];
-    result: number;
+type $__memcpy = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0', '$p1', '$p2'];
+  result: number;
     locals: ['$l3', '$l4', '$l5'];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
@@ -1732,39 +1719,33 @@ type $__memcpy<
       },
       { kind: 'LocalGet'; id: '$p0' },
     ];
-  }
-> = RESULT
+}>
 
-type $stackSave<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $stackSave = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
     ];
-  }
-> = RESULT
+}>
 
-type $stackRestore<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0'];
-    result: number;
+type $stackRestore = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
     ];
-  }
-> = RESULT
+}>
 
-type $stackAlloc<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$p0'];
-    result: number;
+type $stackAlloc = Satisfies<Func, {
+  kind: 'func';
+  params: ['$p0'];
+  result: number;
     locals: ['$l1', '$l2'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -1776,14 +1757,12 @@ type $stackAlloc<
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
       { kind: 'LocalGet'; id: '$l1' },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_init<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_init = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 5244096 },
@@ -1795,58 +1774,49 @@ type $emscripten_stack_init<
       { kind: 'And' },
       { kind: 'GlobalSet'; id: '$__stack_end' },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_get_free<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_get_free = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
       { kind: 'GlobalGet'; id: '$__stack_end' },
       { kind: 'Subtract' },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_get_base<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_get_base = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_base' },
     ];
-  }
-> = RESULT
+}>
 
-type $emscripten_stack_get_end<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $emscripten_stack_get_end = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_end' },
     ];
-  }
-> = RESULT
+}>
 
-type $__errno_location<
-  RESULT extends Func = {
-    kind: 'func';
-    params: [];
-    result: number;
+type $__errno_location = Satisfies<Func, {
+  kind: 'func';
+  params: [];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 1204 },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number],

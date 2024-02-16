@@ -1,10 +1,9 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $my_loop<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$input'];
-    result: number;
+type $my_loop = Satisfies<Func, {
+  kind: 'func';
+  params: ['$input'];
+  result: number;
     locals: ['$i', '$result'];
     instructions: [
       { kind: 'Const'; value: 0 },
@@ -30,21 +29,18 @@ type $my_loop<
       },
       { kind: 'LocalGet'; id: '$result' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'Call'; id: '$my_loop' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number],

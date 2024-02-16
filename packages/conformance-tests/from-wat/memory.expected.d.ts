@@ -1,10 +1,9 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $storeValue<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$index', '$value'];
-    result: number;
+type $storeValue = Satisfies<Func, {
+  kind: 'func';
+  params: ['$index', '$value'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$index' },
@@ -13,14 +12,12 @@ type $storeValue<
       { kind: 'LocalGet'; id: '$value' },
       { kind: 'I32Store'; offset: 0 },
     ];
-  }
-> = RESULT
+}>
 
-type $loadValue<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$index'];
-    result: number;
+type $loadValue = Satisfies<Func, {
+  kind: 'func';
+  params: ['$index'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$index' },
@@ -28,14 +25,12 @@ type $loadValue<
       { kind: 'Multiply' },
       { kind: 'I32Load'; offset: 0 },
     ];
-  }
-> = RESULT
+}>
 
-type $foo<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$a'];
-    result: number;
+type $foo = Satisfies<Func, {
+  kind: 'func';
+  params: ['$a'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 2 },
@@ -46,21 +41,18 @@ type $foo<
       { kind: 'Const'; value: 1 },
       { kind: 'Add' },
     ];
-  }
-> = RESULT
+}>
 
-type $entry<
-  RESULT extends Func = {
-    kind: 'func';
-    params: ['$value'];
-    result: number;
+type $entry = Satisfies<Func, {
+  kind: 'func';
+  params: ['$value'];
+  result: number;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$value' },
       { kind: 'Call'; id: '$foo' },
     ];
-  }
-> = RESULT
+}>
 
 export type entry<
   arguments extends [number],
