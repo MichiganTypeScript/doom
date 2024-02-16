@@ -4,6 +4,7 @@
     "module": "ES2022",
     "moduleResolution": "bundler",
     "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
     "strict": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,

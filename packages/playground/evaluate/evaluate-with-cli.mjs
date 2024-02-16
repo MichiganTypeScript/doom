@@ -7,11 +7,12 @@ import { dirname } from 'path';
 import ts from 'typescript';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const { createProgram, forEachChild, isTypeAliasDeclaration } = ts;
+const { createProgram, forEachChild, isTypeAliasDeclaration, getPreEmitDiagnostics } = ts;
 
 const evaluateType = async () => {
   // Read the TypeScript file
   const fileName = './evaluate/evaluation-playground.d.ts';
+  const globalDefinitions = path.resolve(__dirname, '../../../global.d.ts');
 
   // Read tsconfig.json
   const projectRoot = path.resolve(__dirname, '../../../');
@@ -29,7 +30,7 @@ const evaluateType = async () => {
 
   // https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API
 
-  const program = createProgram([fileName], {
+  const program = createProgram([fileName, globalDefinitions], {
     ...parsedTsConfig.options,
     baseUrl: projectRoot,
   });
@@ -79,6 +80,18 @@ const evaluateType = async () => {
     typeToString: Math.round(Number(typeToStringTime - getTypeAtLocationTime)),
     totalTime: Math.round(Number(typeToStringTime - startTime)),
   };
+
+  getPreEmitDiagnostics(program).forEach(diagnostic => {
+    if (diagnostic.file) {
+      let { line, character } = ts.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+      let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
+      console.error(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+      console.log();
+    } else {
+      console.error(ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
+      console.log();
+    }
+  });
 
   console.log("maximum recursions", stackSize());
   // uncomment below to get a full time readout, but really getTimeAtLocation is the one that matters
