@@ -59,13 +59,14 @@ const evaluateType = async () => {
   const type = checker.getTypeAtLocation(typeAlias);
   const typeString = checker.typeToString(type);
 
-  console.log(typeString);
+  // Stop the timer
+  console.log("Maximum recursions:", stackSize());
+  console.timeEnd("Type Evaluation Time");
   console.log("");
 
-  // Stop the timer
-  console.timeEnd("Type Evaluation Time");
+  console.log(typeString);
 
-  console.log("Maximum recursions:", stackSize());
+  console.log()
 };
 
 const phrases = [
@@ -76,6 +77,7 @@ const phrases = [
   "You're probably going to need a bigger boat",
   "You're off to great places, today is your day!",
   "The truth is out there",
+  "I always trusted code more than people anyway.",
   "10 bucks says what comes next starts with \"RangeError: Maximum call stack size exceeded at `instantiateTypes`\"",
 ]
 
