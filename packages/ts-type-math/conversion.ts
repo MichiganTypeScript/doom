@@ -1,4 +1,5 @@
-import { To32Binary, ToDecimal } from "./binary";
+import { To32Binary, To64Binary, ToDecimal } from "./binary";
+import { WasmType, WasmValue } from './wasm';
 
 // export type Nibble = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
 // export type U8Hex = `${Nibble}${Nibble}`;
@@ -51,7 +52,7 @@ export namespace Convert {
   export namespace U32Decimal {
     export type ToU32Binary<
       decimal extends number
-    > = Satisfies<string,
+    > = Satisfies<WasmValue,
       To32Binary<decimal>
     >
   }
@@ -61,6 +62,14 @@ export namespace Convert {
       binary extends U32Binary
     > = Satisfies<number,
       ToDecimal<binary>
+    >
+  }
+
+  export namespace U64Decimal {
+    export type ToU64Binary<
+      decimal extends number
+    > = Satisfies<WasmValue,
+      To64Binary<decimal>
     >
   }
 
@@ -75,6 +84,19 @@ export namespace Convert {
       ascii extends Ascii
     > = Satisfies<U8Binary,
       Catalog.AsciiToU8Binary[ascii]
+    >
+  }
+
+  export namespace TSNumber {
+    export type ToWasmValue<
+      value extends number,
+      wasmType extends WasmType
+    > = Satisfies<WasmValue,
+      wasmType extends 'i32' ? Convert.U32Decimal.ToU32Binary<value> :
+      wasmType extends 'i64' ? Convert.U64Decimal.ToU64Binary<value> :
+      wasmType extends 'f32' ? never : // TODO
+      wasmType extends 'f64' ? never : // TODO
+      never
     >
   }
 }

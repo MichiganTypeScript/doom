@@ -1,6 +1,7 @@
-import type { Entry, ProgramState } from "../types"
+import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
+import { WasmValue } from "ts-type-math"
 
 export type IAbsoluteValue = {
   kind: "AbsoluteValue"
@@ -33,13 +34,13 @@ export type AbsoluteValue<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remainingStack extends Entry[],
-    infer a extends Entry,
+    ...infer remainingStack extends WasmValue[],
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remainingStack,
-        TypeMath.AbsoluteValue<a>
+        // TypeMath.AbsoluteValue<a> // TODO Broken
       ],
       state
     >
@@ -51,15 +52,15 @@ export type Negate<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        a extends 0 // this check is only necessary due to a bug in hotscript: https://github.com/gvergnaud/hotscript/issues/117
-        ? 0
-        : TypeMath.Negate<a>
+        // a extends 0 // this check is only necessary due to a bug in hotscript: https://github.com/gvergnaud/hotscript/issues/117
+        // ? 0
+        // : TypeMath.Negate<a> // TODO Broken
       ],
 
       state

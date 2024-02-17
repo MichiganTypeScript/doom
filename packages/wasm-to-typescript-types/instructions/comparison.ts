@@ -1,6 +1,7 @@
-import type { Entry, ProgramState } from "../types"
+import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
+import { WasmValue } from "ts-type-math"
 
 export type IEqualsZero = {
   kind: "EqualsZero"
@@ -72,13 +73,13 @@ export type EqualsZero<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.Equal<a, 0> extends true ? 1 : 0
+        // TypeMath.Equal<a, 0> extends true ? 1 : 0 // TODO Broken
       ],
 
       state
@@ -91,14 +92,14 @@ export type Equals<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.Equal<a, b> extends true ? 1 : 0
+        // TypeMath.Equal<a, b> extends true ? 1 : 0 // TODO Broken
       ],
 
       state
@@ -111,14 +112,14 @@ export type NotEqual<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.NotEqual<b, a> extends true ? 1 : 0
+        // TypeMath.NotEqual<b, a> extends true ? 1 : 0 // TODO Broken
       ],
 
       state
@@ -131,14 +132,14 @@ export type GreaterThan<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer a extends Entry,
-    infer b extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.GreaterThan<a, b> extends true ? 1 : 0
+        // TypeMath.GreaterThan<a, b> extends true ? 1 : 0 // TODO Broken
       ],
 
       state
@@ -151,14 +152,14 @@ export type LessThan<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer a extends Entry,
-    infer b extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.LessThan<a, b> extends true ? 1 : 0
+        // TypeMath.LessThan<a, b> extends true ? 1 : 0 // TODO Broken
       ],
       state
     >
@@ -170,14 +171,14 @@ export type GreaterThanOrEqual<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer a extends Entry,
-    infer b extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.GreaterThanOrEqual<a, b> extends true ? 1 : 0
+        // TypeMath.GreaterThanOrEqual<a, b> extends true ? 1 : 0 // TODO Broken
       ],
 
       state
@@ -190,14 +191,14 @@ export type LessThanOrEqual<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer a extends Entry,
-    infer b extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.LessThanOrEqual<a, b> extends true ? 1 : 0
+        // TypeMath.LessThanOrEqual<a, b> extends true ? 1 : 0 // TODO Broken
       ],
       state
     >

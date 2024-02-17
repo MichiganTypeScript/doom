@@ -83,7 +83,7 @@ type Process<
       : Process<Div<T, 2>, `1${_Acc}`>
     :never;
 
-type Precision = 32;
+export type Precision = 32 | 64;
 
 type PadLeft<
   S extends string,
@@ -103,19 +103,26 @@ export type IsNegative<
 
 export type To32Binary<
   T extends number,
-
-  UnsignedBinary extends string =
-    PadLeft<
-      Process<T>,
-      Precision
-    >
 > = Satisfies<string,
-  // TODO potential for bugs here because we're not actually doing negative numbers really
   IsNegative<T> extends true
-  ? UnsignedBinary extends `${infer firstBit extends string}${infer rest extends string}`
-    ? `1${rest}`
-    : never
-  : UnsignedBinary
+
+  ? // we need to pad to 31 because the first bit is the sign bit
+    `1${PadLeft<Process<T>, 31>}`
+  
+  : // full 32 bit
+    PadLeft<Process<T>, 32>
+>
+
+export type To64Binary<
+  T extends number,
+> = Satisfies<string,
+  IsNegative<T> extends true
+
+  ? // we need to pad to 63 because the first bit is the sign bit
+    `1${PadLeft<Process<T>, 63>}`
+
+  : // full 64 bit
+    PadLeft<Process<T>, 64>
 >
 
 export type ReverseString<T extends string> =
@@ -126,7 +133,7 @@ export type ReverseString<T extends string> =
 // QUESTION: I have lookup tables for 0-255 (from both binary and decimal).  Would it be better or faster to just check that object real quick first and return that value if it exists?
 
 export type ToDecimal<T extends string> =
-  _ToDecimal<ReverseString<T>>;
+  _ToDecimal<ReverseString<T>, Precision>;
 
 type _ToDecimal<
   Binary extends string,

@@ -2,9 +2,38 @@ import type { Instruction, selectInstruction } from "./instructions/instructions
 import type { IHalt } from "./instructions/synthetic"
 import type { State } from "./state"
 import type { ProgramInput, ProgramState, evaluate } from "./types"
+import type { Convert, WasmType, WasmValue } from "ts-type-math"
 
 // set to `number` to disable
-export type StopAt = number
+export type StopAt = 1
+
+type _ProcessInputStack<
+  args extends [number[], WasmType[]],
+
+  _Acc extends WasmValue[] = []
+> = Satisfies<WasmValue[],
+  args extends [
+    [infer headValue extends number, ...infer tailValue extends number[]],
+    [infer headType extends WasmType, ...infer tailType extends WasmType[]],
+  ]
+  ? _ProcessInputStack<
+      [tailValue, tailType],
+      [
+        Convert.TSNumber.ToWasmValue<headValue, headType>,
+        ..._Acc,
+      ]
+    >
+  : _Acc
+>
+
+export type ProcessInputStack<
+  input extends ProgramInput
+> = Satisfies<WasmValue[],
+  _ProcessInputStack<[
+    input['arguments'],
+    input['funcs']['$entry']['paramsTypes'],
+  ]>
+>
 
 export type runProgram<
   input extends ProgramInput,
@@ -28,10 +57,10 @@ export type runProgram<
 
       // copy readonly memory into memory registers
       memory: input['memory'];
-      memorySize: input['memorySize'];
+      memorySize: Convert.TSNumber.ToWasmValue<input['memorySize'], 'i32'>;
 
       // since the stack is a stack, we need to reverse it
-      stack: input['arguments'];
+      stack: ProcessInputStack<input>;
     },
     debugMode
   >
@@ -56,7 +85,7 @@ export type executeInstruction<
 
           // increment the instruction counter
           State.Count.increment<state>,
-          
+
           remainingInstructions,
           instruction
         >,

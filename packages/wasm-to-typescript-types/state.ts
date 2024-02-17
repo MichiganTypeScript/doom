@@ -1,7 +1,6 @@
 import type { Instruction } from "./instructions/instructions"
 import type {
   BranchesById,
-  Entry,
   ExecutionContext,
   Func,
   FuncsById,
@@ -9,12 +8,12 @@ import type {
   LocalsById,
   MemoryAddress,
   MemoryByAddress,
-  MemoryValue,
   Param,
   ProgramState,
   evaluate,
 } from "./types"
 import * as TypeMath from "ts-type-math";
+import { WasmValue, Convert } from 'ts-type-math';
 
 export namespace State {
   export type Error<
@@ -191,12 +190,12 @@ export namespace State {
   export namespace Stack {
     export type get<
       state extends ProgramState
-    > = Satisfies<Entry[],
+    > = Satisfies<WasmValue[],
       state['stack']
     >
     
     export type set<
-      stack extends Entry[],
+      stack extends WasmValue[],
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
@@ -215,7 +214,7 @@ export namespace State {
     >
 
     export type push<
-      entry extends Entry,
+      entry extends WasmValue,
       state extends ProgramState
     > = Satisfies<ProgramState,
       set<
@@ -336,7 +335,7 @@ export namespace State {
         
         export type insert<
           id extends string,
-          value extends Entry,
+          value extends WasmValue,
           state extends ProgramState
         > = Satisfies<ProgramState,
           State.ExecutionContexts.Active.set<
@@ -472,18 +471,21 @@ export namespace State {
       TypeMath.Load.ReadBytes<
         bytes,
         get<state>,
-        TypeMath.Add<address, offset>
+        TypeMath.Add<
+          Convert.U32Binary.ToU32Decimal<address>,
+          offset
+        >
       >
 
     type CollectBytes<
-      bytes extends MemoryValue[],
+      bytes extends WasmValue[],
       address extends number,
 
-      _Acc extends Record<number, MemoryValue> = {}
-    > = Satisfies<Record<number, MemoryValue>,
+      _Acc extends Record<number, WasmValue> = {}
+    > = Satisfies<Record<number, WasmValue>,
       bytes extends [
-        infer head extends MemoryValue, // WASM is little-endian so these go in first
-        ...infer tail extends MemoryValue[]
+        infer head extends WasmValue, // WASM is little-endian so these go in first
+        ...infer tail extends WasmValue[]
       ]
       ? CollectBytes<
           tail,
@@ -496,14 +498,17 @@ export namespace State {
     export type insert<
       address extends MemoryAddress,
       offset extends number,
-      bytes extends MemoryValue[],
+      bytes extends WasmValue[],
 
       state extends ProgramState,
 
       _update extends Record<number, number> =
         CollectBytes<
           bytes,
-          TypeMath.Add<address, offset>
+          TypeMath.Add<
+            Convert.U32Binary.ToU32Decimal<address>,
+            offset
+          >
         >
     > = Satisfies<ProgramState,
       {
@@ -537,9 +542,10 @@ export namespace State {
 
     export type getByIndex<
       state extends ProgramState,
-      id extends number
+      id extends WasmValue
     > = Satisfies<string,
-      get<state>[id]
+      // get<state>[id]
+      'TODO lol'
     >
   }
 }

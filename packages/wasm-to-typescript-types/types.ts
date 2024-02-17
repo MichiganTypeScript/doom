@@ -1,22 +1,17 @@
 import type { Instruction } from "./instructions/instructions"
+import type { WasmType, WasmValue } from "ts-type-math"
 
 export type evaluate<T> = {
   [K in keyof T]: T[K]
 } & unknown
 
-/** an item on the stack */
+export type MemoryAddress = WasmValue;
 
-export type Entry = number;
-
-export type MemoryAddress = number;
-
-export type MemoryValue = string;
-
-export type MemoryByAddress = Record<MemoryAddress, MemoryValue>
+export type MemoryByAddress = Record<MemoryAddress, WasmValue>
 
 export type BranchId = string;
 
-export type GlobalsById = Record<string, Entry>;
+export type GlobalsById = Record<string, WasmValue>;
 
 export type Param = string;
 
@@ -29,7 +24,7 @@ export type Func = {
   instructions: Instruction[];
 }
 
-export type LocalsById = Record<string, number>;
+export type LocalsById = Record<string, WasmValue>;
 
 export type BranchesById = Record<BranchId, Instruction[]>;
 
@@ -39,8 +34,6 @@ export type Reverse<T extends any[]> =
   T extends [infer head, ...infer tail]
   ? [...Reverse<tail>, head]
   : []
-
-export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 
 export type StorageBits = 8 | 16 | 32 | 64;
 
@@ -79,17 +72,21 @@ export type ProgramState = {
   /** the linear memory of the program */
   memory: MemoryByAddress;
 
-  memorySize: number;
+  memorySize: WasmValue;
 
   /** a stack of values */
-  stack: Entry[];
+  stack: WasmValue[];
 }
 
 export type ProgramInput = Pick<
   ProgramState,
-  | "memory" | "memorySize" | "indirect" | "funcs" | "globals"
+  | "memory" | "indirect" | "globals"
 > & {
   arguments: number[];
+  memorySize: number;
+  funcs: FuncsById & {
+    $entry: Func;
+  };
 }
 
 type RemoveNullTerminator<T extends string> =

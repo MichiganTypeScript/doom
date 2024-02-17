@@ -1,6 +1,7 @@
-import type { Entry, Func, Param, ProgramState } from "../types"
+import type { Func, Param, ProgramState } from "../types"
 import type { State } from '../state'
 import type { Instruction } from "./instructions"
+import type { WasmValue } from 'ts-type-math'
 
 export type IBlock = {
   kind: "Block"
@@ -183,8 +184,8 @@ export type BranchIf<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer condition extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer condition extends WasmValue,
   ]
   ? condition extends 0
 
@@ -215,22 +216,23 @@ export type BranchTable<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer index extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer index extends WasmValue,
   ]
 
   // the whole reason `BranchTable.branches` is an object instead of an array is to make it easy to check membership like we are here.  if there's a more efficient way to do this: that'd be great
   ? index extends keyof instruction['branches']
 
     // match found
-    ? State.Instructions.set<
-        State.ExecutionContexts.Active.Branches.get<state>[instruction['branches'][index]],
+    ?
+      // State.Instructions.set<
+        // State.ExecutionContexts.Active.Branches.get<state>[instruction['branches'][index]],
 
-        State.Stack.set<
-          remaining,
+        // State.Stack.set<
+          // remaining,
           state
-        >
-      >
+        // > // TODO Broken
+      // >
 
     // no match found fallback to the default
     : State.Instructions.set<
@@ -255,8 +257,8 @@ type PopulateParams<
     infer param extends Param,
   ]
   ? State.Stack.get<state> extends [
-      ...infer remainingStack extends Entry[],
-      infer pop extends Entry,
+      ...infer remainingStack extends WasmValue[],
+      infer pop extends WasmValue,
     ]
     ? PopulateParams<
         funcId,
@@ -316,8 +318,8 @@ export type CallIndirect<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remainder extends Entry[],
-    infer index extends Entry, // it's sorta hard to tell because there are no MDN docs to go from on this but it does seem like the argument that comes before is in fact the index.  if instead the params come before... we'll just have to look up the count and pop accordingly.
+    ...infer remainder extends WasmValue[],
+    infer index extends WasmValue, // it's sorta hard to tell because there are no MDN docs to go from on this but it does seem like the argument that comes before is in fact the index.  if instead the params come before... we'll just have to look up the count and pop accordingly.
   ]
   ?
     State.Instructions.unshift<
@@ -340,8 +342,8 @@ export type Drop<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer drop extends Entry, // dropped instruction
+    ...infer remaining extends WasmValue[],
+    infer drop extends WasmValue, // dropped instruction
   ]
   ? State.Stack.set<
       remaining,
@@ -356,10 +358,10 @@ export type If<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer condition extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer condition extends WasmValue,
   ]
-  ? condition extends 0
+  ? condition extends 0 // TODO, Broken
 
     ? // false branch
       // pop the false branch instructions
@@ -432,7 +434,7 @@ export type Return<
   instruction extends IReturn,
   state extends ProgramState,
 
-  _Acc extends Entry[] = []
+  _Acc extends WasmValue[] = []
 > = Satisfies<ProgramState,
   // have we accumulated enough values to return?
   _Acc['length'] extends instruction['count']
@@ -453,8 +455,8 @@ export type Return<
 
   // we need to recurse more to grab more values off the stack
   : state['stack'] extends [
-      ...infer remaining extends Entry[],
-      infer pop extends Entry,
+      ...infer remaining extends WasmValue[],
+      infer pop extends WasmValue,
     ]
 
     ? Return<
@@ -479,10 +481,10 @@ export type Select<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
-    infer condition extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
+    infer condition extends WasmValue,
   ]
   ? condition extends 0
     ? State.Stack.set<

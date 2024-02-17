@@ -1,6 +1,7 @@
-import type { Entry, ProgramState, WasmType } from "../types"
+import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
+import { WasmType, WasmValue } from "ts-type-math"
 
 export type IAdd = {
   kind: "Add"
@@ -58,14 +59,14 @@ export type Add<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.Add<a, b>
+        // TypeMath.Add<a, b>// TODO Broken
       ],
       state
     >
@@ -77,14 +78,14 @@ export type Subtract<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.Subtract<b, a>
+        // TypeMath.Subtract<b, a> // TODO Broken
       ],
 
       state
@@ -97,14 +98,14 @@ export type Multiply<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.Multiply<a, b>
+        // TypeMath.Multiply<a, b>// TODO Broken
       ],
 
       state

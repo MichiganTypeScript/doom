@@ -1,5 +1,6 @@
-import type { Entry, ProgramState } from "../types"
+import type { ProgramState } from "../types"
 import type { State } from '../state'
+import type { WasmValue } from "ts-type-math"
 
 export type ILocalGet = {
   kind: "LocalGet"
@@ -80,8 +81,8 @@ export type LocalSet<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer entry extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer entry extends WasmValue,
   ]
   ? State.Stack.set<
       remaining,
@@ -100,8 +101,8 @@ export type LocalTee<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer entry extends Entry
+    ...infer remaining extends WasmValue[],
+    infer entry extends WasmValue
   ]
   ? State.ExecutionContexts.Active.Locals.insert<
       instruction['id'],
@@ -126,8 +127,8 @@ export type GlobalSet<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       remaining,

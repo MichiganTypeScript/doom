@@ -39,7 +39,7 @@ const isolatedProgram = () => {
 
   /** this is the magic type alias that the script is looking for in the targetFile */
   const targetTypeAlias = 'Evaluate';
-  const targetFile = resolve(__dirname, 'evaluation-playground.ts');
+  const targetFile = resolve(__dirname, 'playground.ts');
 
   const configFile = ts.readConfigFile(tsconfigFilePath, ts.sys.readFile)
   const { options } = ts.parseJsonConfigFileContent(

@@ -1,6 +1,7 @@
-import type { Entry, MemoryAddress, ProgramState } from "../types"
+import type { MemoryAddress, ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
+import { WasmValue } from "ts-type-math"
 import { U8Binary } from "../../ts-type-math/conversion";
 
 export type IMemorySize = {
@@ -242,21 +243,21 @@ export type I32Load<
   state extends ProgramState
 > = Satisfies<ProgramState,
   state['stack'] extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress
   ]
   ? State.Stack.set<
       [
         ...remaining,
 
-        TypeMath.Load.I32<
-          State.Memory.getByAddress<
-            address,
-            instruction['offset'],
-            4,
-            state
-          >
-        >
+        // TypeMath.Load.I32<
+        //   State.Memory.getByAddress<
+        //     address,
+        //     instruction['offset'],
+        //     4,
+        //     state
+        //   >
+        // > // TODO Broken
       ],
 
       // State.Instructions.debug<
@@ -278,7 +279,7 @@ export type I64Load<
   state extends ProgramState
 > = Satisfies<ProgramState,
   state['stack'] extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress
   ]
   ? State.Stack.set<
@@ -292,7 +293,7 @@ export type I64Load<
         //     8,
         //     state
         //   >
-        // >
+        // > // TODO Broken
       ],
 
       state
@@ -305,7 +306,7 @@ export type F32Load<
   state extends ProgramState
 > = Satisfies<ProgramState,
   state['stack'] extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress
   ]
   ? State.Stack.set<
@@ -319,7 +320,7 @@ export type F32Load<
         //     4,
         //     state
         //   > & U8Binary
-        // > // TODO
+        // > // TODO broken
       ],
 
       state
@@ -332,7 +333,7 @@ export type F64Load<
   state extends ProgramState
 > = Satisfies<ProgramState,
   state['stack'] extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress
   ]
   ? State.Stack.set<
@@ -347,7 +348,7 @@ export type F64Load<
         //     8,
         //     state
         //   > & U8Binary
-        // > // TODO
+        // > // TODO broken
       ],
 
       state
@@ -370,21 +371,21 @@ export type I32Load8u<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress,
   ]
   ? State.Stack.set<
       [
         ...remaining,
 
-        State.Memory.getByAddress<
-          address,
-          instruction['offset'],
-          1,
-          state
-        > extends [infer byte extends U8Binary]
-        ? TypeMath.Convert.U8Binary.ToU8Decimal<byte>
-        : never
+        // State.Memory.getByAddress<
+        //   address,
+        //   instruction['offset'],
+        //   1,
+          // state
+        // > extends [infer byte extends U8Binary]
+        // ? TypeMath.Convert.U8Binary.ToU8Decimal<byte>
+        // : never // TODO Broken
       ],
       state
     >
@@ -478,19 +479,19 @@ export type I32Store<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress,
-    infer entry extends Entry,
+    infer entry extends WasmValue,
   ]
   ? State.Stack.set<
       remaining,
 
-      State.Memory.insert<
-        address,
-        instruction['offset'],
-        TypeMath.Store.I32<entry>,
+      // State.Memory.insert<
+      //   address,
+      //   instruction['offset'],
+      //   TypeMath.Store.I32<entry>,
         state
-      >
+      // > // TODO Broken
     >
   : State.Error<
       instruction,
@@ -505,19 +506,19 @@ export type I64Store<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress,
-    infer entry extends Entry,
+    infer entry extends WasmValue,
   ]
   ? State.Stack.set<
       remaining,
 
-      State.Memory.insert<
-        address,
-        instruction['offset'],
-        [], // WRONG!
+      // State.Memory.insert<
+      //   address,
+      //   instruction['offset'],
+      //   [], // WRONG!
         state
-      >
+      // > // TODO broken
     >
   : never
 >
@@ -528,19 +529,19 @@ export type F32Store<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress,
-    infer entry extends Entry,
+    infer entry extends WasmValue,
   ]
   ? State.Stack.set<
       remaining,
 
-      State.Memory.insert<
-        address,
-        instruction['offset'],
-        [], // WRONG!
+      // State.Memory.insert<
+      //   address,
+      //   instruction['offset'],
+      //   [], // WRONG!
         state
-      >
+      // > // TODO broken
     >
   : never
 >
@@ -551,19 +552,19 @@ export type F64Store<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress,
-    infer entry extends Entry,
+    infer entry extends WasmValue,
   ]
   ? State.Stack.set<
       remaining,
 
-      State.Memory.insert<
-        address,
-        instruction['offset'],
-        [], // WRONG!
+      // State.Memory.insert<
+      //   address,
+      //   instruction['offset'],
+      //   [], // WRONG!
         state
-      >
+      // > // TODO broken
     >
   : never
 >
@@ -573,29 +574,29 @@ export type I32Store8<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
+    ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress,
-    infer entry extends Entry,
+    infer entry extends WasmValue,
   ]
   ?
     State.Stack.set<
         remaining,
 
-        State.Memory.insert<
-          address,
-          instruction['offset'],
+        // State.Memory.insert<
+        //   address,
+        //   instruction['offset'],
 
-          TypeMath.Store.I32<entry> extends [
-            infer firstBit extends string,
-            infer secondBit extends string,
-            infer thirdBit extends string,
-            infer fourthBit extends string,
-          ]
-          ? [fourthBit]
-          : never,
+        //   TypeMath.Store.I32<entry> extends [
+        //     infer firstBit extends string,
+        //     infer secondBit extends string,
+        //     infer thirdBit extends string,
+        //     infer fourthBit extends string,
+        //   ]
+        //   ? [fourthBit]
+        //   : never, // TODO broken
 
           state
-        >
+        // >
       >
   : State.Error<instruction, "insufficient stack", state>
 >

@@ -1,11 +1,12 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
+import type { WasmValue } from 'ts-type-math'
 
 export type IConst = {
   kind: "Const"
 
   /** a constant value */
-  value: number
+  value: WasmValue
 }
 
 export type ConstInstruction = IConst

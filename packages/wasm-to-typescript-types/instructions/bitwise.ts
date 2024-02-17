@@ -1,6 +1,7 @@
-import type { Entry, ProgramState } from "../types"
+import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
+import { WasmValue } from "ts-type-math"
 
 export type IAnd = {
   kind: "And"
@@ -73,14 +74,14 @@ export type And<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.BitwiseAnd<a, b>
+        // TypeMath.BitwiseAnd<a, b> // TODO Broken
       ],
       state
     >
@@ -92,14 +93,14 @@ export type Or<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        TypeMath.BitwiseOr<b, a>
+        // TypeMath.BitwiseOr<b, a> // TODO Broken
       ],
 
       state
@@ -112,14 +113,14 @@ export type Xor<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining, 
-        TypeMath.BitwiseXor<b, a>
+        // TypeMath.BitwiseXor<b, a> // TODO Broken
       ],
 
       state
@@ -132,14 +133,14 @@ export type ShiftLeft<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining, 
-        TypeMath.ShiftLeft<b, a>
+        // TypeMath.ShiftLeft<b, a> // TODO Broken
       ],
 
       state
@@ -152,14 +153,14 @@ export type ShiftRight<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
-    ...infer remaining extends Entry[],
-    infer b extends Entry,
-    infer a extends Entry,
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining, 
-        TypeMath.ShiftRight<b, a, instruction['signed']>
+        // TypeMath.ShiftRight<b, a, instruction['signed']> // TODO Broken
       ],
 
       state
