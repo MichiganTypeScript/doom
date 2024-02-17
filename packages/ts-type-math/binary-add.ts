@@ -108,7 +108,7 @@ type StringAdd<
 export type BinaryAdd<
   A extends string,
   B extends string
-> =
+> = Satisfies<string,
   // we reverse the strings so we can add them from right to left
   // there's no simply way in TypeScript to pick a character off the end of a string
   // since we only do this three times (once for A, once for B, and once for the result)
@@ -120,3 +120,4 @@ export type BinaryAdd<
       []
     >
   >
+>

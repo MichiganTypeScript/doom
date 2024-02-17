@@ -5,7 +5,7 @@ import type { ProgramInput, ProgramState, evaluate } from "./types"
 import type { Convert, WasmType, WasmValue } from "ts-type-math"
 
 // set to `number` to disable
-export type StopAt = 1
+export type StopAt = number
 
 type _ProcessInputStack<
   args extends [number[], WasmType[]],
@@ -61,6 +61,7 @@ export type runProgram<
 
       // since the stack is a stack, we need to reverse it
       stack: ProcessInputStack<input>;
+      result: null;
     },
     debugMode
   >
@@ -95,5 +96,5 @@ export type executeInstruction<
   // program execution is complete.  yay.
   // this is the base case of the main loop's recursion
   : debugMode extends true
-    ? evaluate<state>
-    : evaluate<state>['stack'][0]
+    ? evaluate<State.Result.finish<state>>
+    : State.Result.finish<state>

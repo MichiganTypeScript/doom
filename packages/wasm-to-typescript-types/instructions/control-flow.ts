@@ -303,7 +303,7 @@ export type Call<
       // push a new execution context
       State.ExecutionContexts.push<
         {
-          locals: {}, // even though there may be known locals for the function, they are added when they're set with LocalSet
+          locals: {}, // even though there may be known locals for the function (in addition to params), they are added when they're set with LocalSet
           funcId: _funcId,
           branches: {},
         },

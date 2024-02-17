@@ -13,7 +13,7 @@ import type {
   evaluate,
 } from "./types"
 import * as TypeMath from "ts-type-math";
-import { WasmValue, Convert } from 'ts-type-math';
+import { WasmValue, WasmType, Convert } from 'ts-type-math';
 
 export namespace State {
   export type Error<
@@ -49,6 +49,7 @@ export namespace State {
         instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
+        result: state['result'];
         stack: state['stack'];
       }
     >
@@ -71,6 +72,7 @@ export namespace State {
         indirect: state['indirect'];
         memory: state['memory'];
         memorySize: state['memorySize'];
+        result: state['result'];
         stack: state['stack'];
       }
     >
@@ -210,6 +212,7 @@ export namespace State {
         instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
+        result: state['result'];
       }
     >
 
@@ -245,6 +248,7 @@ export namespace State {
           instructions: state['instructions'];
           memory: state['memory'];
           memorySize: state['memorySize'];
+          result: state['result'];
           stack: state['stack'];
         }
       >
@@ -270,6 +274,7 @@ export namespace State {
         instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
+        result: state['result'];
         stack: state['stack'];
       }
     >
@@ -294,6 +299,7 @@ export namespace State {
           instructions: state['instructions'];
           memory: state['memory'];
           memorySize: state['memorySize'];
+          result: state['result'];
           stack: state['stack'];
         }
       : never
@@ -321,6 +327,7 @@ export namespace State {
           instructions: state['instructions'];
           memory: state['memory'];
           memorySize: state['memorySize'];
+          result: state['result'];
           stack: state['stack'];
         }
       >
@@ -449,6 +456,7 @@ export namespace State {
         instructions: state['instructions'];
         memory: state['memory'];
         memorySize: state['memorySize'];
+        result: state['result'];
         stack: state['stack'];
       }
     >
@@ -527,6 +535,7 @@ export namespace State {
         indirect: state['indirect'];
         instructions: state['instructions'];
         memorySize: state['memorySize'];
+        result: state['result'];
         stack: state['stack'];
       }
     >
@@ -548,4 +557,52 @@ export namespace State {
       'TODO lol'
     >
   }
+
+  export namespace Result {
+    export type getWasmType<
+      state extends ProgramState
+    > = Satisfies<WasmType,
+      state['funcs']['$entry']['result']
+    >
+
+    export type get<
+      state extends ProgramState
+    > = Satisfies<number | null,
+      state['result']
+    >
+
+    export type set<
+      state extends ProgramState
+    > = Satisfies<ProgramState,
+      {
+        result:
+          Convert.WasmValue.ToTSNumber<
+            State.Stack.get<state>[0],
+            getWasmType<state>
+          >;
+
+        activeExecutionContext: state['activeExecutionContext'];
+        count: state['count'];
+        executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+        globals: state['globals'];
+        indirect: state['indirect'];
+        instructions: state['instructions'];
+        memory: state['memory'];
+        memorySize: state['memorySize'];
+        stack: state['stack'];
+      }
+    >
+
+    export type finish<
+      state extends ProgramState
+    > = Satisfies<number | null,
+      get<
+        set<state>
+      >
+    >
+  }
 }
+
+type x = Convert.WasmValue.ToTSNumber<'1', 'i32'>
+//   ^?

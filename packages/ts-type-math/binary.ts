@@ -83,8 +83,6 @@ type Process<
       : Process<Div<T, 2>, `1${_Acc}`>
     :never;
 
-export type Precision = 32 | 64;
-
 type PadLeft<
   S extends string,
   N extends number,
@@ -130,10 +128,11 @@ export type ReverseString<T extends string> =
   ? `${ReverseString<Tail>}${Head}`
   : ''
 
-// QUESTION: I have lookup tables for 0-255 (from both binary and decimal).  Would it be better or faster to just check that object real quick first and return that value if it exists?
+// QUESTION: I have lookup tables for 0-255 (from both binary and decimal).
+// Would it be better or faster to just check that object real quick first and return that value if it exists?
 
 export type ToDecimal<T extends string> =
-  _ToDecimal<ReverseString<T>, Precision>;
+  _ToDecimal<ReverseString<T>>;
 
 type _ToDecimal<
   Binary extends string,
@@ -166,9 +165,22 @@ type _ToDecimal<
 export type Bit = '0' | '1';
 
 export type SignBit<
-  Binary extends string
+  binary extends string
 > = Satisfies<Bit,
-  Binary extends `${infer Head extends Bit}${string}`
+  binary extends `${infer Head extends Bit}${string}`
     ? Head
     : never
+>
+
+// type x = ToDecimal<"00000000001100010111100011000110">
+//   ^?
+
+export type AsSigned<
+  binary extends string
+> = Satisfies<number,
+  binary extends `${infer Head extends Bit}${infer remainder extends string}`
+  ? Head extends '0'
+    ? ToDecimal<remainder>
+    : ToDecimal<remainder>
+  : never
 >

@@ -1,3 +1,5 @@
+import { BinaryAdd } from "./binary-add";
+
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 
 
@@ -6,3 +8,12 @@ export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
  * this is a string with either 8, 16, 32 or 64 bits in binary
  */
 export type WasmValue = string;
+
+export namespace Wasm {
+  export type I32Add<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    BinaryAdd<a, b>
+  >
+}

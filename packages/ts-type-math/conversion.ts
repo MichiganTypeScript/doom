@@ -99,6 +99,19 @@ export namespace Convert {
       never
     >
   }
+
+  export namespace WasmValue {
+    export type ToTSNumber<
+      value extends WasmValue,
+      wasmType extends WasmType
+    > = Satisfies<number,
+      wasmType extends 'i32' ? Convert.U32Binary.ToU32Decimal<value> :
+      wasmType extends 'i64' ? Convert.U32Binary.ToU32Decimal<value> : // TODO
+      wasmType extends 'f32' ? never : // TODO
+      wasmType extends 'f64' ? never : // TODO
+      never
+    >
+  }
 }
 
 export namespace Catalog {

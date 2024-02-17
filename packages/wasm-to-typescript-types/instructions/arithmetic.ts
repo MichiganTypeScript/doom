@@ -1,7 +1,7 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
-import { WasmType, WasmValue } from "ts-type-math"
+import { WasmType, WasmValue, Wasm } from "ts-type-math"
 
 export type IAdd = {
   kind: "Add"
@@ -66,6 +66,7 @@ export type Add<
   ? State.Stack.set<
       [
         ...remaining,
+        Wasm.I32Add<a, b>
         // TypeMath.Add<a, b>// TODO Broken
       ],
       state

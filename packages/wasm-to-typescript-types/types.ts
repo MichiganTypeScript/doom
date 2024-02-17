@@ -76,6 +76,9 @@ export type ProgramState = {
 
   /** a stack of values */
   stack: WasmValue[];
+
+  /** the result of the program */
+  result: number | null;
 }
 
 export type ProgramInput = Pick<
