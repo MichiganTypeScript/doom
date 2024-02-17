@@ -1,8 +1,8 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './c-add.actual.d.ts'
+import type { entry } from './c-add.actual'
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 import { Neg, neg } from '../../ts-type-math/test-cases/negative';
 
 const name = 'c-add';

@@ -1,8 +1,8 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './shift-left.actual.d.ts'
-import { shiftLeftTests } from '../../ts-type-math/test-cases/shift-left.ts';
+import type { entry } from './shift-left.actual'
+import { shiftLeftTests } from '../../ts-type-math/test-cases/shift-left';
 
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 import { expect, test } from 'vitest';
 
 const name = 'shift-left';

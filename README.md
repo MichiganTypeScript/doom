@@ -219,4 +219,4 @@ EVERY effort has been taken to not support something that Doom doesn't explicitl
 
 > _"we're not in Kansas anymore"_
 
-- [ShiftRight](./packages/ts-type-math/shift.d.ts)
+- [ShiftRight](./packages/ts-type-math/shift.ts)

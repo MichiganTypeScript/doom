@@ -1,8 +1,8 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './absolute-value.actual.d.ts';
+import type { entry } from './absolute-value.actual';
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 
 const name = 'absolute-value';
 test(name, async () => {

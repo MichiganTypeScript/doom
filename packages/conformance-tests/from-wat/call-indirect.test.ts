@@ -1,8 +1,8 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './call-indirect.actual.d.ts'
+import type { entry } from './call-indirect.actual'
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 
 const name = 'call-indirect';
 test(name, async () => {

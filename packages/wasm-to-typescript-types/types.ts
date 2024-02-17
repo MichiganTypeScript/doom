@@ -1,4 +1,4 @@
-import type { Instruction } from "./instructions/instructions";
+import type { Instruction } from "./instructions/instructions"
 
 export type evaluate<T> = {
   [K in keyof T]: T[K]

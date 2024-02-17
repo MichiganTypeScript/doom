@@ -1,8 +1,8 @@
-import type { entry } from './br-if.actual.d.ts'
+import type { entry } from './br-if.actual'
 import type { Expect, Equal } from 'type-testing';
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 
 const name = 'br-if';
 test(name, async () => {

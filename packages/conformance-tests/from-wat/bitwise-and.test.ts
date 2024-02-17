@@ -1,9 +1,9 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './bitwise-and.actual.d.ts'
+import type { entry } from './bitwise-and.actual'
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.ts'
-import { bitwiseAndTests } from '../../ts-type-math/test-cases/bitwise.ts';
+import { getWasm } from '../utils'
+import { bitwiseAndTests } from '../../ts-type-math/test-cases/bitwise';
 
 const name = 'bitwise-and';
 test(name, async () => {

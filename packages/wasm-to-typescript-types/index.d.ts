@@ -1,2 +1,2 @@
-export type { runProgram } from './program.d.ts'
-export type { Func } from './types.ts'
+export type { runProgram } from './program'
+export type { Func } from './types'

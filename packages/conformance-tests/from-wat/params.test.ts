@@ -1,8 +1,8 @@
-import type { entry } from "./params.actual.d.ts"
+import type { entry } from "./params.actual"
 import type { Expect, Equal } from "type-testing";
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 
 const name = 'params';
 test(name, async () => {

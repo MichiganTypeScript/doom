@@ -1,12 +1,12 @@
 // type e = 1;
-// import type { entry } from "conformance-tests/from-wat/memory.actual.d.ts";
+// import type { entry } from "conformance-tests/from-wat/memory.actual";
 // type e = entry<[2]>; // =>
 
 import type { e } from '../add/add';
 // type e = entry<[97, 10], true>; // =>
 
 
-// import type { entry } from "conformance-tests/from-c/conway.actual.d.ts";
+// import type { entry } from "conformance-tests/from-c/conway.actual";
 // type e = entry<[0]>; // =>
 
 

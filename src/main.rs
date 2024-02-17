@@ -18,7 +18,7 @@ fn main() {
     let wat_path = current_dir.join("../packages/playground/doom/doom.wat");
     let wat = fs::read_to_string(wat_path).unwrap();
     let output = wat_to_dts(wat, "../packages/playground/doom/doom.dump").to_string();
-    fs::write("../packages/playground/code.d.ts", output).unwrap();
+    fs::write("../packages/playground/code.ts", output).unwrap();
 }
 
 #[cfg(test)]
@@ -164,14 +164,14 @@ mod tests {
     fn create_expected_d_ts(source_file: &SourceFile, dir_entry: &DirEntry) -> String {
         let actual = source_file.to_string();
 
-        let path = dir_entry.path().with_extension("actual.d.ts");
+        let path = dir_entry.path().with_extension("actual.ts");
         fs::write(path, &actual).unwrap();
 
         actual
     }
 
     fn get_expected(dir_entry: &DirEntry) -> String {
-        let path = dir_entry.path().with_extension("expected.d.ts");
+        let path = dir_entry.path().with_extension("expected.ts");
         fs::read_to_string(path).unwrap()
     }
 
@@ -227,7 +227,7 @@ mod tests {
     fn run_conformance_tests() {
         /*
 
-        Here's how this works.  We can take two inputs.  One is a .wat file from the `test/from-wat` directory, and the other is a .c file from the `test/from-c` directory.  If it starts as a C file, we generate a .wat from that.  In both cases we generate `.wasm` files.  The `.dump` file is a debug representation of the `.wat` file's parsed contents.  We then generate an `.actual.d.ts` file from our program.  We then compare the `.d.ts` file to the `.expected.d.ts` file.
+        Here's how this works.  We can take two inputs.  One is a .wat file from the `test/from-wat` directory, and the other is a .c file from the `test/from-c` directory.  If it starts as a C file, we generate a .wat from that.  In both cases we generate `.wasm` files.  The `.dump` file is a debug representation of the `.wat` file's parsed contents.  We then generate an `.actual.ts` file from our program.  We then compare the `.d.ts` file to the `.expected.ts` file.
 
         ## from-wat
             1. read .wat
@@ -240,8 +240,8 @@ mod tests {
 
         ## point of convergence
             - parse .wat and write .dump
-            - generate and write actual.d.ts
-            - compare actual.d.ts to expected.d.ts
+            - generate and write actual"
+            - compare actual.ts to expected"
 
         ## runtime tests
             runtime tests are done from javascript, so they need to be run with `pnpm test` in a separate step
@@ -261,7 +261,7 @@ mod tests {
             let source_file = parse_wat_and_dump(dir_entry);
             let actual = create_expected_d_ts(&source_file, dir_entry);
             if OVERWRITE {
-                fs::write(dir_entry.path().with_extension("expected.d.ts"), &actual).unwrap();
+                fs::write(dir_entry.path().with_extension("expected.ts"), &actual).unwrap();
             }
             let expected = get_expected(dir_entry);
 

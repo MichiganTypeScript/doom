@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { getWasmMemory } from '../utils.ts'
-import type { entry } from './hello-world.actual.d.ts'
+import { getWasmMemory } from '../utils'
+import type { entry } from './hello-world.actual'
 import type { Equal, Expect } from 'type-testing';
 import type { ReadMemory } from 'ts-type-math';
 

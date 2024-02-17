@@ -20,10 +20,10 @@
 // I64Sub
 
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './arithmetic.actual.d.ts';
+import type { entry } from './arithmetic.actual';
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 
 const name = 'arithmetic';
 test(name, async () => {

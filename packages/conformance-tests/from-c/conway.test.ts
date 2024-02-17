@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { getWasmMemory } from '../utils.ts'
-import type { entry } from './conway.actual.d.ts'
+import { getWasmMemory } from '../utils'
+import type { entry } from './conway.actual'
 
 const e0 =
 `$$.......

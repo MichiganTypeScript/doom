@@ -1,7 +1,7 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from "./memory.actual.d.ts"
+import type { entry } from "./memory.actual"
 
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 import { expect, test } from 'vitest';
 import { Neg, neg } from '../../ts-type-math/test-cases/negative';
 

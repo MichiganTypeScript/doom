@@ -1,4 +1,4 @@
-// credit: https://github.com/RuyiLi/cursed-typescript/blob/master/random/game-of-life.ts
+// credit: https://github.com/RuyiLi/cursed-typescript/blob/master/random/game-of-life"
 
 type Equals<X, Y> =
   (<T>() => T extends X ? 1 : 2) extends

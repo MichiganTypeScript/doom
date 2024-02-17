@@ -1,7 +1,7 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from "./negate.actual.d.ts"
+import type { entry } from "./negate.actual"
 
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 import { expect, test } from 'vitest';
 
 const name = 'negate';

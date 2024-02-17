@@ -1,8 +1,8 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './add-middle.actual.d.ts'
+import type { entry } from './add-middle.actual'
 
 import { test, expect } from 'vitest';
-import { getWasm } from '../utils.ts'
+import { getWasm } from '../utils'
 
 const name = 'add-middle';
 test(name, async () => {
