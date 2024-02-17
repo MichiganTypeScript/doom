@@ -1,6 +1,6 @@
 import type { Expect, Equal } from 'type-testing';
 import type { entry } from './shift-right-signed.actual'
-import { shiftRightSignedTests } from '../../ts-type-math/test-cases/shift-right'
+import { t, T } from '../../ts-type-math/test-cases/binary-shift-right-signed'
 
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest'
@@ -8,46 +8,45 @@ import { expect, test } from 'vitest'
 const name = 'shift-right-signed';
 test(name, async () => {
   const entry = await getWasm('from-wat', name);
-  expect(shiftRightSignedTests).toHaveLength(28);
-  shiftRightSignedTests.forEach(({ a, b, expected }) => {
+  expect(t).toHaveLength(28);
+  t.forEach(({ a, b, expected }) => {
     expect(entry(a, b) >>> 0).toStrictEqual(expected);
   });
 });
 
-type S = typeof shiftRightSignedTests;
 type i = 2
-type a = S[i]['a']        // =>
-type b = S[i]['b']        // =>
+type a = T[i]['a']        // =>
+type b = T[i]['b']        // =>
 type t = entry<[a, b]>    // =>
-type e = S[i]['expected'] // =>
+type e = T[i]['expected'] // =>
 
 type testCases = [
-  Expect<Equal<entry<[S[ 0]['a'], S[ 0]['b']]>, S[ 0]['expected']>>,
-  Expect<Equal<entry<[S[ 1]['a'], S[ 1]['b']]>, S[ 1]['expected']>>,
-  Expect<Equal<entry<[S[ 2]['a'], S[ 2]['b']]>, S[ 2]['expected']>>,
-  Expect<Equal<entry<[S[ 3]['a'], S[ 3]['b']]>, S[ 3]['expected']>>,
-  Expect<Equal<entry<[S[ 4]['a'], S[ 4]['b']]>, S[ 4]['expected']>>,
-  Expect<Equal<entry<[S[ 5]['a'], S[ 5]['b']]>, S[ 5]['expected']>>,
-  Expect<Equal<entry<[S[ 6]['a'], S[ 6]['b']]>, S[ 6]['expected']>>,
-  Expect<Equal<entry<[S[ 7]['a'], S[ 7]['b']]>, S[ 7]['expected']>>,
-  Expect<Equal<entry<[S[ 8]['a'], S[ 8]['b']]>, S[ 8]['expected']>>,
-  Expect<Equal<entry<[S[ 9]['a'], S[ 9]['b']]>, S[ 9]['expected']>>,
-  Expect<Equal<entry<[S[10]['a'], S[10]['b']]>, S[10]['expected']>>,
-  Expect<Equal<entry<[S[11]['a'], S[11]['b']]>, S[11]['expected']>>,
-  Expect<Equal<entry<[S[12]['a'], S[12]['b']]>, S[12]['expected']>>,
-  Expect<Equal<entry<[S[13]['a'], S[13]['b']]>, S[13]['expected']>>,
-  Expect<Equal<entry<[S[14]['a'], S[14]['b']]>, S[14]['expected']>>,
-  Expect<Equal<entry<[S[15]['a'], S[15]['b']]>, S[15]['expected']>>,
-  Expect<Equal<entry<[S[16]['a'], S[16]['b']]>, S[16]['expected']>>,
-  Expect<Equal<entry<[S[17]['a'], S[17]['b']]>, S[17]['expected']>>,
-  Expect<Equal<entry<[S[18]['a'], S[18]['b']]>, S[18]['expected']>>,
-  Expect<Equal<entry<[S[19]['a'], S[19]['b']]>, S[19]['expected']>>,
-  Expect<Equal<entry<[S[20]['a'], S[20]['b']]>, S[20]['expected']>>,
-  Expect<Equal<entry<[S[21]['a'], S[21]['b']]>, S[21]['expected']>>,
-  Expect<Equal<entry<[S[22]['a'], S[22]['b']]>, S[22]['expected']>>,
-  Expect<Equal<entry<[S[23]['a'], S[23]['b']]>, S[23]['expected']>>,
-  Expect<Equal<entry<[S[24]['a'], S[24]['b']]>, S[24]['expected']>>,
-  Expect<Equal<entry<[S[25]['a'], S[25]['b']]>, S[25]['expected']>>,
-  Expect<Equal<entry<[S[26]['a'], S[26]['b']]>, S[26]['expected']>>,
-  Expect<Equal<entry<[S[27]['a'], S[27]['b']]>, S[27]['expected']>>,
+  Expect<Equal<entry<[T[ 0]['a'], T[ 0]['b']]>, T[ 0]['expected']>>,
+  Expect<Equal<entry<[T[ 1]['a'], T[ 1]['b']]>, T[ 1]['expected']>>,
+  Expect<Equal<entry<[T[ 2]['a'], T[ 2]['b']]>, T[ 2]['expected']>>,
+  Expect<Equal<entry<[T[ 3]['a'], T[ 3]['b']]>, T[ 3]['expected']>>,
+  Expect<Equal<entry<[T[ 4]['a'], T[ 4]['b']]>, T[ 4]['expected']>>,
+  Expect<Equal<entry<[T[ 5]['a'], T[ 5]['b']]>, T[ 5]['expected']>>,
+  Expect<Equal<entry<[T[ 6]['a'], T[ 6]['b']]>, T[ 6]['expected']>>,
+  Expect<Equal<entry<[T[ 7]['a'], T[ 7]['b']]>, T[ 7]['expected']>>,
+  Expect<Equal<entry<[T[ 8]['a'], T[ 8]['b']]>, T[ 8]['expected']>>,
+  Expect<Equal<entry<[T[ 9]['a'], T[ 9]['b']]>, T[ 9]['expected']>>,
+  Expect<Equal<entry<[T[10]['a'], T[10]['b']]>, T[10]['expected']>>,
+  Expect<Equal<entry<[T[11]['a'], T[11]['b']]>, T[11]['expected']>>,
+  Expect<Equal<entry<[T[12]['a'], T[12]['b']]>, T[12]['expected']>>,
+  Expect<Equal<entry<[T[13]['a'], T[13]['b']]>, T[13]['expected']>>,
+  Expect<Equal<entry<[T[14]['a'], T[14]['b']]>, T[14]['expected']>>,
+  Expect<Equal<entry<[T[15]['a'], T[15]['b']]>, T[15]['expected']>>,
+  Expect<Equal<entry<[T[16]['a'], T[16]['b']]>, T[16]['expected']>>,
+  Expect<Equal<entry<[T[17]['a'], T[17]['b']]>, T[17]['expected']>>,
+  Expect<Equal<entry<[T[18]['a'], T[18]['b']]>, T[18]['expected']>>,
+  Expect<Equal<entry<[T[19]['a'], T[19]['b']]>, T[19]['expected']>>,
+  Expect<Equal<entry<[T[20]['a'], T[20]['b']]>, T[20]['expected']>>,
+  Expect<Equal<entry<[T[21]['a'], T[21]['b']]>, T[21]['expected']>>,
+  Expect<Equal<entry<[T[22]['a'], T[22]['b']]>, T[22]['expected']>>,
+  Expect<Equal<entry<[T[23]['a'], T[23]['b']]>, T[23]['expected']>>,
+  Expect<Equal<entry<[T[24]['a'], T[24]['b']]>, T[24]['expected']>>,
+  Expect<Equal<entry<[T[25]['a'], T[25]['b']]>, T[25]['expected']>>,
+  Expect<Equal<entry<[T[26]['a'], T[26]['b']]>, T[26]['expected']>>,
+  Expect<Equal<entry<[T[27]['a'], T[27]['b']]>, T[27]['expected']>>,
 ]

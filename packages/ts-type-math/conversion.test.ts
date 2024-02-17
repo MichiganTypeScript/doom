@@ -4,24 +4,6 @@ import { test } from 'vitest';
 
 test('conversion')
 
-// type tests_U8HexToU8Decimal = [
-//   Expect<Equal<Convert.U8Hex.ToU8Decimal<"00">, 0>>,
-//   Expect<Equal<Convert.U8Hex.ToU8Decimal<"60">, 96>>,
-//   Expect<Equal<Convert.U8Hex.ToU8Decimal<"8c">, 140>>,
-//   Expect<Equal<Convert.U8Hex.ToU8Decimal<"e2">, 226>>,
-//   Expect<Equal<Convert.U8Hex.ToU8Decimal<"f1">, 241>>,
-//   Expect<Equal<Convert.U8Hex.ToU8Decimal<"ff">, 255>>,
-// ]
-
-// type tests_U8DecimalToU8Hex = [
-//   Expect<Equal<Convert.U8Decimal.ToU8Hex<0>,   "00">>,
-//   Expect<Equal<Convert.U8Decimal.ToU8Hex<96>,  "60">>,
-//   Expect<Equal<Convert.U8Decimal.ToU8Hex<140>, "8c">>,
-//   Expect<Equal<Convert.U8Decimal.ToU8Hex<226>, "e2">>,
-//   Expect<Equal<Convert.U8Decimal.ToU8Hex<241>, "f1">>,
-//   Expect<Equal<Convert.U8Decimal.ToU8Hex<255>, "ff">>,
-// ]
-
 type tests_U8BinaryToU8Decimal = [
   Expect<Equal<Convert.U8Binary.ToU8Decimal<"00000000">, 0>>,
   Expect<Equal<Convert.U8Binary.ToU8Decimal<"01100000">, 96>>,

@@ -3,13 +3,13 @@ import type { entry } from './bitwise-and.actual'
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
-import { bitwiseAndTests } from '../../ts-type-math/test-cases/bitwise';
+import { t, T } from '../../ts-type-math/test-cases/binary-and';
 
 const name = 'bitwise-and';
 test(name, async () => {
   const entry = await getWasm('from-wat', name);
-  expect(bitwiseAndTests).toHaveLength(24);
-  bitwiseAndTests.forEach(({ a, b, e }) => {
+  expect(t).toHaveLength(24);
+  t.forEach(({ a, b, e }) => {
     expect(entry(a, b) >>> 0).toStrictEqual(e);
   });
 });
@@ -19,8 +19,6 @@ type a = T[i]['a']     // =>
 type b = T[i]['b']     // =>
 type e = T[i]['e']     // =>
 type t = entry<[a, b]> // =>
-
-type T = typeof bitwiseAndTests;
 
 type testCases = [
   Expect<Equal<entry<[T[ 0]['a'], T[ 0]['b']]>, T[ 0]['e']>>,

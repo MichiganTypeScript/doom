@@ -7,48 +7,36 @@ type Reverse<
   ? `${Reverse<R>}${L}`
   : ''
 
-/**
- * A lookup table to convert a digit to a counter
- * It's possible to do this recursively with comparable performance but it takes up recursions, which this is optimized to also keep to a minimum
- */
-type _DigitToCounter = {
-  '0': [],
-  '1': [1],
-  '2': [1, 1],
-  '3': [1, 1, 1],
-  '4': [1, 1, 1, 1],
-  '5': [1, 1, 1, 1, 1],
-  '6': [1, 1, 1, 1, 1, 1],
-  '7': [1, 1, 1, 1, 1, 1, 1],
-  '8': [1, 1, 1, 1, 1, 1, 1, 1],
-  '9': [1, 1, 1, 1, 1, 1, 1, 1, 1],
-}
-
 type DigitToCounter<T extends string> =
-  T extends keyof _DigitToCounter
-  ? _DigitToCounter[T]
-  : never
-
+  T extends '0'
+  ? []
+  : [1]
 
 type Calculation = {
   digit: string,
   carry: Counter,
 }
 
-//                 0  1  2  3  4  5  6  7  8  9
-type TenCounter = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-
 /** this creates a Calculation for the addition */
 type Calculate<T extends Counter> =
-  T extends [...TenCounter, ...infer Remainder]
-  ? {
-    digit: `${Remainder['length']}`
-    carry: [1]
-  }
-  : {
-    digit: `${T['length']}`
-    carry: []
-  }
+  T['length'] extends 0 ? { digit: '0', carry: [] } :
+  T['length'] extends 1 ? { digit: '1', carry: [] } :
+  T['length'] extends 2 ? { digit: '0', carry: [1] } :
+  T['length'] extends 3 ? { digit: '1', carry: [1] } :
+  never
+
+  // QUESTION: is this faster?
+  // vvvvvvvvvvvvvvvvvvvvvvvvv
+  // T extends [1, 1, ...infer Remainder]
+  // ? {
+  //   digit: `${Remainder['length']}`
+  //   carry: [1]
+  // }
+  // : {
+  //   digit: `${T['length']}`
+  //   carry: []
+  // }
+
 
 /** This function's purpose in life is to avoid needing to calculate C twice */
 type AppendCalculation<
@@ -115,7 +103,9 @@ type StringAdd<
         : // there was a carry, base case of recursion
           '1'
 
-export type Sum<
+// type x = BinaryAdd<"1", "1"> // =>
+
+export type BinaryAdd<
   A extends string,
   B extends string
 > =

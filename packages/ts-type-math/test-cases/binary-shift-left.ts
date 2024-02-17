@@ -1,4 +1,4 @@
-export const shiftLeftTests = [
+export const t = [
   {
     a: 0,
     b: 0,
@@ -91,3 +91,5 @@ export const shiftLeftTests = [
     e_binary: '00000000100101101011010000111000',
   },
 ] as const;
+
+export type T = typeof t

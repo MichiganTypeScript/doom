@@ -1,6 +1,6 @@
 import type { Expect, Equal } from 'type-testing';
 import type { entry } from './shift-left.actual'
-import { shiftLeftTests } from '../../ts-type-math/test-cases/shift-left';
+import { t, T } from '../../ts-type-math/test-cases/binary-shift-left';
 
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest';
@@ -8,8 +8,8 @@ import { expect, test } from 'vitest';
 const name = 'shift-left';
 test(name, async () => {
   const entry = await getWasm('from-wat', name);
-  expect(shiftLeftTests).toHaveLength(13);
-  shiftLeftTests.forEach(({ a, b, expected }) => {
+  expect(t).toHaveLength(13);
+  t.forEach(({ a, b, expected }) => {
     expect(entry(a, b)).toStrictEqual(expected);
   });
 });
@@ -19,8 +19,6 @@ type a = T[i]['a']        // =>
 type b = T[i]['b']        // =>
 type e = T[i]['expected'] // =>
 type t = entry<[a, b]>    // =>
-
-type T = typeof shiftLeftTests;
 
 type testCases = [
   Expect<Equal<entry<[T[ 0]['a'], T[ 0]['b']]>, T[ 0]['expected']>>,
