@@ -1,4 +1,4 @@
-import type { Entry, MemoryAddress, ProgramState } from "../types.d.ts";
+import type { Entry, MemoryAddress, ProgramState } from "../types.ts";
 import type { State } from '../state.d.ts'
 import * as TypeMath from "ts-type-math"
 import { U8Binary } from "../../ts-type-math/conversion";

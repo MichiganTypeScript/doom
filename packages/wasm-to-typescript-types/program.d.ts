@@ -1,7 +1,7 @@
 import type { Instruction, selectInstruction } from "./instructions/instructions.d.ts"
 import type { IHalt } from "./instructions/synthetic.d.ts";
 import type { State } from "./state.d.ts";
-import type { ProgramInput, ProgramState, evaluate } from "./types.d.ts";
+import type { ProgramInput, ProgramState, evaluate } from "./types.ts";
 
 // set to `number` to disable
 export type StopAt = number

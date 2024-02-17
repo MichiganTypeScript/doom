@@ -1,4 +1,4 @@
-import type { Entry, Func, Param, ProgramState } from "../types.d.ts";
+import type { Entry, Func, Param, ProgramState } from "../types.ts";
 import type { State } from '../state.d.ts'
 import type { Instruction } from "./instructions.ts";
 

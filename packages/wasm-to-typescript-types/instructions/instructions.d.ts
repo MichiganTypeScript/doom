@@ -1,4 +1,4 @@
-import type { ProgramState } from "../types.d.ts"
+import type { ProgramState } from "../types.ts"
 import type { State } from '../state.d.ts'
 import type { ArithmeticInstruction, HandleArithmeticInstructions } from "./arithmetic.d.ts"
 import type { BitwiseInstruction, HandleBitwiseInstructions } from "./bitwise.d.ts"

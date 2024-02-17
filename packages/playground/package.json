@@ -7,8 +7,7 @@
     "wasm-to-wat": "wasm2wat code.wasm --enable-code-metadata --inline-exports --inline-imports --disable-reference-types --generate-names --fold-exprs --output=code.wat",
     "c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
     "wat-to-wasm": "wat2wasm code.wat --output code.wasm",
-    "stack-size": "node --stack-size=8000 ./evaluate/determine-stack-size.mjs",
     "test": "vitest",
-    "playground": "node --stack-size=8000 ./evaluate/evaluate-with-cli.mjs"
+    "playground": "node --stack-size=8100 --import tsx/esm ./evaluate/run-playground.ts"
   }
 }

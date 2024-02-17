@@ -3,6 +3,7 @@
 ## Implementation improvements
 
 ## Refactors
+- remove all .d.ts files wherever possible because of automatic ingesting
 
 ## Other
 

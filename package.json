@@ -14,8 +14,11 @@
   "dependencies": {
     "@types/node": "^20.11.5",
     "@types/ramda": "^0.29.10",
+    "@typescript/vfs": "^1.5.0",
+    "lz-string": "^1.5.0",
     "ramda": "0.29.1",
     "ts-arithmetic": "^0.1.1",
+    "ts-node": "^10.9.2",
     "ts-toolbelt": "^9.6.0",
     "tsx": "^4.7.0",
     "type-testing": "^0.2.0",

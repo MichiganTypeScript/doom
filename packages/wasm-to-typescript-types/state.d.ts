@@ -13,7 +13,7 @@ import type {
   Param,
   ProgramState,
   evaluate,
-} from "./types.d.ts";
+} from "./types.ts";
 import * as TypeMath from "ts-type-math";
 
 export namespace State {

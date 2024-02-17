@@ -1,4 +1,4 @@
-import type { ProgramState } from "../types.d.ts"
+import type { ProgramState } from "../types.ts"
 import type { Instruction } from "./instructions.d.ts"
 import type { State } from '../state.d.ts'
 
