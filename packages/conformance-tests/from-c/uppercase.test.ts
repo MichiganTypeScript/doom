@@ -18,8 +18,8 @@ test(name, async () => {
   expect(await entry( 68 /* 'D' */)).toStrictEqual('D' /* 68 */);
 });
 
-// type Greeting = ReadMemory<entry<[97], true>>;
+type Greeting = ReadMemory<entry<[97], true>>;
 
-// type testCases = [
-//   Expect<Equal<Greeting, typeof greeting>>,
-// ]
+type testCases = [
+  Expect<Equal<Greeting, "A">>,
+]

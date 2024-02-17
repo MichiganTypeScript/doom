@@ -1,8 +1,9 @@
 import type { Expect, Equal } from "type-testing";
-import type { AsciiToU8Binary, AsciiToU8Decimal, ReadMemory, Store, StoreString, U8BinaryToAscii, U8DecimalToAscii } from "./store";
+import type { AsciiToU8Binary, AsciiToU8Decimal, Store, StoreString, U8BinaryToAscii, U8DecimalToAscii } from "./store";
 import { test } from 'vitest';
-test('conversion')
+import { ReadStringFromMemory } from "./memory-read-string";
 
+test('conversion')
 
 type atodtoa = U8DecimalToAscii<AsciiToU8Decimal<"from ascii to decimal and back">>;
 //   ^?
@@ -11,7 +12,7 @@ type atobtoa = U8BinaryToAscii<AsciiToU8Binary<"from ascii to binary and back">>
 //   ^?
 
 type write = StoreString<1024, "Let's hope this works..\u0000">;
-type read = ReadMemory<{ memory: write, stack: [1024] }>;
+type read = ReadStringFromMemory<{ memory: write, stack: [1024] }>;
 
 type encode = [
   Expect<Equal<write, {

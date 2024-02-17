@@ -31,5 +31,5 @@ test(name, async () => {
 });
 
 type testCases = [
-  // TODO
+  // Expect<Equal<TODO
 ]
