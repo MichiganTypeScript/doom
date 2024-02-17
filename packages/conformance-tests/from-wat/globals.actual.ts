@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $setGlobal = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 42 },
@@ -14,7 +15,8 @@ type $setGlobal = Satisfies<Func, {
 type $getGlobal = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$myGlobal' },
@@ -24,7 +26,8 @@ type $getGlobal = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$setGlobal' },

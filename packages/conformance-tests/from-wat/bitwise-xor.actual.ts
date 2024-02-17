@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $xor = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
-  result: number;
+  paramsTypes: ['i32', 'i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
@@ -15,7 +16,8 @@ type $xor = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
-  result: number;
+  paramsTypes: ['i32', 'i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },

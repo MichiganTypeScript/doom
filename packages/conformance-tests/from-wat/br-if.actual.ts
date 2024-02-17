@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $brif = Satisfies<Func, {
   kind: 'func';
   params: ['$x'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: ['$result'];
     instructions: [
       { kind: 'Block';
@@ -43,7 +44,8 @@ type $brif = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },

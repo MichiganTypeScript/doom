@@ -1,8 +1,10 @@
-use crate::handle_instructions::handle_func;
-use crate::source_file::SourceFile;
+use crate::source_file::{ModuleType, SourceFile};
+use crate::utils::format_id;
+use crate::{handle_instructions::handle_func, utils::format_val_type};
 use std::collections::HashMap;
 use std::str;
 use wast::core::{DataVal, Func, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField};
+use wast::token::Index;
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
     source.add_import("wasm-to-typescript-types", "Func");
@@ -18,37 +20,46 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
         source.set_args(String::from("[]"));
     }
 
-    let params_and_result = func
-        .ty
-        .inline
-        .clone()
-        .map(|function_type| {
-            let params = function_type
-                .params
-                .iter()
-                .map(|(id, _, _)| {
+    let params_and_result: String = if func.ty.inline.clone().is_some() {
+        func.ty
+            .inline
+            .clone()
+            .map(|function_type| {
+                let params_and_types = function_type.params.iter().map(|(id, _, val_type)| {
                     let id = id.expect("params must have an id").name();
-                    format!("'${id}'")
-                })
-                .collect::<Vec<String>>()
-                .join(", ");
+                    (format!("'${id}'"), format_val_type(val_type))
+                });
 
-            if name == "$entry" {
-                let internals = (0..function_type.params.len()).map(|_| "number").collect::<Vec<&str>>().join(", ");
-                source.set_args(format!("[{internals}]"));
-            }
+                let params = &params_and_types.clone().map(|(id, _)| id.clone()).collect::<Vec<String>>().join(", ");
+                let params_types = &params_and_types.map(|(_, val_type)| val_type.clone()).collect::<Vec<String>>().join(", ");
 
-            let result = "number";
+                if name == "$entry" {
+                    let internals = (0..function_type.params.len()).map(|_| "number").collect::<Vec<&str>>().join(", ");
+                    source.set_args(format!("[{internals}]"));
+                }
 
-            format!(
-                "  params: [{params}];
-  result: {result};"
-            )
-        })
-        .unwrap_or(String::from(
-            "  params: [];
-  result: number;",
-        ));
+                let result = function_type
+                    .results
+                    .first()
+                    .map(|val_type| format_val_type(val_type))
+                    .unwrap_or("never".to_string())
+                    .to_string();
+
+                format!("  params: [{params}];\n  paramsTypes: [{params_types}];\n  result: {result};")
+            })
+            .expect("better have an inline type because we already checked")
+    } else if func.ty.index.is_some() {
+        let id = match func.ty.index {
+            Some(Index::Id(id)) => format_id(&id),
+            _ => panic!("only id indexes supported for type use"),
+        };
+        let ModuleType { params, result } = source.get_module_type(&id).expect("looking for a module type that doesn't exist");
+        let p = params.join(", ");
+
+        format!("  params: [];\n  paramsTypes: [{p}];\n  result: {result};")
+    } else {
+        String::from("  params: [];\n  paramsTypes: [];\n  result: never;")
+    };
 
     let instructions_and_locals = handle_func(func);
 
@@ -76,7 +87,6 @@ fn handle_module_field_global(source: &SourceFile, global: &Global) {
             match first {
                 Instruction::I32Const(value) => value.to_string(),
                 _ => {
-                    dbg!(first);
                     panic!("inline global to have a first instruction of i32.const");
                 }
             }
@@ -137,9 +147,9 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
                 *count += 1;
                 handle_module_field_memory(source, memory);
             }
-            ModuleField::Table(table) => {
+            ModuleField::Table(_table) => {
                 // handled by ModuleField::Elem
-                dbg!(table);
+                // dbg!(table);
             }
             ModuleField::Elem(element) => {
                 // it's assumed there's exactly one table and exactly one element
@@ -183,7 +193,8 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
                 dbg!(field);
                 panic!("intentionally not implemented module field");
             }
-            ModuleField::Type(_) => {
+            ModuleField::Type(module_type) => {
+                source.add_module_type(module_type);
                 // intentionally ignored
             }
         }

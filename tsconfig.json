@@ -25,6 +25,10 @@
   },
   "exclude": [
     // "./packages/conformance-tests/from-c/*.test.ts", // stay
+    // "./packages/conformance-tests/from-c/c-add.test.ts", // stay
+    // "./packages/conformance-tests/from-c/conway.test.ts", // stay
+    // "./packages/conformance-tests/from-c/hello-world.test.ts", // stay
+    // "./packages/conformance-tests/from-c/uppercase.test.ts", // stay
     // "./packages/conformance-tests/from-wat/*.test.ts", // stay
     // "./packages/conformance-tests/from-wat/absolute-value.test.ts",
     // "./packages/conformance-tests/from-wat/add-middle.test.ts",

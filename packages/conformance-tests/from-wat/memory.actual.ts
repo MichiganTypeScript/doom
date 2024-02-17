@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $storeValue = Satisfies<Func, {
   kind: 'func';
   params: ['$index', '$value'];
-  result: number;
+  paramsTypes: ['i32', 'i32'];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$index' },
@@ -17,7 +18,8 @@ type $storeValue = Satisfies<Func, {
 type $loadValue = Satisfies<Func, {
   kind: 'func';
   params: ['$index'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$index' },
@@ -30,7 +32,8 @@ type $loadValue = Satisfies<Func, {
 type $foo = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Const'; value: 2 },
@@ -39,14 +42,15 @@ type $foo = Satisfies<Func, {
       { kind: 'Const'; value: 2 },
       { kind: 'Call'; id: '$loadValue' },
       { kind: 'Const'; value: 1 },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
     ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$value'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$value' },

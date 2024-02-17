@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { getWasmMemory } from '../utils'
 import type { entry } from './hello-world.actual'
 import type { Equal, Expect } from 'type-testing';
-import type { ReadMemory } from 'ts-type-math';
+import type { ReadStringFromMemory } from 'ts-type-math';
 
 const greeting = `Greetings humans, I am Ziltoid... the omniscient.
 I have come far from across the Omniverse.
@@ -16,7 +16,7 @@ test(name, async () => {
   expect(await entry(0)).toStrictEqual(greeting);
 });
 
-type Greeting = ReadMemory<entry<[], true>>;
+type Greeting = ReadStringFromMemory<entry<[], true>>;
 
 type testCases = [
   Expect<Equal<Greeting, typeof greeting>>,

@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $__wasm_call_ctors = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$emscripten_stack_init' },
@@ -13,7 +14,8 @@ type $__wasm_call_ctors = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
-  result: number;
+  paramsTypes: ['i32', 'i32'];
+  result: 'i32';
     locals: ['$stack_pointer', '$stack_size', '$this_stack', '$stack_a', '$stack_b', '$result'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -38,7 +40,7 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$stack_b' },
       { kind: 'LocalGet'; id: '$stack_a' },
       { kind: 'LocalGet'; id: '$stack_b' },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'LocalSet'; id: '$result' },
       { kind: 'LocalGet'; id: '$result' },
       { kind: 'Return'; count: 1 },
@@ -48,14 +50,15 @@ type $entry = Satisfies<Func, {
 type $emscripten_stack_init = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 5243920 },
       { kind: 'GlobalSet'; id: '$__stack_base' },
       { kind: 'Const'; value: 1028 },
       { kind: 'Const'; value: 15 },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: -16 },
       { kind: 'And' },
       { kind: 'GlobalSet'; id: '$__stack_end' },

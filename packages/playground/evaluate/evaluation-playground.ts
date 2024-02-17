@@ -13,8 +13,8 @@
 // type e = entry<[0]>
 
 
-import type { ReadMemory } from "ts-type-math";
+import type { ReadStringFromMemory } from "ts-type-math";
 import type { entry } from "conformance-tests/from-c/uppercase.actual";
-export type e = ReadMemory<entry<[97], true>>
+export type e = ReadStringFromMemory<entry<[97], true>>
 
 export type Evaluate = e // =>

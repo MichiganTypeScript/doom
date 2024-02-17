@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $example = Satisfies<Func, {
   kind: 'func';
   params: ['$n', '$control'];
-  result: number;
+  paramsTypes: ['i32', 'i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$control' },
@@ -13,7 +14,7 @@ type $example = Satisfies<Func, {
         then: [
           { kind: 'Const'; value: 101 },
           { kind: 'LocalGet'; id: '$n' },
-          { kind: 'Add' },
+          { kind: 'Add', type: 'i32' },
         ];
         else: [
           { kind: 'LocalGet'; id: '$control' },
@@ -43,14 +44,14 @@ type $example = Satisfies<Func, {
                     else: [
                       { kind: 'Const'; value: 104 },
                       { kind: 'LocalGet'; id: '$n' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                     ];
                   },
                 ];
                 else: [
                   { kind: 'Const'; value: 105 },
                   { kind: 'LocalGet'; id: '$n' },
-                  { kind: 'Add' },
+                  { kind: 'Add', type: 'i32' },
                 ];
               },
             ];
@@ -63,7 +64,8 @@ type $example = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
-  result: number;
+  paramsTypes: ['i32', 'i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },

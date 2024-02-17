@@ -4,15 +4,21 @@ use std::{
 };
 
 use indexmap::{IndexMap, IndexSet};
-use wast::core::Elem;
+use wast::core::{Elem, Type};
 
-use crate::utils::format_index;
+use crate::utils::{format_id, format_index, format_val_type};
 
 struct MemoryData {
     index: i32,
     name: String,
     data: String,
     readonly: bool,
+}
+
+#[derive(Clone)]
+pub struct ModuleType {
+    pub params: Vec<String>,
+    pub result: String,
 }
 
 /// This represents is a literal TypeScript file that is the final build output of the program
@@ -37,6 +43,9 @@ pub struct SourceFile {
 
     /// the arguments constraint to the entry function
     args: RefCell<String>,
+
+    // module types.  rarely needed, but unfortunately not never needed
+    module_types: RefCell<IndexMap<String, ModuleType>>,
 }
 
 impl fmt::Debug for SourceFile {
@@ -152,6 +161,7 @@ impl SourceFile {
             indirect: RefCell::new(Vec::new()),
             memory: RefCell::new((0, 0)),
             types: RefCell::new(IndexMap::new()),
+            module_types: RefCell::new(IndexMap::new()),
         }
     }
 
@@ -191,5 +201,33 @@ impl SourceFile {
 
     pub fn set_args(&self, args: String) {
         self.args.replace(args);
+    }
+
+    pub fn add_module_type(&self, module_type: &Type) {
+        let (params, result) = match module_type.def {
+            wast::core::TypeDef::Func(ref function_type) => {
+                let params = function_type.params.iter().map(|(_, _, val)| format_val_type(val)).collect();
+
+                if function_type.results.len() > 1 {
+                    panic!("multiple results not supported");
+                }
+                let result = if let Some(val) = function_type.results.first() {
+                    format_val_type(val)
+                } else {
+                    "never".to_string()
+                };
+
+                (params, result)
+            }
+            _ => panic!("only Func TypeDef supported"),
+        };
+
+        let name = format_id(&module_type.id.expect("module type to have a name"));
+
+        self.module_types.borrow_mut().insert(name, ModuleType { params, result });
+    }
+
+    pub fn get_module_type(&self, name: &String) -> Option<ModuleType> {
+        self.module_types.borrow().get(name).cloned()
     }
 }

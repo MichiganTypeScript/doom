@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $if = Satisfies<Func, {
   kind: 'func';
   params: ['$n', '$control'];
-  result: number;
+  paramsTypes: ['i32', 'i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$n' },
@@ -18,14 +19,15 @@ type $if = Satisfies<Func, {
           { kind: 'Const'; value: -1 },
         ];
       },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
     ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
-  result: number;
+  paramsTypes: ['i32', 'i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },

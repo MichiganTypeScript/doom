@@ -3,21 +3,23 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $main = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: ['$var'];
     instructions: [
       { kind: 'Const'; value: 10 },
       { kind: 'LocalSet'; id: '$var' },
       { kind: 'LocalGet'; id: '$var' },
       { kind: 'Const'; value: 1 },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
     ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$main' },

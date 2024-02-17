@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $abs_f64 = Satisfies<Func, {
   kind: 'func';
   params: ['$x'];
-  result: number;
+  paramsTypes: ['f64'];
+  result: 'f64';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$x' },
@@ -14,7 +15,8 @@ type $abs_f64 = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
-  result: number;
+  paramsTypes: ['f64'];
+  result: 'f64';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },

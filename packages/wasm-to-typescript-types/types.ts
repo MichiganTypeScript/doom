@@ -23,7 +23,8 @@ export type Param = string;
 export type Func = {
   kind: 'func';
   params: Param[];
-  result: number;
+  paramsTypes: WasmType[];
+  result: WasmType | never;
   locals: string[];
   instructions: Instruction[];
 }
@@ -39,7 +40,7 @@ export type Reverse<T extends any[]> =
   ? [...Reverse<tail>, head]
   : []
 
-export type CorePrimitive = 'i32' | 'i64' | 'f32' | 'f64';
+export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 
 export type StorageBits = 8 | 16 | 32 | 64;
 

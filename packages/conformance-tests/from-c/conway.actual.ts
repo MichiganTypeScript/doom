@@ -4,7 +4,8 @@ import type { StoreString } from 'ts-type-math'
 type $__wasm_call_ctors = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$emscripten_stack_init' },
@@ -14,7 +15,8 @@ type $__wasm_call_ctors = Satisfies<Func, {
 type $countAliveNeighbors = Satisfies<Func, {
   kind: 'func';
   params: ['$p0', '$p1', '$p2', '$p3', '$p4', '$p5'];
-  result: number;
+  paramsTypes: ['i32', 'i32', 'i32', 'i32', 'i32', 'i32'];
+  result: never;
     locals: ['$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14', '$l15', '$l16', '$l17', '$l18', '$l19', '$l20', '$l21', '$l22', '$l23', '$l24', '$l25', '$l26', '$l27', '$l28', '$l29', '$l30', '$l31', '$l32', '$l33', '$l34', '$l35', '$l36', '$l37', '$l38', '$l39', '$l40', '$l41', '$l42', '$l43', '$l44', '$l45', '$l46', '$l47', '$l48', '$l49', '$l50', '$l51', '$l52', '$l53', '$l54', '$l55', '$l56', '$l57', '$l58', '$l59', '$l60', '$l61', '$l62', '$l63', '$l64', '$l65', '$l66', '$l67', '$l68', '$l69', '$l70', '$l71', '$l72', '$l73', '$l74', '$l75', '$l76', '$l77', '$l78', '$l79', '$l80', '$l81', '$l82', '$l83'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -144,7 +146,7 @@ type $countAliveNeighbors = Satisfies<Func, {
                           { kind: 'LocalSet'; id: '$l30' },
                           { kind: 'LocalGet'; id: '$l29' },
                           { kind: 'LocalGet'; id: '$l30' },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalSet'; id: '$l31' },
                           { kind: 'LocalGet'; id: '$l8' },
                           { kind: 'LocalGet'; id: '$l31' },
@@ -157,7 +159,7 @@ type $countAliveNeighbors = Satisfies<Func, {
                           { kind: 'LocalSet'; id: '$l33' },
                           { kind: 'LocalGet'; id: '$l32' },
                           { kind: 'LocalGet'; id: '$l33' },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalSet'; id: '$l34' },
                           { kind: 'LocalGet'; id: '$l8' },
                           { kind: 'LocalGet'; id: '$l34' },
@@ -269,14 +271,14 @@ type $countAliveNeighbors = Satisfies<Func, {
                               { kind: 'LocalSet'; id: '$l66' },
                               { kind: 'LocalGet'; id: '$l63' },
                               { kind: 'LocalGet'; id: '$l66' },
-                              { kind: 'Add' },
+                              { kind: 'Add', type: 'i32' },
                               { kind: 'LocalSet'; id: '$l67' },
                               { kind: 'LocalGet'; id: '$l8' },
                               { kind: 'I32Load'; offset: 8 },
                               { kind: 'LocalSet'; id: '$l68' },
                               { kind: 'LocalGet'; id: '$l67' },
                               { kind: 'LocalGet'; id: '$l68' },
-                              { kind: 'Add' },
+                              { kind: 'Add', type: 'i32' },
                               { kind: 'LocalSet'; id: '$l69' },
                               { kind: 'LocalGet'; id: '$l69' },
                               { kind: 'I32Load8u'; offset: 0 },
@@ -304,7 +306,7 @@ type $countAliveNeighbors = Satisfies<Func, {
                               { kind: 'LocalSet'; id: '$l76' },
                               { kind: 'LocalGet'; id: '$l75' },
                               { kind: 'LocalGet'; id: '$l76' },
-                              { kind: 'Add' },
+                              { kind: 'Add', type: 'i32' },
                               { kind: 'LocalSet'; id: '$l77' },
                               { kind: 'LocalGet'; id: '$l74' },
                               { kind: 'LocalGet'; id: '$l77' },
@@ -320,7 +322,7 @@ type $countAliveNeighbors = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l79' },
                       { kind: 'LocalGet'; id: '$l78' },
                       { kind: 'LocalGet'; id: '$l79' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l80' },
                       { kind: 'LocalGet'; id: '$l8' },
                       { kind: 'LocalGet'; id: '$l80' },
@@ -338,7 +340,7 @@ type $countAliveNeighbors = Satisfies<Func, {
               { kind: 'LocalSet'; id: '$l82' },
               { kind: 'LocalGet'; id: '$l81' },
               { kind: 'LocalGet'; id: '$l82' },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$l83' },
               { kind: 'LocalGet'; id: '$l8' },
               { kind: 'LocalGet'; id: '$l83' },
@@ -356,7 +358,8 @@ type $countAliveNeighbors = Satisfies<Func, {
 type $updateGrid = Satisfies<Func, {
   kind: 'func';
   params: ['$p0', '$p1', '$p2'];
-  result: number;
+  paramsTypes: ['i32', 'i32', 'i32'];
+  result: never;
     locals: ['$l3', '$l4', '$l5', '$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14', '$l15', '$l16', '$l17', '$l18', '$l19', '$l20', '$l21', '$l22', '$l23', '$l24', '$l25', '$l26', '$l27', '$l28', '$l29', '$l30', '$l31', '$l32', '$l33', '$l34', '$l35', '$l36', '$l37', '$l38', '$l39', '$l40', '$l41', '$l42', '$l43', '$l44', '$l45', '$l46', '$l47', '$l48', '$l49', '$l50', '$l51', '$l52', '$l53', '$l54', '$l55', '$l56', '$l57', '$l58', '$l59', '$l60', '$l61', '$l62', '$l63', '$l64', '$l65', '$l66', '$l67', '$l68', '$l69', '$l70', '$l71', '$l72', '$l73', '$l74', '$l75', '$l76', '$l77', '$l78', '$l79', '$l80', '$l81', '$l82', '$l83', '$l84', '$l85', '$l86', '$l87', '$l88', '$l89', '$l90', '$l91', '$l92', '$l93', '$l94', '$l95', '$l96', '$l97', '$l98', '$l99', '$l100', '$l101', '$l102', '$l103', '$l104', '$l105', '$l106', '$l107', '$l108', '$l109', '$l110', '$l111', '$l112', '$l113', '$l114', '$l115', '$l116', '$l117', '$l118', '$l119', '$l120', '$l121', '$l122'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -465,7 +468,7 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l27' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'LocalGet'; id: '$l27' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l28' },
                       { kind: 'LocalGet'; id: '$l28' },
                       { kind: 'LocalSet'; id: '$l29' },
@@ -490,14 +493,14 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l33' },
                       { kind: 'LocalGet'; id: '$l30' },
                       { kind: 'LocalGet'; id: '$l33' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l34' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'I32Load'; offset: 24 },
                       { kind: 'LocalSet'; id: '$l35' },
                       { kind: 'LocalGet'; id: '$l34' },
                       { kind: 'LocalGet'; id: '$l35' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l36' },
                       { kind: 'LocalGet'; id: '$l36' },
                       { kind: 'I32Load8u'; offset: 0 },
@@ -611,7 +614,7 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l68' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'LocalGet'; id: '$l68' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l69' },
                       { kind: 'LocalGet'; id: '$l69' },
                       { kind: 'LocalSet'; id: '$l70' },
@@ -623,14 +626,14 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l72' },
                       { kind: 'LocalGet'; id: '$l70' },
                       { kind: 'LocalGet'; id: '$l72' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l73' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'I32Load'; offset: 24 },
                       { kind: 'LocalSet'; id: '$l74' },
                       { kind: 'LocalGet'; id: '$l73' },
                       { kind: 'LocalGet'; id: '$l74' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l75' },
                       { kind: 'LocalGet'; id: '$l75' },
                       { kind: 'LocalGet'; id: '$l66' },
@@ -642,7 +645,7 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l77' },
                       { kind: 'LocalGet'; id: '$l76' },
                       { kind: 'LocalGet'; id: '$l77' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l78' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'LocalGet'; id: '$l78' },
@@ -660,7 +663,7 @@ type $updateGrid = Satisfies<Func, {
               { kind: 'LocalSet'; id: '$l80' },
               { kind: 'LocalGet'; id: '$l79' },
               { kind: 'LocalGet'; id: '$l80' },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$l81' },
               { kind: 'LocalGet'; id: '$l5' },
               { kind: 'LocalGet'; id: '$l81' },
@@ -746,7 +749,7 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l99' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'LocalGet'; id: '$l99' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l100' },
                       { kind: 'LocalGet'; id: '$l100' },
                       { kind: 'LocalSet'; id: '$l101' },
@@ -758,14 +761,14 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l103' },
                       { kind: 'LocalGet'; id: '$l101' },
                       { kind: 'LocalGet'; id: '$l103' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l104' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'I32Load'; offset: 12 },
                       { kind: 'LocalSet'; id: '$l105' },
                       { kind: 'LocalGet'; id: '$l104' },
                       { kind: 'LocalGet'; id: '$l105' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l106' },
                       { kind: 'LocalGet'; id: '$l106' },
                       { kind: 'I32Load8u'; offset: 0 },
@@ -784,14 +787,14 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l111' },
                       { kind: 'LocalGet'; id: '$l108' },
                       { kind: 'LocalGet'; id: '$l111' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l112' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'I32Load'; offset: 12 },
                       { kind: 'LocalSet'; id: '$l113' },
                       { kind: 'LocalGet'; id: '$l112' },
                       { kind: 'LocalGet'; id: '$l113' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l114' },
                       { kind: 'LocalGet'; id: '$l114' },
                       { kind: 'LocalGet'; id: '$l107' },
@@ -803,7 +806,7 @@ type $updateGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l116' },
                       { kind: 'LocalGet'; id: '$l115' },
                       { kind: 'LocalGet'; id: '$l116' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l117' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'LocalGet'; id: '$l117' },
@@ -821,7 +824,7 @@ type $updateGrid = Satisfies<Func, {
               { kind: 'LocalSet'; id: '$l119' },
               { kind: 'LocalGet'; id: '$l118' },
               { kind: 'LocalGet'; id: '$l119' },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$l120' },
               { kind: 'LocalGet'; id: '$l5' },
               { kind: 'LocalGet'; id: '$l120' },
@@ -836,7 +839,7 @@ type $updateGrid = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$l121' },
       { kind: 'LocalGet'; id: '$l5' },
       { kind: 'LocalGet'; id: '$l121' },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'LocalSet'; id: '$l122' },
       { kind: 'LocalGet'; id: '$l122' },
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
@@ -847,7 +850,8 @@ type $updateGrid = Satisfies<Func, {
 type $displayGrid = Satisfies<Func, {
   kind: 'func';
   params: ['$p0', '$p1', '$p2'];
-  result: number;
+  paramsTypes: ['i32', 'i32', 'i32'];
+  result: 'i32';
     locals: ['$l3', '$l4', '$l5', '$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14', '$l15', '$l16', '$l17', '$l18', '$l19', '$l20', '$l21', '$l22', '$l23', '$l24', '$l25', '$l26', '$l27', '$l28', '$l29', '$l30', '$l31', '$l32', '$l33', '$l34', '$l35', '$l36', '$l37', '$l38', '$l39', '$l40', '$l41', '$l42', '$l43', '$l44', '$l45', '$l46', '$l47', '$l48', '$l49', '$l50', '$l51', '$l52', '$l53', '$l54', '$l55', '$l56', '$l57', '$l58', '$l59', '$l60', '$l61', '$l62', '$l63', '$l64', '$l65', '$l66'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -979,14 +983,14 @@ type $displayGrid = Satisfies<Func, {
                           { kind: 'LocalSet'; id: '$l33' },
                           { kind: 'LocalGet'; id: '$l30' },
                           { kind: 'LocalGet'; id: '$l33' },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalSet'; id: '$l34' },
                           { kind: 'LocalGet'; id: '$l5' },
                           { kind: 'I32Load'; offset: 8 },
                           { kind: 'LocalSet'; id: '$l35' },
                           { kind: 'LocalGet'; id: '$l34' },
                           { kind: 'LocalGet'; id: '$l35' },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalSet'; id: '$l36' },
                           { kind: 'LocalGet'; id: '$l36' },
                           { kind: 'I32Load8u'; offset: 0 },
@@ -1017,7 +1021,7 @@ type $displayGrid = Satisfies<Func, {
                           { kind: 'LocalSet'; id: '$l45' },
                           { kind: 'LocalGet'; id: '$l44' },
                           { kind: 'LocalGet'; id: '$l45' },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalSet'; id: '$l46' },
                           { kind: 'LocalGet'; id: '$l5' },
                           { kind: 'LocalGet'; id: '$l46' },
@@ -1034,7 +1038,7 @@ type $displayGrid = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l48' },
                       { kind: 'LocalGet'; id: '$l47' },
                       { kind: 'LocalGet'; id: '$l48' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l49' },
                       { kind: 'LocalGet'; id: '$l5' },
                       { kind: 'LocalGet'; id: '$l49' },
@@ -1077,7 +1081,7 @@ type $displayGrid = Satisfies<Func, {
                   { kind: 'LocalSet'; id: '$l58' },
                   { kind: 'LocalGet'; id: '$l57' },
                   { kind: 'LocalGet'; id: '$l58' },
-                  { kind: 'Add' },
+                  { kind: 'Add', type: 'i32' },
                   { kind: 'LocalSet'; id: '$l59' },
                   { kind: 'LocalGet'; id: '$l5' },
                   { kind: 'LocalGet'; id: '$l59' },
@@ -1096,7 +1100,7 @@ type $displayGrid = Satisfies<Func, {
               { kind: 'LocalSet'; id: '$l62' },
               { kind: 'LocalGet'; id: '$l61' },
               { kind: 'LocalGet'; id: '$l62' },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$l63' },
               { kind: 'LocalGet'; id: '$l5' },
               { kind: 'LocalGet'; id: '$l63' },
@@ -1125,7 +1129,8 @@ type $displayGrid = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: ['$l1', '$l2', '$l3', '$l4', '$l5', '$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14', '$l15', '$l16', '$l17', '$l18', '$l19', '$l20', '$l21', '$l22', '$l23', '$l24', '$l25', '$l26', '$l27', '$l28', '$l29', '$l30', '$l31', '$l32', '$l33', '$l34', '$l35', '$l36', '$l37', '$l38', '$l39', '$l40', '$l41', '$l42', '$l43', '$l44', '$l45', '$l46', '$l47', '$l48', '$l49', '$l50', '$l51', '$l52', '$l53', '$l54', '$l55', '$l56', '$l57', '$l58', '$l59', '$l60', '$l61', '$l62', '$l63', '$l64', '$l65', '$l66', '$l67', '$l68', '$l69', '$l70', '$l71'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -1145,7 +1150,7 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$l4' },
       { kind: 'LocalGet'; id: '$l3' },
       { kind: 'LocalGet'; id: '$l4' },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'LocalSet'; id: '$l5' },
       { kind: 'LocalGet'; id: '$l5' },
       { kind: 'LocalSet'; id: '$l6' },
@@ -1231,7 +1236,7 @@ type $entry = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l26' },
                       { kind: 'LocalGet'; id: '$l3' },
                       { kind: 'LocalGet'; id: '$l26' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l27' },
                       { kind: 'LocalGet'; id: '$l27' },
                       { kind: 'LocalSet'; id: '$l28' },
@@ -1243,14 +1248,14 @@ type $entry = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l30' },
                       { kind: 'LocalGet'; id: '$l28' },
                       { kind: 'LocalGet'; id: '$l30' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l31' },
                       { kind: 'LocalGet'; id: '$l3' },
                       { kind: 'I32Load'; offset: 8 },
                       { kind: 'LocalSet'; id: '$l32' },
                       { kind: 'LocalGet'; id: '$l31' },
                       { kind: 'LocalGet'; id: '$l32' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l33' },
                       { kind: 'LocalGet'; id: '$l33' },
                       { kind: 'I32Load8u'; offset: 0 },
@@ -1262,7 +1267,7 @@ type $entry = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l36' },
                       { kind: 'LocalGet'; id: '$l3' },
                       { kind: 'LocalGet'; id: '$l36' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l37' },
                       { kind: 'LocalGet'; id: '$l37' },
                       { kind: 'LocalSet'; id: '$l38' },
@@ -1274,14 +1279,14 @@ type $entry = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l40' },
                       { kind: 'LocalGet'; id: '$l38' },
                       { kind: 'LocalGet'; id: '$l40' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l41' },
                       { kind: 'LocalGet'; id: '$l3' },
                       { kind: 'I32Load'; offset: 8 },
                       { kind: 'LocalSet'; id: '$l42' },
                       { kind: 'LocalGet'; id: '$l41' },
                       { kind: 'LocalGet'; id: '$l42' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l43' },
                       { kind: 'LocalGet'; id: '$l43' },
                       { kind: 'LocalGet'; id: '$l34' },
@@ -1293,7 +1298,7 @@ type $entry = Satisfies<Func, {
                       { kind: 'LocalSet'; id: '$l45' },
                       { kind: 'LocalGet'; id: '$l44' },
                       { kind: 'LocalGet'; id: '$l45' },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalSet'; id: '$l46' },
                       { kind: 'LocalGet'; id: '$l3' },
                       { kind: 'LocalGet'; id: '$l46' },
@@ -1311,7 +1316,7 @@ type $entry = Satisfies<Func, {
               { kind: 'LocalSet'; id: '$l48' },
               { kind: 'LocalGet'; id: '$l47' },
               { kind: 'LocalGet'; id: '$l48' },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$l49' },
               { kind: 'LocalGet'; id: '$l3' },
               { kind: 'LocalGet'; id: '$l49' },
@@ -1360,7 +1365,7 @@ type $entry = Satisfies<Func, {
               { kind: 'LocalSet'; id: '$l58' },
               { kind: 'LocalGet'; id: '$l3' },
               { kind: 'LocalGet'; id: '$l58' },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$l59' },
               { kind: 'LocalGet'; id: '$l59' },
               { kind: 'LocalSet'; id: '$l60' },
@@ -1377,7 +1382,7 @@ type $entry = Satisfies<Func, {
               { kind: 'LocalSet'; id: '$l63' },
               { kind: 'LocalGet'; id: '$l62' },
               { kind: 'LocalGet'; id: '$l63' },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$l64' },
               { kind: 'LocalGet'; id: '$l3' },
               { kind: 'LocalGet'; id: '$l64' },
@@ -1392,7 +1397,7 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$l65' },
       { kind: 'LocalGet'; id: '$l3' },
       { kind: 'LocalGet'; id: '$l65' },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'LocalSet'; id: '$l66' },
       { kind: 'LocalGet'; id: '$l66' },
       { kind: 'LocalSet'; id: '$l67' },
@@ -1407,7 +1412,7 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$l70' },
       { kind: 'LocalGet'; id: '$l3' },
       { kind: 'LocalGet'; id: '$l70' },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'LocalSet'; id: '$l71' },
       { kind: 'LocalGet'; id: '$l71' },
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
@@ -1419,7 +1424,8 @@ type $entry = Satisfies<Func, {
 type $_initialize = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Block';
@@ -1437,12 +1443,13 @@ type $_initialize = Satisfies<Func, {
 type $__memcpy = Satisfies<Func, {
   kind: 'func';
   params: ['$p0', '$p1', '$p2'];
-  result: number;
+  paramsTypes: ['i32', 'i32', 'i32'];
+  result: 'i32';
     locals: ['$l3', '$l4', '$l5'];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
       { kind: 'LocalGet'; id: '$p2' },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'LocalSet'; id: '$l3' },
       { kind: 'Block';
         id: '$B0';
@@ -1482,11 +1489,11 @@ type $__memcpy = Satisfies<Func, {
                           { kind: 'I32Store8'; offset: 0 },
                           { kind: 'LocalGet'; id: '$p1' },
                           { kind: 'Const'; value: 1 },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalSet'; id: '$p1' },
                           { kind: 'LocalGet'; id: '$p2' },
                           { kind: 'Const'; value: 1 },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalTee'; id: '$p2' },
                           { kind: 'Const'; value: 3 },
                           { kind: 'And' },
@@ -1511,7 +1518,7 @@ type $__memcpy = Satisfies<Func, {
                       { kind: 'BranchIf'; id: '$B5' },
                       { kind: 'LocalGet'; id: '$l3' },
                       { kind: 'Const'; value: -4 },
-                      { kind: 'Add' },
+                      { kind: 'Add', type: 'i32' },
                       { kind: 'LocalTee'; id: '$l4' },
                       { kind: 'LocalGet'; id: '$p0' },
                       { kind: 'LessThan' },
@@ -1539,11 +1546,11 @@ type $__memcpy = Satisfies<Func, {
                           { kind: 'I32Store8'; offset: 3 },
                           { kind: 'LocalGet'; id: '$p1' },
                           { kind: 'Const'; value: 4 },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalSet'; id: '$p1' },
                           { kind: 'LocalGet'; id: '$p2' },
                           { kind: 'Const'; value: 4 },
-                          { kind: 'Add' },
+                          { kind: 'Add', type: 'i32' },
                           { kind: 'LocalTee'; id: '$p2' },
                           { kind: 'LocalGet'; id: '$l4' },
                           { kind: 'LessThanOrEqual' },
@@ -1576,7 +1583,7 @@ type $__memcpy = Satisfies<Func, {
               { kind: 'LocalGet'; id: '$p2' },
               { kind: 'LocalGet'; id: '$l4' },
               { kind: 'Const'; value: -64 },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalTee'; id: '$l5' },
               { kind: 'GreaterThan' },
               { kind: 'BranchIf'; id: '$B7' },
@@ -1649,11 +1656,11 @@ type $__memcpy = Satisfies<Func, {
                   { kind: 'I32Store'; offset: 60 },
                   { kind: 'LocalGet'; id: '$p1' },
                   { kind: 'Const'; value: 64 },
-                  { kind: 'Add' },
+                  { kind: 'Add', type: 'i32' },
                   { kind: 'LocalSet'; id: '$p1' },
                   { kind: 'LocalGet'; id: '$p2' },
                   { kind: 'Const'; value: 64 },
-                  { kind: 'Add' },
+                  { kind: 'Add', type: 'i32' },
                   { kind: 'LocalTee'; id: '$p2' },
                   { kind: 'LocalGet'; id: '$l5' },
                   { kind: 'LessThanOrEqual' },
@@ -1675,11 +1682,11 @@ type $__memcpy = Satisfies<Func, {
               { kind: 'I32Store'; offset: 0 },
               { kind: 'LocalGet'; id: '$p1' },
               { kind: 'Const'; value: 4 },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$p1' },
               { kind: 'LocalGet'; id: '$p2' },
               { kind: 'Const'; value: 4 },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalTee'; id: '$p2' },
               { kind: 'LocalGet'; id: '$l4' },
               { kind: 'LessThan' },
@@ -1704,11 +1711,11 @@ type $__memcpy = Satisfies<Func, {
               { kind: 'I32Store8'; offset: 0 },
               { kind: 'LocalGet'; id: '$p1' },
               { kind: 'Const'; value: 1 },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalSet'; id: '$p1' },
               { kind: 'LocalGet'; id: '$p2' },
               { kind: 'Const'; value: 1 },
-              { kind: 'Add' },
+              { kind: 'Add', type: 'i32' },
               { kind: 'LocalTee'; id: '$p2' },
               { kind: 'LocalGet'; id: '$l3' },
               { kind: 'NotEqual' },
@@ -1724,7 +1731,8 @@ type $__memcpy = Satisfies<Func, {
 type $stackSave = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -1734,7 +1742,8 @@ type $stackSave = Satisfies<Func, {
 type $stackRestore = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
@@ -1745,7 +1754,8 @@ type $stackRestore = Satisfies<Func, {
 type $stackAlloc = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: ['$l1', '$l2'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -1762,14 +1772,15 @@ type $stackAlloc = Satisfies<Func, {
 type $emscripten_stack_init = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 5244096 },
       { kind: 'GlobalSet'; id: '$__stack_base' },
       { kind: 'Const'; value: 1208 },
       { kind: 'Const'; value: 15 },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: -16 },
       { kind: 'And' },
       { kind: 'GlobalSet'; id: '$__stack_end' },
@@ -1779,7 +1790,8 @@ type $emscripten_stack_init = Satisfies<Func, {
 type $emscripten_stack_get_free = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -1791,7 +1803,8 @@ type $emscripten_stack_get_free = Satisfies<Func, {
 type $emscripten_stack_get_base = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_base' },
@@ -1801,7 +1814,8 @@ type $emscripten_stack_get_base = Satisfies<Func, {
 type $emscripten_stack_get_end = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_end' },
@@ -1811,7 +1825,8 @@ type $emscripten_stack_get_end = Satisfies<Func, {
 type $__errno_location = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Const'; value: 1204 },

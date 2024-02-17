@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $selectBranch = Satisfies<Func, {
   kind: 'func';
   params: ['$condition'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Const'; value: 10 },
@@ -16,7 +17,8 @@ type $selectBranch = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },

@@ -68,8 +68,17 @@ fn handle_instruction(
         }
 
         /* Arithmetic Instructions */
-        Instruction::I32Add | Instruction::I64Add | Instruction::F32Add | Instruction::F64Add => {
-            vec![(*indent, format!("{{ kind: 'Add' }},"))]
+        Instruction::I32Add => {
+            vec![(*indent, format!("{{ kind: 'Add', type: 'i32' }},"))]
+        }
+        Instruction::I64Add => {
+            vec![(*indent, format!("{{ kind: 'Add', type: 'i64' }},"))]
+        }
+        Instruction::F32Add => {
+            vec![(*indent, format!("{{ kind: 'Add', type: 'f32' }},"))]
+        }
+        Instruction::F64Add => {
+            vec![(*indent, format!("{{ kind: 'Add', type: 'f64' }},"))]
         }
         Instruction::I32Sub | Instruction::I64Sub | Instruction::F32Sub | Instruction::F64Sub => {
             vec![(*indent, format!("{{ kind: 'Subtract' }},"))]

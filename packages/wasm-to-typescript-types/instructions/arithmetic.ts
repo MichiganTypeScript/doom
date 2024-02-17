@@ -1,9 +1,11 @@
-import type { Entry, ProgramState } from "../types"
+import type { Entry, ProgramState, WasmType } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
 
 export type IAdd = {
   kind: "Add"
+
+  type: WasmType
 }
 
 export type ISubtract = {

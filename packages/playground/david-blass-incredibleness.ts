@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/memory.actual'; import type { ReadMemory } from 'ts-type-math';
+import { entry } from 'conformance-tests/from-wat/memory.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
 type e=entry<[4294967295], true>// =>
 
 type stack=e['stack']// =>
-// type m = ReadMemory<e>// =>
+// type m = ReadStringFromMemory<e>// =>
 
 type ec=e['executionContexts']
 type c0f=ec[0]['funcId']// =>

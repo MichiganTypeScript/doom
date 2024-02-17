@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $throw = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Unreachable' },
@@ -13,7 +14,8 @@ type $throw = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$throw' },

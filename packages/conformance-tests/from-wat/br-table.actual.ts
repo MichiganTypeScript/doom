@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $switch_like = Satisfies<Func, {
   kind: 'func';
   params: ['$p'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Block';
@@ -45,7 +46,8 @@ type $switch_like = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },

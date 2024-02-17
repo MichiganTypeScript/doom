@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $negate = Satisfies<Func, {
   kind: 'func';
   params: ['$theOmniscient'];
-  result: number;
+  paramsTypes: ['f64'];
+  result: 'f64';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$theOmniscient' },
@@ -14,7 +15,8 @@ type $negate = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$ziltoid'];
-  result: number;
+  paramsTypes: ['f64'];
+  result: 'f64';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$ziltoid' },

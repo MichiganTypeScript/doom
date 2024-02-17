@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $__wasm_call_ctors = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$emscripten_stack_init' },
@@ -13,7 +14,8 @@ type $__wasm_call_ctors = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: ['$l1', '$l2', '$l3', '$l4', '$l5', '$l6', '$l7', '$l8', '$l9', '$l10', '$l11', '$l12', '$l13', '$l14'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -63,7 +65,7 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$l13' },
       { kind: 'LocalGet'; id: '$l3' },
       { kind: 'LocalGet'; id: '$l13' },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'LocalSet'; id: '$l14' },
       { kind: 'LocalGet'; id: '$l14' },
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
@@ -75,7 +77,8 @@ type $entry = Satisfies<Func, {
 type $_initialize = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Block';
@@ -93,12 +96,13 @@ type $_initialize = Satisfies<Func, {
 type $islower = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
       { kind: 'Const'; value: -97 },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: 26 },
       { kind: 'LessThan' },
     ];
@@ -107,7 +111,8 @@ type $islower = Satisfies<Func, {
 type $toupper = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
@@ -123,7 +128,8 @@ type $toupper = Satisfies<Func, {
 type $stackSave = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -133,7 +139,8 @@ type $stackSave = Satisfies<Func, {
 type $stackRestore = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
@@ -144,7 +151,8 @@ type $stackRestore = Satisfies<Func, {
 type $stackAlloc = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: ['$l1', '$l2'];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -161,14 +169,15 @@ type $stackAlloc = Satisfies<Func, {
 type $emscripten_stack_init = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: never;
     locals: [];
     instructions: [
       { kind: 'Const'; value: 5243920 },
       { kind: 'GlobalSet'; id: '$__stack_base' },
       { kind: 'Const'; value: 1032 },
       { kind: 'Const'; value: 15 },
-      { kind: 'Add' },
+      { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: -16 },
       { kind: 'And' },
       { kind: 'GlobalSet'; id: '$__stack_end' },
@@ -178,7 +187,8 @@ type $emscripten_stack_init = Satisfies<Func, {
 type $emscripten_stack_get_free = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
@@ -190,7 +200,8 @@ type $emscripten_stack_get_free = Satisfies<Func, {
 type $emscripten_stack_get_base = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_base' },
@@ -200,7 +211,8 @@ type $emscripten_stack_get_base = Satisfies<Func, {
 type $emscripten_stack_get_end = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_end' },
@@ -210,7 +222,8 @@ type $emscripten_stack_get_end = Satisfies<Func, {
 type $__errno_location = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Const'; value: 1028 },

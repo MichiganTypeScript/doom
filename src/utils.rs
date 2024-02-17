@@ -1,4 +1,7 @@
-use wast::token::Index;
+use wast::{
+    core::ValType,
+    token::{Id, Index},
+};
 
 #[macro_export]
 macro_rules! dbg_dump_file {
@@ -16,5 +19,19 @@ pub fn format_index(index: &Index) -> String {
     match index {
         Index::Id(id) => "'$".to_string() + id.name() + "'",
         _ => panic!("numeric index not supported"),
+    }
+}
+
+pub fn format_id(id: &Id) -> String {
+    "$".to_string() + id.name()
+}
+
+pub fn format_val_type(val_type: &ValType) -> String {
+    match val_type {
+        ValType::I32 => "'i32'".to_string(),
+        ValType::I64 => "'i64'".to_string(),
+        ValType::F32 => "'f32'".to_string(),
+        ValType::F64 => "'f64'".to_string(),
+        _ => panic!("unsupported type"),
     }
 }

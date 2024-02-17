@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $my_loop = Satisfies<Func, {
   kind: 'func';
   params: ['$input'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: ['$i', '$result'];
     instructions: [
       { kind: 'Const'; value: 0 },
@@ -15,7 +16,7 @@ type $my_loop = Satisfies<Func, {
         instructions: [
           { kind: 'LocalGet'; id: '$i' },
           { kind: 'Const'; value: 1 },
-          { kind: 'Add' },
+          { kind: 'Add', type: 'i32' },
           { kind: 'LocalSet'; id: '$i' },
           { kind: 'LocalGet'; id: '$result' },
           { kind: 'Const'; value: 2 },
@@ -34,7 +35,8 @@ type $my_loop = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
-  result: number;
+  paramsTypes: ['i32'];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },

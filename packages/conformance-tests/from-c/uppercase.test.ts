@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { getWasmMemory } from '../utils'
 import type { entry } from './uppercase.actual'
 import type { Equal, Expect } from 'type-testing';
-import type { ReadMemory } from 'ts-type-math';
+import type { ReadStringFromMemory } from 'ts-type-math';
 
 const name = 'uppercase';
 test(name, async () => {
@@ -18,7 +18,7 @@ test(name, async () => {
   expect(await entry( 68 /* 'D' */)).toStrictEqual('D' /* 68 */);
 });
 
-type Greeting = ReadMemory<entry<[97], true>>;
+type Greeting = ReadStringFromMemory<entry<[97], true>>;
 
 type testCases = [
   Expect<Equal<Greeting, "A">>,

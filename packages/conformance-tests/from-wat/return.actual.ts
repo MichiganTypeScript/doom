@@ -3,7 +3,8 @@ import type { Func, runProgram } from 'wasm-to-typescript-types'
 type $return = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Const'; value: 0 },
@@ -18,7 +19,8 @@ type $return = Satisfies<Func, {
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
-  result: number;
+  paramsTypes: [];
+  result: 'i32';
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$return' },
