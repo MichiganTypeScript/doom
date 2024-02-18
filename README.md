@@ -38,17 +38,17 @@ Usage count (in Doom) is the number on the right
 | I32GtU            | 118   | ✅           |❌
 | I32LeU            | 95    | ✅           |❌
 | I32GeU            | 74    | ✅           |❌
-| I64LtU            | 62    | ✅           |❌
-| I64Eqz            | 57    | ✅           |❌
-| I64GtU            | 35    | ✅           |❌
-| I64Ne             | 30    | ✅           |
-| I64Eq             | 26    | ✅           |
-| I64GeS            | 21    | ✅           |❌
-| I64LtS            | 19    | ✅           |❌
-| I64LeU            | 8     | ✅           |❌
-| I64LeS            | 5     | ✅           |❌
-| I64GtS            | 5     | ✅           |❌
-| I64GeU            | 5     | ✅           |❌
+| I64LtU            | 62    | ❌           |
+| I64Eqz            | 57    | ❌           |
+| I64GtU            | 35    | ❌           |
+| I64Ne             | 30    | ❌           |
+| I64Eq             | 26    | ❌           |
+| I64GeS            | 21    | ❌           |
+| I64LtS            | 19    | ❌           |
+| I64LeU            | 8     | ❌           |
+| I64LeS            | 5     | ❌           |
+| I64GtS            | 5     | ❌           |
+| I64GeU            | 5     | ❌           |
 | F64Lt             | 4     | ❌           |
 | F64Ne             | 4     | ❌           |
 | F64Eq             | 3     | ❌           |
@@ -111,18 +111,18 @@ Usage count (in Doom) is the number on the right
 
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |
-| I32Shl            | 954   | ✅           |❌
-| I32And            | 819   | ✅           |❌
-| I32Or             | 488   | ✅           |❌
-| I32Xor            | 411   | ✅           |❌
+| I32Shl            | 954   | ✅           |
+| I32And            | 819   | ✅           |
+| I32Or             | 488   | ✅           |
+| I32Xor            | 411   | ✅           |
 | I32Rotl           | 240   | ❌           |
-| I32ShrU           | 234   | ✅           |❌
-| I32ShrS           | 230   | ✅           |❌
-| I64Or             | 129   | 🐛           |❌
+| I32ShrU           | 234   | ✅           |
+| I32ShrS           | 230   | ✅           |
+| I64Or             | 129   | ❌           |
 | I64ShrU           | 83    | ❌           |
 | I64Shl            | 80    | ❌           |
-| I64And            | 73    | 🐛           |❌
-| I64Xor            | 34    | 🐛           |❌
+| I64And            | 73    | ❌           |
+| I64Xor            | 34    | ❌           |
 | I64Clz            | 7     | ❌           |
 | I32Clz            | 5     | ❌           |
 | I64Rotl           | 1     | ❌           |
@@ -131,11 +131,11 @@ Usage count (in Doom) is the number on the right
 
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |
-| LocalGet          | 18967 | ✅           |❌
-| LocalTee          | 4081  | ✅           |❌
-| LocalSet          | 3602  | ✅           |❌
-| GlobalSet         | 349   | ✅           |❌
-| GlobalGet         | 179   | ✅           |❌
+| LocalGet          | 18967 | ✅           |
+| LocalTee          | 4081  | ✅           |
+| LocalSet          | 3602  | ✅           |
+| GlobalSet         | 349   | ✅           |
+| GlobalGet         | 179   | ✅           |
 
 ### Memory Instructions
 

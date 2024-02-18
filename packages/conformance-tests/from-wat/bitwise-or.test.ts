@@ -3,7 +3,7 @@ import type { entry } from './bitwise-or.actual'
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
-import { t, T } from '../../ts-type-math/test-cases/binary-or';
+import { t, T } from '../../ts-type-math/test-cases/or';
 
 const name = 'bitwise-or';
 test(name, async () => {

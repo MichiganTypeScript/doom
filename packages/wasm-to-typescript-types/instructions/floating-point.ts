@@ -30,7 +30,7 @@ export type HandleFloatingPointInstructions<
 >
 
 export type AbsoluteValue<
-  instruction extends IAbsoluteValue, // unused
+  instruction extends IAbsoluteValue,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -48,7 +48,7 @@ export type AbsoluteValue<
 >
 
 export type Negate<
-  instruction extends INegate, // unused
+  instruction extends INegate,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [

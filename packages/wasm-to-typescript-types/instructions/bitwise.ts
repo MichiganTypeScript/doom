@@ -84,7 +84,7 @@ export type HandleBitwiseInstructions<
 >
 
 export type And<
-  instruction extends IAnd, // unused
+  instruction extends IAnd,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -95,7 +95,8 @@ export type And<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.BitwiseAnd<a, b> // TODO Broken
+        instruction['type'] extends 'i32' ? TypeMath.Wasm.I32And<a, b> :
+        never // Todo i64
       ],
       state
     >
@@ -103,7 +104,7 @@ export type And<
 >
 
 export type Or<
-  instruction extends IOr, // unused
+  instruction extends IOr,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -114,7 +115,8 @@ export type Or<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.BitwiseOr<b, a> // TODO Broken
+        instruction['type'] extends 'i32' ? TypeMath.Wasm.I32Or<a, b> :
+        never // Todo i64
       ],
 
       state
@@ -123,7 +125,7 @@ export type Or<
 >
 
 export type Xor<
-  instruction extends IXor, // unused
+  instruction extends IXor,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -134,7 +136,8 @@ export type Xor<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.BitwiseXor<b, a> // TODO Broken
+        instruction['type'] extends 'i32' ? TypeMath.Wasm.I32Xor<a, b> :
+        never // Todo i64
       ],
 
       state

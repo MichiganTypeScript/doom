@@ -55,7 +55,7 @@ export type HandleArithmeticInstructions<
 >
 
 export type Add<
-  instruction extends IAdd, // unused
+  instruction extends IAdd,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -75,7 +75,7 @@ export type Add<
 >
 
 export type Subtract<
-  instruction extends ISubtract, // unused
+  instruction extends ISubtract,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -95,7 +95,7 @@ export type Subtract<
 >
 
 export type Multiply<
-  instruction extends IMultiply, // unused
+  instruction extends IMultiply,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [

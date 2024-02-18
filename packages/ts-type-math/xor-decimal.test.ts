@@ -1,6 +1,6 @@
 import type { Expect, Equal } from 'type-testing';
 import { test, expect } from "vitest";
-import { t, T } from "./test-cases/binary-xor";
+import { t, T } from "./test-cases/xor";
 import { BitwiseXor, BitwiseXorBinary } from './bitwise';
 import { binaryTwosComplementToNumber, numberToTwosComplementBinary } from './test-utils';
 
@@ -42,8 +42,6 @@ type eXb = T[iX]['e_binary'];         // =>
 type xXb = BitwiseXorBinary<aXb, bXb> // =>
 
 type testXor = [
-  Expect<Equal<T['length'], 24>>,
-
   Expect<Equal<BitwiseXorBinary<T[ 0]['a_binary'], T[ 0]['b_binary']>, T[ 0]['e_binary']>>,
   Expect<Equal<BitwiseXorBinary<T[ 1]['a_binary'], T[ 1]['b_binary']>, T[ 1]['e_binary']>>,
   Expect<Equal<BitwiseXorBinary<T[ 2]['a_binary'], T[ 2]['b_binary']>, T[ 2]['e_binary']>>,
@@ -93,4 +91,6 @@ type testXor = [
   Expect<Equal<BitwiseXor<T[21]['a'], T[21]['b']>, T[21]['e']>>,
   Expect<Equal<BitwiseXor<T[22]['a'], T[22]['b']>, T[22]['e']>>,
   Expect<Equal<BitwiseXor<T[23]['a'], T[23]['b']>, T[23]['e']>>,
+
+  Expect<Equal<T['length'], 24>>,
 ]

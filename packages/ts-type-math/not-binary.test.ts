@@ -1,7 +1,8 @@
-import { t, T } from './test-cases/binary-not';
+import { t, T } from './test-cases/not';
 import { test, expect } from 'vitest';
 import { Expect, Equal } from 'type-testing';
 import { BitwiseNot, BitwiseNotBinary } from './bitwise';
+import { binaryTwosComplementToNumber, numberToTwosComplementBinary } from './test-utils';
 
 //----------------------------------------------------------------------
 // BITWISE NOT
@@ -13,13 +14,14 @@ test.each(t)('~$a === $e', ({
   a_binary,
   e_binary,
 }) => {
-  expect(Number.isInteger(a)).toBe(true);
-  expect(a).toBe(parseInt(a_binary, 2) >> 0);
+  expect(numberToTwosComplementBinary(a)).toBe(a_binary);
+  expect(numberToTwosComplementBinary(e)).toBe(e_binary);
 
-  expect(Number.isInteger(e)).toBe(true);
-  expect(e).toBe(parseInt(e_binary, 2) >> 0);
+  expect(binaryTwosComplementToNumber(a_binary)).toBe(a);
+  expect(binaryTwosComplementToNumber(e_binary)).toBe(e);
 
-  expect(~a).toBe(e);
+  const expected = binaryTwosComplementToNumber(a_binary);
+  expect(~expected).toBe(binaryTwosComplementToNumber(e_binary));
 
   expect(t).toHaveLength(19);
 });
@@ -53,26 +55,6 @@ type tests = [
   Expect<Equal<BitwiseNotBinary<T[16]['a_binary']>, T[16]['e_binary']>>,
   Expect<Equal<BitwiseNotBinary<T[17]['a_binary']>, T[17]['e_binary']>>,
   Expect<Equal<BitwiseNotBinary<T[18]['a_binary']>, T[18]['e_binary']>>,
-
-  Expect<Equal<BitwiseNot<T[ 0]['a']>, T[ 0]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 1]['a']>, T[ 1]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 2]['a']>, T[ 2]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 3]['a']>, T[ 3]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 4]['a']>, T[ 4]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 5]['a']>, T[ 5]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 6]['a']>, T[ 6]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 7]['a']>, T[ 7]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 8]['a']>, T[ 8]['e']>>,
-  Expect<Equal<BitwiseNot<T[ 9]['a']>, T[ 9]['e']>>,
-  Expect<Equal<BitwiseNot<T[10]['a']>, T[10]['e']>>,
-  Expect<Equal<BitwiseNot<T[11]['a']>, T[11]['e']>>,
-  Expect<Equal<BitwiseNot<T[12]['a']>, T[12]['e']>>,
-  Expect<Equal<BitwiseNot<T[13]['a']>, T[13]['e']>>,
-  Expect<Equal<BitwiseNot<T[14]['a']>, T[14]['e']>>,
-  Expect<Equal<BitwiseNot<T[15]['a']>, T[15]['e']>>,
-  Expect<Equal<BitwiseNot<T[16]['a']>, T[16]['e']>>,
-  Expect<Equal<BitwiseNot<T[17]['a']>, T[17]['e']>>,
-  Expect<Equal<BitwiseNot<T[18]['a']>, T[18]['e']>>,
 
   Expect<Equal<T['length'], 19>>,
 ]

@@ -1,6 +1,7 @@
 import { ClampDigits } from "./binary";
 import { AddBinary } from "./add-binary";
 import { ShiftLeftBinary, ShiftRightBinary } from "./shift";
+import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary } from "./bitwise";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 export type WasmInt = 'i32' | 'i64';
@@ -93,5 +94,32 @@ export namespace Wasm {
     b extends WasmValue
   > = Satisfies<WasmValue,
     ShiftRightBinary<a, b, true>
+  >
+
+  export type I32And<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    BitwiseAndBinary<a, b>
+  >
+
+  export type I32Or<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    BitwiseOrBinary<a, b>
+  >
+
+  export type I32Xor<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    BitwiseXorBinary<a, b>
   >
 }

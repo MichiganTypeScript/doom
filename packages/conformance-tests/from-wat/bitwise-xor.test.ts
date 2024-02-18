@@ -3,7 +3,7 @@ import type { entry } from './bitwise-xor.actual'
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
-import { t, T } from '../../ts-type-math/test-cases/binary-xor';
+import { t, T } from '../../ts-type-math/test-cases/xor';
 
 const name = 'bitwise-xor';
 test(name, async () => {

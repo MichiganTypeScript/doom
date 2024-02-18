@@ -75,7 +75,7 @@ export type HandleComparisonInstruction<
 >
 
 export type EqualsZero<
-  instruction extends IEqualsZero, // unused
+  instruction extends IEqualsZero,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -97,7 +97,7 @@ export type EqualsZero<
 >
 
 export type Equals<
-  instruction extends IEquals, // unused
+  instruction extends IEquals,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -120,7 +120,7 @@ export type Equals<
 >
 
 export type NotEqual<
-  instruction extends INotEqual, // unused
+  instruction extends INotEqual,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -143,7 +143,7 @@ export type NotEqual<
 >
 
 export type GreaterThan<
-  instruction extends IGreaterThan, // unused
+  instruction extends IGreaterThan,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -163,7 +163,7 @@ export type GreaterThan<
 >
 
 export type LessThan<
-  instruction extends ILessThan, // unused
+  instruction extends ILessThan,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -182,7 +182,7 @@ export type LessThan<
 >
 
 export type GreaterThanOrEqual<
-  instruction extends IGreaterThanOrEqual, // unused
+  instruction extends IGreaterThanOrEqual,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
@@ -202,7 +202,7 @@ export type GreaterThanOrEqual<
 >
 
 export type LessThanOrEqual<
-  instruction extends ILessThanOrEqual, // unused
+  instruction extends ILessThanOrEqual,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
