@@ -1,7 +1,7 @@
+import { ClampDigits } from "./binary";
 import { BinaryAdd } from "./binary-add";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
-
 
 /**
  * This type is a wasm memory value.  Could be an item on the stack, or a global, or a byte in memory (or a few bytes)
@@ -14,6 +14,9 @@ export namespace Wasm {
     a extends WasmValue,
     b extends WasmValue
   > = Satisfies<WasmValue,
-    BinaryAdd<a, b>
+    ClampDigits<
+      BinaryAdd<a, b>,
+      32
+    >
   >
 }

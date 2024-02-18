@@ -1,5 +1,5 @@
 import { BinaryAdd } from "./binary-add";
-import { BitwiseNot, BitwiseNotBinary } from "./bitwise";
+import { BitwiseNotBinary } from "./bitwise";
 import type { Div, Mod } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
 // import type { Add } from './hotscript-fork/numbers/impl/addition';
@@ -219,3 +219,21 @@ export type ToDecimalSigned<
 
 type a = ToDecimalSigned<"101110"> // =>
 type b = ToDecimalUnsigned<"101110">       // =>
+
+export type ClampDigits<
+  binary extends string,
+  maxDigits extends number
+> = Satisfies<string,
+  Length<binary> extends maxDigits
+  ? binary
+  : Length<binary> extends 1
+    ? binary
+    : ClampDigits<
+        binary extends `${infer Head}${infer Tail}`
+        ? Tail
+        : never,
+        maxDigits
+      >
+>
+
+type c = ClampDigits<"abcdefg", 2> // =>

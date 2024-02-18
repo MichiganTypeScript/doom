@@ -36,9 +36,9 @@ type b = T[i]['b'];         // =>
 type e = T[i]['e'];         // =>
 type x = BitwiseAnd<a, b>  // =>
 
-type ab = T[i]['a_binary'];         // =>
-type bb = T[i]['b_binary'];         // =>
-type eb = T[i]['e_binary'];         // =>
+type ab = T[i]['a_binary'];        // =>
+type bb = T[i]['b_binary'];        // =>
+type eb = T[i]['e_binary'];        // =>
 type xb = BitwiseAndBinary<ab, bb> // =>
 
 type tests = [
