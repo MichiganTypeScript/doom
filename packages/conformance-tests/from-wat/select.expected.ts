@@ -7,8 +7,8 @@ type $selectBranch = Satisfies<Func, {
   result: 'i32';
     locals: [];
     instructions: [
-      { kind: 'Const'; value: '1010' },
-      { kind: 'Const'; value: '10100' },
+      { kind: 'Const'; value: '00000000000000000000000000001010' },
+      { kind: 'Const'; value: '00000000000000000000000000010100' },
       { kind: 'LocalGet'; id: '$condition' },
       { kind: 'Select' },
     ];
@@ -38,7 +38,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

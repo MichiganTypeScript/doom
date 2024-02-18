@@ -20,7 +20,7 @@ type $entry = Satisfies<Func, {
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
       { kind: 'LocalSet'; id: '$l2' },
-      { kind: 'Const'; value: '10000' },
+      { kind: 'Const'; value: '00000000000000000000000000010000' },
       { kind: 'LocalSet'; id: '$l3' },
       { kind: 'LocalGet'; id: '$l2' },
       { kind: 'LocalGet'; id: '$l3' },
@@ -57,8 +57,8 @@ type $_initialize = Satisfies<Func, {
       { kind: 'Block';
         id: '$B0';
         instructions: [
-          { kind: 'Const'; value: '1' },
-          { kind: 'EqualsZero' },
+          { kind: 'Const'; value: '00000000000000000000000000000001' },
+          { kind: 'EqualsZero', type: 'i32' },
           { kind: 'BranchIf'; id: '$B0' },
           { kind: 'Call'; id: '$__wasm_call_ctors' },
         ];
@@ -114,10 +114,10 @@ type $emscripten_stack_init = Satisfies<Func, {
   result: never;
     locals: [];
     instructions: [
-      { kind: 'Const'; value: '10100000000010000010000' },
+      { kind: 'Const'; value: '00000000010100000000010000010000' },
       { kind: 'GlobalSet'; id: '$__stack_base' },
-      { kind: 'Const'; value: '10000000100' },
-      { kind: 'Const'; value: '1111' },
+      { kind: 'Const'; value: '00000000000000000000010000000100' },
+      { kind: 'Const'; value: '00000000000000000000000000001111' },
       { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: '11111111111111111111111111110000' },
       { kind: 'And' },
@@ -167,7 +167,7 @@ type $__errno_location = Satisfies<Func, {
   result: 'i32';
     locals: [];
     instructions: [
-      { kind: 'Const'; value: '10000000000' },
+      { kind: 'Const'; value: '00000000000000000000010000000000' },
     ];
 }>
 
@@ -191,12 +191,12 @@ export type entry<
       $__errno_location: $__errno_location;
     };
     globals: {
-      $__stack_pointer: '10100000000010000010000';
-      $__stack_end: '0';
-      $__stack_base: '0';
+      $__stack_pointer: '00000000010100000000010000010000';
+      $__stack_end: '00000000000000000000000000000000';
+      $__stack_base: '00000000000000000000000000000000';
     };
     memory: {};
-    memorySize: '100000000';
+    memorySize: '00000000000000000000000100000000';
     indirect: ['$__wasm_call_ctors'];
   },
   debugMode

@@ -7,7 +7,7 @@ type $get42 = Satisfies<Func, {
   result: 'i32';
     locals: [];
     instructions: [
-      { kind: 'Const'; value: '101010' },
+      { kind: 'Const'; value: '00000000000000000000000000101010' },
     ];
 }>
 
@@ -19,7 +19,7 @@ type $get42Plus1 = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$get42' },
-      { kind: 'Const'; value: '1' },
+      { kind: 'Const'; value: '00000000000000000000000000000001' },
       { kind: 'Add', type: 'i32' },
     ];
 }>
@@ -48,7 +48,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

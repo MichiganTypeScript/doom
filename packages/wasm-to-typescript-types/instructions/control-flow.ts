@@ -1,7 +1,7 @@
 import type { Func, Param, ProgramState } from "../types"
 import type { State } from '../state'
 import type { Instruction } from "./instructions"
-import type { WasmValue } from 'ts-type-math'
+import type { Wasm, WasmValue } from 'ts-type-math'
 
 export type IBlock = {
   kind: "Block"
@@ -187,7 +187,7 @@ export type BranchIf<
     ...infer remaining extends WasmValue[],
     infer condition extends WasmValue,
   ]
-  ? condition extends 0
+  ? Wasm.I32Eqz<condition> extends Wasm.I32True
 
     // false branch
     // nothing happens. we just pop the stack and endLoop on to the next instruction
@@ -361,7 +361,8 @@ export type If<
     ...infer remaining extends WasmValue[],
     infer condition extends WasmValue,
   ]
-  ? condition extends 0 // TODO, Broken
+  ? // according to the WASM spec, a condition must be an i32
+    Wasm.I32Eqz<condition> extends Wasm.I32True
 
     ? // false branch
       // pop the false branch instructions
@@ -486,7 +487,7 @@ export type Select<
     infer a extends WasmValue,
     infer condition extends WasmValue,
   ]
-  ? condition extends 0
+  ? Wasm.I32Eqz<condition> extends Wasm.I32True
     ? State.Stack.set<
         [
           ...remaining,

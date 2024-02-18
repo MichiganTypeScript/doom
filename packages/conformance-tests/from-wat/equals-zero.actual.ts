@@ -8,7 +8,7 @@ type $isZero = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$x' },
-      { kind: 'EqualsZero' },
+      { kind: 'EqualsZero', type: 'i32' },
     ];
 }>
 
@@ -36,7 +36,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

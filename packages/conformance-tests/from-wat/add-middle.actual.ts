@@ -20,7 +20,7 @@ type $entry = Satisfies<Func, {
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
       { kind: 'LocalSet'; id: '$stack_pointer' },
-      { kind: 'Const'; value: '10000' },
+      { kind: 'Const'; value: '00000000000000000000000000010000' },
       { kind: 'LocalSet'; id: '$stack_size' },
       { kind: 'LocalGet'; id: '$stack_pointer' },
       { kind: 'LocalGet'; id: '$stack_size' },
@@ -54,10 +54,10 @@ type $emscripten_stack_init = Satisfies<Func, {
   result: never;
     locals: [];
     instructions: [
-      { kind: 'Const'; value: '10100000000010000010000' },
+      { kind: 'Const'; value: '00000000010100000000010000010000' },
       { kind: 'GlobalSet'; id: '$__stack_base' },
-      { kind: 'Const'; value: '10000000100' },
-      { kind: 'Const'; value: '1111' },
+      { kind: 'Const'; value: '00000000000000000000010000000100' },
+      { kind: 'Const'; value: '00000000000000000000000000001111' },
       { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: '11111111111111111111111111110000' },
       { kind: 'And' },
@@ -77,12 +77,12 @@ export type entry<
       $emscripten_stack_init: $emscripten_stack_init;
     };
     globals: {
-      $__stack_pointer: '10100000000010000010000';
-      $__stack_end: '0';
-      $__stack_base: '0';
+      $__stack_pointer: '00000000010100000000010000010000';
+      $__stack_end: '00000000000000000000000000000000';
+      $__stack_base: '00000000000000000000000000000000';
     };
     memory: {};
-    memorySize: '100000000';
+    memorySize: '00000000000000000000000100000000';
     indirect: ['$__wasm_call_ctors'];
   },
   debugMode

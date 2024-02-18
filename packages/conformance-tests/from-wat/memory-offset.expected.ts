@@ -7,7 +7,7 @@ type $foo = Satisfies<Func, {
   result: 'i32';
     locals: ['$start'];
     instructions: [
-      { kind: 'Const'; value: '0' },
+      { kind: 'Const'; value: '00000000000000000000000000000000' },
       { kind: 'LocalSet'; id: '$start' },
       { kind: 'LocalGet'; id: '$start' },
       { kind: 'LocalGet'; id: '$a' },
@@ -55,7 +55,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '1';
+    memorySize: '00000000000000000000000000000001';
     indirect: [];
   },
   debugMode

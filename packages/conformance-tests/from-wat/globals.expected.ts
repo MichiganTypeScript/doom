@@ -7,7 +7,7 @@ type $setGlobal = Satisfies<Func, {
   result: never;
     locals: [];
     instructions: [
-      { kind: 'Const'; value: '101010' },
+      { kind: 'Const'; value: '00000000000000000000000000101010' },
       { kind: 'GlobalSet'; id: '$myGlobal' },
     ];
 }>
@@ -47,10 +47,10 @@ export type entry<
       $entry: $entry;
     };
     globals: {
-      $myGlobal: '0';
+      $myGlobal: '00000000000000000000000000000000';
     };
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

@@ -25,8 +25,8 @@ export type makeInput = Satisfies<ProgramInput, {
 
 type c1 = ProcessInputStack<makeInput>; // =>
 type e1 = [
-  '00000000000000000000000000000010',
   '00000000000000000000000000000001',
+  '00000000000000000000000000000010',
 ];
 
 type tests = [

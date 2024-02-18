@@ -7,7 +7,7 @@ type $my_loop = Satisfies<Func, {
   result: 'i32';
     locals: ['$i', '$result'];
     instructions: [
-      { kind: 'Const'; value: '0' },
+      { kind: 'Const'; value: '00000000000000000000000000000000' },
       { kind: 'LocalSet'; id: '$i' },
       { kind: 'LocalGet'; id: '$input' },
       { kind: 'LocalSet'; id: '$result' },
@@ -15,15 +15,15 @@ type $my_loop = Satisfies<Func, {
         id: '$my_loop';
         instructions: [
           { kind: 'LocalGet'; id: '$i' },
-          { kind: 'Const'; value: '1' },
+          { kind: 'Const'; value: '00000000000000000000000000000001' },
           { kind: 'Add', type: 'i32' },
           { kind: 'LocalSet'; id: '$i' },
           { kind: 'LocalGet'; id: '$result' },
-          { kind: 'Const'; value: '10' },
+          { kind: 'Const'; value: '00000000000000000000000000000010' },
           { kind: 'Multiply' },
           { kind: 'LocalSet'; id: '$result' },
           { kind: 'LocalGet'; id: '$i' },
-          { kind: 'Const'; value: '11' },
+          { kind: 'Const'; value: '00000000000000000000000000000011' },
           { kind: 'LessThan' },
           { kind: 'BranchIf'; id: '$my_loop' },
         ];
@@ -56,7 +56,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

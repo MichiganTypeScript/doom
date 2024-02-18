@@ -1,6 +1,5 @@
 // import type { entry } from "./drop.actual"
 import type { Expect, Equal } from "type-testing";
-import type { Func } from 'wasm-to-typescript-types'
 import type { entry } from "./drop.actual"
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'

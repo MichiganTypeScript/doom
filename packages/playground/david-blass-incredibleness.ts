@@ -1,17 +1,22 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/add.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[-1, 2], true>// =>
+import { entry } from 'conformance-tests/from-wat/params.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[10, 2, 4], true>// =>
 type r=e['result']// =>
-type stack=e['stack']// =>
+type s=e['stack'] // =>
 // type m = ReadStringFromMemory<e>// =>
 
+type a=e['activeExecutionContext']// =>
+type af=a['funcId']  // =>
+type al=a['locals']  // =>
+type ab=a['branches']// =>
+
 type ec=e['executionContexts']
-type c0f=ec[0]['funcId']// =>
-type c0l=ec[0]['locals']// =>
+type c0f=ec[0]['funcId']  // =>
+type c0l=ec[0]['locals']  // =>
 type c0b=ec[0]['branches']// =>
 
-type c1f=ec[1]['funcId']// =>
-type c1l=ec[1]['locals']// =>
+type c1f=ec[1]['funcId']  // =>
+type c1l=ec[1]['locals']  // =>
 type c1b=ec[1]['branches']// =>
 
 // type c3=ec[2]// =>

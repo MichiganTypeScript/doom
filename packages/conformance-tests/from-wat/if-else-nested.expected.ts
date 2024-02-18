@@ -8,48 +8,48 @@ type $example = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$control' },
-      { kind: 'Const'; value: '1' },
-      { kind: 'Equals' },
+      { kind: 'Const'; value: '00000000000000000000000000000001' },
+      { kind: 'Equals', type: 'i32' },
       { kind: 'If';
         then: [
-          { kind: 'Const'; value: '1100101' },
+          { kind: 'Const'; value: '00000000000000000000000001100101' },
           { kind: 'LocalGet'; id: '$n' },
           { kind: 'Add', type: 'i32' },
         ];
         else: [
           { kind: 'LocalGet'; id: '$control' },
-          { kind: 'Const'; value: '10' },
-          { kind: 'Equals' },
+          { kind: 'Const'; value: '00000000000000000000000000000010' },
+          { kind: 'Equals', type: 'i32' },
           { kind: 'If';
             then: [
-              { kind: 'Const'; value: '1100110' },
+              { kind: 'Const'; value: '00000000000000000000000001100110' },
               { kind: 'LocalGet'; id: '$n' },
               { kind: 'Subtract' },
             ];
             else: [
               { kind: 'LocalGet'; id: '$control' },
-              { kind: 'Const'; value: '11' },
+              { kind: 'Const'; value: '00000000000000000000000000000011' },
               { kind: 'GreaterThanOrEqual' },
               { kind: 'If';
                 then: [
                   { kind: 'LocalGet'; id: '$control' },
-                  { kind: 'Const'; value: '101' },
+                  { kind: 'Const'; value: '00000000000000000000000000000101' },
                   { kind: 'GreaterThan' },
                   { kind: 'If';
                     then: [
-                      { kind: 'Const'; value: '1100111' },
+                      { kind: 'Const'; value: '00000000000000000000000001100111' },
                       { kind: 'LocalGet'; id: '$n' },
                       { kind: 'Multiply' },
                     ];
                     else: [
-                      { kind: 'Const'; value: '1101000' },
+                      { kind: 'Const'; value: '00000000000000000000000001101000' },
                       { kind: 'LocalGet'; id: '$n' },
                       { kind: 'Add', type: 'i32' },
                     ];
                   },
                 ];
                 else: [
-                  { kind: 'Const'; value: '1101001' },
+                  { kind: 'Const'; value: '00000000000000000000000001101001' },
                   { kind: 'LocalGet'; id: '$n' },
                   { kind: 'Add', type: 'i32' },
                 ];
@@ -86,7 +86,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

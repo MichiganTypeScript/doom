@@ -1,18 +1,24 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
-import { WasmValue } from "ts-type-math"
+import { WasmValue, WasmType, Wasm } from "ts-type-math"
 
 export type IEqualsZero = {
   kind: "EqualsZero"
+
+  type: WasmType
 }
 
 export type IEquals = {
   kind: "Equals"
+
+  type: WasmType
 }
 
 export type INotEqual = {
   kind: "NotEqual"
+
+  type: WasmType
 }
 
 export type IGreaterThan = {
@@ -79,7 +85,10 @@ export type EqualsZero<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.Equal<a, 0> extends true ? 1 : 0 // TODO Broken
+        
+        instruction['type'] extends 'i32' ? Wasm.I32Eqz<a> :
+        instruction['type'] extends 'i64' ? Wasm.I64Eqz<a> :
+        never //  TODO Add f32, f64
       ],
 
       state
@@ -99,7 +108,10 @@ export type Equals<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.Equal<a, b> extends true ? 1 : 0 // TODO Broken
+        
+        instruction['type'] extends 'i32' ? Wasm.I32Eq<a, b> :
+        instruction['type'] extends 'i64' ? Wasm.I64Eq<a, b> :
+        never //  TODO Add f32, f64
       ],
 
       state
@@ -119,7 +131,10 @@ export type NotEqual<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.NotEqual<b, a> extends true ? 1 : 0 // TODO Broken
+        
+        instruction['type'] extends 'i32' ? Wasm.I32Neq<a, b> :
+        instruction['type'] extends 'i64' ? Wasm.I64Neq<a, b> :
+        never //  TODO Add f32, f64
       ],
 
       state

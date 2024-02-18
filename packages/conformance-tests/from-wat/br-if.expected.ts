@@ -17,23 +17,23 @@ type $brif = Satisfies<Func, {
                 id: '$inner_block';
                 instructions: [
                   { kind: 'LocalGet'; id: '$x' },
-                  { kind: 'EqualsZero' },
+                  { kind: 'EqualsZero', type: 'i32' },
                   { kind: 'BranchIf'; id: '$inner_block' },
                   { kind: 'LocalGet'; id: '$x' },
-                  { kind: 'Const'; value: '1' },
-                  { kind: 'Equals' },
+                  { kind: 'Const'; value: '00000000000000000000000000000001' },
+                  { kind: 'Equals', type: 'i32' },
                   { kind: 'BranchIf'; id: '$middle_block' },
-                  { kind: 'Const'; value: '111' },
+                  { kind: 'Const'; value: '00000000000000000000000000000111' },
                   { kind: 'LocalSet'; id: '$result' },
                   { kind: 'Branch'; id: '$outer_block' },
                 ];
               },
-              { kind: 'Const'; value: '101010' },
+              { kind: 'Const'; value: '00000000000000000000000000101010' },
               { kind: 'LocalSet'; id: '$result' },
               { kind: 'Branch'; id: '$outer_block' },
             ];
           },
-          { kind: 'Const'; value: '1100011' },
+          { kind: 'Const'; value: '00000000000000000000000001100011' },
           { kind: 'LocalSet'; id: '$result' },
         ];
       },
@@ -65,7 +65,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

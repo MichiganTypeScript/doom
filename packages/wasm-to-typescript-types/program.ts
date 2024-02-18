@@ -19,8 +19,8 @@ type _ProcessInputStack<
   ? _ProcessInputStack<
       [tailValue, tailType],
       [
-        Convert.TSNumber.ToWasmValue<headValue, headType>,
         ..._Acc,
+        Convert.TSNumber.ToWasmValue<headValue, headType>,
       ]
     >
   : _Acc

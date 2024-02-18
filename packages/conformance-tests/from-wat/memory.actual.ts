@@ -8,7 +8,7 @@ type $storeValue = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$index' },
-      { kind: 'Const'; value: '100' },
+      { kind: 'Const'; value: '00000000000000000000000000000100' },
       { kind: 'Multiply' },
       { kind: 'LocalGet'; id: '$value' },
       { kind: 'I32Store'; offset: 0 },
@@ -23,7 +23,7 @@ type $loadValue = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$index' },
-      { kind: 'Const'; value: '100' },
+      { kind: 'Const'; value: '00000000000000000000000000000100' },
       { kind: 'Multiply' },
       { kind: 'I32Load'; offset: 0 },
     ];
@@ -36,12 +36,12 @@ type $foo = Satisfies<Func, {
   result: 'i32';
     locals: [];
     instructions: [
-      { kind: 'Const'; value: '10' },
+      { kind: 'Const'; value: '00000000000000000000000000000010' },
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'Call'; id: '$storeValue' },
-      { kind: 'Const'; value: '10' },
+      { kind: 'Const'; value: '00000000000000000000000000000010' },
       { kind: 'Call'; id: '$loadValue' },
-      { kind: 'Const'; value: '1' },
+      { kind: 'Const'; value: '00000000000000000000000000000001' },
       { kind: 'Add', type: 'i32' },
     ];
 }>
@@ -72,7 +72,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '1';
+    memorySize: '00000000000000000000000000000001';
     indirect: [];
   },
   debugMode

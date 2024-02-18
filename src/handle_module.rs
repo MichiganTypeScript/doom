@@ -85,7 +85,7 @@ fn handle_module_field_global(source: &SourceFile, global: &Global) {
         GlobalKind::Inline(inline) => {
             let first = inline.instrs.first().expect("inline global to have at least one instruction");
             match first {
-                Instruction::I32Const(value) => format!("'{:b}'", value),
+                Instruction::I32Const(value) => format!("'{:032b}'", value),
                 _ => {
                     panic!("inline global to have a first instruction of i32.const");
                 }

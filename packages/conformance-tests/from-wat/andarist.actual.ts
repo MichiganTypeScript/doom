@@ -8,14 +8,14 @@ type $andarist = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$x' },
-      { kind: 'Const'; value: '1100' },
-      { kind: 'Const'; value: '1010' },
+      { kind: 'Const'; value: '00000000000000000000000000001100' },
+      { kind: 'Const'; value: '00000000000000000000000000001010' },
       { kind: 'LocalGet'; id: '$x' },
       { kind: 'Const'; value: '11111111111111111111111111111011' },
       { kind: 'GreaterThan' },
       { kind: 'Select' },
       { kind: 'Add', type: 'i32' },
-      { kind: 'Const'; value: '111' },
+      { kind: 'Const'; value: '00000000000000000000000000000111' },
       { kind: 'Add', type: 'i32' },
     ];
 }>
@@ -44,7 +44,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

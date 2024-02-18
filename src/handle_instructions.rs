@@ -30,10 +30,10 @@ fn handle_instruction(
 
         /* Constants Instructions */
         Instruction::I32Const(value) => {
-            vec![(*indent, format!("{{ kind: 'Const'; value: '{:b}' }},", value))]
+            vec![(*indent, format!("{{ kind: 'Const'; value: '{:032b}' }},", value))]
         }
         Instruction::I64Const(value) => {
-            vec![(*indent, format!("{{ kind: 'Const'; value: '{:b}' }},", value))]
+            vec![(*indent, format!("{{ kind: 'Const'; value: '{:064b}' }},", value))]
         }
         // Instruction::F32Const(raw_bits) => {
         //     let value = f32::from_bits(raw_bits.bits).to_string();
@@ -45,13 +45,37 @@ fn handle_instruction(
         // }
 
         /* Comparison Instructions */
-        Instruction::I32Eqz | Instruction::I64Eqz => {
-            vec![(*indent, format!("{{ kind: 'EqualsZero' }},"))]
+        Instruction::I32Eqz => {
+            vec![(*indent, format!("{{ kind: 'EqualsZero', type: 'i32' }},"))]
         }
-        Instruction::I32Eq | Instruction::I64Eq | Instruction::F32Eq | Instruction::F64Eq => {
-            vec![(*indent, format!("{{ kind: 'Equals' }},"))]
+        Instruction::I64Eqz => {
+            vec![(*indent, format!("{{ kind: 'EqualsZero', type: 'i64' }},"))]
         }
-        Instruction::F32Ne | Instruction::F64Ne | Instruction::I32Ne | Instruction::I64Ne => {
+        Instruction::I32Eq => {
+            vec![(*indent, format!("{{ kind: 'Equals', type: 'i32' }},"))]
+        }
+        Instruction::I64Eq => {
+            vec![(*indent, format!("{{ kind: 'Equals', type: 'i64' }},"))]
+        }
+        // Instruction::F32Eq => {
+        //     vec![(*indent, format!("{{ kind: 'Equals', type: 'f32' }},"))]
+        // }
+        // Instruction::F64Eq => {
+        //     vec![(*indent, format!("{{ kind: 'Equals', type: 'f64' }},"))]
+        // }
+        Instruction::I32Ne => {
+            vec![(*indent, format!("{{ kind: 'NotEqual', type: 'i32' }},"))]
+        }
+        Instruction::I64Ne => {
+            vec![(*indent, format!("{{ kind: 'NotEqual', type: 'i64' }},"))]
+        }
+        // Instruction::F32Ne => {
+        //     vec![(*indent, format!("{{ kind: 'NotEqual', type: 'i32' }},"))]
+        // }
+        // Instruction::F64Ne => {
+        //     vec![(*indent, format!("{{ kind: 'NotEqual', type: 'f64' }},"))]
+        // }
+        Instruction::F32Ne => {
             vec![(*indent, format!("{{ kind: 'NotEqual' }},"))]
         }
         Instruction::I32GtS | Instruction::I64GtS | Instruction::I32GtU | Instruction::I64GtU | Instruction::F32Gt | Instruction::F64Gt => {

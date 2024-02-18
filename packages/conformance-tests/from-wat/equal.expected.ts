@@ -9,7 +9,7 @@ type $main = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Equals' },
+      { kind: 'Equals', type: 'i32' },
     ];
 }>
 
@@ -38,7 +38,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

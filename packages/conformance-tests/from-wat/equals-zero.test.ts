@@ -1,19 +1,13 @@
 import type { Expect, Equal } from 'type-testing';
 import type { entry } from './equals-zero.actual'
+import { t, T } from '../../ts-type-math/test-cases/equals-zero'
 
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest';
 
-const name = 'equals-zero';
-test(name, async () => {
-  const entry = await getWasm("from-wat", name);
-  expect(entry(2)).toStrictEqual(0);
-  expect(entry(1)).toStrictEqual(0);
-  expect(entry(0)).toStrictEqual(1);
-  expect(entry(-1)).toStrictEqual(0);
-  expect(entry(-2)).toStrictEqual(0);
-
-  expect(entry(4294967296)).toStrictEqual(1);
+test.each(t)('$a === 0 ? $e_bool', async ({ a, e }) => {
+  const entry = await getWasm("from-wat", 'equals-zero');
+  expect(entry(a)).toStrictEqual(e);
 });
 
 type testCases = [

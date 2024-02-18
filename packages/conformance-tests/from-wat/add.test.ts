@@ -5,9 +5,8 @@ import { t, T } from '../../ts-type-math/test-cases/add'
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
 
-const name = 'add';
 test.each(t)('$a + $b === $e', async ({ a, b, e }) => {
-  const entry = await getWasm("from-wat", name);
+  const entry = await getWasm("from-wat", 'add');
   expect(entry(a, b)).toStrictEqual(e);
 });
 

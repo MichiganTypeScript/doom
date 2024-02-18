@@ -9,11 +9,11 @@ type $if = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$n' },
       { kind: 'LocalGet'; id: '$control' },
-      { kind: 'Const'; value: '0' },
+      { kind: 'Const'; value: '00000000000000000000000000000000' },
       { kind: 'GreaterThanOrEqual' },
       { kind: 'If';
         then: [
-          { kind: 'Const'; value: '1' },
+          { kind: 'Const'; value: '00000000000000000000000000000001' },
         ];
         else: [
           { kind: 'Const'; value: '11111111111111111111111111111111' },
@@ -48,7 +48,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode

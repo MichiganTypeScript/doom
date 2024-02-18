@@ -26,19 +26,19 @@ type $switch_like = Satisfies<Func, {
                       }
                     ];
                   },
-                  { kind: 'Const'; value: '1100100' },
+                  { kind: 'Const'; value: '00000000000000000000000001100100' },
                   { kind: 'Return'; count: 1 },
                 ];
               },
-              { kind: 'Const'; value: '1100101' },
+              { kind: 'Const'; value: '00000000000000000000000001100101' },
               { kind: 'Return'; count: 1 },
             ];
           },
-          { kind: 'Const'; value: '1100110' },
+          { kind: 'Const'; value: '00000000000000000000000001100110' },
           { kind: 'Return'; count: 1 },
         ];
       },
-      { kind: 'Const'; value: '1100111' },
+      { kind: 'Const'; value: '00000000000000000000000001100111' },
       { kind: 'Return'; count: 1 },
     ];
 }>
@@ -67,7 +67,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: '0';
+    memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
   debugMode
