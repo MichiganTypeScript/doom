@@ -35,7 +35,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: 0;
+    memorySize: '0';
     indirect: [];
   },
   debugMode

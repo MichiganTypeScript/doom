@@ -8,7 +8,7 @@ type $minusOne = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Const'; value: 1 },
+      { kind: 'Const'; value: '1' },
       { kind: 'Subtract' },
     ];
 }>
@@ -37,7 +37,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: 0;
+    memorySize: '0';
     indirect: [];
   },
   debugMode

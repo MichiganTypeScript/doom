@@ -1,8 +1,9 @@
 import type { Expect, Equal } from 'type-testing'
 import { expect, test } from "vitest"
-import { To32Binary, ToDecimal } from './binary';
+import { To32Binary, ToDecimalSigned } from './binary';
+import { binaryTwosComplementToNumber, numberToTwosComplementBinary } from './test-utils';
 
-const bit32 = [
+const t = [
   {
     decimal: 0,
     binary: '00000000000000000000000000000000',
@@ -32,42 +33,45 @@ const bit32 = [
     binary: '00000000001100010111100011000110',
   },
   {
-    decimal: 4294967295,
+    decimal: -1,
     binary: '11111111111111111111111111111111',
+  },
+  {
+    decimal: -18,
+    binary: '11111111111111111111111111101110',
   },
 ] as const;
 
-test.each(bit32)('$binary === $decimal', ({
+test.each(t)('$binary === $decimal', ({
   decimal,
   binary,
 }) => {
-  const fromBinary = parseInt(binary, 2);
-  expect(fromBinary).toBe(decimal);
-
-  const fromDecimal = decimal.toString(2).padStart(32, '0');
-  expect(fromDecimal).toBe(binary);
+  expect(binaryTwosComplementToNumber(binary)).toBe(decimal);
+  expect(numberToTwosComplementBinary(decimal)).toBe(binary);
 });
 
-type Bit32 = typeof bit32;
+type T = typeof t;
 
 type tests = [
-  Expect<Equal<Bit32['length'], 8>>,
+  Expect<Equal<To32Binary<T[0]['decimal']>, T[0]['binary']>>,
+  Expect<Equal<To32Binary<T[1]['decimal']>, T[1]['binary']>>,
+  Expect<Equal<To32Binary<T[2]['decimal']>, T[2]['binary']>>,
+  Expect<Equal<To32Binary<T[3]['decimal']>, T[3]['binary']>>,
+  Expect<Equal<To32Binary<T[4]['decimal']>, T[4]['binary']>>,
+  Expect<Equal<To32Binary<T[5]['decimal']>, T[5]['binary']>>,
+  Expect<Equal<To32Binary<T[6]['decimal']>, T[6]['binary']>>,
+  Expect<Equal<To32Binary<T[7]['decimal']>, T[7]['binary']>>,
+  Expect<Equal<To32Binary<T[8]['decimal']>, T[8]['binary']>>,
 
-  Expect<Equal<To32Binary<Bit32[0]['decimal']>, Bit32[0]['binary']>>,
-  Expect<Equal<To32Binary<Bit32[1]['decimal']>, Bit32[1]['binary']>>,
-  Expect<Equal<To32Binary<Bit32[2]['decimal']>, Bit32[2]['binary']>>,
-  Expect<Equal<To32Binary<Bit32[3]['decimal']>, Bit32[3]['binary']>>,
-  Expect<Equal<To32Binary<Bit32[4]['decimal']>, Bit32[4]['binary']>>,
-  Expect<Equal<To32Binary<Bit32[5]['decimal']>, Bit32[5]['binary']>>,
-  Expect<Equal<To32Binary<Bit32[6]['decimal']>, Bit32[6]['binary']>>,
-  Expect<Equal<To32Binary<Bit32[7]['decimal']>, Bit32[7]['binary']>>,
+  Expect<Equal<ToDecimalSigned<T[0]['binary']>, T[0]['decimal']>>,
+  Expect<Equal<ToDecimalSigned<T[1]['binary']>, T[1]['decimal']>>,
+  Expect<Equal<ToDecimalSigned<T[2]['binary']>, T[2]['decimal']>>,
+  Expect<Equal<ToDecimalSigned<T[3]['binary']>, T[3]['decimal']>>,
+  Expect<Equal<ToDecimalSigned<T[4]['binary']>, T[4]['decimal']>>,
+  Expect<Equal<ToDecimalSigned<T[5]['binary']>, T[5]['decimal']>>,
+  Expect<Equal<ToDecimalSigned<T[6]['binary']>, T[6]['decimal']>>,
+  Expect<Equal<ToDecimalSigned<T[7]['binary']>, T[7]['decimal']>>,
+  Expect<Equal<ToDecimalSigned<T[8]['binary']>, T[8]['decimal']>>,
 
-  Expect<Equal<ToDecimal<Bit32[0]['binary']>, Bit32[0]['decimal']>>,
-  Expect<Equal<ToDecimal<Bit32[1]['binary']>, Bit32[1]['decimal']>>,
-  Expect<Equal<ToDecimal<Bit32[2]['binary']>, Bit32[2]['decimal']>>,
-  Expect<Equal<ToDecimal<Bit32[3]['binary']>, Bit32[3]['decimal']>>,
-  Expect<Equal<ToDecimal<Bit32[4]['binary']>, Bit32[4]['decimal']>>,
-  Expect<Equal<ToDecimal<Bit32[5]['binary']>, Bit32[5]['decimal']>>,
-  Expect<Equal<ToDecimal<Bit32[6]['binary']>, Bit32[6]['decimal']>>,
-  Expect<Equal<ToDecimal<Bit32[7]['binary']>, Bit32[7]['decimal']>>,
+  Expect<Equal<T['length'], 9>>,
 ]

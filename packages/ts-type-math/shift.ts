@@ -1,11 +1,11 @@
-import { ReverseString, SignBit, To32Binary, ToDecimal } from "./binary";
+import { ReverseString, SignBit, To32Binary, ToDecimalUnsigned } from "./binary";
 
 /** inputs are unsigned Decimal32, under the hood is binary */
 export type ShiftLeft<
   Decimal extends number,
   Shift extends number
 > = Satisfies<number,
-  ToDecimal<
+  ToDecimalUnsigned<
     ShiftLeftBinary<
       To32Binary<Decimal>,
       Shift
@@ -103,7 +103,7 @@ export type ShiftRight<
   Shift extends number,
   Signed extends boolean
 > = Satisfies<number,
-  ToDecimal<
+  ToDecimalUnsigned<
     ShiftRightBinary<
       To32Binary<Decimal>,
       Shift,

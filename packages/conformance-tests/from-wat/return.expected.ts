@@ -7,11 +7,11 @@ type $return = Satisfies<Func, {
   result: 'i32';
     locals: [];
     instructions: [
-      { kind: 'Const'; value: 0 },
-      { kind: 'Const'; value: 1 },
-      { kind: 'Const'; value: 2 },
-      { kind: 'Const'; value: 3 },
-      { kind: 'Const'; value: 4 },
+      { kind: 'Const'; value: '0' },
+      { kind: 'Const'; value: '1' },
+      { kind: 'Const'; value: '10' },
+      { kind: 'Const'; value: '11' },
+      { kind: 'Const'; value: '100' },
       { kind: 'Return'; count: 1 },
     ];
 }>
@@ -39,7 +39,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: 0;
+    memorySize: '0';
     indirect: [];
   },
   debugMode

@@ -267,7 +267,7 @@ type $entry = Satisfies<Func, {
   result: never;
     locals: ['$index'];
     instructions: [
-      { kind: 'Const'; value: 0 },
+      { kind: 'Const'; value: '0' },
       { kind: 'LocalSet'; id: '$index' },
       { kind: 'LocalGet'; id: '$index' },
       { kind: 'LocalGet'; id: '$F32Add_a' },
@@ -403,7 +403,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: 1;
+    memorySize: '1';
     indirect: [];
   },
   debugMode

@@ -20,20 +20,20 @@ type $brif = Satisfies<Func, {
                   { kind: 'EqualsZero' },
                   { kind: 'BranchIf'; id: '$inner_block' },
                   { kind: 'LocalGet'; id: '$x' },
-                  { kind: 'Const'; value: 1 },
+                  { kind: 'Const'; value: '1' },
                   { kind: 'Equals' },
                   { kind: 'BranchIf'; id: '$middle_block' },
-                  { kind: 'Const'; value: 7 },
+                  { kind: 'Const'; value: '111' },
                   { kind: 'LocalSet'; id: '$result' },
                   { kind: 'Branch'; id: '$outer_block' },
                 ];
               },
-              { kind: 'Const'; value: 42 },
+              { kind: 'Const'; value: '101010' },
               { kind: 'LocalSet'; id: '$result' },
               { kind: 'Branch'; id: '$outer_block' },
             ];
           },
-          { kind: 'Const'; value: 99 },
+          { kind: 'Const'; value: '1100011' },
           { kind: 'LocalSet'; id: '$result' },
         ];
       },
@@ -65,7 +65,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: 0;
+    memorySize: '0';
     indirect: [];
   },
   debugMode

@@ -1,4 +1,4 @@
-import { Bit, To32Binary, ToDecimal } from "./binary";
+import { Bit, To32Binary, ToDecimalSigned } from "./binary";
 
 type LookupBitAnd = {
   '0': {
@@ -47,7 +47,7 @@ type ProcessLookup<
 export type BitwiseAnd<
   T extends number,
   U extends number
-> = ToDecimal<BitwiseAndBinary<To32Binary<T>, To32Binary<U>>>
+> = ToDecimalSigned<BitwiseAndBinary<To32Binary<T>, To32Binary<U>>>
 
 export type BitwiseAndBinary<
   T extends string,
@@ -57,7 +57,7 @@ export type BitwiseAndBinary<
 export type BitwiseOr<
   T extends number,
   U extends number
-> = ToDecimal<BitwiseOrBinary<To32Binary<T>, To32Binary<U>>>
+> = ToDecimalSigned<BitwiseOrBinary<To32Binary<T>, To32Binary<U>>>
 
 export type BitwiseOrBinary<
   T extends string,
@@ -67,9 +67,25 @@ export type BitwiseOrBinary<
 export type BitwiseXor<
   T extends number,
   U extends number
-> = ToDecimal<BitwiseXorBinary<To32Binary<T>, To32Binary<U>>>
+> = ToDecimalSigned<BitwiseXorBinary<To32Binary<T>, To32Binary<U>>>
 
 export type BitwiseXorBinary<
   T extends string,
   U extends string
 > = ProcessLookup<T, U, LookupBitXor>
+
+type _BitwiseNotBinary<
+  T extends string,
+  _Acc extends string
+> =
+  T extends `${infer Head}${infer Tail}`
+  ? _BitwiseNotBinary<Tail, `${_Acc}${Head extends '0' ? '1' : '0'}`>
+  : _Acc
+
+export type BitwiseNotBinary<
+  T extends string
+> = _BitwiseNotBinary<T, ''>
+
+export type BitwiseNot<
+  T extends number
+> = ToDecimalSigned<BitwiseNotBinary<To32Binary<T>>>

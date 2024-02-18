@@ -83,10 +83,9 @@ export type ProgramState = {
 
 export type ProgramInput = Pick<
   ProgramState,
-  | "memory" | "indirect" | "globals"
+  | "memory" | "indirect" | "globals" | "memorySize"
 > & {
   arguments: number[];
-  memorySize: number;
   funcs: FuncsById & {
     $entry: Func;
   };

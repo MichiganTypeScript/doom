@@ -30,19 +30,19 @@ fn handle_instruction(
 
         /* Constants Instructions */
         Instruction::I32Const(value) => {
-            vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
+            vec![(*indent, format!("{{ kind: 'Const'; value: '{:b}' }},", value))]
         }
         Instruction::I64Const(value) => {
-            vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
+            vec![(*indent, format!("{{ kind: 'Const'; value: '{:b}' }},", value))]
         }
-        Instruction::F32Const(raw_bits) => {
-            let value = f32::from_bits(raw_bits.bits).to_string();
-            vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
-        }
-        Instruction::F64Const(raw_bits) => {
-            let value = f64::from_bits(raw_bits.bits).to_string();
-            vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
-        }
+        // Instruction::F32Const(raw_bits) => {
+        //     let value = f32::from_bits(raw_bits.bits).to_string();
+        //     vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
+        // }
+        // Instruction::F64Const(raw_bits) => {
+        //     let value = f64::from_bits(raw_bits.bits).to_string();
+        //     vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
+        // }
 
         /* Comparison Instructions */
         Instruction::I32Eqz | Instruction::I64Eqz => {

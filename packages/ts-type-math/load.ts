@@ -1,4 +1,4 @@
-import { ToDecimal } from "./binary";
+import { ToDecimalSigned } from "./binary";
 import { Add } from "./hotscript-fork/numbers/impl/addition";
 import { JoinBytes } from "./split";
 // import { Add } from 'ts-arithmetic'
@@ -30,7 +30,7 @@ export namespace Load {
   export type I32<
     bytes extends string[]
   > = Satisfies<number,
-    ToDecimal<
+    ToDecimalSigned<
       JoinBytes<bytes>
     >
   >

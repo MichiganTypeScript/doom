@@ -1,3 +1,5 @@
+import { BinaryAdd } from "./binary-add";
+import { BitwiseNot, BitwiseNotBinary } from "./bitwise";
 import type { Div, Mod } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
 // import type { Add } from './hotscript-fork/numbers/impl/addition';
@@ -92,7 +94,7 @@ type PadLeft<
   : PadLeft<`0${S}`, N>
 >
 
-export type IsNegative<
+export type TsNumberIsNegative<
   T extends number
 > =
   `${T}` extends `-${string}`
@@ -102,10 +104,10 @@ export type IsNegative<
 export type To32Binary<
   T extends number,
 > = Satisfies<string,
-  IsNegative<T> extends true
+  TsNumberIsNegative<T> extends true
 
-  ? // we need to pad to 31 because the first bit is the sign bit
-    `1${PadLeft<Process<T>, 31>}`
+  ? // we need do the Two's Complement fliperouney thing
+    TwosComplementFlip<PadLeft<Process<T>, 32>>
   
   : // full 32 bit
     PadLeft<Process<T>, 32>
@@ -114,10 +116,10 @@ export type To32Binary<
 export type To64Binary<
   T extends number,
 > = Satisfies<string,
-  IsNegative<T> extends true
+  TsNumberIsNegative<T> extends true
 
-  ? // we need to pad to 63 because the first bit is the sign bit
-    `1${PadLeft<Process<T>, 63>}`
+  ? // we need do the Two's Complement fliperouney thing
+    TwosComplementFlip<PadLeft<Process<T>, 64>>
 
   : // full 64 bit
     PadLeft<Process<T>, 64>
@@ -131,10 +133,10 @@ export type ReverseString<T extends string> =
 // QUESTION: I have lookup tables for 0-255 (from both binary and decimal).
 // Would it be better or faster to just check that object real quick first and return that value if it exists?
 
-export type ToDecimal<T extends string> =
-  _ToDecimal<ReverseString<T>>;
+export type ToDecimalUnsigned<T extends string> =
+  _ToDecimalUnsigned<ReverseString<T>>;
 
-type _ToDecimal<
+type _ToDecimalUnsigned<
   Binary extends string,
 
   _PowerOfTwo extends number = 0,
@@ -143,14 +145,14 @@ type _ToDecimal<
   Binary extends `${infer Head}${infer Tail}`
 
   ? Head extends '0'
-    ? _ToDecimal<
+    ? _ToDecimalUnsigned<
         Tail,
         _NextPowerOfTwo
       >
 
     : Head extends '1'
       ? Add<
-          _ToDecimal<
+          _ToDecimalUnsigned<
             Tail,
             _NextPowerOfTwo
           >,
@@ -164,6 +166,14 @@ type _ToDecimal<
 // maybe performance would be better if this were just `string`?
 export type Bit = '0' | '1';
 
+export type IsNegativeBinary<
+  binary extends string
+> = Satisfies<boolean,
+  binary extends `${infer Head extends '1'}${string}`
+    ? true
+    : false
+>
+
 export type SignBit<
   binary extends string
 > = Satisfies<Bit,
@@ -172,15 +182,40 @@ export type SignBit<
     : never
 >
 
-// type x = ToDecimal<"00000000001100010111100011000110">
+// type x = ToDecimalUnsigned<"00000000001100010111100011000110">
 //   ^?
 
-export type AsSigned<
+export type TwosComplementFlip<
+  T extends string
+> = BinaryAdd<BitwiseNotBinary<T>, "1">
+
+type x = TwosComplementFlip<"101110"> // =>
+
+type y = ToDecimalUnsigned<x> // =>
+
+// this takes a positive TsNumber nad makes it negative
+export type WithNegativeSign<
+  T extends number
+> = `-${T}` extends `${infer U extends number}` ? U : never
+
+export type ToDecimalSigned<
   binary extends string
 > = Satisfies<number,
   binary extends `${infer Head extends Bit}${infer remainder extends string}`
   ? Head extends '0'
-    ? ToDecimal<remainder>
-    : ToDecimal<remainder>
+    ? // positive number
+      ToDecimalUnsigned<remainder>
+
+    : // negative number
+      WithNegativeSign<
+        ToDecimalUnsigned<
+          TwosComplementFlip<
+            remainder
+          >
+        >
+      >
   : never
 >
+
+type a = ToDecimalSigned<"101110"> // =>
+type b = ToDecimalUnsigned<"101110">       // =>

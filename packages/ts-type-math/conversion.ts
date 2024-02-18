@@ -1,4 +1,4 @@
-import { To32Binary, To64Binary, ToDecimal } from "./binary";
+import { To32Binary, To64Binary, ToDecimalSigned } from "./binary";
 import { WasmType, WasmValue } from './wasm';
 
 // export type Nibble = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
@@ -61,7 +61,7 @@ export namespace Convert {
     export type ToU32Decimal<
       binary extends U32Binary
     > = Satisfies<number,
-      ToDecimal<binary>
+      ToDecimalSigned<binary>
     >
   }
 

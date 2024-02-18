@@ -122,6 +122,8 @@ impl ToString for SourceFile {
         }
 
         let (memory_size, _max_memory) = self.memory.borrow().to_owned();
+        dbg!(&memory_size);
+        let memory_size_binary = format!("{:b}", memory_size);
 
         let indirect = self.indirect.borrow().to_owned().join(", ");
 
@@ -140,7 +142,7 @@ impl ToString for SourceFile {
     }};
     globals: {{{globals}}};
     memory: {memory};
-    memorySize: {memory_size};
+    memorySize: '{memory_size_binary}';
     indirect: [{indirect}];
   }},
   debugMode

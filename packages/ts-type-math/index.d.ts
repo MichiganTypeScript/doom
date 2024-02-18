@@ -1,6 +1,5 @@
 export type { Add } from './hotscript-fork/numbers/impl/addition'
 export type { Abs as AbsoluteValue } from './hotscript-fork/numbers/impl/absolute'
-export type { IsNegative } from './binary'
 export type { Convert } from './conversion'
 export type { BitwiseAnd, BitwiseOr, BitwiseXor } from './bitwise'
 export type { Equal, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual, NotEqual } from './hotscript-fork/numbers/impl/compare'

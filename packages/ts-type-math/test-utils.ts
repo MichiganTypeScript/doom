@@ -9,3 +9,14 @@ export const floatToBinary = (input: number, bits: 32 | 64) => {
   const intView = new (is32 ? Uint32Array : BigUint64Array)(buffer);
   return intView[0].toString(2).padStart(bits, '0');
 }
+
+export const numberToTwosComplementBinary = (decimal: number) => {
+  if (decimal >= 0) {
+    return decimal.toString(2).padStart(32, '0')
+  }
+  return (decimal >>> 0).toString(2).padStart(32, '1');
+}
+
+export const binaryTwosComplementToNumber = (binary: string) => {
+  return +`0b${binary}` >> 0;
+}

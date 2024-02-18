@@ -2,6 +2,7 @@ import type { Expect, Equal } from 'type-testing'
 import { test, expect } from "vitest"
 import { BitwiseOr, BitwiseOrBinary } from './bitwise'
 import { t, T } from './test-cases/binary-or'
+import { binaryTwosComplementToNumber, numberToTwosComplementBinary } from './test-utils';
 
 //----------------------------------------------------------------------
 // BITWISE OR
@@ -15,16 +16,15 @@ test.each(t)('$a | $b === $e', ({
   b_binary,
   e_binary,
 }) => {
-  expect(Number.isInteger(a)).toBe(true);
-  expect(a).toBe(+`0b${a_binary}`);
+  expect(numberToTwosComplementBinary(a)).toBe(a_binary);
+  expect(numberToTwosComplementBinary(b)).toBe(b_binary);
+  expect(numberToTwosComplementBinary(e)).toBe(e_binary);
 
-  expect(Number.isInteger(b)).toBe(true);
-  expect(b).toBe(+`0b${b_binary}`);
-  
-  expect(Number.isInteger(e)).toBe(true);
-  expect(e).toBe(+`0b${e_binary}`);
+  expect(binaryTwosComplementToNumber(a_binary)).toBe(a);
+  expect(binaryTwosComplementToNumber(b_binary)).toBe(b);
+  expect(binaryTwosComplementToNumber(e_binary)).toBe(e);
 
-  expect((a | b) >>> 0).toBe(e);
+  expect((a | b) >> 0).toBe(e);
 
   expect(t).toHaveLength(24);
 });

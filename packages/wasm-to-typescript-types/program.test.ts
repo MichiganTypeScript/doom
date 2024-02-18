@@ -19,7 +19,7 @@ export type makeInput = Satisfies<ProgramInput, {
   };
   globals: {};
   memory: {};
-  memorySize: 0;
+  memorySize: '0';
   indirect: [];
 }>
 

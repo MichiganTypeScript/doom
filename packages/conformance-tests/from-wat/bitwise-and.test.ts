@@ -10,7 +10,7 @@ test(name, async () => {
   const entry = await getWasm('from-wat', name);
   expect(t).toHaveLength(24);
   t.forEach(({ a, b, e }) => {
-    expect(entry(a, b) >>> 0).toStrictEqual(e);
+    expect(entry(a, b) >> 0).toStrictEqual(e);
   });
 });
 

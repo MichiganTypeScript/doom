@@ -20,7 +20,7 @@ type $entry = Satisfies<Func, {
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
       { kind: 'LocalSet'; id: '$l1' },
-      { kind: 'Const'; value: 16 },
+      { kind: 'Const'; value: '10000' },
       { kind: 'LocalSet'; id: '$l2' },
       { kind: 'LocalGet'; id: '$l1' },
       { kind: 'LocalGet'; id: '$l2' },
@@ -34,7 +34,7 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalGet'; id: '$l3' },
       { kind: 'I32Load8u'; offset: 15 },
       { kind: 'LocalSet'; id: '$l4' },
-      { kind: 'Const'; value: 24 },
+      { kind: 'Const'; value: '11000' },
       { kind: 'LocalSet'; id: '$l5' },
       { kind: 'LocalGet'; id: '$l4' },
       { kind: 'LocalGet'; id: '$l5' },
@@ -47,21 +47,21 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalGet'; id: '$l7' },
       { kind: 'Call'; id: '$toupper' },
       { kind: 'LocalSet'; id: '$l8' },
-      { kind: 'Const'; value: 0 },
+      { kind: 'Const'; value: '0' },
       { kind: 'LocalSet'; id: '$l9' },
       { kind: 'LocalGet'; id: '$l9' },
       { kind: 'LocalGet'; id: '$l8' },
       { kind: 'I32Store8'; offset: 1024 },
-      { kind: 'Const'; value: 0 },
+      { kind: 'Const'; value: '0' },
       { kind: 'LocalSet'; id: '$l10' },
-      { kind: 'Const'; value: 0 },
+      { kind: 'Const'; value: '0' },
       { kind: 'LocalSet'; id: '$l11' },
       { kind: 'LocalGet'; id: '$l11' },
       { kind: 'LocalGet'; id: '$l10' },
       { kind: 'I32Store8'; offset: 1025 },
-      { kind: 'Const'; value: 1024 },
+      { kind: 'Const'; value: '10000000000' },
       { kind: 'LocalSet'; id: '$l12' },
-      { kind: 'Const'; value: 16 },
+      { kind: 'Const'; value: '10000' },
       { kind: 'LocalSet'; id: '$l13' },
       { kind: 'LocalGet'; id: '$l3' },
       { kind: 'LocalGet'; id: '$l13' },
@@ -84,7 +84,7 @@ type $_initialize = Satisfies<Func, {
       { kind: 'Block';
         id: '$B0';
         instructions: [
-          { kind: 'Const'; value: 1 },
+          { kind: 'Const'; value: '1' },
           { kind: 'EqualsZero' },
           { kind: 'BranchIf'; id: '$B0' },
           { kind: 'Call'; id: '$__wasm_call_ctors' },
@@ -101,9 +101,9 @@ type $islower = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'Const'; value: -97 },
+      { kind: 'Const'; value: '11111111111111111111111110011111' },
       { kind: 'Add', type: 'i32' },
-      { kind: 'Const'; value: 26 },
+      { kind: 'Const'; value: '11010' },
       { kind: 'LessThan' },
     ];
 }>
@@ -116,7 +116,7 @@ type $toupper = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'Const'; value: 95 },
+      { kind: 'Const'; value: '1011111' },
       { kind: 'And' },
       { kind: 'LocalGet'; id: '$p0' },
       { kind: 'LocalGet'; id: '$p0' },
@@ -158,7 +158,7 @@ type $stackAlloc = Satisfies<Func, {
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
       { kind: 'LocalGet'; id: '$p0' },
       { kind: 'Subtract' },
-      { kind: 'Const'; value: -16 },
+      { kind: 'Const'; value: '11111111111111111111111111110000' },
       { kind: 'And' },
       { kind: 'LocalTee'; id: '$l1' },
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
@@ -173,12 +173,12 @@ type $emscripten_stack_init = Satisfies<Func, {
   result: never;
     locals: [];
     instructions: [
-      { kind: 'Const'; value: 5243920 },
+      { kind: 'Const'; value: '10100000000010000010000' },
       { kind: 'GlobalSet'; id: '$__stack_base' },
-      { kind: 'Const'; value: 1032 },
-      { kind: 'Const'; value: 15 },
+      { kind: 'Const'; value: '10000001000' },
+      { kind: 'Const'; value: '1111' },
       { kind: 'Add', type: 'i32' },
-      { kind: 'Const'; value: -16 },
+      { kind: 'Const'; value: '11111111111111111111111111110000' },
       { kind: 'And' },
       { kind: 'GlobalSet'; id: '$__stack_end' },
     ];
@@ -226,7 +226,7 @@ type $__errno_location = Satisfies<Func, {
   result: 'i32';
     locals: [];
     instructions: [
-      { kind: 'Const'; value: 1028 },
+      { kind: 'Const'; value: '10000000100' },
     ];
 }>
 
@@ -252,12 +252,12 @@ export type entry<
       $__errno_location: $__errno_location;
     };
     globals: {
-      $__stack_pointer: 5243920;
-      $__stack_end: 0;
-      $__stack_base: 0;
+      $__stack_pointer: '10100000000010000010000';
+      $__stack_end: '0';
+      $__stack_base: '0';
     };
     memory: {};
-    memorySize: 256;
+    memorySize: '100000000';
     indirect: ['$__wasm_call_ctors'];
   },
   debugMode

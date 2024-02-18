@@ -57,7 +57,7 @@ export type runProgram<
 
       // copy readonly memory into memory registers
       memory: input['memory'];
-      memorySize: Convert.TSNumber.ToWasmValue<input['memorySize'], 'i32'>;
+      memorySize: input['memorySize'];
 
       // since the stack is a stack, we need to reverse it
       stack: ProcessInputStack<input>;

@@ -22,7 +22,7 @@ type $indirect_call = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Const'; value: 0 },
+      { kind: 'Const'; value: '0' },
       { kind: 'CallIndirect'; id: '$__indirect_function_table' },
     ];
 }>
@@ -53,7 +53,7 @@ export type entry<
     };
     globals: {};
     memory: {};
-    memorySize: 0;
+    memorySize: '0';
     indirect: ['$add'];
   },
   debugMode
