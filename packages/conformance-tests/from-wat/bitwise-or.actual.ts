@@ -9,7 +9,7 @@ type $or = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Or' },
+      { kind: 'Or', type: 'i32' },
     ];
 }>
 

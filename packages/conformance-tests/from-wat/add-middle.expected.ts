@@ -60,7 +60,7 @@ type $emscripten_stack_init = Satisfies<Func, {
       { kind: 'Const'; value: '00000000000000000000000000001111' },
       { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: '11111111111111111111111111110000' },
-      { kind: 'And' },
+      { kind: 'And', type: 'i32' },
       { kind: 'GlobalSet'; id: '$__stack_end' },
     ];
 }>

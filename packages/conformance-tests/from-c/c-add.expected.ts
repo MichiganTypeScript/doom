@@ -100,7 +100,7 @@ type $stackAlloc = Satisfies<Func, {
       { kind: 'LocalGet'; id: '$p0' },
       { kind: 'Subtract' },
       { kind: 'Const'; value: '11111111111111111111111111110000' },
-      { kind: 'And' },
+      { kind: 'And', type: 'i32' },
       { kind: 'LocalTee'; id: '$l1' },
       { kind: 'GlobalSet'; id: '$__stack_pointer' },
       { kind: 'LocalGet'; id: '$l1' },
@@ -120,7 +120,7 @@ type $emscripten_stack_init = Satisfies<Func, {
       { kind: 'Const'; value: '00000000000000000000000000001111' },
       { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: '11111111111111111111111111110000' },
-      { kind: 'And' },
+      { kind: 'And', type: 'i32' },
       { kind: 'GlobalSet'; id: '$__stack_end' },
     ];
 }>

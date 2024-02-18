@@ -9,7 +9,7 @@ type $xor = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Xor' },
+      { kind: 'Xor', type: 'i32' },
     ];
 }>
 

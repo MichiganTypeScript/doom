@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/params.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[10, 2, 4], true>// =>
+import { entry } from 'conformance-tests/from-wat/shift-right-unsigned.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[10, 1], true>// =>
 type r=e['result']// =>
 type s=e['stack'] // =>
 // type m = ReadStringFromMemory<e>// =>

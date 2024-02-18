@@ -1,35 +1,49 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
-import { WasmValue } from "ts-type-math"
+import { WasmValue, WasmInt } from "ts-type-math"
 
 export type IAnd = {
   kind: "And"
+
+  type: WasmInt
 }
 
 export type IOr = {
   kind: "Or"
+
+  type: WasmInt
 }
 
 export type IXor = {
   kind: "Xor"
+
+  type: WasmInt
 }
 
 export type IShiftLeft = {
   kind: "ShiftLeft"
+
+  type: WasmInt
 }
 
 export type IShiftRight = {
   kind: "ShiftRight"
   signed: boolean
+
+  type: WasmInt
 }
 
 export type IRotateLeft = {
   kind: "RotateLeft"
+
+  type: WasmInt
 }
 
 export type IRotateRight = {
   kind: "RotateRight"
+
+  type: WasmInt
 }
 
 export type BitwiseInstruction =
@@ -119,7 +133,7 @@ export type Xor<
   ]
   ? State.Stack.set<
       [
-        ...remaining, 
+        ...remaining,
         // TypeMath.BitwiseXor<b, a> // TODO Broken
       ],
 
@@ -134,13 +148,14 @@ export type ShiftLeft<
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
     ...infer remaining extends WasmValue[],
-    infer b extends WasmValue,
     infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
-        ...remaining, 
-        // TypeMath.ShiftLeft<b, a> // TODO Broken
+        ...remaining,
+        instruction['type'] extends 'i32' ? TypeMath.Wasm.I32Shl<a, b> :
+        never // TODO i64
       ],
 
       state
@@ -154,13 +169,18 @@ export type ShiftRight<
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
     ...infer remaining extends WasmValue[],
-    infer b extends WasmValue,
     infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
-        ...remaining, 
-        // TypeMath.ShiftRight<b, a, instruction['signed']> // TODO Broken
+        ...remaining,
+
+        instruction['type'] extends 'i32'
+          ? instruction['signed'] extends true
+              ? TypeMath.Wasm.I32ShrS<a, b>
+              : TypeMath.Wasm.I32ShrU<a, b>
+          : never // TODO i64
       ],
 
       state

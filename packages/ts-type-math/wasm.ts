@@ -1,8 +1,10 @@
 import { ClampDigits } from "./binary";
-import { BinaryAdd } from "./binary-add";
+import { AddBinary } from "./add-binary";
+import { ShiftLeftBinary, ShiftRightBinary } from "./shift";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
-
+export type WasmInt = 'i32' | 'i64';
+export type WasmFloat = 'f32' | 'f64';
 
 /**
  * This type is a wasm memory value.  Could be an item on the stack, or a global, or a byte in memory (or a few bytes)
@@ -16,7 +18,7 @@ export namespace Wasm {
     b extends WasmValue
   > = Satisfies<WasmValue,
     ClampDigits<
-      BinaryAdd<a, b>,
+      AddBinary<a, b>,
       32
     >
   >
@@ -64,5 +66,32 @@ export namespace Wasm {
     b extends WasmValue
   > = Satisfies<WasmValue,
     a extends b ? I64False : I64True
+  >
+
+  export type I32Shl<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    ShiftLeftBinary<a, b>
+  >
+
+  export type I32ShrU<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    ShiftRightBinary<a, b, false>
+  >
+
+  export type I32ShrS<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    ShiftRightBinary<a, b, true>
   >
 }

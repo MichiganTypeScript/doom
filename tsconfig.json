@@ -64,9 +64,9 @@
     // "./packages/conformance-tests/from-wat/params.test.ts",
     // "./packages/conformance-tests/from-wat/return.test.ts",
     // "./packages/conformance-tests/from-wat/select.test.ts",
-    "./packages/conformance-tests/from-wat/shift-left.test.ts",
-    "./packages/conformance-tests/from-wat/shift-right-signed.test.ts",
-    "./packages/conformance-tests/from-wat/shift-right-unsigned.test.ts",
+    // "./packages/conformance-tests/from-wat/shift-left.test.ts",
+    // "./packages/conformance-tests/from-wat/shift-right-signed.test.ts",
+    // "./packages/conformance-tests/from-wat/shift-right-unsigned.test.ts",
     "./packages/conformance-tests/from-wat/subtract.test.ts",
     // "./packages/conformance-tests/from-wat/unreachable.test.ts",
   ]

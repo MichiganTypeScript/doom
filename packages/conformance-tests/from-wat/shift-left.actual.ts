@@ -9,7 +9,7 @@ type $entry = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$num' },
       { kind: 'LocalGet'; id: '$by' },
-      { kind: 'ShiftLeft' },
+      { kind: 'ShiftLeft', type: 'i32' },
     ];
 }>
 

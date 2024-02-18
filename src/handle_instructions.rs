@@ -145,29 +145,53 @@ fn handle_instruction(
         // CopySign
 
         /* Bitwise Instructions */
-        Instruction::I32And | Instruction::I64And => {
-            vec![(*indent, format!("{{ kind: 'And' }},"))]
+        Instruction::I32And => {
+            vec![(*indent, format!("{{ kind: 'And', type: 'i32' }},"))]
         }
-        Instruction::I32Or | Instruction::I64Or => {
-            vec![(*indent, format!("{{ kind: 'Or' }},"))]
+        Instruction::I64And => {
+            vec![(*indent, format!("{{ kind: 'And', type: 'i64' }},"))]
         }
-        Instruction::I32Xor | Instruction::I64Xor => {
-            vec![(*indent, format!("{{ kind: 'Xor' }},"))]
+        Instruction::I32Or => {
+            vec![(*indent, format!("{{ kind: 'Or', type: 'i32' }},"))]
         }
-        Instruction::I32Shl | Instruction::I64Shl => {
-            vec![(*indent, format!("{{ kind: 'ShiftLeft' }},"))]
+        Instruction::I64Or => {
+            vec![(*indent, format!("{{ kind: 'Or', type: 'i64' }},"))]
         }
-        Instruction::I32ShrU | Instruction::I64ShrU => {
-            vec![(*indent, format!("{{ kind: 'ShiftRight', signed: false }},"))]
+        Instruction::I32Xor => {
+            vec![(*indent, format!("{{ kind: 'Xor', type: 'i32' }},"))]
         }
-        Instruction::I32ShrS | Instruction::I64ShrS => {
-            vec![(*indent, format!("{{ kind: 'ShiftRight', signed: true }},"))]
+        Instruction::I64Xor => {
+            vec![(*indent, format!("{{ kind: 'Xor', type: 'i64' }},"))]
         }
-        Instruction::I32Rotl | Instruction::I64Rotl => {
-            vec![(*indent, format!("{{ kind: 'RotateLeft' }},"))]
+        Instruction::I32Shl => {
+            vec![(*indent, format!("{{ kind: 'ShiftLeft', type: 'i32' }},"))]
         }
-        Instruction::I32Rotr | Instruction::I64Rotr => {
-            vec![(*indent, format!("{{ kind: 'RotateRight' }},"))]
+        Instruction::I64Shl => {
+            vec![(*indent, format!("{{ kind: 'ShiftLeft', type: 'i64' }},"))]
+        }
+        Instruction::I32ShrU => {
+            vec![(*indent, format!("{{ kind: 'ShiftRight', signed: false, type: 'i32' }},"))]
+        }
+        Instruction::I64ShrU => {
+            vec![(*indent, format!("{{ kind: 'ShiftRight', signed: false, type: 'i64' }},"))]
+        }
+        Instruction::I32ShrS => {
+            vec![(*indent, format!("{{ kind: 'ShiftRight', signed: true, type: 'i32' }},"))]
+        }
+        Instruction::I64ShrS => {
+            vec![(*indent, format!("{{ kind: 'ShiftRight', signed: true, type: 'i64' }},"))]
+        }
+        Instruction::I32Rotl => {
+            vec![(*indent, format!("{{ kind: 'RotateLeft', type: 'i32' }},"))]
+        }
+        Instruction::I64Rotl => {
+            vec![(*indent, format!("{{ kind: 'RotateLeft', type: 'i64' }},"))]
+        }
+        Instruction::I32Rotr => {
+            vec![(*indent, format!("{{ kind: 'RotateRight', type: 'i32' }},"))]
+        }
+        Instruction::I64Rotr => {
+            vec![(*indent, format!("{{ kind: 'RotateRight', type: 'i64' }},"))]
         }
         // CountLeadingZeros
         // CountTrailingZeros

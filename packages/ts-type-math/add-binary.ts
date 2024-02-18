@@ -103,9 +103,9 @@ type StringAdd<
         : // there was a carry, base case of recursion
           '1'
 
-// type x = BinaryAdd<"1", "1"> // =>
+// type x = AddBinary<"1", "1"> // =>
 
-export type BinaryAdd<
+export type AddBinary<
   A extends string,
   B extends string
 > = Satisfies<string,

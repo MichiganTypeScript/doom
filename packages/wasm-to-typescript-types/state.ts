@@ -603,6 +603,3 @@ export namespace State {
     >
   }
 }
-
-type x = Convert.WasmValue.ToTSNumber<'1', 'i32'>
-//   ^?

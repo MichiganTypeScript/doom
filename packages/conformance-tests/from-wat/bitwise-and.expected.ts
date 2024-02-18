@@ -9,7 +9,7 @@ type $and = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'And' },
+      { kind: 'And', type: 'i32' },
     ];
 }>
 

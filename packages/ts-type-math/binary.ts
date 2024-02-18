@@ -1,4 +1,4 @@
-import { BinaryAdd } from "./binary-add";
+import { AddBinary } from "./add-binary";
 import { BitwiseNotBinary } from "./bitwise";
 import type { Div, Mod } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
@@ -187,7 +187,7 @@ export type SignBit<
 
 export type TwosComplementFlip<
   T extends string
-> = BinaryAdd<BitwiseNotBinary<T>, "1">
+> = AddBinary<BitwiseNotBinary<T>, "1">
 
 type x = TwosComplementFlip<"101110"> // =>
 
