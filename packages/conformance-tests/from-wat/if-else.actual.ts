@@ -10,7 +10,7 @@ type $if = Satisfies<Func, {
       { kind: 'LocalGet'; id: '$n' },
       { kind: 'LocalGet'; id: '$control' },
       { kind: 'Const'; value: '00000000000000000000000000000000' },
-      { kind: 'GreaterThanOrEqual' },
+      { kind: 'GreaterThanOrEqual', signed: true, type: 'i32' },
       { kind: 'If';
         then: [
           { kind: 'Const'; value: '00000000000000000000000000000001' },

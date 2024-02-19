@@ -20,3 +20,16 @@ export const numberToTwosComplementBinary = (decimal: number) => {
 export const binaryTwosComplementToNumber = (binary: string) => {
   return +`0b${binary}` >> 0;
 }
+
+export const compare = {
+  gts: (a: number, b: number) => a > b ? 1 : 0,
+  gtu: (a: number, b: number) => ((a >>> 0) > (b >>> 0)) ? 1 : 0,
+  ges: (a: number, b: number) => a >= b ? 1 : 0,
+  geu: (a: number, b: number) => ((a >>> 0) >= (b >>> 0)) ? 1 : 0,
+  lts: (a: number, b: number) => a < b ? 1 : 0,
+  ltu: (a: number, b: number) => ((a >>> 0) < (b >>> 0)) ? 1 : 0,
+  les: (a: number, b: number) => a <= b ? 1 : 0,
+  leu: (a: number, b: number) => ((a >>> 0) <= (b >>> 0)) ? 1 : 0,
+   eq: (a: number, b: number) => a === b ? 1 : 0,
+  eqz: (a: number) => a === 0 ? 1 : 0,
+}

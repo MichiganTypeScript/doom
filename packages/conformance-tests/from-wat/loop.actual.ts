@@ -24,7 +24,7 @@ type $my_loop = Satisfies<Func, {
           { kind: 'LocalSet'; id: '$result' },
           { kind: 'LocalGet'; id: '$i' },
           { kind: 'Const'; value: '00000000000000000000000000000011' },
-          { kind: 'LessThan' },
+          { kind: 'LessThan', signed: true, type: 'i32' },
           { kind: 'BranchIf'; id: '$my_loop' },
         ];
       },

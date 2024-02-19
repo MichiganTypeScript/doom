@@ -2,6 +2,7 @@ import { ClampDigits } from "./binary";
 import { AddBinary } from "./add-binary";
 import { ShiftLeftBinary, ShiftRightBinary } from "./shift";
 import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary } from "./bitwise";
+import { EqualsBinary, GreaterThanSignedBinary, GreaterThanUnsignedBinary, LessThanSignedBinary, LessThanUnsignedBinary, NotEqualsBinary } from "./comparison";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 export type WasmInt = 'i32' | 'i64';
@@ -38,35 +39,36 @@ export namespace Wasm {
   export type I64Eqz<
     a extends WasmValue
   > = Satisfies<WasmValue,
-    a extends I64False ? I64True : I64False
+    // note, even if it's an i64, it's still 32 bits that's returned
+    a extends I64False ? I32True : I32False
   >
 
   export type I32Eq<
     a extends WasmValue,
     b extends WasmValue
   > = Satisfies<WasmValue,
-    a extends b ? I32True : I32False
+    EqualsBinary<a, b>
   >
 
   export type I64Eq<
     a extends WasmValue,
     b extends WasmValue
   > = Satisfies<WasmValue,
-    a extends b ? I64True : I64False
+    EqualsBinary<a, b>
   >
 
   export type I32Neq<
     a extends WasmValue,
     b extends WasmValue
   > = Satisfies<WasmValue,
-    a extends b ? I32False : I32True
+    NotEqualsBinary<a, b>
   >
 
   export type I64Neq<
     a extends WasmValue,
     b extends WasmValue
   > = Satisfies<WasmValue,
-    a extends b ? I64False : I64True
+    NotEqualsBinary<a, b>
   >
 
   export type I32Shl<
@@ -121,5 +123,70 @@ export namespace Wasm {
     b extends WasmValue
   > = Satisfies<WasmValue,
     BitwiseXorBinary<a, b>
+  >
+
+  export type I32GtU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    GreaterThanUnsignedBinary<a, b>
+  >
+
+  export type I32GeU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    EqualsBinary<a, b> extends I32True
+    ? I32True
+    : GreaterThanUnsignedBinary<a, b>
+  >
+
+  export type I32LtU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    LessThanUnsignedBinary<a, b>
+  >
+
+  export type I32LeU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    EqualsBinary<a, b> extends I32True
+    ? I32True
+    : LessThanUnsignedBinary<a, b>
+  >
+
+
+  export type I32GtS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    GreaterThanSignedBinary<a, b>
+  >
+
+  export type I32GeS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    EqualsBinary<a, b> extends I32True
+    ? I32True
+    : GreaterThanSignedBinary<a, b>
+  >
+
+  export type I32LtS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    LessThanSignedBinary<a, b>
+  >
+
+  export type I32LeS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    EqualsBinary<a, b> extends I32True
+    ? I32True
+    : LessThanSignedBinary<a, b>
   >
 }

@@ -1,6 +1,5 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
-import * as TypeMath from "ts-type-math"
 import { WasmValue, WasmType, Wasm } from "ts-type-math"
 
 export type IEqualsZero = {
@@ -23,18 +22,34 @@ export type INotEqual = {
 
 export type IGreaterThan = {
   kind: "GreaterThan"
+
+  type: WasmType
+
+  signed: boolean
 }
 
 export type ILessThan = {
   kind: "LessThan"
+
+  type: WasmType
+
+  signed: boolean
 }
 
 export type IGreaterThanOrEqual = {
   kind: "GreaterThanOrEqual"
+
+  type: WasmType
+
+  signed: boolean
 }
 
 export type ILessThanOrEqual = {
   kind: "LessThanOrEqual"
+
+  type: WasmType
+
+  signed: boolean
 }
 
 export type ComparisonInstruction =
@@ -154,7 +169,11 @@ export type GreaterThan<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.GreaterThan<a, b> extends true ? 1 : 0 // TODO Broken
+        instruction['type'] extends 'i32'
+        ? instruction['signed'] extends true
+          ? Wasm.I32GtS<a, b>
+          : Wasm.I32GtU<a, b>
+        : never // Todo add i64, f32, f64
       ],
 
       state
@@ -174,7 +193,11 @@ export type LessThan<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.LessThan<a, b> extends true ? 1 : 0 // TODO Broken
+        instruction['type'] extends 'i32'
+        ? instruction['signed'] extends true
+          ? Wasm.I32LtS<a, b>
+          : Wasm.I32LtU<a, b>
+        : never // Todo add i64, f32, f64
       ],
       state
     >
@@ -193,7 +216,11 @@ export type GreaterThanOrEqual<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.GreaterThanOrEqual<a, b> extends true ? 1 : 0 // TODO Broken
+        instruction['type'] extends 'i32'
+        ? instruction['signed'] extends true
+          ? Wasm.I32GeS<a, b>
+          : Wasm.I32GeU<a, b>
+        : never // Todo add i64, f32, f64
       ],
 
       state
@@ -213,7 +240,11 @@ export type LessThanOrEqual<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.LessThanOrEqual<a, b> extends true ? 1 : 0 // TODO Broken
+        instruction['type'] extends 'i32'
+        ? instruction['signed'] extends true
+          ? Wasm.I32LeS<a, b>
+          : Wasm.I32LeU<a, b>
+        : never // Todo add i64, f32, f64
       ],
       state
     >

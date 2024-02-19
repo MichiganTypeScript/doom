@@ -104,7 +104,7 @@ type $islower = Satisfies<Func, {
       { kind: 'Const'; value: '11111111111111111111111110011111' },
       { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: '00000000000000000000000000011010' },
-      { kind: 'LessThan' },
+      { kind: 'LessThan', signed: false, type: 'i32' },
     ];
 }>
 

@@ -12,7 +12,7 @@ type $andarist = Satisfies<Func, {
       { kind: 'Const'; value: '00000000000000000000000000001010' },
       { kind: 'LocalGet'; id: '$x' },
       { kind: 'Const'; value: '11111111111111111111111111111011' },
-      { kind: 'GreaterThan' },
+      { kind: 'GreaterThan', signed: true, type: 'i32' },
       { kind: 'Select' },
       { kind: 'Add', type: 'i32' },
       { kind: 'Const'; value: '00000000000000000000000000000111' },

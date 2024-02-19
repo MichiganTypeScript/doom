@@ -78,17 +78,81 @@ fn handle_instruction(
         Instruction::F32Ne => {
             vec![(*indent, format!("{{ kind: 'NotEqual' }},"))]
         }
-        Instruction::I32GtS | Instruction::I64GtS | Instruction::I32GtU | Instruction::I64GtU | Instruction::F32Gt | Instruction::F64Gt => {
-            vec![(*indent, format!("{{ kind: 'GreaterThan' }},"))]
+
+        Instruction::I32GtS => {
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: true, type: 'i32' }},"))]
         }
-        Instruction::I32LtS | Instruction::I64LtS | Instruction::I32LtU | Instruction::I64LtU | Instruction::F32Lt | Instruction::F64Lt => {
-            vec![(*indent, format!("{{ kind: 'LessThan' }},"))]
+        Instruction::I64GtS => {
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: true, type: 'i64' }},"))]
         }
-        Instruction::I32GeS | Instruction::I64GeS | Instruction::I32GeU | Instruction::I64GeU | Instruction::F32Ge | Instruction::F64Ge => {
-            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual' }},"))]
+        Instruction::I32GtU => {
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: false, type: 'i32' }},"))]
         }
-        Instruction::I32LeS | Instruction::I64LeS | Instruction::I32LeU | Instruction::I64LeU | Instruction::F32Le | Instruction::F64Le => {
-            vec![(*indent, format!("{{ kind: 'LessThanOrEqual' }},"))]
+        Instruction::I64GtU => {
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: false, type: 'i64' }},"))]
+        }
+        Instruction::F32Gt => {
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: true, type: 'f32' }},"))]
+        }
+        Instruction::F64Gt => {
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: true, type: 'f64' }},"))]
+        }
+
+        Instruction::I32LtS => {
+            vec![(*indent, format!("{{ kind: 'LessThan', signed: true, type: 'i32' }},"))]
+        }
+        Instruction::I64LtS => {
+            vec![(*indent, format!("{{ kind: 'LessThan', signed: true, type: 'i64' }},"))]
+        }
+        Instruction::I32LtU => {
+            vec![(*indent, format!("{{ kind: 'LessThan', signed: false, type: 'i32' }},"))]
+        }
+        Instruction::I64LtU => {
+            vec![(*indent, format!("{{ kind: 'LessThan', signed: false, type: 'i64' }},"))]
+        }
+        Instruction::F32Lt => {
+            vec![(*indent, format!("{{ kind: 'LessThan', signed: true, type: 'f32' }},"))]
+        }
+        Instruction::F64Lt => {
+            vec![(*indent, format!("{{ kind: 'LessThan', signed: true, type: 'f64' }},"))]
+        }
+
+        Instruction::I32GeS => {
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'i32' }},"))]
+        }
+        Instruction::I64GeS => {
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'i64' }},"))]
+        }
+        Instruction::I32GeU => {
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: false, type: 'i32' }},"))]
+        }
+        Instruction::I64GeU => {
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: false, type: 'i64' }},"))]
+        }
+        Instruction::F32Ge => {
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'f32' }},"))]
+        }
+        Instruction::F64Ge => {
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'f64' }},"))]
+        }
+
+        Instruction::I32LeS => {
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'i32' }},"))]
+        }
+        Instruction::I64LeS => {
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'i64' }},"))]
+        }
+        Instruction::I32LeU => {
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: false, type: 'i32' }},"))]
+        }
+        Instruction::I64LeU => {
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: false, type: 'i64' }},"))]
+        }
+        Instruction::F32Le => {
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'f32' }},"))]
+        }
+        Instruction::F64Le => {
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'f64' }},"))]
         }
 
         /* Arithmetic Instructions */

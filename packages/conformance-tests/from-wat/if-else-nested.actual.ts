@@ -29,12 +29,12 @@ type $example = Satisfies<Func, {
             else: [
               { kind: 'LocalGet'; id: '$control' },
               { kind: 'Const'; value: '00000000000000000000000000000011' },
-              { kind: 'GreaterThanOrEqual' },
+              { kind: 'GreaterThanOrEqual', signed: true, type: 'i32' },
               { kind: 'If';
                 then: [
                   { kind: 'LocalGet'; id: '$control' },
                   { kind: 'Const'; value: '00000000000000000000000000000101' },
-                  { kind: 'GreaterThan' },
+                  { kind: 'GreaterThan', signed: true, type: 'i32' },
                   { kind: 'If';
                     then: [
                       { kind: 'Const'; value: '00000000000000000000000001100111' },
