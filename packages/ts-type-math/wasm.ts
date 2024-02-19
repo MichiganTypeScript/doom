@@ -1,8 +1,9 @@
 import { ClampDigits } from "./binary";
-import { AddBinary } from "./add-binary";
+import { AddBinary, I32AddBinary } from "./add";
 import { ShiftLeftBinary, ShiftRightBinary } from "./shift";
 import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary } from "./bitwise";
 import { EqualsBinary, GreaterThanSignedBinary, GreaterThanUnsignedBinary, LessThanSignedBinary, LessThanUnsignedBinary, NotEqualsBinary } from "./comparison";
+import { I32SubtractBinary } from "./subtract";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 export type WasmInt = 'i32' | 'i64';
@@ -15,22 +16,26 @@ export type WasmFloat = 'f32' | 'f64';
 export type WasmValue = string;
 
 export namespace Wasm {
-  export type I32Add<
-    a extends WasmValue,
-    b extends WasmValue
-  > = Satisfies<WasmValue,
-    ClampDigits<
-      AddBinary<a, b>,
-      32
-    >
-  >
-
   /** 8 bits string (in binary) */
   export type Byte = string;
   export type I32True  = '00000000000000000000000000000001'
   export type I32False = '00000000000000000000000000000000'
   export type I64True  = '0000000000000000000000000000000000000000000000000000000000000001'
   export type I64False = '0000000000000000000000000000000000000000000000000000000000000000'
+
+  export type I32Add<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I32AddBinary<a, b>
+  >
+
+  export type I32Sub<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I32SubtractBinary<a, b>
+  >
 
   export type I32Eqz<
     a extends WasmValue

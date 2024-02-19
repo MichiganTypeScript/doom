@@ -20,7 +20,7 @@ type $my_loop = Satisfies<Func, {
           { kind: 'LocalSet'; id: '$i' },
           { kind: 'LocalGet'; id: '$result' },
           { kind: 'Const'; value: '00000000000000000000000000000010' },
-          { kind: 'Multiply' },
+          { kind: 'Multiply', type: 'i32' },
           { kind: 'LocalSet'; id: '$result' },
           { kind: 'LocalGet'; id: '$i' },
           { kind: 'Const'; value: '00000000000000000000000000000011' },

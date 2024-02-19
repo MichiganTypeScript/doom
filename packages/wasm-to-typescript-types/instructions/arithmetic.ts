@@ -1,7 +1,7 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
-import { WasmType, WasmValue, Wasm } from "ts-type-math"
+import { WasmType, WasmValue, Wasm, WasmInt } from "ts-type-math"
 
 export type IAdd = {
   kind: "Add"
@@ -11,18 +11,30 @@ export type IAdd = {
 
 export type ISubtract = {
   kind: "Subtract"
+
+  type: WasmType
 }
 
 export type IMultiply = {
   kind: "Multiply"
+
+  type: WasmType
 }
 
 export type IDivide = {
   kind: "Divide"
+
+  signed: boolean
+
+  type: WasmType
 }
 
 export type IRemainder = {
   kind: "Remainder"
+
+  signed: boolean
+
+  type: WasmInt
 }
 
 export type ArithmeticInstruction =
@@ -66,8 +78,8 @@ export type Add<
   ? State.Stack.set<
       [
         ...remaining,
-        Wasm.I32Add<a, b>
-        // TypeMath.Add<a, b>// TODO Broken
+        instruction['type'] extends 'i32' ? Wasm.I32Add<a, b> :
+        never // Todo i64, f32, f64
       ],
       state
     >
@@ -80,13 +92,14 @@ export type Subtract<
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
     ...infer remaining extends WasmValue[],
-    infer b extends WasmValue,
     infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.Subtract<b, a> // TODO Broken
+        instruction['type'] extends 'i32' ? Wasm.I32Sub<a, b> :
+        never // Todo i64, f32, f64
       ],
 
       state

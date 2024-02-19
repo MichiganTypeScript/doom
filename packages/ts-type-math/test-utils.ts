@@ -11,10 +11,11 @@ export const floatToBinary = (input: number, bits: 32 | 64) => {
 }
 
 export const numberToTwosComplementBinary = (decimal: number) => {
-  if (decimal >= 0) {
-    return decimal.toString(2).padStart(32, '0')
+  const inRange = decimal >> 0;
+  if (inRange >= 0) {
+    return inRange.toString(2).padStart(32, '0')
   }
-  return (decimal >>> 0).toString(2).padStart(32, '1');
+  return (inRange >>> 0).toString(2).padStart(32, '1');
 }
 
 export const binaryTwosComplementToNumber = (binary: string) => {
@@ -32,4 +33,14 @@ export const compare = {
   leu: (a: number, b: number) => ((a >>> 0) <= (b >>> 0)) ? 1 : 0,
    eq: (a: number, b: number) => a === b ? 1 : 0,
   eqz: (a: number) => a === 0 ? 1 : 0,
+}
+
+export const arithmetic = {
+  add: (a: number, b: number) => (a + b) >> 0,
+  sub: (a: number, b: number) => (a - b) >> 0,
+  mul: (a: number, b: number) => (a * b) >> 0,
+  divs: (a: number, b: number) => b === 0 ? 0 : Math.floor(a / b) >> 0,
+  divu: (a: number, b: number) => b === 0 ? 0 : Math.floor((a >>> 0) / (b >>> 0)) >> 0,
+  rems: (a: number, b: number) => b === 0 ? 0 : (a % b) >> 0,
+  remu: (a: number, b: number) => b === 0 ? 0 : ((a >>> 0) % (b >>> 0)) >> 0,
 }

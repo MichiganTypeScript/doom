@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "playground": "pnpm --filter playground run playground",
+    "generate": "tsx ./packages/playground/generation.ts",
     "test:conformance": "pnpm --filter conformance-tests run test",
     "test:math": "pnpm --filter ts-type-math run test",
     "test:create-new": "pnpm --filter conformance-tests run test:create-new",

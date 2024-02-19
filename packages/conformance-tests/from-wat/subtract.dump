@@ -12,55 +12,6 @@ Module {
                         offset: 11,
                     },
                     id: Some(
-                        "minusOne",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                I32Const(
-                                    1,
-                                ),
-                                I32Sub,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                ],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 200,
-                    },
-                    id: Some(
                         "entry",
                     ),
                     name: None,
@@ -78,11 +29,12 @@ Module {
                                         "a",
                                     ),
                                 ),
-                                Call(
+                                LocalGet(
                                     Id(
-                                        "minusOne",
+                                        "b",
                                     ),
                                 ),
+                                I32Sub,
                             ],
                         },
                     },
@@ -94,6 +46,13 @@ Module {
                                     (
                                         Some(
                                             "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
                                         ),
                                         None,
                                         I32,
@@ -116,7 +75,5 @@ Module {
 
 {
     "LocalGet": 2,
-    "I32Const": 1,
     "I32Sub": 1,
-    "Call": 1,
 }

@@ -1,31 +1,5 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $F32Add = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a', '$b'];
-  paramsTypes: ['f32', 'f32'];
-  result: 'f32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Add', type: 'f32' },
-    ];
-}>
-
-type $F64Add = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a', '$b'];
-  paramsTypes: ['f64', 'f64'];
-  result: 'f64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Add', type: 'f64' },
-    ];
-}>
-
 type $I32Add = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
@@ -52,32 +26,6 @@ type $I64Add = Satisfies<Func, {
     ];
 }>
 
-type $F32Div = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a', '$b'];
-  paramsTypes: ['f32', 'f32'];
-  result: 'f32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Divide' },
-    ];
-}>
-
-type $F64Div = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a', '$b'];
-  paramsTypes: ['f64', 'f64'];
-  result: 'f64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Divide' },
-    ];
-}>
-
 type $I32DivS = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
@@ -87,7 +35,7 @@ type $I32DivS = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Divide' },
+      { kind: 'Divide', signed: true, type: 'i32' },
     ];
 }>
 
@@ -100,7 +48,7 @@ type $I64DivS = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Divide' },
+      { kind: 'Divide', signed: true, type: 'i64' },
     ];
 }>
 
@@ -113,7 +61,7 @@ type $I32DivU = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Divide' },
+      { kind: 'Divide', signed: false, type: 'i32' },
     ];
 }>
 
@@ -126,33 +74,7 @@ type $I64DivU = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Divide' },
-    ];
-}>
-
-type $F32Mul = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a', '$b'];
-  paramsTypes: ['f32', 'f32'];
-  result: 'f32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Multiply' },
-    ];
-}>
-
-type $F64Mul = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a', '$b'];
-  paramsTypes: ['f64', 'f64'];
-  result: 'f64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Multiply' },
+      { kind: 'Divide', signed: false, type: 'i64' },
     ];
 }>
 
@@ -165,7 +87,7 @@ type $I32Mul = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Multiply' },
+      { kind: 'Multiply', type: 'i32' },
     ];
 }>
 
@@ -178,7 +100,7 @@ type $I64Mul = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Multiply' },
+      { kind: 'Multiply', type: 'i64' },
     ];
 }>
 
@@ -191,7 +113,7 @@ type $I32RemS = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Remainder' },
+      { kind: 'Remainder', signed: true, type: 'i32' },
     ];
 }>
 
@@ -204,33 +126,7 @@ type $I32RemU = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Remainder' },
-    ];
-}>
-
-type $F32Sub = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a', '$b'];
-  paramsTypes: ['f32', 'f32'];
-  result: 'f32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Subtract' },
-    ];
-}>
-
-type $F64Sub = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a', '$b'];
-  paramsTypes: ['f64', 'f64'];
-  result: 'f64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Subtract' },
+      { kind: 'Remainder', signed: false, type: 'i32' },
     ];
 }>
 
@@ -243,7 +139,7 @@ type $I32Sub = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Subtract' },
+      { kind: 'Subtract', type: 'i32' },
     ];
 }>
 
@@ -256,29 +152,19 @@ type $I64Sub = Satisfies<Func, {
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
       { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Subtract' },
+      { kind: 'Subtract', type: 'i64' },
     ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
-  params: ['$F32Add_a', '$F32Add_b', '$F64Add_a', '$F64Add_b', '$I32Add_a', '$I32Add_b', '$I64Add_a', '$I64Add_b', '$F32Div_a', '$F32Div_b', '$F64Div_a', '$F64Div_b', '$I32DivS_a', '$I32DivS_b', '$I64DivS_a', '$I64DivS_b', '$I32DivU_a', '$I32DivU_b', '$I64DivU_a', '$I64DivU_b', '$F32Mul_a', '$F32Mul_b', '$F64Mul_a', '$F64Mul_b', '$I32Mul_a', '$I32Mul_b', '$I64Mul_a', '$I64Mul_b', '$I32RemS_a', '$I32RemS_b', '$I32RemU_a', '$I32RemU_b', '$F32Sub_a', '$F32Sub_b', '$F64Sub_a', '$F64Sub_b', '$I32Sub_a', '$I32Sub_b', '$I64Sub_a', '$I64Sub_b'];
-  paramsTypes: ['f32', 'f32', 'f64', 'f64', 'i32', 'i32', 'i64', 'i64', 'f32', 'f32', 'f64', 'f64', 'i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i64', 'i64', 'f32', 'f32', 'f64', 'f64', 'i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i32', 'i32', 'f32', 'f32', 'f64', 'f64', 'i32', 'i32', 'i64', 'i64'];
+  params: ['$I32Add_a', '$I32Add_b', '$I64Add_a', '$I64Add_b', '$I32DivS_a', '$I32DivS_b', '$I64DivS_a', '$I64DivS_b', '$I32DivU_a', '$I32DivU_b', '$I64DivU_a', '$I64DivU_b', '$I32Mul_a', '$I32Mul_b', '$I64Mul_a', '$I64Mul_b', '$I32RemS_a', '$I32RemS_b', '$I32RemU_a', '$I32RemU_b', '$I32Sub_a', '$I32Sub_b', '$I64Sub_a', '$I64Sub_b'];
+  paramsTypes: ['i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i32', 'i32', 'i32', 'i32', 'i64', 'i64'];
   result: never;
     locals: ['$index'];
     instructions: [
       { kind: 'Const'; value: '00000000000000000000000000000000' },
       { kind: 'LocalSet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$F32Add_a' },
-      { kind: 'LocalGet'; id: '$F32Add_b' },
-      { kind: 'Call'; id: '$F32Add' },
-      { kind: 'F32Store'; offset: '00000000000000000000000000000000' },
-      { kind: 'LocalGet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$F64Add_a' },
-      { kind: 'LocalGet'; id: '$F64Add_b' },
-      { kind: 'Call'; id: '$F64Add' },
-      { kind: 'F64Store'; offset: '00000000000000000000000000001000' },
       { kind: 'LocalGet'; id: '$index' },
       { kind: 'LocalGet'; id: '$I32Add_a' },
       { kind: 'LocalGet'; id: '$I32Add_b' },
@@ -289,16 +175,6 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalGet'; id: '$I64Add_b' },
       { kind: 'Call'; id: '$I64Add' },
       { kind: 'I64Store'; offset: '00000000000000000000000000011000' },
-      { kind: 'LocalGet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$F32Div_a' },
-      { kind: 'LocalGet'; id: '$F32Div_b' },
-      { kind: 'Call'; id: '$F32Div' },
-      { kind: 'F32Store'; offset: '00000000000000000000000000100000' },
-      { kind: 'LocalGet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$F64Div_a' },
-      { kind: 'LocalGet'; id: '$F64Div_b' },
-      { kind: 'Call'; id: '$F64Div' },
-      { kind: 'F64Store'; offset: '00000000000000000000000000101000' },
       { kind: 'LocalGet'; id: '$index' },
       { kind: 'LocalGet'; id: '$I32DivS_a' },
       { kind: 'LocalGet'; id: '$I32DivS_b' },
@@ -320,16 +196,6 @@ type $entry = Satisfies<Func, {
       { kind: 'Call'; id: '$I64DivU' },
       { kind: 'I64Store'; offset: '00000000000000000000000001001000' },
       { kind: 'LocalGet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$F32Mul_a' },
-      { kind: 'LocalGet'; id: '$F32Mul_b' },
-      { kind: 'Call'; id: '$F32Mul' },
-      { kind: 'F32Store'; offset: '00000000000000000000000001010000' },
-      { kind: 'LocalGet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$F64Mul_a' },
-      { kind: 'LocalGet'; id: '$F64Mul_b' },
-      { kind: 'Call'; id: '$F64Mul' },
-      { kind: 'F64Store'; offset: '00000000000000000000000001011000' },
-      { kind: 'LocalGet'; id: '$index' },
       { kind: 'LocalGet'; id: '$I32Mul_a' },
       { kind: 'LocalGet'; id: '$I32Mul_b' },
       { kind: 'Call'; id: '$I32Mul' },
@@ -350,16 +216,6 @@ type $entry = Satisfies<Func, {
       { kind: 'Call'; id: '$I32RemU' },
       { kind: 'I32Store'; offset: '00000000000000000000000001111000' },
       { kind: 'LocalGet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$F32Sub_a' },
-      { kind: 'LocalGet'; id: '$F32Sub_b' },
-      { kind: 'Call'; id: '$F32Sub' },
-      { kind: 'F32Store'; offset: '00000000000000000000000010000000' },
-      { kind: 'LocalGet'; id: '$index' },
-      { kind: 'LocalGet'; id: '$F64Sub_a' },
-      { kind: 'LocalGet'; id: '$F64Sub_b' },
-      { kind: 'Call'; id: '$F64Sub' },
-      { kind: 'F64Store'; offset: '00000000000000000000000010001000' },
-      { kind: 'LocalGet'; id: '$index' },
       { kind: 'LocalGet'; id: '$I32Sub_a' },
       { kind: 'LocalGet'; id: '$I32Sub_b' },
       { kind: 'Call'; id: '$I32Sub' },
@@ -373,30 +229,22 @@ type $entry = Satisfies<Func, {
 }>
 
 export type entry<
-  arguments extends [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number],
+  arguments extends [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number],
   debugMode extends boolean = false
 > = runProgram<
   {
     arguments: arguments;
     funcs: {
-      $F32Add: $F32Add;
-      $F64Add: $F64Add;
       $I32Add: $I32Add;
       $I64Add: $I64Add;
-      $F32Div: $F32Div;
-      $F64Div: $F64Div;
       $I32DivS: $I32DivS;
       $I64DivS: $I64DivS;
       $I32DivU: $I32DivU;
       $I64DivU: $I64DivU;
-      $F32Mul: $F32Mul;
-      $F64Mul: $F64Mul;
       $I32Mul: $I32Mul;
       $I64Mul: $I64Mul;
       $I32RemS: $I32RemS;
       $I32RemU: $I32RemU;
-      $F32Sub: $F32Sub;
-      $F64Sub: $F64Sub;
       $I32Sub: $I32Sub;
       $I64Sub: $I64Sub;
       $entry: $entry;

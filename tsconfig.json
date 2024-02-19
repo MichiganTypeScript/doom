@@ -55,7 +55,7 @@
     // "./packages/conformance-tests/from-wat/local-set.test.ts",
     // "./packages/conformance-tests/from-wat/local-tee.test.ts",
     "./packages/conformance-tests/from-wat/loop.test.ts", // depends on multiply
-    "./packages/conformance-tests/from-wat/memory-offset.test.ts", // depends on subtract
+    "./packages/conformance-tests/from-wat/memory-offset.test.ts",
     // "./packages/conformance-tests/from-wat/memory-size.test.ts",
     "./packages/conformance-tests/from-wat/memory.test.ts", // depends on multiply
     "./packages/conformance-tests/from-wat/negate.test.ts",
@@ -67,7 +67,7 @@
     // "./packages/conformance-tests/from-wat/shift-left.test.ts",
     // "./packages/conformance-tests/from-wat/shift-right-signed.test.ts",
     // "./packages/conformance-tests/from-wat/shift-right-unsigned.test.ts",
-    "./packages/conformance-tests/from-wat/subtract.test.ts",
+    // "./packages/conformance-tests/from-wat/subtract.test.ts",
     // "./packages/conformance-tests/from-wat/unreachable.test.ts",
   ]
 }

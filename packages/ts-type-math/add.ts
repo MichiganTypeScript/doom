@@ -1,3 +1,6 @@
+import { ClampDigits } from "./binary";
+import { WasmValue } from "./wasm";
+
 type Counter = 1[];
 
 type Reverse<
@@ -105,6 +108,7 @@ type StringAdd<
 
 // type x = AddBinary<"1", "1"> // =>
 
+/** this is an arbitrary precision add, which means it can return more bits than it was given (as in the case of an overflow) */
 export type AddBinary<
   A extends string,
   B extends string
@@ -119,5 +123,15 @@ export type AddBinary<
       Reverse<B>,
       []
     >
+  >
+>
+
+export type I32AddBinary<
+  a extends WasmValue,
+  b extends WasmValue
+> = Satisfies<WasmValue,
+  ClampDigits<
+    AddBinary<a, b>,
+    32
   >
 >

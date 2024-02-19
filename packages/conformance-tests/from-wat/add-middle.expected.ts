@@ -24,7 +24,7 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$stack_size' },
       { kind: 'LocalGet'; id: '$stack_pointer' },
       { kind: 'LocalGet'; id: '$stack_size' },
-      { kind: 'Subtract' },
+      { kind: 'Subtract', type: 'i32' },
       { kind: 'LocalSet'; id: '$this_stack' },
       { kind: 'LocalGet'; id: '$this_stack' },
       { kind: 'LocalGet'; id: '$a' },

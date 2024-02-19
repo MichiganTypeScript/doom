@@ -13,20 +13,25 @@ I32And      26
 I32Eqz      22
 Br          16
 Loop        16
+I32LtS      14
 Unreachable 13
 I32Store8   12
 I32Load8u   11
 GlobalGet   10
 LocalTee    9
 GlobalSet   8
-I32Mul      8
 Call        6
-I32Sub      6
+I32LtU      5
 Return      4
 I32Eq       3
 I32Shl      3
 I32ShrS     3
+I32GeS      2
+I32GeU      2
+I32LeS      2
+I32LeU      2
 Drop        1
+I32GtU      1
 I32Ne       1
 I32Xor      1
 Select      1
@@ -36,14 +41,7 @@ Select      1
 I32Load     94
 I32Store    59
 
-I32LtS      14
-I32GeS      2
-I32LeS      2
-I32LeU      2
-I32LtU      5
-I32GeU      2
-I32GtU      1
-
 ## Not Done
 
-nothing!
+I32Mul      8
+I32Sub      6

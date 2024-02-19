@@ -24,7 +24,7 @@ type $foo = Satisfies<Func, {
       { kind: 'I32Load'; offset: '00000000000000000000000000000100' },
       { kind: 'LocalGet'; id: '$start' },
       { kind: 'I32Load'; offset: '00000000000000000000000000000000' },
-      { kind: 'Subtract' },
+      { kind: 'Subtract', type: 'i32' },
       { kind: 'Add', type: 'i32' },
     ];
 }>

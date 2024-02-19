@@ -168,17 +168,59 @@ fn handle_instruction(
         Instruction::F64Add => {
             vec![(*indent, format!("{{ kind: 'Add', type: 'f64' }},"))]
         }
-        Instruction::I32Sub | Instruction::I64Sub | Instruction::F32Sub | Instruction::F64Sub => {
-            vec![(*indent, format!("{{ kind: 'Subtract' }},"))]
+        Instruction::I32Sub => {
+            vec![(*indent, format!("{{ kind: 'Subtract', type: 'i32' }},"))]
         }
-        Instruction::I32Mul | Instruction::I64Mul | Instruction::F32Mul | Instruction::F64Mul => {
-            vec![(*indent, format!("{{ kind: 'Multiply' }},"))]
+        Instruction::I64Sub => {
+            vec![(*indent, format!("{{ kind: 'Subtract', type: 'i64' }},"))]
         }
-        Instruction::F32Div | Instruction::F64Div | Instruction::I32DivS | Instruction::I64DivS | Instruction::I32DivU | Instruction::I64DivU => {
-            vec![(*indent, format!("{{ kind: 'Divide' }},"))]
+        Instruction::F32Sub => {
+            vec![(*indent, format!("{{ kind: 'Subtract', type: 'f32' }},"))]
         }
-        Instruction::I32RemS | Instruction::I64RemS | Instruction::I32RemU | Instruction::I64RemU => {
-            vec![(*indent, format!("{{ kind: 'Remainder' }},"))]
+        Instruction::F64Sub => {
+            vec![(*indent, format!("{{ kind: 'Subtract', type: 'f64' }},"))]
+        }
+        Instruction::I32Mul => {
+            vec![(*indent, format!("{{ kind: 'Multiply', type: 'i32' }},"))]
+        }
+        Instruction::I64Mul => {
+            vec![(*indent, format!("{{ kind: 'Multiply', type: 'i64' }},"))]
+        }
+        Instruction::F32Mul => {
+            vec![(*indent, format!("{{ kind: 'Multiply', type: 'f32' }},"))]
+        }
+        Instruction::F64Mul => {
+            vec![(*indent, format!("{{ kind: 'Multiply', type: 'f64' }},"))]
+        }
+        Instruction::F32Div => {
+            vec![(*indent, format!("{{ kind: 'Divide', signed: true, type: 'f32' }},"))]
+        }
+        Instruction::F64Div => {
+            vec![(*indent, format!("{{ kind: 'Divide', signed: true, type: 'f64' }},"))]
+        }
+        Instruction::I32DivS => {
+            vec![(*indent, format!("{{ kind: 'Divide', signed: true, type: 'i32' }},"))]
+        }
+        Instruction::I64DivS => {
+            vec![(*indent, format!("{{ kind: 'Divide', signed: true, type: 'i64' }},"))]
+        }
+        Instruction::I32DivU => {
+            vec![(*indent, format!("{{ kind: 'Divide', signed: false, type: 'i32' }},"))]
+        }
+        Instruction::I64DivU => {
+            vec![(*indent, format!("{{ kind: 'Divide', signed: false, type: 'i64' }},"))]
+        }
+        Instruction::I32RemS => {
+            vec![(*indent, format!("{{ kind: 'Remainder', signed: true, type: 'i32' }},"))]
+        }
+        Instruction::I64RemS => {
+            vec![(*indent, format!("{{ kind: 'Remainder', signed: true, type: 'i64' }},"))]
+        }
+        Instruction::I32RemU => {
+            vec![(*indent, format!("{{ kind: 'Remainder', signed: false, type: 'i32' }},"))]
+        }
+        Instruction::I64RemU => {
+            vec![(*indent, format!("{{ kind: 'Remainder', signed: false, type: 'i64' }},"))]
         }
 
         /* Conversion Instructions */

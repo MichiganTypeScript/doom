@@ -24,7 +24,7 @@ type $example = Satisfies<Func, {
             then: [
               { kind: 'Const'; value: '00000000000000000000000001100110' },
               { kind: 'LocalGet'; id: '$n' },
-              { kind: 'Subtract' },
+              { kind: 'Subtract', type: 'i32' },
             ];
             else: [
               { kind: 'LocalGet'; id: '$control' },
@@ -39,7 +39,7 @@ type $example = Satisfies<Func, {
                     then: [
                       { kind: 'Const'; value: '00000000000000000000000001100111' },
                       { kind: 'LocalGet'; id: '$n' },
-                      { kind: 'Multiply' },
+                      { kind: 'Multiply', type: 'i32' },
                     ];
                     else: [
                       { kind: 'Const'; value: '00000000000000000000000001101000' },

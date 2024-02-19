@@ -24,7 +24,7 @@ type $entry = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$l3' },
       { kind: 'LocalGet'; id: '$l2' },
       { kind: 'LocalGet'; id: '$l3' },
-      { kind: 'Subtract' },
+      { kind: 'Subtract', type: 'i32' },
       { kind: 'LocalSet'; id: '$l4' },
       { kind: 'LocalGet'; id: '$l4' },
       { kind: 'LocalGet'; id: '$p0' },
@@ -98,7 +98,7 @@ type $stackAlloc = Satisfies<Func, {
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
       { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'Subtract' },
+      { kind: 'Subtract', type: 'i32' },
       { kind: 'Const'; value: '11111111111111111111111111110000' },
       { kind: 'And', type: 'i32' },
       { kind: 'LocalTee'; id: '$l1' },
@@ -134,7 +134,7 @@ type $emscripten_stack_get_free = Satisfies<Func, {
     instructions: [
       { kind: 'GlobalGet'; id: '$__stack_pointer' },
       { kind: 'GlobalGet'; id: '$__stack_end' },
-      { kind: 'Subtract' },
+      { kind: 'Subtract', type: 'i32' },
     ];
 }>
 

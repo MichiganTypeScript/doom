@@ -1,4 +1,4 @@
-import { AddBinary } from "./add-binary";
+import { AddBinary } from "./add";
 import { BitwiseNotBinary } from "./bitwise";
 import type { Div, Mod } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
@@ -189,7 +189,12 @@ export type TwosComplementFlip<
   T extends string
 > = AddBinary<BitwiseNotBinary<T>, "1">
 
-type x = TwosComplementFlip<"101110"> // =>
+type x1 = BitwiseNotBinary<"00000011"> // =>
+type x2 = AddBinary<x1, "1">           // =>
+
+type x = TwosComplementFlip<"00000011"> // =>
+
+type x3 = AddBinary<x, "1"> // =>
 
 type y = ToDecimalUnsigned<x> // =>
 
@@ -217,23 +222,37 @@ export type ToDecimalSigned<
   : never
 >
 
-type a = ToDecimalSigned<"101110"> // =>
-type b = ToDecimalUnsigned<"101110">       // =>
+type i = '101110';
+type a = ToDecimalSigned<i>  // =>
+type b = ToDecimalUnsigned<i>// =>
+
+type LengthOfString<
+  S extends string,
+  Acc extends 1[] = [],
+> = S extends `${string}${infer T}`
+  ? LengthOfString<T, [1, ...Acc]>
+  : Acc["length"];
 
 export type ClampDigits<
   binary extends string,
-  maxDigits extends number
+  maxDigits extends number,
 > = Satisfies<string,
-  Length<binary> extends maxDigits
+  LengthOfString<binary> extends maxDigits
   ? binary
-  : Length<binary> extends 1
-    ? binary
-    : ClampDigits<
-        binary extends `${infer Head}${infer Tail}`
-        ? Tail
-        : never,
-        maxDigits
-      >
+  : ClampDigits<
+      binary extends `${infer Head}${infer Tail}`
+      ? Tail
+      : never,
+      maxDigits
+    >
+>
+
+export type DisregardMSB<
+  binary extends string
+> = Satisfies<string,
+  binary extends `${infer Head}${infer Tail}`
+  ? Tail
+  : never
 >
 
 type c = ClampDigits<"abcdefg", 2> // =>

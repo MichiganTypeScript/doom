@@ -90,13 +90,13 @@ export type LessThanUnsignedBinary<
     Wasm.I32False
 >
 
-type IsPositiveSignedBinary<
+export type IsPositiveSignedBinary<
   a extends WasmValue
-> = Satisfies<WasmValue,
+> = Satisfies<boolean,
   a extends `${infer A}${infer TailA}`
   ? A extends '1'
-    ? Wasm.I32False
-    : Wasm.I32True
+    ? false
+    : true
   : never
 >
 
@@ -104,10 +104,10 @@ export type GreaterThanSignedBinary<
   a extends WasmValue,
   b extends WasmValue,
 > = Satisfies<WasmValue,
-  IsPositiveSignedBinary<a> extends Wasm.I32True
+  IsPositiveSignedBinary<a> extends true
 
   ? // +a
-    IsPositiveSignedBinary<b> extends Wasm.I32True
+    IsPositiveSignedBinary<b> extends true
 
     ? // +a +b
       GreaterThanUnsignedBinary<a, b>
@@ -116,7 +116,7 @@ export type GreaterThanSignedBinary<
       Wasm.I32True
 
   : // -a
-    IsPositiveSignedBinary<b> extends Wasm.I32True
+    IsPositiveSignedBinary<b> extends true
 
     ? // -a +b
       Wasm.I32False
@@ -129,10 +129,10 @@ export type LessThanSignedBinary<
   a extends WasmValue,
   b extends WasmValue,
 > = Satisfies<WasmValue,
-  IsPositiveSignedBinary<a> extends Wasm.I32True
+  IsPositiveSignedBinary<a> extends true
 
   ? // +a
-    IsPositiveSignedBinary<b> extends Wasm.I32True
+    IsPositiveSignedBinary<b> extends true
 
     ? // +a +b
       LessThanUnsignedBinary<a, b>
@@ -141,7 +141,7 @@ export type LessThanSignedBinary<
       Wasm.I32False
 
   : // -a
-    IsPositiveSignedBinary<b> extends Wasm.I32True
+    IsPositiveSignedBinary<b> extends true
 
     ? // -a +b
       Wasm.I32True

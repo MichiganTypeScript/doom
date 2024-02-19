@@ -3,18 +3,26 @@
 
 // import type {Add} from "ts-arithmetic"
 
-import type { Sum as Add } from "./ch3cknull-dimitri"; // dummy implementation, as a baseline
+// import type { Sum as Add } from "./ch3cknull-dimitri"; // dummy implementation, as a baseline
+
+// import type { AddBinary as Add } from "../../ts-type-math/add"
+import type { Wasm } from "../../ts-type-math/wasm";
+type Add<a extends string, b extends string> = Wasm.I32Add<a, b>
+import type { Convert } from "../../ts-type-math/conversion"
+
+
+type One = Convert.TSNumber.ToWasmValue<1, 'i32'>;
 
 type v = [
-  "1234",
-  "1234567",
-  "1234567890",
-  "1234567890123",
+  Convert.TSNumber.ToWasmValue<1234, 'i64'>,
+  Convert.TSNumber.ToWasmValue<1234567, 'i64'>,
+  Convert.TSNumber.ToWasmValue<1234567890, 'i64'>,
+  Convert.TSNumber.ToWasmValue<1234567890123, 'i64'>,
 ]
 
 export type e =
 Add<
-  "1",
+  One,
   Add<
     Add<
       Add<

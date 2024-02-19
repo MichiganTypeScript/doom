@@ -34,123 +34,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 66,
-                    },
-                    id: Some(
-                        "F32Add",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                F32Add,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                ],
-                                results: [
-                                    F32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 188,
-                    },
-                    id: Some(
-                        "F64Add",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                F64Add,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                ],
-                                results: [
-                                    F64,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 310,
+                        offset: 346,
                     },
                     id: Some(
                         "I32Add",
@@ -208,7 +92,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 432,
+                        offset: 468,
                     },
                     id: Some(
                         "I64Add",
@@ -266,123 +150,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 554,
-                    },
-                    id: Some(
-                        "F32Div",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                F32Div,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                ],
-                                results: [
-                                    F32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 676,
-                    },
-                    id: Some(
-                        "F64Div",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                F64Div,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                ],
-                                results: [
-                                    F64,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 799,
+                        offset: 871,
                     },
                     id: Some(
                         "I32DivS",
@@ -440,7 +208,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 925,
+                        offset: 997,
                     },
                     id: Some(
                         "I64DivS",
@@ -498,7 +266,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1051,
+                        offset: 1123,
                     },
                     id: Some(
                         "I32DivU",
@@ -556,7 +324,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1177,
+                        offset: 1249,
                     },
                     id: Some(
                         "I64DivU",
@@ -614,123 +382,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1302,
-                    },
-                    id: Some(
-                        "F32Mul",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                F32Mul,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                ],
-                                results: [
-                                    F32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 1424,
-                    },
-                    id: Some(
-                        "F64Mul",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                F64Mul,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                ],
-                                results: [
-                                    F64,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 1546,
+                        offset: 1654,
                     },
                     id: Some(
                         "I32Mul",
@@ -788,7 +440,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1668,
+                        offset: 1776,
                     },
                     id: Some(
                         "I64Mul",
@@ -846,7 +498,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1791,
+                        offset: 1899,
                     },
                     id: Some(
                         "I32RemS",
@@ -904,7 +556,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1917,
+                        offset: 2025,
                     },
                     id: Some(
                         "I32RemU",
@@ -962,123 +614,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2102,
-                    },
-                    id: Some(
-                        "F32Sub",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                F32Sub,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                ],
-                                results: [
-                                    F32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 2224,
-                    },
-                    id: Some(
-                        "F64Sub",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "b",
-                                    ),
-                                ),
-                                F64Sub,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
-                                            "b",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                ],
-                                results: [
-                                    F64,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 2346,
+                        offset: 2490,
                     },
                     id: Some(
                         "I32Sub",
@@ -1136,7 +672,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2468,
+                        offset: 2612,
                     },
                     id: Some(
                         "I64Sub",
@@ -1194,7 +730,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2578,
+                        offset: 2722,
                     },
                     id: Some(
                         "entry",
@@ -1230,70 +766,6 @@ Module {
                                 ),
                                 LocalGet(
                                     Id(
-                                        "F32Add_a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F32Add_b",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "F32Add",
-                                    ),
-                                ),
-                                F32Store(
-                                    MemArg {
-                                        align: 4,
-                                        offset: 0,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 3738,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F64Add_a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F64Add_b",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "F64Add",
-                                    ),
-                                ),
-                                F64Store(
-                                    MemArg {
-                                        align: 8,
-                                        offset: 8,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 3848,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
                                         "I32Add_a",
                                     ),
                                 ),
@@ -1314,7 +786,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 3958,
+                                                offset: 4156,
                                             },
                                         ),
                                     },
@@ -1346,71 +818,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4069,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F32Div_a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F32Div_b",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "F32Div",
-                                    ),
-                                ),
-                                F32Store(
-                                    MemArg {
-                                        align: 4,
-                                        offset: 32,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 4180,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F64Div_a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F64Div_b",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "F64Div",
-                                    ),
-                                ),
-                                F64Store(
-                                    MemArg {
-                                        align: 8,
-                                        offset: 40,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 4291,
+                                                offset: 4267,
                                             },
                                         ),
                                     },
@@ -1442,7 +850,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4405,
+                                                offset: 4633,
                                             },
                                         ),
                                     },
@@ -1474,7 +882,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4519,
+                                                offset: 4747,
                                             },
                                         ),
                                     },
@@ -1506,7 +914,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4633,
+                                                offset: 4861,
                                             },
                                         ),
                                     },
@@ -1538,71 +946,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 4747,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F32Mul_a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F32Mul_b",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "F32Mul",
-                                    ),
-                                ),
-                                F32Store(
-                                    MemArg {
-                                        align: 4,
-                                        offset: 80,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 4858,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F64Mul_a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F64Mul_b",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "F64Mul",
-                                    ),
-                                ),
-                                F64Store(
-                                    MemArg {
-                                        align: 8,
-                                        offset: 88,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 4969,
+                                                offset: 4975,
                                             },
                                         ),
                                     },
@@ -1634,7 +978,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 5080,
+                                                offset: 5338,
                                             },
                                         ),
                                     },
@@ -1666,7 +1010,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 5191,
+                                                offset: 5449,
                                             },
                                         ),
                                     },
@@ -1698,7 +1042,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 5306,
+                                                offset: 5564,
                                             },
                                         ),
                                     },
@@ -1730,71 +1074,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 5421,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F32Sub_a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F32Sub_b",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "F32Sub",
-                                    ),
-                                ),
-                                F32Store(
-                                    MemArg {
-                                        align: 4,
-                                        offset: 128,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 5533,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F64Sub_a",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "F64Sub_b",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "F64Sub",
-                                    ),
-                                ),
-                                F64Store(
-                                    MemArg {
-                                        align: 8,
-                                        offset: 136,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 5645,
+                                                offset: 5679,
                                             },
                                         ),
                                     },
@@ -1826,7 +1106,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 5757,
+                                                offset: 6045,
                                             },
                                         ),
                                     },
@@ -1858,7 +1138,7 @@ Module {
                                         memory: Num(
                                             0,
                                             Span {
-                                                offset: 5869,
+                                                offset: 6157,
                                             },
                                         ),
                                     },
@@ -1871,34 +1151,6 @@ Module {
                         inline: Some(
                             FunctionType {
                                 params: [
-                                    (
-                                        Some(
-                                            "F32Add_a",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "F32Add_b",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "F64Add_a",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
-                                            "F64Add_b",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
                                     (
                                         Some(
                                             "I32Add_a",
@@ -1926,34 +1178,6 @@ Module {
                                         ),
                                         None,
                                         I64,
-                                    ),
-                                    (
-                                        Some(
-                                            "F32Div_a",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "F32Div_b",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "F64Div_a",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
-                                            "F64Div_b",
-                                        ),
-                                        None,
-                                        F64,
                                     ),
                                     (
                                         Some(
@@ -2013,34 +1237,6 @@ Module {
                                     ),
                                     (
                                         Some(
-                                            "F32Mul_a",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "F32Mul_b",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "F64Mul_a",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
-                                            "F64Mul_b",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
                                             "I32Mul_a",
                                         ),
                                         None,
@@ -2097,34 +1293,6 @@ Module {
                                     ),
                                     (
                                         Some(
-                                            "F32Sub_a",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "F32Sub_b",
-                                        ),
-                                        None,
-                                        F32,
-                                    ),
-                                    (
-                                        Some(
-                                            "F64Sub_a",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
-                                            "F64Sub_b",
-                                        ),
-                                        None,
-                                        F64,
-                                    ),
-                                    (
-                                        Some(
                                             "I32Sub_a",
                                         ),
                                         None,
@@ -2166,30 +1334,20 @@ Module {
 
 
 {
-    "LocalGet": 100,
-    "Call": 20,
+    "LocalGet": 60,
+    "Call": 12,
     "I32Store": 7,
     "I64Store": 5,
-    "F32Store": 4,
-    "F64Store": 4,
-    "F32Add": 1,
-    "F64Add": 1,
     "I32Add": 1,
     "I64Add": 1,
-    "F32Div": 1,
-    "F64Div": 1,
     "I32DivS": 1,
     "I64DivS": 1,
     "I32DivU": 1,
     "I64DivU": 1,
-    "F32Mul": 1,
-    "F64Mul": 1,
     "I32Mul": 1,
     "I64Mul": 1,
     "I32RemS": 1,
     "I32RemU": 1,
-    "F32Sub": 1,
-    "F64Sub": 1,
     "I32Sub": 1,
     "I64Sub": 1,
     "I32Const": 1,

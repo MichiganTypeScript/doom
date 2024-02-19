@@ -128,6 +128,7 @@ const phrases = [
   "You're probably going to need a bigger boat",
   "You're off to great places, today is your day!",
   "The truth is out there",
+  "Are you tryna create a union that's too complex to represent.. again?",
   "I always trusted code more than people anyway.",
   "To excessive and possibly infinite depth and beyond!", // credit: DBlass
   "10 bucks says what comes next starts with \"RangeError: Maximum call stack size exceeded at `instantiateTypes`\"",
