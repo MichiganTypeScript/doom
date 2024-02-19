@@ -4,6 +4,7 @@ import { ShiftLeftBinary, ShiftRightBinary } from "./shift";
 import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary } from "./bitwise";
 import { EqualsBinary, GreaterThanSignedBinary, GreaterThanUnsignedBinary, LessThanSignedBinary, LessThanUnsignedBinary, NotEqualsBinary } from "./comparison";
 import { I32SubtractBinary } from "./subtract";
+import { I32MultiplyBinary } from "./multiply";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 export type WasmInt = 'i32' | 'i64';
@@ -35,6 +36,13 @@ export namespace Wasm {
     b extends WasmValue
   > = Satisfies<WasmValue,
     I32SubtractBinary<a, b>
+  >
+
+  export type I32Mul<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I32MultiplyBinary<a, b>
   >
 
   export type I32Eqz<

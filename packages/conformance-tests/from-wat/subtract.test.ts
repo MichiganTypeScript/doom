@@ -5,7 +5,7 @@ import { t, T } from '../../ts-type-math/test-cases/arithmetic';
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest';
 
-test.each(t)('$a + $b === $sub', async ({ a, b, sub }) => {
+test.each(t)('$a - $b === $sub', async ({ a, b, sub }) => {
   const entry = await getWasm("from-wat", 'subtract');
   expect(entry(a, b)).toBe(sub);
 })

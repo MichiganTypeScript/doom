@@ -21,6 +21,7 @@ GlobalGet   10
 LocalTee    9
 GlobalSet   8
 Call        6
+I32Sub      6
 I32LtU      5
 Return      4
 I32Eq       3
@@ -38,10 +39,10 @@ Select      1
 
 ## Sorta
 
+I32Mul      8
 I32Load     94
 I32Store    59
 
 ## Not Done
 
-I32Mul      8
-I32Sub      6
+nothing!

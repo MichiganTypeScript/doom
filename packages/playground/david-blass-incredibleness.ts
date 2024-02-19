@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/subtract.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[0, 0], true>// =>
+import { entry } from 'conformance-tests/from-wat/if-else-nested.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[10, 6], true>// =>
 type r=e['result']// =>
 type s=e['stack'] // =>
 // type m = ReadStringFromMemory<e>// =>

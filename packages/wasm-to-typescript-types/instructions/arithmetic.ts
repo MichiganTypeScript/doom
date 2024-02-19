@@ -119,7 +119,8 @@ export type Multiply<
   ? State.Stack.set<
       [
         ...remaining,
-        // TypeMath.Multiply<a, b>// TODO Broken
+        instruction['type'] extends 'i32' ? Wasm.I32Mul<a, b> :
+        never // Todo i64, f32, f64
       ],
 
       state

@@ -6,12 +6,10 @@ import { getWasm } from '../utils'
 import { expect, test } from 'vitest';
 
 const name = 'shift-right-unsigned';
-test(name, async () => {
+test.each(t)(name, async ({ a, b, e }) => {
   const entry = await getWasm('from-wat', name);
+  expect(entry(a, b) >> 0).toStrictEqual(e);
   expect(t).toHaveLength(28);
-  t.forEach(({ a, b, e }) => {
-    expect(entry(a, b) >> 0).toStrictEqual(e);
-  });
 });
 
 type i = 15

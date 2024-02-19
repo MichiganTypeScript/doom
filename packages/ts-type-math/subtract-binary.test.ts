@@ -4,7 +4,7 @@ import { t, T } from './test-cases/arithmetic';
 import { expect, test } from 'vitest';
 import { binaryTwosComplementToNumber, numberToTwosComplementBinary } from "./test-utils";
 
-test.each(t)('$a_binary + $b_binary === $sub_binary', ({ a_binary, b_binary, sub_binary }) => {
+test.each(t)('$a_binary - $b_binary === $sub_binary', ({ a_binary, b_binary, sub_binary }) => {
   const actual = binaryTwosComplementToNumber(a_binary) - binaryTwosComplementToNumber(b_binary);
   const actual_binary = numberToTwosComplementBinary(actual);
   expect(actual_binary).toBe(sub_binary);

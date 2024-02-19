@@ -6,12 +6,10 @@ import { getWasm } from '../utils'
 import { t, T } from '../../ts-type-math/test-cases/or';
 
 const name = 'bitwise-or';
-test(name, async () => {
+test.each(t)(name, async ({ a, b, e }) => {
   const entry = await getWasm('from-wat', name);
   expect(t).toHaveLength(24);
-  t.forEach(({ a, b, e }) => {
-    expect(entry(a, b) >> 0).toStrictEqual(e);
-  });
+  expect(entry(a, b) >> 0).toStrictEqual(e);
 });
 
 type i = 2

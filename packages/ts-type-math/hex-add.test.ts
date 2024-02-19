@@ -3,11 +3,11 @@ import type { HexAdd } from './hex-add';
 import { t, T } from './test-cases/hex-add';
 import { expect, test } from 'vitest';
 
-test.each(t)('$a + $b === $e', () => {
-  t.forEach(({ a, b, e }) => {
-    expect(parseInt(a, 16) + parseInt(b, 16)).toBe(parseInt(e, 16));
-  });
+test.each(t)('$a + $b === $e', ({ a, b, e }) => {
+  expect(parseInt(a, 16) + parseInt(b, 16)).toBe(parseInt(e, 16));
 })
+
+
 
 type hexAddTests = [
   Expect<Equal<HexAdd<T[ 0]['a'], T[ 0]['b']>, T[ 0]['e']>>,

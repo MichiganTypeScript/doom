@@ -21,7 +21,7 @@ const example = ($n: number, $control: number) => {
   return 105 + $n
 }
 
-test('if-else example', () => {
+test('if-else-nested example', () => {
   expect(example(10, 0)).toStrictEqual(115);
   expect(example(10, 1)).toStrictEqual(111);
   expect(example(10, 2)).toStrictEqual(92);
@@ -42,6 +42,8 @@ test(name, async () => {
   expect(entry(10, 5)).toStrictEqual(114);
   expect(entry(10, 6)).toStrictEqual(1030);
 });
+
+type x = entry<[10, 6]>; // =>
 
 type testCases = [
   Expect<Equal<entry<[10, 0]>, 115>>,

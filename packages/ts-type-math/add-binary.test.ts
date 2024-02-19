@@ -4,13 +4,11 @@ import { t, T } from './test-cases/arithmetic';
 import { expect, test } from 'vitest';
 import { binaryTwosComplementToNumber, numberToTwosComplementBinary } from "./test-utils";
 
-test.each(t)('$a_binary + $b_binary === $add_binary', () => {
-  t.forEach(({ a_binary, b_binary, add_binary }) => {
-    const actual = binaryTwosComplementToNumber(a_binary) + binaryTwosComplementToNumber(b_binary);
-    const actual_binary = numberToTwosComplementBinary(actual);
-    expect(actual_binary).toBe(add_binary);
-  });
-})
+test.each(t)('$a_binary + $b_binary === $add_binary', ({ a_binary, b_binary, add_binary }) => {
+  const actual = binaryTwosComplementToNumber(a_binary) + binaryTwosComplementToNumber(b_binary);
+  const actual_binary = numberToTwosComplementBinary(actual);
+  expect(actual_binary).toBe(add_binary);
+});
 
 type tests = [
   Expect<Equal<I32AddBinary<T[ 0]['a_binary'], T[ 0]['b_binary']>, T[ 0]['add_binary']>>,
