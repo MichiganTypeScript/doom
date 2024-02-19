@@ -464,9 +464,9 @@ export namespace State {
   export namespace Memory {
     export type get<
       state extends ProgramState
-    > = Satisfies<MemoryByAddress,
+    > = 
       state['memory']
-    >
+    
 
     export type getByAddress<
       address extends MemoryAddress,
@@ -474,7 +474,7 @@ export namespace State {
       bytes extends number,
 
       state extends ProgramState,
-    > = Satisfies<Wasm.Byte[],
+    > =
         TypeMath.Load.ReadBytes<
           bytes,
           get<state>,
@@ -482,8 +482,8 @@ export namespace State {
             address,
             offset
           >
-        > extends infer B extends Wasm.Byte[] ? B : never // QUESTION: why does this need to be here? otherwise, we get an excessive depth
-      >
+        >
+
 
     type CollectBytes<
       bytes extends WasmValue[],

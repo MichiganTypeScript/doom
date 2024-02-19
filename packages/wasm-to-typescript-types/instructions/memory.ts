@@ -249,7 +249,7 @@ export type I32Load<
       [
         ...remaining,
 
-        // TypeMath.Load.I32<
+        // TypeMath.Load.JoinBytes<
         //   State.Memory.getByAddress<
         //     address,
         //     instruction['offset'],
@@ -266,7 +266,6 @@ export type I32Load<
       //       4,
       //       state
       //     >,
-        // TypeMath.Add<address, instruction['offset']>,
       state
     //   >
     >

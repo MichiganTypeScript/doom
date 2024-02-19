@@ -1,4 +1,3 @@
-import { JoinBytes } from "./split";
 import { WasmValue, Wasm } from "./wasm";
 
 export namespace Load {
@@ -13,7 +12,7 @@ export namespace Load {
     address extends WasmValue,
 
     _Acc extends Wasm.Byte[] = [],
-  > = Satisfies<Wasm.Byte[],
+  > =
     _Acc['length'] extends count
       ? _Acc
       : ReadBytes<
@@ -23,16 +22,25 @@ export namespace Load {
           [
             ..._Acc,
             memory[address]
-          ] extends infer Acc extends Wasm.Byte[] // QUESTION: why does this need to be here? otherwise, we get an excessive depth
-            ? Acc
-            : never
+          ]
         >
-    >
 
+  type _JoinBytes<
+    T extends Wasm.Byte[],
 
-  export type I32<
-    bytes extends string[]
+    Acc extends WasmValue = ''
   > = Satisfies<WasmValue,
-    JoinBytes<bytes>
+    T extends [
+      infer byte extends Wasm.Byte,
+      ...infer Tail extends Wasm.Byte[]
+    ]
+    ? _JoinBytes<Tail, `${Acc}${byte}`>
+    : Acc
+  >
+
+  export type JoinBytes<
+    T extends Wasm.Byte[]
+  > = Satisfies<WasmValue,
+    _JoinBytes<T>
   >
 }

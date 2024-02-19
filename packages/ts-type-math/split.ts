@@ -13,19 +13,3 @@ export type SplitToBytes<
 > = Satisfies<string[],
   _SplitToBytes<T>
 >
-
-type _JoinBytes<
-  T extends string[],
-
-  Acc extends string = ''
-> = Satisfies<string,
-  T extends [infer byte extends string, ...infer Tail extends string[]]
-  ? _JoinBytes<Tail, `${Acc}${byte}`>
-  : Acc
->
-
-export type JoinBytes<
-  T extends string[]
-> = Satisfies<string,
-  _JoinBytes<T>
->
