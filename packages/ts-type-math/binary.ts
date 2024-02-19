@@ -85,7 +85,7 @@ type Process<
       : Process<Div<T, 2>, `1${_Acc}`>
     :never;
 
-type PadLeft<
+export type PadLeft<
   S extends string,
   N extends number,
 > = Satisfies<string,

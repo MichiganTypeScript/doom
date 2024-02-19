@@ -1,7 +1,7 @@
 import type { Instruction, selectInstruction } from "./instructions/instructions"
 import type { IHalt } from "./instructions/synthetic"
 import type { State } from "./state"
-import type { ProgramInput, ProgramState, evaluate } from "./types"
+import type { ProgramInput, ProgramState } from "./types"
 import type { Convert, WasmType, WasmValue } from "ts-type-math"
 
 // set to `number` to disable

@@ -141,8 +141,8 @@ Usage count (in Doom) is the number on the right
 
 | Instruction       | Calls | Implemented? |
 | ----------------- | ----- | ------------ |
-| I32Load           | 5853  | 🐛           |❌
-| I32Store          | 3413  | 🐛           |❌
+| I32Load           | 5853  | ✅           |
+| I32Store          | 3413  | ✅           |
 | I32Load8u         | 460   | ✅           |❌
 | I64Load           | 357   | ⏸️           |
 | I32Load16s        | 278   | ❌           |

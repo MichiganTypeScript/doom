@@ -1,13 +1,9 @@
 import type { Instruction } from "./instructions/instructions"
-import type { WasmType, WasmValue } from "ts-type-math"
-
-export type evaluate<T> = {
-  [K in keyof T]: T[K]
-} & unknown
+import type { WasmType, WasmValue, Wasm } from "ts-type-math"
 
 export type MemoryAddress = WasmValue;
 
-export type MemoryByAddress = Record<MemoryAddress, WasmValue>
+export type MemoryByAddress = Record<MemoryAddress, Wasm.Byte>
 
 export type BranchId = string;
 

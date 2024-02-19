@@ -1,8 +1,7 @@
 import type { MemoryAddress, ProgramState } from "../types"
 import type { State } from '../state'
-import * as TypeMath from "ts-type-math"
 import { WasmValue } from "ts-type-math"
-import { U8Binary } from "../../ts-type-math/conversion";
+import type * as TypeMath from 'ts-type-math'
 
 export type IMemorySize = {
   kind: "MemorySize"
@@ -10,117 +9,117 @@ export type IMemorySize = {
 
 export type II32Load = {
   kind: "I32Load"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Load = {
   kind: "I64Load"
-  offset: number
+  offset: WasmValue
 }
 
 export type IF32Load = {
   kind: "F32Load"
-  offset: number
+  offset: WasmValue
 }
 
 export type IF64Load = {
   kind: "F64Load"
-  offset: number
+  offset: WasmValue
 }
 
 export type II32Load8s = {
   kind: "I32Load8s"
-  offset: number
+  offset: WasmValue
 }
 
 export type II32Load8u = {
   kind: "I32Load8u"
-  offset: number
+  offset: WasmValue
 }
 
 export type II32Load16s = {
   kind: "I32Load16s"
-  offset: number
+  offset: WasmValue
 }
 
 export type II32Load16u = {
   kind: "I32Load16u"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Load8s = {
   kind: "I64Load8s"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Load8u = {
   kind: "I64Load8u"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Load16s = {
   kind: "I64Load16s"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Load16u = {
   kind: "I64Load16u"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Load32s = {
   kind: "I64Load32s"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Load32u = {
   kind: "I64Load32u"
-  offset: number
+  offset: WasmValue
 }
 
 export type II32Store = {
   kind: "I32Store"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Store = {
   kind: "I64Store"
-  offset: number
+  offset: WasmValue
 }
 
 export type IF32Store = {
   kind: "F32Store"
-  offset: number
+  offset: WasmValue
 }
 
 export type IF64Store = {
   kind: "F64Store"
-  offset: number
+  offset: WasmValue
 }
 
 export type II32Store8 = {
   kind: "I32Store8"
-  offset: number
+  offset: WasmValue
 }
 
 export type II32Store16 = {
   kind: "I32Store16"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Store8 = {
   kind: "I64Store8"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Store16 = {
   kind: "I64Store16"
-  offset: number
+  offset: WasmValue
 }
 
 export type II64Store32 = {
   kind: "I64Store32"
-  offset: number
+  offset: WasmValue
 }
 
 export type MemoryInstruction =
@@ -244,7 +243,7 @@ export type I32Load<
 > = Satisfies<ProgramState,
   state['stack'] extends [
     ...infer remaining extends WasmValue[],
-    infer address extends MemoryAddress
+    infer address extends WasmValue
   ]
   ? State.Stack.set<
       [
@@ -257,7 +256,7 @@ export type I32Load<
         //     4,
         //     state
         //   >
-        // > // TODO Broken
+        // >
       ],
 
       // State.Instructions.debug<
@@ -269,7 +268,7 @@ export type I32Load<
       //     >,
         // TypeMath.Add<address, instruction['offset']>,
       state
-      // >
+    //   >
     >
   : never
 >

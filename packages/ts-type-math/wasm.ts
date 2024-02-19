@@ -25,6 +25,8 @@ export namespace Wasm {
     >
   >
 
+  /** 8 bits string (in binary) */
+  export type Byte = string;
   export type I32True  = '00000000000000000000000000000001'
   export type I32False = '00000000000000000000000000000000'
   export type I64True  = '0000000000000000000000000000000000000000000000000000000000000001'

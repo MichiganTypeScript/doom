@@ -10,10 +10,9 @@ import type {
   MemoryByAddress,
   Param,
   ProgramState,
-  evaluate,
 } from "./types"
 import * as TypeMath from "ts-type-math";
-import { WasmValue, WasmType, Convert } from 'ts-type-math';
+import { WasmValue, WasmType, Convert, Wasm } from 'ts-type-math';
 
 export namespace State {
   export type Error<
@@ -471,33 +470,34 @@ export namespace State {
 
     export type getByAddress<
       address extends MemoryAddress,
-      offset extends number,
+      offset extends WasmValue,
       bytes extends number,
 
       state extends ProgramState,
-    > =
-      TypeMath.Load.ReadBytes<
-        bytes,
-        get<state>,
-        TypeMath.Add<
-          Convert.U32Binary.ToU32Decimal<address>,
-          offset
-        >
+    > = Satisfies<Wasm.Byte[],
+        TypeMath.Load.ReadBytes<
+          bytes,
+          get<state>,
+          Wasm.I32Add<
+            address,
+            offset
+          >
+        > extends infer B extends Wasm.Byte[] ? B : never // QUESTION: why does this need to be here? otherwise, we get an excessive depth
       >
 
     type CollectBytes<
       bytes extends WasmValue[],
-      address extends number,
+      address extends WasmValue,
 
-      _Acc extends Record<number, WasmValue> = {}
-    > = Satisfies<Record<number, WasmValue>,
+      _Acc extends Record<WasmValue, WasmValue> = {}
+    > = Satisfies<Record<WasmValue, WasmValue>,
       bytes extends [
         infer head extends WasmValue, // WASM is little-endian so these go in first
         ...infer tail extends WasmValue[]
       ]
       ? CollectBytes<
           tail,
-          TypeMath.Add<address, 1>,
+          Wasm.I32Add<address, Wasm.I32True>,
           _Acc & { [k in address]: head }
         >
       : _Acc
@@ -505,16 +505,16 @@ export namespace State {
 
     export type insert<
       address extends MemoryAddress,
-      offset extends number,
+      offset extends WasmValue,
       bytes extends WasmValue[],
 
       state extends ProgramState,
 
-      _update extends Record<number, number> =
+      _update extends Record<WasmValue, WasmValue> =
         CollectBytes<
           bytes,
-          TypeMath.Add<
-            Convert.U32Binary.ToU32Decimal<address>,
+          Wasm.I32Add<
+            address,
             offset
           >
         >
@@ -551,10 +551,9 @@ export namespace State {
 
     export type getByIndex<
       state extends ProgramState,
-      id extends WasmValue
+      index extends WasmValue
     > = Satisfies<string,
-      // get<state>[id]
-      'TODO lol'
+      get<state>[Convert.WasmValue.ToTSNumber<index, 'i32'>]
     >
   }
 

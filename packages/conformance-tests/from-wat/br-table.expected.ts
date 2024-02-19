@@ -21,7 +21,7 @@ type $switch_like = Satisfies<Func, {
                     instructions: [
                       { kind: 'LocalGet'; id: '$p' },
                       { kind: 'BranchTable';
-                        branches: { 0: '$B2', 1: '$B1', 2: '$B0' };
+                        branches: { '00000000000000000000000000000000': '$B2', '00000000000000000000000000000001': '$B1', '00000000000000000000000000000010': '$B0' };
                         default: '$B3';
                       }
                     ];

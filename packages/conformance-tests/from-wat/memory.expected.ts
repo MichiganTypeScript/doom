@@ -11,7 +11,7 @@ type $storeValue = Satisfies<Func, {
       { kind: 'Const'; value: '00000000000000000000000000000100' },
       { kind: 'Multiply' },
       { kind: 'LocalGet'; id: '$value' },
-      { kind: 'I32Store'; offset: 0 },
+      { kind: 'I32Store'; offset: '00000000000000000000000000000000' },
     ];
 }>
 
@@ -25,7 +25,7 @@ type $loadValue = Satisfies<Func, {
       { kind: 'LocalGet'; id: '$index' },
       { kind: 'Const'; value: '00000000000000000000000000000100' },
       { kind: 'Multiply' },
-      { kind: 'I32Load'; offset: 0 },
+      { kind: 'I32Load'; offset: '00000000000000000000000000000000' },
     ];
 }>
 

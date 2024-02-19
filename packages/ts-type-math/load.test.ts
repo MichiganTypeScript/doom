@@ -1,51 +1,53 @@
 import { Equal, Expect } from "type-testing";
 import { Load } from "./load";
 import { test } from 'vitest';
+import { Convert } from './conversion';
+
 test('conversion')
 
-type memory = {
-  10: "00001000";
-  11: "00000100";
-  12: "00000010";
-  13: "00000001";
+export type memory = {
+  "00000000000000000000000000001010": '00001000',
+  "00000000000000000000000000001011": '00000100',
+  "00000000000000000000000000001100": '00000010',
+  "00000000000000000000000000001101": '00000001',
 }
 
 type testLoad = [
   Expect<Equal<
-    Load.ReadBytes<4, memory, 10>,
+    Load.ReadBytes<4, memory, Convert.TSNumber.ToWasmValue<10, 'i32'>>,
     ["00001000", "00000100", "00000010", "00000001"]
   >>,
   Expect<Equal<
-    Load.ReadBytes<3, memory, 10>,
+    Load.ReadBytes<3, memory, Convert.TSNumber.ToWasmValue<10, 'i32'>>,
     ["00001000", "00000100", "00000010"]
   >>,
   Expect<Equal<
-    Load.ReadBytes<2, memory, 10>,
+    Load.ReadBytes<2, memory, Convert.TSNumber.ToWasmValue<10, 'i32'>>,
     ["00001000", "00000100"]
   >>,
   Expect<Equal<
-    Load.ReadBytes<1, memory, 10>,
+    Load.ReadBytes<1, memory, Convert.TSNumber.ToWasmValue<10, 'i32'>>,
     ["00001000"]
   >>,
   Expect<Equal<
-    Load.ReadBytes<0, memory, 10>,
+    Load.ReadBytes<0, memory, Convert.TSNumber.ToWasmValue<10, 'i32'>>,
     []
   >>,
   Expect<Equal<
-    Load.ReadBytes<4, memory, 11>,
+    Load.ReadBytes<4, memory, Convert.TSNumber.ToWasmValue<11, 'i32'>>,
     // this is what happens if you try to read past the end of memory
-    ["00000100", "00000010", "00000001", unknown]
+    never
   >>,
   Expect<Equal<
-    Load.ReadBytes<1, memory, 11>,
+    Load.ReadBytes<1, memory, Convert.TSNumber.ToWasmValue<11, 'i32'>>,
     ["00000100"]
   >>,
   Expect<Equal<
-    Load.ReadBytes<1, memory, 12>,
+    Load.ReadBytes<1, memory, Convert.TSNumber.ToWasmValue<12, 'i32'>>,
     ["00000010"]
   >>,
   Expect<Equal<
-    Load.ReadBytes<1, memory, 13>,
+    Load.ReadBytes<1, memory, Convert.TSNumber.ToWasmValue<13, 'i32'>>,
     ["00000001"]
   >>,
 ]
@@ -53,11 +55,11 @@ type testLoad = [
 type testI32 = [
   Expect<Equal<
     Load.I32<["00001000", "00000100", "00000010", "00000001"]>,
-    134480385
+    "00001000000001000000001000000001"
   >>,
 
   Expect<Equal<
     Load.I32<["11111111", "11111111", "11111111", "11111111"]>,
-    -1
+    "11111111111111111111111111111111"
   >>,
 ]

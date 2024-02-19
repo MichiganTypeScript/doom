@@ -65,10 +65,10 @@ impl ToString for SourceFile {
             data_types.push_str(&format!("type {name} = `{data}`;\n"));
 
             if *readonly {
-                mutable_data.push(format!("      & StoreString<{}, {}>", index, name));
+                mutable_data.push(format!("      & StoreString<'{:032b}', {}>", index, name));
                 readonly_data.push(format!("      {}: {};", index, name));
             } else {
-                mutable_data.push(format!("      & StoreString<{}, {}>", index, name));
+                mutable_data.push(format!("      & StoreString<'{:032b}', {}>", index, name));
             }
         });
 

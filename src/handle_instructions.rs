@@ -293,73 +293,73 @@ fn handle_instruction(
             vec![(*indent, format!("{{ kind: 'MemorySize' }},"))]
         }
         Instruction::I32Load(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I32Load'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I32Load'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Load(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Load'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Load'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::F32Load(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'F32Load'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'F32Load'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::F64Load(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'F64Load'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'F64Load'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I32Load8s(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I32Load8s'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I32Load8s'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I32Load8u(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I32Load8u'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I32Load8u'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I32Load16s(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I32Load16s'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I32Load16s'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I32Load16u(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I32Load16u'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I32Load16u'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Load8s(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Load8s'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Load8s'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Load8u(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Load8u'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Load8u'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Load16s(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Load16s'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Load16s'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Load16u(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Load16u'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Load16u'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Load32s(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Load32s'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Load32s'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Load32u(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Load32u'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Load32u'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I32Store(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I32Store'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I32Store'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Store(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Store'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Store'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::F32Store(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'F32Store'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'F32Store'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::F64Store(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'F64Store'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'F64Store'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I32Store8(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I32Store8'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I32Store8'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I32Store16(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I32Store16'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I32Store16'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Store8(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Store8'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Store8'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Store16(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Store16'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Store16'; offset: '{:032b}' }},", mem_arg.offset))]
         }
         Instruction::I64Store32(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'I64Store32'; offset: {} }},", mem_arg.offset))]
+            vec![(*indent, format!("{{ kind: 'I64Store32'; offset: '{:032b}' }},", mem_arg.offset))]
         }
 
         /**************
@@ -393,7 +393,7 @@ fn handle_instruction(
                 .labels
                 .iter()
                 .enumerate()
-                .map(|(index, label)| format!("{}: {}", index, format_index(label)))
+                .map(|(index, label)| format!("'{:032b}': {}", index, format_index(label)))
                 .collect::<Vec<String>>()
                 .join(", ");
 

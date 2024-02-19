@@ -30,7 +30,7 @@ export type IBranchTable = {
   kind: "BranchTable"
 
   /** a block identifier */
-  branches: Record<number, string>
+  branches: Record<WasmValue, WasmValue>
 
   default: string
 }
@@ -225,14 +225,14 @@ export type BranchTable<
 
     // match found
     ?
-      // State.Instructions.set<
-        // State.ExecutionContexts.Active.Branches.get<state>[instruction['branches'][index]],
+      State.Instructions.set<
+        State.ExecutionContexts.Active.Branches.get<state>[instruction['branches'][index]],
 
-        // State.Stack.set<
-          // remaining,
+        State.Stack.set<
+          remaining,
           state
-        // > // TODO Broken
-      // >
+        >
+      >
 
     // no match found fallback to the default
     : State.Instructions.set<
