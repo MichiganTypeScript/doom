@@ -82,14 +82,14 @@ export type LocalSet<
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
     ...infer remaining extends WasmValue[],
-    infer entry extends WasmValue,
+    infer value extends WasmValue,
   ]
   ? State.Stack.set<
       remaining,
 
       State.ExecutionContexts.Active.Locals.insert<
         instruction['id'],
-        entry,
+        value,
         state
       >
     >

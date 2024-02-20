@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/memory.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[16909320], true>// =>
+import { entry } from 'conformance-tests/from-wat/add.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[0, 1], true>// =>
 type r=e['result']// =>
 type s=e['stack'] // =>
 // type m = ReadStringFromMemory<e>// =>
@@ -22,7 +22,7 @@ type c1b=ec[1]['branches']// =>
 // type c3=ec[2]// =>
 // type c4=ec[3]// =>
 
-type memory=e['memory']// =>
+type m=e['memory']// =>
 
 type c=e['count']// =>
 type i=e['instructions']
@@ -42,9 +42,11 @@ type i5=e['instructions'][5]// =>
 
 type d=i0['stuff']// =>
 
-// type g=e['globals']// =>
+type g=e['globals']// =>
 
 type b0=ec[1]['branches']['$B0']// =>
 type b1=ec[1]['branches']['$B1']// =>
 type b2=ec[1]['branches']['$B2']// =>
 type b3=ec[1]['branches']['$B3']// =>
+
+type x=m['00000000010100000000010011000000']// =>

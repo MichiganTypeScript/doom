@@ -83,7 +83,11 @@ export type Add<
       ],
       state
     >
-  : never
+  :  State.Error<
+      instruction,
+      "Stack exhausted",
+      state
+    >
 >
 
 export type Subtract<
@@ -104,7 +108,11 @@ export type Subtract<
 
       state
     >
-  : never
+  : State.Error<
+      instruction,
+      "Stack exhausted",
+      state
+    >
 >
 
 export type Multiply<
@@ -125,7 +133,11 @@ export type Multiply<
 
       state
     >
-  : never
+  : State.Error<
+      instruction,
+      "Stack exhausted",
+      state
+    >
 >
 
 export type Divide<

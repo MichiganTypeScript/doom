@@ -16,7 +16,6 @@ Loop        16
 I32LtS      14
 Unreachable 13
 I32Store8   12
-I32Load8u   11
 GlobalGet   10
 LocalTee    9
 GlobalSet   8
@@ -45,4 +44,4 @@ I32Store    59
 
 ## Not Done
 
-nothing!
+I32Load8u   11

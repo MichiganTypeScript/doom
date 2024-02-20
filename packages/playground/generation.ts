@@ -106,3 +106,9 @@ const result =
 const stringifiedResult = JSON.stringify(result, null, 2);
 console.log(stringifiedResult);
 writeFileSync('./packages/playground/generated.json', stringifiedResult)
+
+/*
+00000000010100000000010011000000
+
+
+*/

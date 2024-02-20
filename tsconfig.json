@@ -24,19 +24,19 @@
     }
   },
   "exclude": [
-    "./packages/conformance-tests/from-c/*.test.ts", // stay
+    // "./packages/conformance-tests/from-c/*.test.ts",
     //
-    // "./packages/conformance-tests/from-c/c-add.test.ts", // stay
-    // "./packages/conformance-tests/from-c/conway.test.ts", // stay
-    // "./packages/conformance-tests/from-c/hello-world.test.ts", // stay
-    // "./packages/conformance-tests/from-c/uppercase.test.ts", // stay
+    // "./packages/conformance-tests/from-c/c-add.test.ts",
+    // "./packages/conformance-tests/from-c/conway.test.ts",
+    "./packages/conformance-tests/from-c/hello-world.test.ts",
+    "./packages/conformance-tests/from-c/uppercase.test.ts",
     //
     //
-    // "./packages/conformance-tests/from-wat/*.test.ts", // stay
+    // "./packages/conformance-tests/from-wat/*.test.ts",
     //
     "./packages/conformance-tests/from-wat/absolute-value.test.ts",
     // "./packages/conformance-tests/from-wat/add.test.ts",
-    "./packages/conformance-tests/from-wat/add-middle.test.ts",
+    // "./packages/conformance-tests/from-wat/add-middle.test.ts",
     // "./packages/conformance-tests/from-wat/andarist.test.ts",
     "./packages/conformance-tests/from-wat/arithmetic.test.ts",
     // "./packages/conformance-tests/from-wat/bitwise-and.test.ts",

@@ -22,7 +22,11 @@ export namespace State {
     state extends ProgramState
   > = Satisfies<ProgramState,
     State.Instructions.push<
-      { kind: 'Halt', reason: reason, instruction: instruction },
+      {
+        kind: 'Halt',
+        reason: `ERROR(${State.Count.get<state>}): ${reason}`,
+        instruction: instruction
+      },
       state
     >
   >
@@ -216,13 +220,13 @@ export namespace State {
     >
 
     export type push<
-      entry extends WasmValue,
+      value extends WasmValue,
       state extends ProgramState
     > = Satisfies<ProgramState,
       set<
         [
           ...get<state>,
-          entry
+          value
         ],
         state
       >
@@ -338,7 +342,6 @@ export namespace State {
           State.ExecutionContexts.Active.get<state>['locals']
         >
 
-        
         export type insert<
           id extends string,
           value extends WasmValue,
@@ -348,7 +351,8 @@ export namespace State {
             {
               locals:
                 evaluate<
-                & Omit<State.ExecutionContexts.Active.Locals.get<state>, id>
+                & Omit<get<state>, id>
+                // get<state>
                 & { [k in id]: value }
                 >;
 
@@ -490,8 +494,8 @@ export namespace State {
       bytes extends WasmValue[],
       address extends WasmValue,
 
-      _Acc extends Record<WasmValue, WasmValue> = {}
-    > = Satisfies<Record<WasmValue, WasmValue>,
+      _Acc extends Record<WasmValue, Wasm.Byte> = {}
+    > = Satisfies<Record<WasmValue, Wasm.Byte>,
       bytes extends [
         infer head extends WasmValue, // WASM is little-endian so these go in first
         ...infer tail extends WasmValue[],
@@ -499,7 +503,10 @@ export namespace State {
       ? CollectBytes<
           tail,
           Wasm.I32Add<address, Wasm.I32True>,
-          _Acc & { [k in address]: head }
+          evaluate<
+            & _Acc
+            & { [k in address]: head }
+          >
         >
       : _Acc
     >
@@ -511,7 +518,7 @@ export namespace State {
 
       state extends ProgramState,
 
-      _update extends Record<WasmValue, WasmValue> =
+      _update extends Record<WasmValue, Wasm.Byte> =
         CollectBytes<
           bytes,
           Wasm.I32Add<
@@ -522,10 +529,10 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         memory:
-            // & Omit<state['memory'], keyof _update>
+            // & Omit<get<state>, keyof _update>
             evaluate<
-            & state['memory']
-            & _update
+              & get<state>
+              & _update
             >;
 
         activeExecutionContext: state['activeExecutionContext'];
