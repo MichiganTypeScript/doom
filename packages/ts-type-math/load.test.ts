@@ -64,8 +64,7 @@ type testI32 = [
   >>,
 ]
 
-
-type t = Load.JoinBytes<["1234567800000000"]>; // =>
+type t = Load.JoinBytes<['12345678', "00000000"]>; // =>
 
 type join = [
   Expect<Equal<Load.JoinBytes<["00000000"]>, "00000000">>,

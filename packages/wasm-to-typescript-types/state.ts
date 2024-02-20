@@ -474,16 +474,17 @@ export namespace State {
       bytes extends number,
 
       state extends ProgramState,
-    > =
-        TypeMath.Load.ReadBytes<
-          bytes,
-          get<state>,
-          Wasm.I32Add<
-            address,
-            offset
+    > = Satisfies<WasmValue,
+        bytes extends 4
+        ? TypeMath.Load.Read4Bytes<
+            get<state>,
+            Wasm.I32Add<
+              address,
+              offset
+            >
           >
-        >
-
+        : never // TODO loading more than 4 bytes
+      >
 
     type CollectBytes<
       bytes extends WasmValue[],
@@ -493,7 +494,7 @@ export namespace State {
     > = Satisfies<Record<WasmValue, WasmValue>,
       bytes extends [
         infer head extends WasmValue, // WASM is little-endian so these go in first
-        ...infer tail extends WasmValue[]
+        ...infer tail extends WasmValue[],
       ]
       ? CollectBytes<
           tail,

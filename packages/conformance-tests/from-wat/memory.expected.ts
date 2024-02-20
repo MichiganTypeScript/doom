@@ -1,51 +1,5 @@
 import type { Func, runProgram } from 'wasm-to-typescript-types'
 
-type $storeValue = Satisfies<Func, {
-  kind: 'func';
-  params: ['$index', '$value'];
-  paramsTypes: ['i32', 'i32'];
-  result: never;
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$index' },
-      { kind: 'Const'; value: '00000000000000000000000000000100' },
-      { kind: 'Multiply', type: 'i32' },
-      { kind: 'LocalGet'; id: '$value' },
-      { kind: 'I32Store'; offset: '00000000000000000000000000000000' },
-    ];
-}>
-
-type $loadValue = Satisfies<Func, {
-  kind: 'func';
-  params: ['$index'];
-  paramsTypes: ['i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$index' },
-      { kind: 'Const'; value: '00000000000000000000000000000100' },
-      { kind: 'Multiply', type: 'i32' },
-      { kind: 'I32Load'; offset: '00000000000000000000000000000000' },
-    ];
-}>
-
-type $foo = Satisfies<Func, {
-  kind: 'func';
-  params: ['$a'];
-  paramsTypes: ['i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Const'; value: '00000000000000000000000000000010' },
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Call'; id: '$storeValue' },
-      { kind: 'Const'; value: '00000000000000000000000000000010' },
-      { kind: 'Call'; id: '$loadValue' },
-      { kind: 'Const'; value: '00000000000000000000000000000001' },
-      { kind: 'Add', type: 'i32' },
-    ];
-}>
-
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$value'];
@@ -53,8 +7,11 @@ type $entry = Satisfies<Func, {
   result: 'i32';
     locals: [];
     instructions: [
+      { kind: 'Const'; value: '00000000000000000000000000000000' },
       { kind: 'LocalGet'; id: '$value' },
-      { kind: 'Call'; id: '$foo' },
+      { kind: 'I32Store'; offset: '00000000000000000000000000000000' },
+      { kind: 'Const'; value: '00000000000000000000000000000000' },
+      { kind: 'I32Load'; offset: '00000000000000000000000000000000' },
     ];
 }>
 
@@ -65,9 +22,6 @@ export type entry<
   {
     arguments: arguments;
     funcs: {
-      $storeValue: $storeValue;
-      $loadValue: $loadValue;
-      $foo: $foo;
       $entry: $entry;
     };
     globals: {};

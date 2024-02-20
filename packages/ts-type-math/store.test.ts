@@ -3,7 +3,7 @@ import type { AsciiToU8Binary, AsciiToU8Decimal, Store, StoreString, U8BinaryToA
 import { test } from 'vitest';
 import { ReadStringFromMemory } from "./memory-read-string";
 
-test('conversion')
+test('store')
 
 type atodtoa = U8DecimalToAscii<AsciiToU8Decimal<"from ascii to decimal and back">>;
 //   ^?
@@ -11,43 +11,53 @@ type atodtoa = U8DecimalToAscii<AsciiToU8Decimal<"from ascii to decimal and back
 type atobtoa = U8BinaryToAscii<AsciiToU8Binary<"from ascii to binary and back">>;
 //   ^?
 
-// type write = StoreString<1024, "Let's hope this works..\u0000">;
-// type read = ReadStringFromMemory<{ memory: write, stack: [1024] }>;
+type p1024 = '00000000000000000000010000000000';
+type write = StoreString<p1024, "Let's hope this works..\u0000">;
+type read = ReadStringFromMemory<{ memory: write, stack: [p1024] }>;
 
-// type encode = [
-//   Expect<Equal<write, {
-//     1024: '01001100';
-//     1025: '01100101';
-//     1026: '01110100';
-//     1027: '00100111';
-//     1028: '01110011';
-//     1029: '00100000';
-//     1030: '01101000';
-//     1031: '01101111';
-//     1032: '01110000';
-//     1033: '01100101';
-//     1034: '00100000';
-//     1035: '01110100';
-//     1036: '01101000';
-//     1037: '01101001';
-//     1038: '01110011';
-//     1039: '00100000';
-//     1040: '01110111';
-//     1041: '01101111';
-//     1042: '01110010';
-//     1043: '01101011';
-//     1044: '01110011';
-//     1045: '00101110';
-//     1046: '00101110';
-//     1047: '00000000';
-//   }>>,
+type encode = [
+  Expect<Equal<write['00000000000000000000010000000000'], '01001100'>>,
+  Expect<Equal<write['00000000000000000000010000000001'], '01100101'>>,
+  Expect<Equal<write['00000000000000000000010000000010'], '01110100'>>,
+  Expect<Equal<write['00000000000000000000010000000011'], '00100111'>>,
+  Expect<Equal<write['00000000000000000000010000000100'], '01110011'>>,
+  Expect<Equal<write['00000000000000000000010000000101'], '00100000'>>,
+  Expect<Equal<write['00000000000000000000010000000110'], '01101000'>>,
+  Expect<Equal<write['00000000000000000000010000000111'], '01101111'>>,
+  Expect<Equal<write['00000000000000000000010000001000'], '01110000'>>,
+  Expect<Equal<write['00000000000000000000010000001001'], '01100101'>>,
+  Expect<Equal<write['00000000000000000000010000001010'], '00100000'>>,
+  Expect<Equal<write['00000000000000000000010000001011'], '01110100'>>,
+  Expect<Equal<write['00000000000000000000010000001100'], '01101000'>>,
+  Expect<Equal<write['00000000000000000000010000001101'], '01101001'>>,
+  Expect<Equal<write['00000000000000000000010000001110'], '01110011'>>,
+  Expect<Equal<write['00000000000000000000010000001111'], '00100000'>>,
+  Expect<Equal<write['00000000000000000000010000010000'], '01110111'>>,
+  Expect<Equal<write['00000000000000000000010000010001'], '01101111'>>,
+  Expect<Equal<write['00000000000000000000010000010010'], '01110010'>>,
+  Expect<Equal<write['00000000000000000000010000010011'], '01101011'>>,
+  Expect<Equal<write['00000000000000000000010000010100'], '01110011'>>,
+  Expect<Equal<write['00000000000000000000010000010101'], '00101110'>>,
+  Expect<Equal<write['00000000000000000000010000010110'], '00101110'>>,
+  Expect<Equal<write['00000000000000000000010000010111'], '00000000'>>,
 
-//   Expect<Equal<read, "Let's hope this works..">>,
-// ]
+  Expect<Equal<read, "Let's hope this works..">>,
+]
 
-// type storeTests = [
-  // Expect<Equal<Store.I32<0>, ["00000000", "00000000", "00000000", "00000000"]>>,
-//   Expect<Equal<Store.I32<1>, ["00000000", "00000000", "00000000", "00000001"]>>,
-//   Expect<Equal<Store.I32<2>, ["00000000", "00000000", "00000000", "00000010"]>>,
-//   Expect<Equal<Store.I32<2>[3], "00000010">>,
-// ]
+type numbers = [
+  '00000000000000000000000000000000',
+  '00000000000000000000000000000001',
+  '00000000000000000000000000000010',
+  '00000000000000000000000000000011',
+  '00000001000000100000010000001000', // 16909320
+]
+
+type x = Store.I32<numbers[4]>; // =>
+
+type storeTests = [
+  Expect<Equal<Store.I32<numbers[0]>, ["00000000", "00000000", "00000000", "00000000"]>>,
+  Expect<Equal<Store.I32<numbers[1]>, ["00000000", "00000000", "00000000", "00000001"]>>,
+  Expect<Equal<Store.I32<numbers[2]>, ["00000000", "00000000", "00000000", "00000010"]>>,
+  Expect<Equal<Store.I32<numbers[3]>, ["00000000", "00000000", "00000000", "00000011"]>>,
+  Expect<Equal<Store.I32<numbers[4]>, ["00000001", "00000010", "00000100", "00001000"]>>,
+]

@@ -3,28 +3,25 @@ import type { entry } from "./memory.actual"
 
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest';
-import { Neg, neg } from '../../ts-type-math/test-cases/negative';
+
+const t = [
+  2,
+  1,
+  0
+  -1,
+  -2
+] as const
 
 const name = 'memory';
-test(name, async () => {
+test.each(t)(name, async (value) => {
   const entry = await getWasm("from-wat", name);
-  expect(entry(2)).toStrictEqual(3);
-  expect(entry(1)).toStrictEqual(2);
-  expect(entry(0)).toStrictEqual(1);
-
-  expect(entry(-1)).toStrictEqual(0);
-  expect(entry(-1 >>> 0)).toStrictEqual(0);
-  expect(entry(neg["-1"])).toStrictEqual(0);
-
-  expect(entry(-2)).toStrictEqual(-1);
-  expect(entry(-2 >>> 0)).toStrictEqual(-1);
-  expect(entry(neg["-2"])).toStrictEqual(-1);
+  expect(entry(value)).toBe(value);
 });
 
-type testCases = [
-  Expect<Equal<entry<[2]>, 3>>,
-  Expect<Equal<entry<[1]>, 2>>,
-  Expect<Equal<entry<[0]>, 1>>,
-  // Expect<Equal<entry<[Neg['-1']]>, Neg['0']>>,
-  // Expect<Equal<entry<Neg['-2']>, Neg['-1']>>,
+type tests = [
+  Expect<Equal<entry<[2]>, 2>>,
+  Expect<Equal<entry<[1]>, 1>>,
+  Expect<Equal<entry<[0]>, 0>>,
+  Expect<Equal<entry<[-1]>, -1>>,
+  Expect<Equal<entry<[-2]>, -2>>,
 ]

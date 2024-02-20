@@ -1,14 +1,13 @@
 import { U8Binary } from "./conversion";
 import type { Convert } from "./conversion"
-import { Add } from "./hotscript-fork/numbers/impl/addition";
-
+import { Wasm, WasmValue } from "./wasm";
 
 export type NullTerminatorBinary = "00000000";
 
 export type ReadUntilNullTerminator<
-  memory extends Record<number, string>,
+  memory extends Record<WasmValue, Wasm.Byte>,
 
-  address extends number,
+  address extends WasmValue,
 > =
   memory[address] extends NullTerminatorBinary
   ? ''
@@ -17,13 +16,16 @@ export type ReadUntilNullTerminator<
       ? Convert.U8Binary.ToAscii<memory[address]>
       : ''
     }${
-      ReadUntilNullTerminator<memory, Add<1, address>>
+      ReadUntilNullTerminator<
+        memory,
+        Wasm.I32Add<Wasm.I32True, address>
+      >
     }`
 
 export type ReadStringFromMemory<
   state extends {
-    stack: number[]
-    memory: Record<number, string>
+    stack: WasmValue[]
+    memory: Record<WasmValue, Wasm.Byte>
   },
 > = Satisfies<string,
   ReadUntilNullTerminator<

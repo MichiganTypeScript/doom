@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/if-else-nested.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[10, 6], true>// =>
+import { entry } from 'conformance-tests/from-wat/memory.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[16909320], true>// =>
 type r=e['result']// =>
 type s=e['stack'] // =>
 // type m = ReadStringFromMemory<e>// =>
@@ -39,14 +39,8 @@ type i5=e['instructions'][5]// =>
 // type i10=e['instructions'][10]// =>
 // type i11=e['instructions'][11]// =>
 // type i12=e['instructions'][12]// =>
-// type i13=e['instructions'][13]// =>
-// type i14=e['instructions'][14]// =>
-// type i15=e['instructions'][15]// =>
-// type i16=e['instructions'][16]// =>
-// type i17=e['instructions'][17]// =>
-// type i18=e['instructions'][18]// =>
-// type i19=e['instructions'][19]// =>
-// type i20=e['instructions'][20]// =>
+
+type d=i0['stuff']// =>
 
 // type g=e['globals']// =>
 

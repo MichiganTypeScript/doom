@@ -249,25 +249,24 @@ export type I32Load<
       [
         ...remaining,
 
-        // TypeMath.Load.JoinBytes<
-        //   State.Memory.getByAddress<
-        //     address,
-        //     instruction['offset'],
-        //     4,
-        //     state
-        //   >
-        // >
+          State.Memory.getByAddress<
+            address,
+            instruction['offset'],
+            4,
+            state
+          >
       ],
 
-      // State.Instructions.debug<
-      //     State.Memory.getByAddress<
-      //       address,
-      //       instruction['offset'],
-      //       4,
-      //       state
-      //     >,
       state
-    //   >
+      // State.Instructions.debug<
+      //   State.Memory.getByAddress<
+      //     address,
+      //     instruction['offset'],
+      //     4,
+      //     state
+      //   >,
+      //   state
+      // >
     >
   : never
 >
@@ -484,12 +483,12 @@ export type I32Store<
   ? State.Stack.set<
       remaining,
 
-      // State.Memory.insert<
-      //   address,
-      //   instruction['offset'],
-      //   TypeMath.Store.I32<entry>,
+      State.Memory.insert<
+        address,
+        instruction['offset'],
+        TypeMath.Store.I32<entry>,
         state
-      // > // TODO Broken
+      >
     >
   : State.Error<
       instruction,

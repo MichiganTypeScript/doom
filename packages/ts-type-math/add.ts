@@ -106,7 +106,7 @@ type StringAdd<
         : // there was a carry, base case of recursion
           '1'
 
-// type x = AddBinary<"1", "1"> // =>
+// type x = AddBinary<"1", "110101010111101"> // =>
 
 /** this is an arbitrary precision add, which means it can return more bits than it was given (as in the case of an overflow) */
 export type AddBinary<

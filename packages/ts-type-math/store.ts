@@ -38,7 +38,7 @@ export type _StoreString<
       & _Acc
       & {
           [A in Address]:
-            Convert.Ascii.ToWasmValue<Char>
+            Convert.Ascii.ToU8Binary<Char>
             // Char
         }
     >

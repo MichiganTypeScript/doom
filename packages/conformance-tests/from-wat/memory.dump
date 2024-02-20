@@ -34,204 +34,7 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 147,
-                    },
-                    id: Some(
-                        "storeValue",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                I32Const(
-                                    4,
-                                ),
-                                I32Mul,
-                                LocalGet(
-                                    Id(
-                                        "value",
-                                    ),
-                                ),
-                                I32Store(
-                                    MemArg {
-                                        align: 4,
-                                        offset: 0,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 410,
-                                            },
-                                        ),
-                                    },
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "index",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                    (
-                                        Some(
-                                            "value",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                ],
-                                results: [],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 476,
-                    },
-                    id: Some(
-                        "loadValue",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "index",
-                                    ),
-                                ),
-                                I32Const(
-                                    4,
-                                ),
-                                I32Mul,
-                                I32Load(
-                                    MemArg {
-                                        align: 4,
-                                        offset: 0,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 680,
-                                            },
-                                        ),
-                                    },
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "index",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                ],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 689,
-                    },
-                    id: Some(
-                        "foo",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                I32Const(
-                                    2,
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "a",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "storeValue",
-                                    ),
-                                ),
-                                I32Const(
-                                    2,
-                                ),
-                                Call(
-                                    Id(
-                                        "loadValue",
-                                    ),
-                                ),
-                                I32Const(
-                                    1,
-                                ),
-                                I32Add,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: None,
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "a",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                ],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 1138,
+                        offset: 91,
                     },
                     id: Some(
                         "entry",
@@ -246,15 +49,40 @@ Module {
                         locals: [],
                         expression: Expression {
                             instrs: [
+                                I32Const(
+                                    0,
+                                ),
                                 LocalGet(
                                     Id(
                                         "value",
                                     ),
                                 ),
-                                Call(
-                                    Id(
-                                        "foo",
-                                    ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 230,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 292,
+                                            },
+                                        ),
+                                    },
                                 ),
                             ],
                         },
@@ -288,11 +116,8 @@ Module {
 
 
 {
-    "LocalGet": 5,
-    "I32Const": 5,
-    "Call": 3,
-    "I32Mul": 2,
+    "I32Const": 2,
+    "LocalGet": 1,
     "I32Store": 1,
     "I32Load": 1,
-    "I32Add": 1,
 }
