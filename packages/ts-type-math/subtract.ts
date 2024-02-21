@@ -1,6 +1,7 @@
 import { AddBinary } from "./add";
-import { ClampDigits, ToDecimalSigned, TwosComplementFlip } from "./binary";
+import { ToDecimalSigned, TwosComplementFlip } from "./binary";
 import { IsPositiveSignedBinary } from "./comparison";
+import { Clamp } from "./split";
 import { WasmValue } from "./wasm";
 
 /** NOTE! this is unclamped!  that means if you subtract two negative numbers you could get an overflow! */
@@ -33,9 +34,8 @@ export type I32SubtractBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  ClampDigits<
-    SubtractBinary<a, b>,
-    32
+  Clamp.Last32Bits<
+    SubtractBinary<a, b>
   >
 >
 
@@ -67,4 +67,5 @@ type z3 = ToDecimalSigned<x3>    // =>
 type x4 = SubtractBinary<n3, n5> // =>
 type z4 = ToDecimalSigned<x4>    // =>
 
-type z = ClampDigits<AddBinary<n3, p5>, 8> // =>
+type ab = AddBinary<n3, p5>; // =>
+type z = Clamp.Last8Bits<ab> // =>

@@ -117,6 +117,6 @@ type m = {
 }
 */
 
-// console.log(array(32).map(i => `\${infer b${i}}`).join(""))
+console.log(array(32).map(i => `\${infer b${i+1}}`).reverse().join(""))
 
-console.log(array(8).map(i => numberToTwosComplementBinary(i+1024)).join("\n"))
+// console.log(array(8).map(i => numberToTwosComplementBinary(i+1024)).join("\n"))

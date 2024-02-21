@@ -1,4 +1,4 @@
-import { ClampDigits } from "./binary";
+import { Clamp } from "./split";
 import { WasmValue } from "./wasm";
 
 type Counter = 1[];
@@ -130,8 +130,7 @@ export type I32AddBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  ClampDigits<
-    AddBinary<a, b>,
-    32
+  Clamp.Last32Bits<
+    AddBinary<a, b>
   >
 >

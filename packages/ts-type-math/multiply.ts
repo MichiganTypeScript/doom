@@ -1,6 +1,7 @@
 import { AddBinary } from "./add";
-import { ClampDigits, ReverseString } from "./binary";
+import { ReverseString } from "./binary";
 import { ShiftRightBinary } from "./shift";
+import { Clamp } from "./split";
 import { Wasm, WasmValue } from "./wasm";
 
 type a = "00000000000000000000000001100100"
@@ -48,9 +49,8 @@ export type I32MultiplyBinary<
 > = Satisfies<WasmValue,
   a extends Wasm.I32False ? Wasm.I32False :
   b extends Wasm.I32False ? Wasm.I32False :
-  ClampDigits<
-    MultiplyBinary<a, b>,
-    32
+  Clamp.Last32Bits<
+    MultiplyBinary<a, b>
   >
 >
 

@@ -3,6 +3,8 @@
 ## Implementation improvements
 remove all `: never` from `/state/*` and replace with unimplemented or errors
 
+remove StartWithZeros uses
+
 ## Refactors
 
 ## Other

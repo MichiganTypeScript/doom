@@ -170,10 +170,25 @@ export type To64Binary<
     Pad.StartWithZeros<Process<T>, 64>
 >
 
+/**
+ * @interesting this can do a 32 bit string in four gulps (rather than 32)
+ * 
+ */
 export type ReverseString<T extends string> =
-  T extends `${infer Head}${infer Tail}`
-  ? `${ReverseString<Tail>}${Head}`
-  : ''
+  // let's go 8 at a time (rather than 1)
+  T extends `${infer h1}${infer h2}${infer h3}${infer h4}${infer h5}${infer h6}${infer h7}${infer h8}${infer Tail}`
+
+  ? // put them back together (but backwards)
+    `${ReverseString<Tail>}${h8}${h7}${h6}${h5}${h4}${h3}${h2}${h1}`
+  
+  : // we have less than 8 left
+    T extends `${infer h0}${infer t0}`
+    
+    ? // it wasn't some multiple of 8 so to finish up let's go one at a time
+      `${ReverseString<t0>}${h0}`
+      
+    : // we're done
+      ''
 
 // QUESTION: I have lookup tables for 0-255 (from both binary and decimal).
 // Would it be better or faster to just check that object real quick first and return that value if it exists?
@@ -271,26 +286,6 @@ type i = '101110';
 type a = ToDecimalSigned<i>  // =>
 type b = ToDecimalUnsigned<i>// =>
 
-type LengthOfString<
-  S extends string,
-  Acc extends 1[] = [],
-> = S extends `${string}${infer T}`
-  ? LengthOfString<T, [1, ...Acc]>
-  : Acc["length"];
-
-export type ClampDigits<
-  binary extends string,
-  maxDigits extends number,
-> = Satisfies<string,
-  LengthOfString<binary> extends maxDigits
-  ? binary
-  : ClampDigits<
-      binary extends `${infer Head}${infer Tail}`
-      ? Tail
-      : never,
-      maxDigits
-    >
->
 
 export type DisregardMSB<
   binary extends string
@@ -299,5 +294,3 @@ export type DisregardMSB<
   ? Tail
   : never
 >
-
-type c = ClampDigits<"abcdefg", 2> // =>

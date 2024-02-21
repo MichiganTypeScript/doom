@@ -1,5 +1,4 @@
-import { ClampDigits } from "./binary";
-import { AddBinary, I32AddBinary } from "./add";
+import { I32AddBinary } from "./add";
 import { ShiftLeftBinary, ShiftRightBinary } from "./shift";
 import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary } from "./bitwise";
 import { EqualsBinary, GreaterThanSignedBinary, GreaterThanUnsignedBinary, LessThanSignedBinary, LessThanUnsignedBinary, NotEqualsBinary } from "./comparison";

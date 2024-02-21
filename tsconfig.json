@@ -37,7 +37,7 @@
     //
     "./packages/conformance-tests/from-wat/absolute-value.test.ts",
     // "./packages/conformance-tests/from-wat/add.test.ts",
-    // "./packages/conformance-tests/from-wat/add-middle.test.ts",
+    "./packages/conformance-tests/from-wat/add-middle.test.ts",
     // "./packages/conformance-tests/from-wat/andarist.test.ts",
     "./packages/conformance-tests/from-wat/arithmetic.test.ts",
     // "./packages/conformance-tests/from-wat/bitwise-and.test.ts",
