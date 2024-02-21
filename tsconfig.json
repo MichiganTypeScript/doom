@@ -25,11 +25,11 @@
   },
   "exclude": [
     //
-    "./packages/conformance-tests/from-c/*.test.ts",
+    // "./packages/conformance-tests/from-c/*.test.ts",
     //
     // "./packages/conformance-tests/from-c/c-add.test.ts",
-    // "./packages/conformance-tests/from-c/conway.test.ts",
-    // "./packages/conformance-tests/from-c/hello-world.test.ts",
+    "./packages/conformance-tests/from-c/conway.test.ts",
+    "./packages/conformance-tests/from-c/hello-world.test.ts",
     // "./packages/conformance-tests/from-c/uppercase.test.ts",
     //
     //
@@ -37,7 +37,7 @@
     //
     "./packages/conformance-tests/from-wat/absolute-value.test.ts",
     // "./packages/conformance-tests/from-wat/add.test.ts",
-    "./packages/conformance-tests/from-wat/add-middle.test.ts",
+    // "./packages/conformance-tests/from-wat/add-middle.test.ts",
     // "./packages/conformance-tests/from-wat/andarist.test.ts",
     "./packages/conformance-tests/from-wat/arithmetic.test.ts",
     // "./packages/conformance-tests/from-wat/bitwise-and.test.ts",
@@ -56,9 +56,9 @@
     // "./packages/conformance-tests/from-wat/local-set.test.ts",
     // "./packages/conformance-tests/from-wat/local-tee.test.ts",
     // "./packages/conformance-tests/from-wat/loop.test.ts",
-    "./packages/conformance-tests/from-wat/memory-offset.test.ts",
-    "./packages/conformance-tests/from-wat/memory-size.test.ts",
-    "./packages/conformance-tests/from-wat/memory.test.ts",
+    // "./packages/conformance-tests/from-wat/memory-offset.test.ts",
+    // "./packages/conformance-tests/from-wat/memory-size.test.ts",
+    // "./packages/conformance-tests/from-wat/memory.test.ts",
     "./packages/conformance-tests/from-wat/negate.test.ts",
     // "./packages/conformance-tests/from-wat/nop.test.ts",
     // "./packages/conformance-tests/from-wat/not-equal.test.ts",

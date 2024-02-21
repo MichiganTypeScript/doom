@@ -24,12 +24,14 @@ export type ReadUntilNullTerminator<
 
 export type ReadStringFromMemory<
   state extends {
-    stack: WasmValue[]
     memory: Record<WasmValue, Wasm.Byte>
+
+    /** the pointer in memory where the result is stored */
+    stack: WasmValue[]
   },
 > = Satisfies<string,
   ReadUntilNullTerminator<
     state['memory'],
-    state['stack'][0] // startAddress
+    state['stack'][0] // the pointer to the string in memory
   >
 >

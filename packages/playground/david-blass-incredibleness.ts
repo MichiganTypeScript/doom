@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/add.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[97, 1], true>// =>
+import { entry } from 'conformance-tests/from-c/uppercase.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[97], true>// =>
 type r=e['result'] // =>
 type s=e['stack']  //  >
 type s0=s[0]       // =>

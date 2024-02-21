@@ -18,8 +18,19 @@ test(name, async () => {
   expect(await entry( 68 /* 'D' */)).toStrictEqual('D' /* 68 */);
 });
 
+
+type p1024 = '00000000000000000000010000000000'
+type result = entry<[97], true>   // =>
+type pointer = result['stack'][0] // =>
+type memory = result['memory']    // =>
+type end = result['memory'][p1024]// =>
+
 type Greeting = ReadStringFromMemory<entry<[97], true>>;
 
 type testCases = [
+  Expect<Equal<pointer, p1024>>,
+
+  Expect<Equal<memory[p1024], end>>,
+
   Expect<Equal<Greeting, "A">>,
 ]

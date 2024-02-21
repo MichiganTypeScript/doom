@@ -55,7 +55,7 @@ export type Load<
   state extends ProgramState
 > = Satisfies<ProgramState,
   instruction['subkind'] extends 'I32Load' ?   I32Load<instruction, state> :
-  instruction['subkind'] extends 'I32Load8U' ? I32Load8U<instruction, state> :
+  instruction['subkind'] extends 'I32Load8u' ? I32Load8U<instruction, state> :
   State.unimplemented<instruction, state>
 >
 
