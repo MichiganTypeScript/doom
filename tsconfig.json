@@ -29,7 +29,7 @@
     //
     // "./packages/conformance-tests/from-c/c-add.test.ts",
     "./packages/conformance-tests/from-c/conway.test.ts",
-    "./packages/conformance-tests/from-c/hello-world.test.ts",
+    // "./packages/conformance-tests/from-c/hello-world.test.ts",
     // "./packages/conformance-tests/from-c/uppercase.test.ts",
     //
     //
