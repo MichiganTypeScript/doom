@@ -8,7 +8,7 @@ type s1=s[1]       // =>
 type s2=s[2]       // =>
 type s3=s[3]       // =>
 type sl=s['length']// =>
-type rsfm=ReadStringFromMemory<e>// =>
+// type rsfm=ReadStringFromMemory<e>// =>
 
 type a=e['activeExecutionContext']// =>
 type af=a['funcId']  // =>
