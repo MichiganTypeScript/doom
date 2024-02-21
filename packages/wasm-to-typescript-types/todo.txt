@@ -9,6 +9,8 @@ remove StartWithZeros uses
 
 ## Other
 
+- add program-wide stats
+
 - noErrorTruncation short
 
 ### once Doom runs

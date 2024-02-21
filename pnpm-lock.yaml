@@ -13,6 +13,12 @@ importers:
 
   .:
     dependencies:
+      '@biomejs/js-api':
+        specifier: 0.3.0-nightly.cfef948
+        version: 0.3.0-nightly.cfef948(@biomejs/wasm-nodejs@1.5.3)
+      '@biomejs/wasm-nodejs':
+        specifier: ^1.5.3
+        version: 1.5.3
       '@types/node':
         specifier: ^20.11.5
         version: 20.11.5
@@ -25,9 +31,6 @@ importers:
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
-      prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
       ramda:
         specifier: 0.29.1
         version: 0.29.1
@@ -62,6 +65,27 @@ importers:
   packages/wasm-to-typescript-types: {}
 
 packages:
+
+  /@biomejs/js-api@0.3.0-nightly.cfef948(@biomejs/wasm-nodejs@1.5.3):
+    resolution: {integrity: sha512-MhOHOA05Z2RulLO7knjyXLV1vdFoGBrwuPji9DfpJjt1RaHXR+Mcc439ACaLWnLslFy+x+JHu/7vqD5B2/yx0g==}
+    peerDependencies:
+      '@biomejs/wasm-bundler': ^10.0.0
+      '@biomejs/wasm-nodejs': ^10.0.0
+      '@biomejs/wasm-web': ^10.0.0
+    peerDependenciesMeta:
+      '@biomejs/wasm-bundler':
+        optional: true
+      '@biomejs/wasm-nodejs':
+        optional: true
+      '@biomejs/wasm-web':
+        optional: true
+    dependencies:
+      '@biomejs/wasm-nodejs': 1.5.3
+    dev: false
+
+  /@biomejs/wasm-nodejs@1.5.3:
+    resolution: {integrity: sha512-JgM5+QqpK7rPUAL3gNfbwZaNBgOnVNEF6AXrzMFBp7uqd2Bdpf2wZNU9jFzQcO06KPqEZ15zmLjiXwUTx0JNFw==}
+    dev: false
 
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -786,12 +810,6 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: false
-
-  /prettier@3.2.5:
-    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
-    engines: {node: '>=14'}
-    hasBin: true
     dev: false
 
   /pretty-format@29.7.0:
