@@ -9,6 +9,8 @@ remove StartWithZeros uses
 
 ## Other
 
+- noErrorTruncation short
+
 ### once Doom runs
 
 - publish as an NPM (lol)

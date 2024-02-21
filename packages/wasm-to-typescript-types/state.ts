@@ -71,16 +71,16 @@ export namespace State {
       {
         count: TypeMath.Add<state['count'], 1>;
 
-        activeExecutionContext: state['activeExecutionContext'];
-        executionContexts: state['executionContexts'];
-        funcs: state['funcs'];
-        globals: state['globals'];
-        indirect: state['indirect'];
-        instructions: state['instructions'];
-        memory: state['memory'];
-        memorySize: state['memorySize'];
         result: state['result'];
         stack: state['stack'];
+        instructions: state['instructions'];
+        activeExecutionContext: state['activeExecutionContext'];
+        globals: state['globals'];
+        memory: state['memory'];
+        indirect: state['indirect'];
+        memorySize: state['memorySize'];
+        executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
       }
     >
   }
@@ -92,18 +92,19 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
+        count: state['count'];
+        result: state['result'];
+        stack: state['stack'];
+
         instructions: instructions;
 
         activeExecutionContext: state['activeExecutionContext'];
-        count: state['count'];
+        globals: state['globals'];
+        memory: state['memory'];
+        indirect: state['indirect'];
+        memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
-        globals: state['globals'];
-        indirect: state['indirect'];
-        memory: state['memory'];
-        memorySize: state['memorySize'];
-        result: state['result'];
-        stack: state['stack'];
       }
     >
 
@@ -204,18 +205,19 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
+        count: state['count'];
+        result: state['result'];
+
         stack: stack;
 
+        instructions: state['instructions'];
         activeExecutionContext: state['activeExecutionContext'];
-        count: state['count'];
+        globals: state['globals'];
+        memory: state['memory'];
+        indirect: state['indirect'];
+        memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
-        globals: state['globals'];
-        indirect: state['indirect'];
-        instructions: state['instructions'];
-        memory: state['memory'];
-        memorySize: state['memorySize'];
-        result: state['result'];
       }
     >
 
@@ -241,20 +243,21 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
-          executionContexts: executionContexts;
-
-          activeExecutionContext: state['activeExecutionContext'];
-          count: state['count'];
-          funcs: state['funcs'];
-          globals: state['globals'];
-          indirect: state['indirect'];
-          instructions: state['instructions'];
-          memory: state['memory'];
-          memorySize: state['memorySize'];
-          result: state['result'];
-          stack: state['stack'];
-        }
-      >
+        count: state['count'];
+        result: state['result'];
+        stack: state['stack'];
+        instructions: state['instructions'];
+        activeExecutionContext: state['activeExecutionContext'];
+        globals: state['globals'];
+        memory: state['memory'];
+        indirect: state['indirect'];
+        memorySize: state['memorySize'];
+        
+        executionContexts: executionContexts;
+        
+        funcs: state['funcs'];
+      }
+    >
 
     /** push a brand new execution context */
     export type push<
@@ -262,23 +265,26 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
+        count: state['count'];
+        result: state['result'];
+        stack: state['stack'];
+        instructions: state['instructions'];
+
+        // set the new one
+        activeExecutionContext: executionContext;
+
+        globals: state['globals'];
+        memory: state['memory'];
+        indirect: state['indirect'];
+        memorySize: state['memorySize'];
+
         executionContexts: [
           ...state['executionContexts'],
           // add the old active execution context to the stack
           state['activeExecutionContext']
         ];
 
-        // set the new one
-        activeExecutionContext: executionContext;
-        count: state['count'];
         funcs: state['funcs'];
-        globals: state['globals'];
-        indirect: state['indirect'];
-        instructions: state['instructions'];
-        memory: state['memory'];
-        memorySize: state['memorySize'];
-        result: state['result'];
-        stack: state['stack'];
       }
     >
 
@@ -291,19 +297,22 @@ export namespace State {
         infer active extends ExecutionContext,
       ]
       ? {
-          executionContexts: remaining;
-
-          // set the new one
-          activeExecutionContext: active;
           count: state['count'];
-          funcs: state['funcs'];
-          globals: state['globals'];
-          indirect: state['indirect'];
-          instructions: state['instructions'];
-          memory: state['memory'];
-          memorySize: state['memorySize'];
           result: state['result'];
           stack: state['stack'];
+          instructions: state['instructions'];
+          
+          // set the new one
+          activeExecutionContext: active;
+          
+          globals: state['globals'];
+          memory: state['memory'];
+          indirect: state['indirect'];
+          memorySize: state['memorySize'];
+          
+          executionContexts: remaining;
+
+          funcs: state['funcs'];
         }
       : never
     >
@@ -320,18 +329,19 @@ export namespace State {
         state extends ProgramState
       > = Satisfies<ProgramState,
         {
-          activeExecutionContext: executionContext;
-          
           count: state['count'];
-          executionContexts: state['executionContexts']
-          funcs: state['funcs'];
-          globals: state['globals'];
-          indirect: state['indirect'];
-          instructions: state['instructions'];
-          memory: state['memory'];
-          memorySize: state['memorySize'];
           result: state['result'];
           stack: state['stack'];
+          instructions: state['instructions'];
+
+          activeExecutionContext: executionContext;
+
+          globals: state['globals'];
+          memory: state['memory'];
+          indirect: state['indirect'];
+          memorySize: state['memorySize'];
+          executionContexts: state['executionContexts'];
+          funcs: state['funcs'];
         }
       >
 
@@ -444,6 +454,11 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
+        count: state['count'];
+        result: state['result'];
+        stack: state['stack'];
+        instructions: state['instructions'];
+        activeExecutionContext: state['activeExecutionContext'];
 
         globals:
           evaluate<
@@ -451,16 +466,11 @@ export namespace State {
           & globals
           >;
 
-        activeExecutionContext: state['activeExecutionContext'];
-        count: state['count'];
+        memory: state['memory'];
+        indirect: state['indirect'];
+        memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
-        indirect: state['indirect'];
-        instructions: state['instructions'];
-        memory: state['memory'];
-        memorySize: state['memorySize'];
-        result: state['result'];
-        stack: state['stack'];
       }
     >
   }
@@ -501,6 +511,13 @@ export namespace State {
         >
     > = Satisfies<ProgramState,
       {
+        count: state['count'];
+        result: state['result'];
+        stack: state['stack'];
+        instructions: state['instructions'];
+        activeExecutionContext: state['activeExecutionContext'];
+        globals: state['globals'];
+
         memory:
           evaluate<
           // & Omit<get<state>, keyof _update>
@@ -508,16 +525,10 @@ export namespace State {
             & _update
           >;
 
-        activeExecutionContext: state['activeExecutionContext'];
-        count: state['count'];
-        funcs: state['funcs'];
-        globals: state['globals'];
-        executionContexts: state['executionContexts'];
         indirect: state['indirect'];
-        instructions: state['instructions'];
         memorySize: state['memorySize'];
-        result: state['result'];
-        stack: state['stack'];
+        executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
       }
     >
   }
@@ -555,22 +566,23 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
+        count: state['count'];
+
         result:
           Convert.WasmValue.ToTSNumber<
             State.Stack.get<state>[0],
             getWasmType<state>
           >;
 
+        stack: state['stack'];
+        instructions: state['instructions'];
         activeExecutionContext: state['activeExecutionContext'];
-        count: state['count'];
+        globals: state['globals'];
+        memory: state['memory'];
+        indirect: state['indirect'];
+        memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
-        globals: state['globals'];
-        indirect: state['indirect'];
-        instructions: state['instructions'];
-        memory: state['memory'];
-        memorySize: state['memorySize'];
-        stack: state['stack'];
       }
     >
 

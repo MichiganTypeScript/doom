@@ -3,6 +3,8 @@ import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import tsvfs from '@typescript/vfs';
 import ts from 'typescript';
+import { writeFileSync } from 'fs';
+import prettier from 'prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,10 +31,11 @@ const reportErrors = (program: ts.Program) => {
       console.error(ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
       console.log();
     }
+
   });
 }
 
-const isolatedProgram = () => {
+const isolatedProgram = async () => {
   const projectRoot = resolve(__dirname, '../../../');
   const globalDefinitions = resolve(__dirname, '../../../global.d.ts');
   const tsconfigFilePath = resolve(projectRoot, './tsconfig.json');
@@ -108,7 +111,19 @@ const isolatedProgram = () => {
     shortStats(time, stats)
   }
   console.log();
-  console.log(typeString);
+  if (process.argv.includes('--write-file')) {
+    const path = "./evaluate/playground-result.ts"
+    console.log("wrote file to", path)
+    const formattedString = await prettier.format(`type PlaygroundResult = ${typeString}`, {
+      parser: 'typescript',
+      singleQuote: true,
+      trailingComma: 'all',
+      printWidth: 200,
+    });
+    writeFileSync(path, formattedString, 'utf-8')
+  } else {
+    console.log(typeString);
+  }
   console.log()
   reportErrors(program);
 }
@@ -136,4 +151,4 @@ const phrases = [
 
 console.log(phrases[Math.floor(Math.random() * phrases.length)]);
 console.log();
-isolatedProgram();
+isolatedProgram().catch(console.error);

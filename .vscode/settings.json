@@ -8,5 +8,5 @@
   "errorLens.excludePatterns": [
     "**/david-blass-incredibleness.ts",
     "**/package.json"
-  ]
+  ],
 }

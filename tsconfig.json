@@ -4,6 +4,7 @@
     "module": "ES2022",
     "moduleResolution": "bundler",
     "incremental": true,
+    "noErrorTruncation": true,
     "tsBuildInfoFile": ".tsbuildinfo",
     "strict": true,
     "noEmit": true,
@@ -24,6 +25,8 @@
     }
   },
   "exclude": [
+    "./packages/playground/evaluate/playground-result.ts",
+    "./packages/playground/evaluate/playground.ts",
     //
     // "./packages/conformance-tests/from-c/*.test.ts",
     //

@@ -50,31 +50,31 @@ export type ProgramState = {
   /** the number of instructions we've executed, useful for debugging */
   count: number;
 
-  /** a stack of execution contexts */
-  executionContexts: ExecutionContext[];
-
-  activeExecutionContext: ExecutionContext;
-
-  funcs: FuncsById;
-
-  globals: GlobalsById;
-
-  /** used for dynamic dispatch: maps directly to funcs */
-  indirect: string[];
-
-  /** the currently executing instructions */
-  instructions: Instruction[];
-
-  /** the linear memory of the program */
-  memory: MemoryByAddress;
-
-  memorySize: WasmValue;
+  /** the result of the program */
+  result: number | null;
 
   /** a stack of values */
   stack: WasmValue[];
 
-  /** the result of the program */
-  result: number | null;
+  /** the currently executing instructions */
+  instructions: Instruction[];
+
+  activeExecutionContext: ExecutionContext;
+
+  globals: GlobalsById;
+
+  /** the linear memory of the program */
+  memory: MemoryByAddress;
+
+  /** used for dynamic dispatch: maps directly to funcs */
+  indirect: string[];
+
+  memorySize: WasmValue;
+
+  /** a stack of execution contexts */
+  executionContexts: ExecutionContext[];
+
+  funcs: FuncsById;
 }
 
 export type ProgramInput = Pick<

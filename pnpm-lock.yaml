@@ -25,6 +25,9 @@ importers:
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
+      prettier:
+        specifier: ^3.2.5
+        version: 3.2.5
       ramda:
         specifier: 0.29.1
         version: 0.29.1
@@ -783,6 +786,12 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
+    dev: false
+
+  /prettier@3.2.5:
+    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: false
 
   /pretty-format@29.7.0:

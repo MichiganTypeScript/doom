@@ -55,8 +55,8 @@ test(name, async () => {
 //   ^?
 
 type testCases = [
-  // Expect<Equal<entry<[0]>, typeof e0>>,
-  // Expect<Equal<entry<[1]>, typeof e1>>,
-  // Expect<Equal<entry<[2]>, typeof e2>>,
-  // Expect<Equal<entry<[3]>, typeof e3>>,
+  // Expect<Equal<entry<[0], true>, typeof e0>>,
+  // Expect<Equal<entry<[1], true>, typeof e1>>,
+  // Expect<Equal<entry<[2], true>, typeof e2>>,
+  // Expect<Equal<entry<[3], true>, typeof e3>>,
 ]
