@@ -1,6 +1,11 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-c/conway.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[0], false, 66>// =>
+// import { entry } from 'conformance-tests/from-c/conway.actual';
+import type { ReadStringFromMemory } from 'ts-type-math';
+// type e=entry<[0], false, 66>// =>
+import { executeInstruction } from '../../packages/wasm-to-typescript-types/program';
+import { PlaygroundResult_18800 } from './evaluate/results/results-18800';
+import { Equal, Expect } from 'type-testing';
+type e = executeInstruction<PlaygroundResult_18800, true>// =>
 type r=e['result'] // =>
 type s=e['stack']  //  >
 type s0=s[0]       // =>
@@ -8,7 +13,22 @@ type s1=s[1]       // =>
 type s2=s[2]       // =>
 type s3=s[3]       // =>
 type sl=s['length']// =>
-// type rsfm=ReadStringFromMemory<e>// =>
+type rsfm=ReadStringFromMemory<e>// =>
+
+type expected =
+`$$.......
+.........
+.........
+....$....
+...$$$...
+....$....
+.........
+.........`
+
+type IT_WORKS = Expect<Equal<rsfm, expected>>// =>
+
+type c=e['count']// =>
+
 
 type a=e['activeExecutionContext']// =>
 type af=a['funcId']  // =>
@@ -29,7 +49,6 @@ type ab=a['branches']// =>
 
 type m=e['memory']// =>
 
-type c=e['count']// =>
 type i=e['instructions']
 type i0=e['instructions'][0]// =>
 type i1=e['instructions'][1]// =>

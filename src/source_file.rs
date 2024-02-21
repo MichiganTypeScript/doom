@@ -218,7 +218,7 @@ impl SourceFile {
                 let result = if let Some(val) = function_type.results.first() {
                     format_val_type(val)
                 } else {
-                    "never".to_string()
+                    "null".to_string()
                 };
 
                 (params, result)

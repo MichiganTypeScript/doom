@@ -3,7 +3,7 @@ import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import tsvfs from '@typescript/vfs';
 import ts from 'typescript';
-import { writeFileSync } from 'fs';
+import { readdirSync, unlinkSync, writeFileSync } from 'fs';
 import prettier from 'prettier';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -35,14 +35,25 @@ const reportErrors = (program: ts.Program) => {
   });
 }
 
-const isolatedProgram = async () => {
+interface ProgramRun {
+  current: number;
+  stopAt: number;
+  incrementBy: number;
+  targetFile: string;
+}
+
+const isolatedProgram = async ({
+  current,
+  stopAt,
+  incrementBy,
+  targetFile,
+}: ProgramRun): Promise<void | ProgramRun> => {
   const projectRoot = resolve(__dirname, '../../../');
   const globalDefinitions = resolve(__dirname, '../../../global.d.ts');
   const tsconfigFilePath = resolve(projectRoot, './tsconfig.json');
 
   /** this is the magic type alias that the script is looking for in the targetFile */
   const targetTypeAlias = 'Evaluate';
-  const targetFile = resolve(__dirname, 'playground.ts');
 
   const configFile = ts.readConfigFile(tsconfigFilePath, ts.sys.readFile)
   const { options } = ts.parseJsonConfigFileContent(
@@ -108,38 +119,103 @@ const isolatedProgram = async () => {
   if (process.argv.includes('--verbose')) {
     console.log({ time, stats })
   } else {
-    shortStats(time, stats)
+    shortStats(current, time, stats)
   }
-  console.log();
+
+  reportErrors(program);
+
   if (process.argv.includes('--write-file')) {
-    const path = "./evaluate/playground-result.ts"
-    console.log("wrote file to", path)
-    const formattedString = await prettier.format(`export type PlaygroundResult = ${typeString}`, {
+    const updatedStopAt = current + incrementBy;
+    const formattedCurrent = String(current).padStart(5, '0');
+
+    const programImport = `import { executeInstruction } from '../../../wasm-to-typescript-types/program'\n`
+    const statsString = `export const stats_${formattedCurrent} = ${JSON.stringify({ time, stats }, null, 2)}`
+    const typeName = `PlaygroundResult_${formattedCurrent}`;
+    const playgroundResult = `export type ${typeName} = ${typeString}`;
+    const evaluate = `export type Evaluate = executeInstruction<${typeName}, false, ${updatedStopAt}>`
+
+    const unformattedFile = [
+      programImport,
+      statsString,
+      evaluate,
+      playgroundResult,
+    ].join('\n\n');
+
+    const formattedFile = await prettier.format(unformattedFile, {
       parser: 'typescript',
       singleQuote: true,
       trailingComma: 'all',
       printWidth: 200,
+      quoteProps: 'as-needed',
     });
-    writeFileSync(path, formattedString, 'utf-8');
+    const nextFilePath = resolve(__dirname, `./results/results-${formattedCurrent}.ts`)
+    writeFileSync(nextFilePath, formattedFile, 'utf-8');
+    // console.log("wrote file to", nextFilePath)
 
-    formattedString.split('\n').forEach((line, index) => {
+    let actualCount = 0;
+    let foundErrors = false;
+    formattedFile.split('\n').forEach((line, index) => {
       // if the line contains the `never` type, report an error
       if (line.includes('never')) {
         console.error(`'never' found on line ${index + 1}`);
+        foundErrors = true;
+      }
+      // if the line starts with `  count: ` then get the number that follows and before the `;`
+      if (line.startsWith('  count:')) {
+        const count = line.match(/count: (\d+),/);
+        if (count) {
+          actualCount = Number(count[1]);
+        }
       }
     });
+
+
+    if (foundErrors) {
+      console.error('stopped because errors found in the file (see above re: `never`)');
+      return;
+    }
+
+    if (actualCount > current) {
+      console.log('naturally reached the end of the program at instruction count', actualCount);
+      return;
+    }
+
+    if (stopAt > 0 && updatedStopAt >= stopAt) {
+      console.log('stopped because we reached the stopAt instruction count', stopAt);
+      return;
+    }
+
+    if (current < stopAt) {
+      return {
+        current: current + incrementBy,
+        stopAt,
+        incrementBy,
+        targetFile: nextFilePath
+      };
+    }
   } else {
+    console.log();
     console.log(typeString);
   }
-  console.log()
-  reportErrors(program);
+
+
 }
 
 const shortStats = (
+  count: number,
   { getTypeAtLocation }: { getTypeAtLocation: number },
   { instantiations }: { instantiations: number },
 ) => {
-  console.log("time (ms)", getTypeAtLocation, "| instantiations", instantiations);
+  console.log("count", count, "| time (ms)", getTypeAtLocation, "| instantiations", instantiations);
+}
+
+const reset = () => {
+  // delete every file in the results directory
+  const resultsDirectory = resolve(__dirname, './results');
+  const files = readdirSync(resultsDirectory);
+  files.forEach(file => {
+    unlinkSync(resolve(resultsDirectory, file));
+  });
 }
 
 const phrases = [
@@ -158,4 +234,20 @@ const phrases = [
 
 console.log(phrases[Math.floor(Math.random() * phrases.length)]);
 console.log();
-isolatedProgram().catch(console.error);
+
+
+
+// reset()
+let next: ProgramRun | void = {
+  current: 9950,
+  stopAt: 100_000,
+  incrementBy: 50,
+  targetFile: resolve(__dirname, './results/results-09900.ts'),
+};
+
+while (true) {
+  next = await isolatedProgram(next);
+  if (!next) {
+    break;
+  }
+}

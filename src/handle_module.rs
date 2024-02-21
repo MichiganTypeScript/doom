@@ -42,7 +42,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
                     .results
                     .first()
                     .map(|val_type| format_val_type(val_type))
-                    .unwrap_or("never".to_string())
+                    .unwrap_or("null".to_string())
                     .to_string();
 
                 format!("  params: [{params}];\n  paramsTypes: [{params_types}];\n  result: {result};")

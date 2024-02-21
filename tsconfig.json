@@ -25,6 +25,7 @@
     }
   },
   "exclude": [
+    "./packages/playground/evaluate/results/*",
     "./packages/playground/evaluate/playground-result.ts",
     "./packages/playground/evaluate/playground.ts",
     "./packages/playground/evaluate/pickup-result.ts",

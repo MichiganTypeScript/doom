@@ -401,10 +401,10 @@ export namespace State {
           state extends ProgramState
         > = Satisfies<ProgramState,
           set<
-            // evaluate<
+            evaluate<
             & Omit<get<state>, id>
             & { [k in id]: instructions }
-            // >
+            >
             ,
             state
           >
@@ -520,8 +520,8 @@ export namespace State {
 
         memory:
           evaluate<
-          // & Omit<get<state>, keyof _update>
-            & get<state>
+            & Omit<get<state>, keyof _update>
+            // & get<state>
             & _update
           >;
 
@@ -552,7 +552,7 @@ export namespace State {
   export namespace Result {
     export type getWasmType<
       state extends ProgramState
-    > = Satisfies<WasmType,
+    > = Satisfies<WasmType | null,
       state['funcs']['$entry']['result']
     >
 
@@ -569,10 +569,14 @@ export namespace State {
         count: state['count'];
 
         result:
-          Convert.WasmValue.ToTSNumber<
-            State.Stack.get<state>[0],
-            getWasmType<state>
-          >;
+          getWasmType<state> extends infer result
+          ? result extends WasmType
+            ? Convert.WasmValue.ToTSNumber<
+                State.Stack.get<state>[0],
+                result
+              >
+            : never // technically this should be possible (i.e. a program that has side effects), but all programs in this universe should return _something_ (even if it's just a memory pointer) because otherwise there's no point in doing anything
+          : never // this suggests there's a missing $entry function
 
         stack: state['stack'];
         instructions: state['instructions'];

@@ -4,7 +4,7 @@ type $__wasm_call_ctors = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: never;
+  result: null;
     locals: [];
     instructions: [
       { kind: 'Call'; id: '$emscripten_stack_init' },
@@ -78,7 +78,7 @@ type $_initialize = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: never;
+  result: null;
     locals: [];
     instructions: [
       { kind: 'Block';
@@ -140,7 +140,7 @@ type $stackRestore = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
   paramsTypes: ['i32'];
-  result: never;
+  result: null;
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$p0' },
@@ -170,7 +170,7 @@ type $emscripten_stack_init = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: never;
+  result: null;
     locals: [];
     instructions: [
       { kind: 'Const'; value: '00000000010100000000010000010000' },

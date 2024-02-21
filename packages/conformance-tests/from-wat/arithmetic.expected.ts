@@ -160,7 +160,7 @@ type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$I32Add_a', '$I32Add_b', '$I64Add_a', '$I64Add_b', '$I32DivS_a', '$I32DivS_b', '$I64DivS_a', '$I64DivS_b', '$I32DivU_a', '$I32DivU_b', '$I64DivU_a', '$I64DivU_b', '$I32Mul_a', '$I32Mul_b', '$I64Mul_a', '$I64Mul_b', '$I32RemS_a', '$I32RemS_b', '$I32RemU_a', '$I32RemU_b', '$I32Sub_a', '$I32Sub_b', '$I64Sub_a', '$I64Sub_b'];
   paramsTypes: ['i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i64', 'i64', 'i32', 'i32', 'i32', 'i32', 'i32', 'i32', 'i64', 'i64'];
-  result: never;
+  result: null;
     locals: ['$index'];
     instructions: [
       { kind: 'Const'; value: '00000000000000000000000000000000' },

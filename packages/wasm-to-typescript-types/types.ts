@@ -15,7 +15,7 @@ export type Func = {
   kind: 'func';
   params: Param[];
   paramsTypes: WasmType[];
-  result: WasmType | never;
+  result: WasmType | null;
   locals: string[];
   instructions: Instruction[];
 }
