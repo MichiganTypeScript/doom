@@ -21,7 +21,7 @@ export namespace State {
 
     state extends ProgramState
   > = Satisfies<ProgramState,
-    State.Instructions.push<
+    State.Instructions.unshift<
       {
         kind: 'Halt',
         reason: `ERROR(${State.Count.get<state>}): ${reason}`,
@@ -48,7 +48,7 @@ export namespace State {
     instruction extends Instruction,
     state extends ProgramState
   > = Satisfies<ProgramState,
-    State.Instructions.push<
+    State.Instructions.unshift<
       {
         kind: 'Halt',
         reason: "Unimplemented Instruction",
