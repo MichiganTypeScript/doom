@@ -133,7 +133,8 @@ impl ToString for SourceFile {
         let entry = format!(
             "export type entry<
   arguments extends {arguments},
-  debugMode extends boolean = false
+  debugMode extends boolean = false,
+  stopAt extends number = number,
 > = runProgram<
   {{
     arguments: arguments;
@@ -145,7 +146,8 @@ impl ToString for SourceFile {
     memorySize: '{memory_size_binary}';
     indirect: [{indirect}];
   }},
-  debugMode
+  debugMode,
+  stopAt
 >"
         );
 

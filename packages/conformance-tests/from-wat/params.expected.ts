@@ -25,7 +25,8 @@ type $entry = Satisfies<Func, {
 
 export type entry<
   arguments extends [number, number, number],
-  debugMode extends boolean = false
+  debugMode extends boolean = false,
+  stopAt extends number = number,
 > = runProgram<
   {
     arguments: arguments;
@@ -38,5 +39,6 @@ export type entry<
     memorySize: '00000000000000000000000000000000';
     indirect: [];
   },
-  debugMode
+  debugMode,
+  stopAt
 >

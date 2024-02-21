@@ -4,9 +4,6 @@ import type { State } from "./state"
 import type { ProgramInput, ProgramState } from "./types"
 import type { Convert, WasmType, WasmValue } from "ts-type-math"
 
-// set to `number` to disable
-export type StopAt = number
-
 type _ProcessInputStack<
   args extends [number[], WasmType[]],
 
@@ -38,6 +35,7 @@ export type ProcessInputStack<
 export type runProgram<
   input extends ProgramInput,
   debugMode extends boolean = false,
+  stopAt extends number = number,
 > =
   executeInstruction<
     {
@@ -63,12 +61,14 @@ export type runProgram<
       stack: ProcessInputStack<input>;
       result: null;
     },
-    debugMode
+    debugMode,
+    stopAt
   >
 
 export type executeInstruction<
   state extends ProgramState,
   debugMode extends boolean = false,
+  stopAt extends number = number,
 > =
   state["instructions"] extends [
     infer instruction extends Instruction,
@@ -79,7 +79,7 @@ export type executeInstruction<
   ? instruction extends IHalt
     ? state
 
-    : StopAt extends State.Count.get<state>
+    : stopAt extends State.Count.get<state>
     ? state
     : executeInstruction<
         selectInstruction<
@@ -90,7 +90,8 @@ export type executeInstruction<
           remainingInstructions,
           instruction
         >,
-        debugMode
+        debugMode,
+        stopAt
       >
 
   // program execution is complete.  yay.

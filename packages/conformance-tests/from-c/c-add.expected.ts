@@ -173,7 +173,8 @@ type $__errno_location = Satisfies<Func, {
 
 export type entry<
   arguments extends [number, number],
-  debugMode extends boolean = false
+  debugMode extends boolean = false,
+  stopAt extends number = number,
 > = runProgram<
   {
     arguments: arguments;
@@ -199,5 +200,6 @@ export type entry<
     memorySize: '00000000000000000000000100000000';
     indirect: ['$__wasm_call_ctors'];
   },
-  debugMode
+  debugMode,
+  stopAt
 >
