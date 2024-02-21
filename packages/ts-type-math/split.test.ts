@@ -3,7 +3,7 @@ import { SplitToBytes } from "./split";
 import { Load } from "./load";
 import { Convert } from "./conversion";
 import { test } from 'vitest';
-test('conversion')
+test('split')
 
 type split = [
   Expect<Equal<SplitToBytes<"00000000">, ["00000000"]>>,

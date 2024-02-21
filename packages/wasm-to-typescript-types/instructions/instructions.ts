@@ -60,8 +60,4 @@ export type selectInstruction<
   ? HandleSyntheticInstructions<instruction, state>
 
   // Global Fallback
-  : State.Error<
-      instruction,
-      'unrecognized instruction',
-      state
-    >
+  : State.Error<'unrecognized instruction', instruction, state>

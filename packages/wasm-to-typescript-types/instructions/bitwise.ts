@@ -195,18 +195,12 @@ export type RotateLeft<
   instruction extends IRotateLeft,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Instructions.unimplemented<
-    instruction,
-    state
-  >
+  State.unimplemented<instruction, state>
 >
 
 export type RotateRight<
   instruction extends IRotateRight,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Instructions.unimplemented<
-    instruction,
-    state
-  >
+  State.unimplemented<instruction, state>
 >

@@ -83,11 +83,7 @@ export type Add<
       ],
       state
     >
-  :  State.Error<
-      instruction,
-      "Stack exhausted",
-      state
-    >
+  :  State.Error<"stack exhausted", instruction, state>
 >
 
 export type Subtract<
@@ -108,11 +104,7 @@ export type Subtract<
 
       state
     >
-  : State.Error<
-      instruction,
-      "Stack exhausted",
-      state
-    >
+  : State.Error<"stack exhausted", instruction, state>
 >
 
 export type Multiply<
@@ -133,29 +125,19 @@ export type Multiply<
 
       state
     >
-  : State.Error<
-      instruction,
-      "Stack exhausted",
-      state
-    >
+  : State.Error<"stack exhausted", instruction, state>
 >
 
 export type Divide<
   instruction extends IDivide,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Instructions.unimplemented<
-    instruction,
-    state
-  >
+  State.unimplemented<instruction, state>
 >
 
 export type Remainder<
   instruction extends IRemainder,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Instructions.unimplemented<
-    instruction,
-    state
-  >
+  State.unimplemented<instruction, state>
 >

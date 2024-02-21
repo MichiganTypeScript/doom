@@ -93,12 +93,11 @@ type tests = [
   Expect<Equal<T['length'], 78>>,
 ]
 
-type i = 48
+type i = 35
 type a = T[i]['a']  // =>
 type b = T[i]['b']  // =>
 type e = T[i]['add']// =>
-type ab = T[i]['a_binary']  // =>
-type bb = T[i]['b_binary']  // =>
-type eb = T[i]['add_binary']// =>
-
+type ab = T[i]['a_binary']     // =>
+type bb = T[i]['b_binary']     // =>
+type eb = T[i]['add_binary']   // =>
 type xb = I32AddBinary<ab, bb> // =>

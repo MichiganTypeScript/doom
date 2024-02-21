@@ -16,8 +16,8 @@ import { WasmValue, WasmType, Convert, Wasm } from 'ts-type-math';
 
 export namespace State {
   export type Error<
-    instruction extends Instruction,
     reason extends string,
+    instruction extends Instruction,
 
     state extends ProgramState
   > = Satisfies<ProgramState,
@@ -25,6 +25,33 @@ export namespace State {
       {
         kind: 'Halt',
         reason: `ERROR(${State.Count.get<state>}): ${reason}`,
+        instruction: instruction
+      },
+      state
+    >
+  >
+
+  export type debug<
+    stuff extends any,
+    state extends ProgramState
+  > = Satisfies<ProgramState,
+    State.Instructions.unshift<
+      {
+        kind: "Halt",
+        stuff: stuff,
+      },
+      state
+    >
+  >
+
+  export type unimplemented<
+    instruction extends Instruction,
+    state extends ProgramState
+  > = Satisfies<ProgramState,
+    State.Instructions.push<
+      {
+        kind: 'Halt',
+        reason: "Unimplemented Instruction",
         instruction: instruction
       },
       state
@@ -159,33 +186,6 @@ export namespace State {
           instruction,
           ...state['instructions'],
         ],
-        state
-      >
-    >
-
-    export type debug<
-      stuff extends any,
-      state extends ProgramState
-    > = Satisfies<ProgramState,
-      State.Instructions.unshift<
-        {
-          kind: "Halt",
-          stuff: stuff,
-        },
-        state
-      >
-    >
-
-    export type unimplemented<
-      instruction extends Instruction,
-      state extends ProgramState
-    > = Satisfies<ProgramState,
-      push<
-        {
-          kind: 'Halt',
-          reason: "Unimplemented Instruction",
-          instruction: instruction
-        },
         state
       >
     >
@@ -470,70 +470,43 @@ export namespace State {
       state extends ProgramState
     > = 
       state['memory']
-    
-
-    export type getByAddress<
-      address extends MemoryAddress,
-      offset extends WasmValue,
-      bytes extends number,
-
-      state extends ProgramState,
-    > = Satisfies<WasmValue,
-        bytes extends 4
-        ? TypeMath.Load.Read4Bytes<
-            get<state>,
-            Wasm.I32Add<
-              address,
-              offset
-            >
-          >
-        : never // TODO loading more than 4 bytes
-      >
 
     type CollectBytes<
-      bytes extends WasmValue[],
       address extends WasmValue,
+      bytes extends Wasm.Byte[],
 
       _Acc extends Record<WasmValue, Wasm.Byte> = {}
     > = Satisfies<Record<WasmValue, Wasm.Byte>,
       bytes extends [
-        infer head extends WasmValue, // WASM is little-endian so these go in first
-        ...infer tail extends WasmValue[],
+        infer head extends Wasm.Byte, // WASM is little-endian so these go in first
+        ...infer tail extends Wasm.Byte[],
       ]
       ? CollectBytes<
-          tail,
           Wasm.I32Add<address, Wasm.I32True>,
-          evaluate<
-            & _Acc
-            & { [k in address]: head }
-          >
+          tail,
+          evaluate<_Acc & { [k in address]: head }>
         >
       : _Acc
     >
 
     export type insert<
       address extends MemoryAddress,
-      offset extends WasmValue,
-      bytes extends WasmValue[],
-
+      bytes extends Wasm.Byte[],
       state extends ProgramState,
 
       _update extends Record<WasmValue, Wasm.Byte> =
         CollectBytes<
-          bytes,
-          Wasm.I32Add<
-            address,
-            offset
-          >
+          address,
+          bytes
         >
     > = Satisfies<ProgramState,
       {
         memory:
-            // & Omit<get<state>, keyof _update>
-            evaluate<
-              & get<state>
-              & _update
-            >;
+          evaluate<
+          // & Omit<get<state>, keyof _update>
+            & get<state>
+            & _update
+          >;
 
         activeExecutionContext: state['activeExecutionContext'];
         count: state['count'];

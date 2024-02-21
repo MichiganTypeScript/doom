@@ -2,7 +2,6 @@ import { AddBinary } from "./add";
 import { BitwiseNotBinary } from "./bitwise";
 import type { Div, Mod } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
-// import type { Add } from './hotscript-fork/numbers/impl/addition';
 import type { Add } from "ts-arithmetic"
 
 type PowersOfTwo = [
@@ -85,14 +84,60 @@ type Process<
       : Process<Div<T, 2>, `1${_Acc}`>
     :never;
 
-export type PadLeft<
-  S extends string,
-  N extends number,
-> = Satisfies<string,
-  Length<S> extends N
-  ? S
-  : PadLeft<`0${S}`, N>
->
+export namespace Pad {
+  export type StartWith8Zeros<
+    input extends string
+  > = `00000000${input}`
+
+  export type StartWith16Zeros<
+    input extends string
+  > = `0000000000000000${input}`
+
+  export type StartWith24Zeros<
+    input extends string
+  > = `000000000000000000000000${input}`
+
+  export type StartWith32Zeros<
+    input extends string
+  > = `00000000000000000000000000000000${input}`
+
+  /** @deprecated avoid using this and try to use one of the dedicated ones if you know how many 0s you want to add */
+  export type StartWithZeros<
+    input extends string,
+    finalLength extends number,
+  > = Satisfies<string,
+    Length<input> extends finalLength
+    ? input
+    : StartWithZeros<`0${input}`, finalLength>
+  >
+
+  export type StartWith8Ones<
+    input extends string
+  > = `11111111${input}`
+
+  export type StartWith16Ones<
+    input extends string
+  > = `1111111111111111${input}`
+
+  export type StartWith24Ones<
+    input extends string
+  > = `111111111111111111111111${input}`
+
+  export type StartWith32Ones<
+    input extends string
+  > = `11111111111111111111111111111111${input}`
+
+  /** @deprecated avoid using this and try to use one of the dedicated ones if you know how many 0s you want to add */
+  export type StartWithOnes<
+    input extends string,
+    finalLength extends number,
+  > = Satisfies<string,
+    Length<input> extends finalLength
+    ? input
+    : StartWithOnes<`1${input}`, finalLength>
+  >
+}
+
 
 export type TsNumberIsNegative<
   T extends number
@@ -107,10 +152,10 @@ export type To32Binary<
   TsNumberIsNegative<T> extends true
 
   ? // we need do the Two's Complement fliperouney thing
-    TwosComplementFlip<PadLeft<Process<T>, 32>>
+    TwosComplementFlip<Pad.StartWithZeros<Process<T>, 32>>
   
   : // full 32 bit
-    PadLeft<Process<T>, 32>
+    Pad.StartWithZeros<Process<T>, 32>
 >
 
 export type To64Binary<
@@ -119,10 +164,10 @@ export type To64Binary<
   TsNumberIsNegative<T> extends true
 
   ? // we need do the Two's Complement fliperouney thing
-    TwosComplementFlip<PadLeft<Process<T>, 64>>
+    TwosComplementFlip<Pad.StartWithZeros<Process<T>, 64>>
 
   : // full 64 bit
-    PadLeft<Process<T>, 64>
+    Pad.StartWithZeros<Process<T>, 64>
 >
 
 export type ReverseString<T extends string> =

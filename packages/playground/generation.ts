@@ -103,12 +103,20 @@ const result =
 
 // console.log(numberToTwosComplementBinary(0 / 0))
 
-const stringifiedResult = JSON.stringify(result, null, 2);
-console.log(stringifiedResult);
-writeFileSync('./packages/playground/generated.json', stringifiedResult)
+// const stringifiedResult = JSON.stringify(result, null, 2);
+// console.log(stringifiedResult);
+// writeFileSync('./packages/playground/generated.json', stringifiedResult)
 
 /*
-00000000010100000000010011000000
+00000000000000000000010000000000
 
-
+type m = {
+    "00000000010100000000010000001111": "01100001";
+    "00000000000000000000010000000000": "00000000";
+    "00000000000000000000010000000001": "00000000";
+}
 */
+
+// console.log(array(32).map(i => `\${infer b${i}}`).join(""))
+
+console.log(array(8).map(i => numberToTwosComplementBinary(i+1024)).join("\n"))

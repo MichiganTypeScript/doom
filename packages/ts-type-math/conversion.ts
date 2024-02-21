@@ -1,4 +1,4 @@
-import { To32Binary, To64Binary, ToDecimalSigned, PadLeft } from "./binary";
+import { To32Binary, To64Binary, ToDecimalSigned, Pad } from "./binary";
 import { WasmType, WasmValue } from './wasm';
 
 // export type Nibble = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
@@ -89,7 +89,7 @@ export namespace Convert {
     export type ToU32Binary<
       ascii extends Ascii
     > = Satisfies<WasmValue,
-      PadLeft<
+      Pad.StartWithZeros<
         Convert.U8Decimal.ToU8Binary<
           Convert.Ascii.ToU8Decimal<ascii>
         >,

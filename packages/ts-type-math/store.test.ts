@@ -44,6 +44,8 @@ type encode = [
   Expect<Equal<read, "Let's hope this works..">>,
 ]
 
+type z = write['00000000000000000000010000010100'] // =>
+
 type numbers = [
   '00000000000000000000000000000000',
   '00000000000000000000000000000001',
@@ -60,4 +62,14 @@ type storeTests = [
   Expect<Equal<Store.I32<numbers[2]>, ["00000000", "00000000", "00000000", "00000010"]>>,
   Expect<Equal<Store.I32<numbers[3]>, ["00000000", "00000000", "00000000", "00000011"]>>,
   Expect<Equal<Store.I32<numbers[4]>, ["00000001", "00000010", "00000100", "00001000"]>>,
+]
+
+type y = Store.GetLSB<numbers[0]> // =>
+
+type lsb = [
+  Expect<Equal<Store.GetLSB<numbers[0]>, ['00000000']>>,
+  Expect<Equal<Store.GetLSB<numbers[1]>, ['00000001']>>,
+  Expect<Equal<Store.GetLSB<numbers[2]>, ['00000010']>>,
+  Expect<Equal<Store.GetLSB<numbers[3]>, ['00000011']>>,
+  Expect<Equal<Store.GetLSB<numbers[4]>, ['00001000']>>,
 ]
