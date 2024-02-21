@@ -9,7 +9,7 @@
 // type e = entry<[1, 2]>
 
 import type { entry } from "conformance-tests/from-c/conway.actual";
-type e = entry<[0], true>
+type e = entry<[0], true, 1>
 
 // import type { entry } from 'conformance-tests/from-wat/memory.actual'
 // type e = entry<[16909320]>
@@ -18,6 +18,8 @@ type e = entry<[0], true>
 // import type { ReadStringFromMemory } from "ts-type-math";
 // import type { entry } from "conformance-tests/from-c/uppercase.actual";
 // export type e = ReadStringFromMemory<entry<[97], true>>
+
+// import type { e } from './pickup-result';
 
 // type e = 1;
 export type Evaluate = e // =>

@@ -114,13 +114,20 @@ const isolatedProgram = async () => {
   if (process.argv.includes('--write-file')) {
     const path = "./evaluate/playground-result.ts"
     console.log("wrote file to", path)
-    const formattedString = await prettier.format(`type PlaygroundResult = ${typeString}`, {
+    const formattedString = await prettier.format(`export type PlaygroundResult = ${typeString}`, {
       parser: 'typescript',
       singleQuote: true,
       trailingComma: 'all',
       printWidth: 200,
     });
-    writeFileSync(path, formattedString, 'utf-8')
+    writeFileSync(path, formattedString, 'utf-8');
+
+    formattedString.split('\n').forEach((line, index) => {
+      // if the line contains the `never` type, report an error
+      if (line.includes('never')) {
+        console.error(`'never' found on line ${index + 1}`);
+      }
+    });
   } else {
     console.log(typeString);
   }

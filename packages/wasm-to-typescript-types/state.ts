@@ -395,17 +395,17 @@ export namespace State {
           >
         >
 
-        
         export type merge<
           id extends string,
           instructions extends Instruction[],
           state extends ProgramState
         > = Satisfies<ProgramState,
           set<
-            evaluate<
-            & Omit<State.ExecutionContexts.Active.Branches.get<state>, id>
+            // evaluate<
+            & Omit<get<state>, id>
             & { [k in id]: instructions }
-            >,
+            // >
+            ,
             state
           >
         >

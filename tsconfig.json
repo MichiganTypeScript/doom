@@ -27,6 +27,7 @@
   "exclude": [
     "./packages/playground/evaluate/playground-result.ts",
     "./packages/playground/evaluate/playground.ts",
+    "./packages/playground/evaluate/pickup-result.ts",
     //
     // "./packages/conformance-tests/from-c/*.test.ts",
     //

@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-c/uppercase.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[97], true, 66>// =>
+import { entry } from 'conformance-tests/from-c/conway.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[0], false, 66>// =>
 type r=e['result'] // =>
 type s=e['stack']  //  >
 type s0=s[0]       // =>
