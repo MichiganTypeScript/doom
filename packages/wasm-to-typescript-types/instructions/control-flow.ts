@@ -406,6 +406,12 @@ export type Loop<
     }
   ]
 > = Satisfies<ProgramState,
+// State.debug<
+//   [
+//     'anything I want',
+//     State.ExecutionContexts.Active.get<state>,
+//   ],
+
   // cache this loop's following instructions for when we (more than likely) Branch to it later
   State.ExecutionContexts.Active.Branches.merge<
     instruction['id'],
@@ -418,6 +424,7 @@ export type Loop<
     >
   >
 >
+// >
 
 export type Nop<
   instruction extends INop, // unused

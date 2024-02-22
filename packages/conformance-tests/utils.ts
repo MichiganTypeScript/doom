@@ -30,9 +30,9 @@ export const getWasmMemory = (
     memory: WebAssembly.Memory
   };
 
-  const buffer = new Uint8Array(memory.buffer);
-
   const pointer = entry(...input);
+
+  const buffer = new Uint8Array(memory.buffer);
 
   let output = '';
   for (let i = pointer; buffer[i]; i++) {

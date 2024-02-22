@@ -10,6 +10,15 @@ test.each(t)('$a_binary + $b_binary === $add_binary', ({ a_binary, b_binary, add
   expect(actual_binary).toBe(add_binary);
 });
 
+type i = 35
+type a = T[i]['a']  // =>
+type b = T[i]['b']  // =>
+type e = T[i]['add']// =>
+type ab = T[i]['a_binary']    // =>
+type bb = T[i]['b_binary']    // =>
+type eb = T[i]['add_binary']  // =>
+type xb = I32AddBinary<ab, bb>// =>
+
 type tests = [
   Expect<Equal<I32AddBinary<T[ 0]['a_binary'], T[ 0]['b_binary']>, T[ 0]['add_binary']>>,
   Expect<Equal<I32AddBinary<T[ 1]['a_binary'], T[ 1]['b_binary']>, T[ 1]['add_binary']>>,
@@ -92,12 +101,3 @@ type tests = [
 
   Expect<Equal<T['length'], 78>>,
 ]
-
-type i = 35
-type a = T[i]['a']  // =>
-type b = T[i]['b']  // =>
-type e = T[i]['add']// =>
-type ab = T[i]['a_binary']     // =>
-type bb = T[i]['b_binary']     // =>
-type eb = T[i]['add_binary']   // =>
-type xb = I32AddBinary<ab, bb> // =>

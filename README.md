@@ -16,16 +16,16 @@ Usage count (in Doom) is the number on the right
 
 #### Constants
 
-| Instruction       | Calls | Implemented? |Binary
+| Instruction       | Count | Implemented? |Binary
 | ----------------- | ----- | ------------ |
 | I32Const          | 17073 | ✅           |
-| I64Const          | 712   | ✅           |
+| I64Const          | 712   | 🪚           |
 | F64Const          | 37    | ❌           |
 | F32Const          | 4     | ❌           |
 
 #### Comparison
 
-| Instruction       | Calls | Implemented? |
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | I32Eqz            | 1198  | ✅           |
 | I32Eq             | 823   | ✅           |
@@ -38,17 +38,17 @@ Usage count (in Doom) is the number on the right
 | I32GtU            | 118   | ✅           |
 | I32LeU            | 95    | ✅           |
 | I32GeU            | 74    | ✅           |
-| I64LtU            | 62    | ⏸️           |
-| I64Eqz            | 57    | ⏸️           |
-| I64GtU            | 35    | ⏸️           |
-| I64Ne             | 30    | ⏸️           |
-| I64Eq             | 26    | ⏸️           |
-| I64GeS            | 21    | ⏸️           |
-| I64LtS            | 19    | ⏸️           |
-| I64LeU            | 8     | ⏸️           |
-| I64LeS            | 5     | ⏸️           |
-| I64GtS            | 5     | ⏸️           |
-| I64GeU            | 5     | ⏸️           |
+| I64LtU            | 62    | 🪚           |
+| I64Eqz            | 57    | 🪚           |
+| I64GtU            | 35    | 🪚           |
+| I64Ne             | 30    | 🪚           |
+| I64Eq             | 26    | 🪚           |
+| I64GeS            | 21    | 🪚           |
+| I64LtS            | 19    | 🪚           |
+| I64LeU            | 8     | 🪚           |
+| I64LeS            | 5     | 🪚           |
+| I64GtS            | 5     | 🪚           |
+| I64GeU            | 5     | 🪚           |
 | F64Lt             | 4     | ❌           |
 | F64Ne             | 4     | ❌           |
 | F64Eq             | 3     | ❌           |
@@ -57,39 +57,39 @@ Usage count (in Doom) is the number on the right
 
 #### Arithmetic
 
-| Instruction       | Calls | Implemented? |
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | I32Add            | 4175  | ✅           |
 | I32Sub            | 1424  | ✅           |
-| I32Mul            | 478   | ⏸️           | ❌ some negative number overflow edge cases
+| I32Mul            | 478   | ✅           | ❌ some negative number overflow edge cases
 | I32DivS           | 165   | ❌           |
-| I64Add            | 130   | ⏸️           |
-| I64Sub            | 53    | ⏸️           |
-| I64Mul            | 46    | ⏸️           |
+| I64Add            | 130   | 🪚           |
+| I64Sub            | 53    | 🪚           |
+| I64Mul            | 46    | 🪚           |
 | I32RemS           | 44    | ❌           |
 | I32DivU           | 30    | ❌           |
 | F64Mul            | 18    | ❌           |
 | I32RemU           | 13    | ❌           |
 | F64Sub            | 5     | ❌           |
 | F64Add            | 5     | ❌           |
-| I64DivU           | 3     | ⏸️           |
+| I64DivU           | 3     | 🪚           |
 | F32Div            | 2     | ❌           |
 | F32Mul            | 2     | ❌           |
 | F32Add            | 1     | ❌           |
-| I64DivS           | 1     | ⏸️           |
+| I64DivS           | 1     | 🪚           |
 | F64Div            | 1     | ❌           |
 
 #### Conversion
 
-| Instruction       | Calls | Implemented? |
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
-| I64ExtendI32U     | 118   | ❌           |
+| I64ExtendI32U     | 118   | 🪚           |
 | I32WrapI64        | 53    | ❌           |
-| I64ExtendI32S     | 29    | ❌           |
+| I64ExtendI32S     | 29    | 🪚           |
 | F64ConvertI32S    | 9     | ❌           |
 | F32ConvertI32S    | 4     | ❌           |
 | F64ReinterpretI64 | 3     | ❌           |
-| I64ReinterpretF64 | 3     | ❌           |
+| I64ReinterpretF64 | 3     | 🪚           |
 | F64PromoteF32     | 2     | ❌           |
 | I32TruncF32S      | 1     | ❌           |
 | F32DemoteF64      | 1     | ❌           |
@@ -101,15 +101,15 @@ Usage count (in Doom) is the number on the right
 
 #### Floating Point Specific Instructions
 
-| Instruction       | Calls | Implemented? |
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
-| F64Neg            | 5     | ❌           |
-| F32Abs            | 2     | ❌           |
-| F64Abs            | 1     | ❌           |
+| F64Neg            | 5     | ✅           |
+| F32Abs            | 2     | ✅           |
+| F64Abs            | 1     | ✅           |
 
 #### Bitwise
 
-| Instruction       | Calls | Implemented? |
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | I32Shl            | 954   | ✅           |
 | I32And            | 819   | ✅           |
@@ -118,18 +118,18 @@ Usage count (in Doom) is the number on the right
 | I32Rotl           | 240   | ❌           |
 | I32ShrU           | 234   | ✅           |
 | I32ShrS           | 230   | ✅           |
-| I64Or             | 129   | ⏸️           |
-| I64ShrU           | 83    | ⏸️           |
-| I64Shl            | 80    | ⏸️           |
-| I64And            | 73    | ⏸️           |
-| I64Xor            | 34    | ⏸️           |
-| I64Clz            | 7     | ⏸️           |
+| I64Or             | 129   | 🪚           |
+| I64ShrU           | 83    | 🪚           |
+| I64Shl            | 80    | 🪚           |
+| I64And            | 73    | 🪚           |
+| I64Xor            | 34    | 🪚           |
+| I64Clz            | 7     | 🪚           |
 | I32Clz            | 5     | ❌           |
-| I64Rotl           | 1     | ⏸️           |
+| I64Rotl           | 1     | 🪚           |
 
 ### Variable Instructions
 
-| Instruction       | Calls | Implemented? |
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | LocalGet          | 18967 | ✅           |
 | LocalTee          | 4081  | ✅           |
@@ -139,36 +139,36 @@ Usage count (in Doom) is the number on the right
 
 ### Memory Instructions
 
-| Instruction       | Calls | Implemented? |
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | I32Load           | 5853  | ✅           |
 | I32Store          | 3413  | ✅           |
-| I32Load8u         | 460   | ✅           |❌
-| I64Load           | 357   | ⏸️           |
+| I32Load8u         | 460   | ✅           |
+| I64Load           | 357   | 🪚           |
 | I32Load16s        | 278   | ❌           |
-| I32Store8         | 253   | ✅           |❌
-| I64Store          | 196   | ⏸️           |
+| I32Store8         | 253   | ✅           |
+| I64Store          | 196   | 🪚           |
 | I32Store16        | 188   | ❌           |
 | I32Load16u        | 176   | ❌           |
 | I32Load8s         | 71    | ❌           |
-| I64Load32u        | 6     | ⏸️           |
+| I64Load32u        | 6     | 🪚           |
 | F64Store          | 4     | ❌           |
-| I64Store32        | 4     | ⏸️           |
+| I64Store32        | 4     | 🪚           |
 | F32Load           | 2     | ❌           |
 | F32Store          | 2     | ❌           |
 | F64Load           | 2     | ❌           |
-| I64Store8         | 2     | ⏸️           |
-| I64Load16s        | 1     | ⏸️           |
-| I64Load16u        | 1     | ⏸️           |
-| I64Load8s         | 1     | ⏸️           |
-| I64Load8u         | 1     | ⏸️           |
-| I64Load32s        | 1     | ⏸️           |
-| I64Store16        | 1     | ⏸️           |
+| I64Store8         | 2     | 🪚           |
+| I64Load16s        | 1     | 🪚           |
+| I64Load16u        | 1     | 🪚           |
+| I64Load8s         | 1     | 🪚           |
+| I64Load8u         | 1     | 🪚           |
+| I64Load32s        | 1     | 🪚           |
+| I64Store16        | 1     | 🪚           |
 | MemorySize        | 1     | ✅           |
 
 ### Control Flow Instructions
 
-| Instruction       | Calls | Implemented? |
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | End               | 4218  | ✅           |
 | Call              | 3824  | ✅           |
@@ -186,8 +186,9 @@ Usage count (in Doom) is the number on the right
 | Else              | 70    | ✅           |
 | Nop               | 40    | ✅           |
 
-<sub>⏸️ means things are in progress</sub>
+<sub>✅ means things are in progress</sub>
 <sub>🐛 means things are known problems</sub>
+<sub>🪚 are for I64 instructions</sub>
 
 ## Design decisions
 

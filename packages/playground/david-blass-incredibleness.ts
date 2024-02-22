@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { entry } from 'conformance-tests/from-c/c-add.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[1, -100], true>// =>
+type e=entry<[2, 1], true>// =>
 type r=e['result'] // =>
-type s=e['stack']  //  >
+type s=e['stack']  // =>
 type s0=s[0]       // =>
 type s1=s[1]       // =>
 type s2=s[2]       // =>
@@ -17,17 +17,17 @@ type af=a['funcId']  // =>
 type al=a['locals']  // =>
 type ab=a['branches']// =>
 
-// type ec=e['executionContexts']
-// type c0f=ec[0]['funcId']  // =>
-// type c0l=ec[0]['locals']  // =>
-// type c0b=ec[0]['branches']// =>
+type ec=e['executionContexts']
+type c0f=ec[0]['funcId']  // =>
+type c0l=ec[0]['locals']  // =>
+type c0b=ec[0]['branches']// =>
 
-// type c1f=ec[1]['funcId']  // =>
-// type c1l=ec[1]['locals']  // =>
-// type c1b=ec[1]['branches']// =>
+type c1f=ec[1]['funcId']  // =>
+type c1l=ec[1]['locals']  // =>
+type c1b=ec[1]['branches']// =>
 
-// type c3=ec[2]// =>
-// type c4=ec[3]// =>
+type c3=ec[2]// =>
+type c4=ec[3]// =>
 
 type m=e['memory']// =>
 
@@ -43,11 +43,11 @@ type i7=e['instructions'][7]// =>
 type i8=e['instructions'][8]// =>
 type i9=e['instructions'][9]// =>
 
-// type d=i0['stuff']// =>
+type d=i0['stuff']// =>
 
-// type g=e['globals']// =>
+type g=e['globals']// =>
 
-// type b0=ec[1]['branches']['$B0']// =>
-// type b1=ec[1]['branches']['$B1']// =>
-// type b2=ec[1]['branches']['$B2']// =>
-// type b3=ec[1]['branches']['$B3']// =>
+type b0=ec[1]['branches']['$B0']// =>
+type b1=ec[1]['branches']['$B1']// =>
+type b2=ec[1]['branches']['$B2']// =>
+type b3=ec[1]['branches']['$B3']// =>

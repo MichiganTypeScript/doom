@@ -1,3 +1,5 @@
+import { Convert } from "./conversion";
+import { Add } from "./hotscript-fork/numbers/impl/addition";
 import { Clamp } from "./split";
 import { WasmValue } from "./wasm";
 
@@ -133,4 +135,11 @@ export type I32AddBinary<
   Clamp.Last32Bits<
     AddBinary<a, b>
   >
+>
+
+export type I32AddDecimal<
+  a extends number,
+  b extends number,
+> = Satisfies<number,
+  Add<a, b>
 >

@@ -9,4 +9,5 @@
     "**/david-blass-incredibleness.ts",
     "**/package.json"
   ],
+  "zenMode.showTabs": "none",
 }

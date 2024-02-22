@@ -26,9 +26,8 @@
   },
   "exclude": [
     "./packages/playground/evaluate/results/results-*",
-    "./packages/playground/evaluate/playground-result.ts",
-    "./packages/playground/evaluate/playground.ts",
-    "./packages/playground/evaluate/pickup-result.ts",
+    // "./packages/playground/evaluate/results/result.ts",
+    // "./packages/playground/evaluate/playground.ts",
     //
     // "./packages/conformance-tests/from-c/*.test.ts",
     //

@@ -5,6 +5,8 @@
 LocalGet    564
 LocalSet    345
 I32Const    119
+I32Load     94
+I32Store    59
 I32Add      56
 End         43
 BrIf        38
@@ -16,6 +18,7 @@ Loop        16
 I32LtS      14
 Unreachable 13
 I32Store8   12
+I32Load8u   11
 GlobalGet   10
 LocalTee    9
 GlobalSet   8
@@ -35,13 +38,12 @@ I32GtU      1
 I32Ne       1
 I32Xor      1
 Select      1
+I32Mul      8
 
 ## Sorta
 
-I32Mul      8
-I32Load     94
-I32Store    59
+notta!
 
 ## Not Done
 
-I32Load8u   11
+nothing!

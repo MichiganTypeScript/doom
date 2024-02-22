@@ -18,8 +18,14 @@ importers:
     dependencies:
       '@biomejs/js-api':
         specifier: 0.3.0-nightly.cfef948
-        version: 0.3.0-nightly.cfef948(patch_hash=zizv6l7zla7jxpytik5rmyr6wi)(@biomejs/wasm-nodejs@1.5.3)
+        version: 0.3.0-nightly.cfef948(patch_hash=zizv6l7zla7jxpytik5rmyr6wi)(@biomejs/wasm-bundler@1.5.3)(@biomejs/wasm-nodejs@1.5.3)(@biomejs/wasm-web@1.5.3)
+      '@biomejs/wasm-bundler':
+        specifier: ^1.5.3
+        version: 1.5.3
       '@biomejs/wasm-nodejs':
+        specifier: ^1.5.3
+        version: 1.5.3
+      '@biomejs/wasm-web':
         specifier: ^1.5.3
         version: 1.5.3
       '@types/node':
@@ -69,7 +75,7 @@ importers:
 
 packages:
 
-  /@biomejs/js-api@0.3.0-nightly.cfef948(patch_hash=zizv6l7zla7jxpytik5rmyr6wi)(@biomejs/wasm-nodejs@1.5.3):
+  /@biomejs/js-api@0.3.0-nightly.cfef948(patch_hash=zizv6l7zla7jxpytik5rmyr6wi)(@biomejs/wasm-bundler@1.5.3)(@biomejs/wasm-nodejs@1.5.3)(@biomejs/wasm-web@1.5.3):
     resolution: {integrity: sha512-MhOHOA05Z2RulLO7knjyXLV1vdFoGBrwuPji9DfpJjt1RaHXR+Mcc439ACaLWnLslFy+x+JHu/7vqD5B2/yx0g==}
     peerDependencies:
       '@biomejs/wasm-bundler': ^10.0.0
@@ -83,12 +89,22 @@ packages:
       '@biomejs/wasm-web':
         optional: true
     dependencies:
+      '@biomejs/wasm-bundler': 1.5.3
       '@biomejs/wasm-nodejs': 1.5.3
+      '@biomejs/wasm-web': 1.5.3
     dev: false
     patched: true
 
+  /@biomejs/wasm-bundler@1.5.3:
+    resolution: {integrity: sha512-VN1j6GDS1HS8HyBUTeODjyGVgdnuaPOFl2UsPxmVeFMzmR0Xh+491tzmT27Yy+P248dsT0HW1cErhghcAMWX4g==}
+    dev: false
+
   /@biomejs/wasm-nodejs@1.5.3:
     resolution: {integrity: sha512-JgM5+QqpK7rPUAL3gNfbwZaNBgOnVNEF6AXrzMFBp7uqd2Bdpf2wZNU9jFzQcO06KPqEZ15zmLjiXwUTx0JNFw==}
+    dev: false
+
+  /@biomejs/wasm-web@1.5.3:
+    resolution: {integrity: sha512-pkZ8kdz3OiBdrQIZ0oZqfwu8Pw8ocgVg35qBz/ImeC5vBpJ9YVNn87daFWpZyQEkZRp1tXvLy2YlKQVfaAzQqw==}
     dev: false
 
   /@cspotcode/source-map-support@0.8.1:

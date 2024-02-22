@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "@biomejs/js-api": "0.3.0-nightly.cfef948",
+    "@biomejs/wasm-bundler": "^1.5.3",
     "@biomejs/wasm-nodejs": "^1.5.3",
+    "@biomejs/wasm-web": "^1.5.3",
     "@types/node": "^20.11.5",
     "@types/ramda": "^0.29.10",
     "@typescript/vfs": "^1.5.0",
