@@ -1,5 +1,9 @@
 # TODO List
 
+## Important
+
+update typescript patch for truncation limit
+
 ## Implementation improvements
 remove all `: never` from `/state/*` and replace with unimplemented or errors
 

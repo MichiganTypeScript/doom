@@ -1,5 +1,5 @@
 diff --git a/lib/tsc.js b/lib/tsc.js
-index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..ce5428095d6a58a3a4bf81c7741703bc5a294f6a 100644
+index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..c2f463379427112ee4d5fdd53c006662df7d33b7 100644
 --- a/lib/tsc.js
 +++ b/lib/tsc.js
 @@ -6177,7 +6177,7 @@ var Diagnostics = {
@@ -40,6 +40,15 @@ index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..ce5428095d6a58a3a4bf81c7741703bc
    The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method: diag(2860, 1 /* Error */, "The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_2860", "The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method."),
    An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression: diag(2861, 1 /* Error */, "An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_han_2861", "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression."),
    Type_0_is_generic_and_can_only_be_indexed_for_reading: diag(2862, 1 /* Error */, "Type_0_is_generic_and_can_only_be_indexed_for_reading_2862", "Type '{0}' is generic and can only be indexed for reading."),
+@@ -11377,7 +11377,7 @@ function isRestParameter(node) {
+ var resolvingEmptyArray = [];
+ var externalHelpersModuleNameText = "tslib";
+ var defaultMaximumTruncationLength = 160;
+-var noTruncationMaximumTruncationLength = 1e6;
++var noTruncationMaximumTruncationLength = 1e60;
+ function getDeclarationOfKind(symbol, kind) {
+   const declarations = symbol.declarations;
+   if (declarations) {
 @@ -56747,7 +56747,7 @@ function createTypeChecker(host) {
            addElement(type, 8 /* Variadic */, (_a = target.labeledElementDeclarations) == null ? void 0 : _a[i]);
          } else if (isTupleType(type)) {
@@ -86,7 +95,7 @@ index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..ce5428095d6a58a3a4bf81c7741703bc
            return 0 /* False */;
          }
 diff --git a/lib/tsserver.js b/lib/tsserver.js
-index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..7d424d709aaf94b2b33e59cd55e3d0a3ca2aa473 100644
+index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..2752cd8b61521a6bf2b7506399348c38d01cdae0 100644
 --- a/lib/tsserver.js
 +++ b/lib/tsserver.js
 @@ -9705,7 +9705,7 @@ var Diagnostics = {
@@ -127,6 +136,15 @@ index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..7d424d709aaf94b2b33e59cd55e3d0a3
    The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method: diag(2860, 1 /* Error */, "The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_2860", "The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method."),
    An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression: diag(2861, 1 /* Error */, "An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_han_2861", "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression."),
    Type_0_is_generic_and_can_only_be_indexed_for_reading: diag(2862, 1 /* Error */, "Type_0_is_generic_and_can_only_be_indexed_for_reading_2862", "Type '{0}' is generic and can only be indexed for reading."),
+@@ -15085,7 +15085,7 @@ function isRestParameter(node) {
+ var resolvingEmptyArray = [];
+ var externalHelpersModuleNameText = "tslib";
+ var defaultMaximumTruncationLength = 160;
+-var noTruncationMaximumTruncationLength = 1e6;
++var noTruncationMaximumTruncationLength = 1e60;
+ function getDeclarationOfKind(symbol, kind) {
+   const declarations = symbol.declarations;
+   if (declarations) {
 @@ -61451,7 +61451,7 @@ function createTypeChecker(host) {
            addElement(type, 8 /* Variadic */, (_a = target.labeledElementDeclarations) == null ? void 0 : _a[i]);
          } else if (isTupleType(type)) {
@@ -173,7 +191,7 @@ index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..7d424d709aaf94b2b33e59cd55e3d0a3
            return 0 /* False */;
          }
 diff --git a/lib/typescript.js b/lib/typescript.js
-index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..9944aca15454b2114e4a21a63d10954f89d8b9ac 100644
+index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..872810396ced31b3b4e4c0e24a11f52d96bc6268 100644
 --- a/lib/typescript.js
 +++ b/lib/typescript.js
 @@ -7487,7 +7487,7 @@ ${lanes.join("\n")}
@@ -214,6 +232,15 @@ index fe732a6cb262712d4d79b917b7fa0f0eee9d58b4..9944aca15454b2114e4a21a63d10954f
          The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method: diag(2860, 1 /* Error */, "The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_2860", "The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method."),
          An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression: diag(2861, 1 /* Error */, "An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_han_2861", "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression."),
          Type_0_is_generic_and_can_only_be_indexed_for_reading: diag(2862, 1 /* Error */, "Type_0_is_generic_and_can_only_be_indexed_for_reading_2862", "Type '{0}' is generic and can only be indexed for reading."),
+@@ -18953,7 +18953,7 @@ ${lanes.join("\n")}
+       resolvingEmptyArray = [];
+       externalHelpersModuleNameText = "tslib";
+       defaultMaximumTruncationLength = 160;
+-      noTruncationMaximumTruncationLength = 1e6;
++      noTruncationMaximumTruncationLength = 1e60;
+       stringWriter = createSingleLineStringWriter();
+       getScriptTargetFeatures = /* @__PURE__ */ memoize(
+         () => new Map(Object.entries({
 @@ -59218,7 +59218,7 @@ ${lanes.join("\n")}
              addElement(type, 8 /* Variadic */, (_a = target.labeledElementDeclarations) == null ? void 0 : _a[i]);
            } else if (isTupleType(type)) {

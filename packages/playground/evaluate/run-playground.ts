@@ -157,7 +157,6 @@ const reportErrors = (program: ts.Program) => {
   });
 }
 
-
 interface ProgramRun {
   current: number;
   stopAt: number;
@@ -246,7 +245,7 @@ const isolatedProgram = async ({
   const updatedStopAt = current + incrementBy;
 
   if (!isComplete) {
-    shortStats(current, time, stats, typeStringLength);
+    shortStats(current, time.getTypeAtLocation, stats.instantiations, typeStringLength);
   }
   reportErrors(program);
 
@@ -369,15 +368,15 @@ const finalizeProgram = async (
 
 const shortStats = (
   count: number,
-  { getTypeAtLocation }: { getTypeAtLocation: number },
-  { instantiations }: { instantiations: number },
+  getTypeAtLocation: number,
+  instantiations: number,
   typeStringLength: number
 ) => {
   // you see.. when you console.log a number it shows it in orange.  so we're going through some extra trouble to keep it that way
-  const countFiller = ' '.repeat(6 - count.toString().length);
-  const gTALFiller = ' '.repeat(5 - getTypeAtLocation.toString().length);
-  const instFiller = ' '.repeat(10 - instantiations.toString().length);
-  const lenFiller = ' '.repeat(7 - typeStringLength.toString().length);
+  const countFiller = ' '.repeat(Math.max(0, 6 - count.toString().length));
+  const gTALFiller = ' '.repeat(Math.max(0, 6 - getTypeAtLocation.toString().length));
+  const instFiller = ' '.repeat(Math.max(0, 10 - instantiations.toString().length));
+  const lenFiller = ' '.repeat(Math.max(0, 7 - typeStringLength.toString().length));
   console.log(
     `count${countFiller}`,
     count,
@@ -391,6 +390,11 @@ const shortStats = (
 }
 
 const clearResultsDirectory = () => {
+  if (initialConditions.current != 0) {
+    // skip clearing the results directory if we're not starting from scratch
+    return;
+  }
+
   // delete every file in the results directory
   const resultsDirectory = resolve(__dirname, './results');
   const files = readdirSync(resultsDirectory);
@@ -421,25 +425,32 @@ const encourage = () => {
 const rome = await Rome.create({
   distribution: Distribution.NODE,
 });
+rome.applyConfiguration({
+    // @ts-ignore there's a problem with the biome js-api.  there's also a pnpm patch to fix this
+    gitignore_matches: [],
+    files: {
+      maxSize: 1024 * 1024 * 1024,
+  }
+})
 
 encourage();
 const startProgram = performance.now();
-// clearResultsDirectory();
+clearResultsDirectory();
 
-// let runConfig: ProgramRun | void = {
-//   current: initialConditions.current,
-//   stopAt: initialConditions.stopAt,
-//   incrementBy: initialConditions.incrementBy,
-//   targetFile: startFilePath,
-// };
+let runConfig: ProgramRun | void = {
+  current: initialConditions.current,
+  stopAt: initialConditions.stopAt,
+  incrementBy: initialConditions.incrementBy,
+  targetFile: startFilePath,
+};
 
 
-// while (true) {
-//   runConfig = await isolatedProgram(runConfig);
-//   if (!runConfig) {
-//     break;
-//   }
-// }
+while (true) {
+  runConfig = await isolatedProgram(runConfig);
+  if (!runConfig) {
+    break;
+  }
+}
 
 const endProgram = performance.now();
 const programTime = Math.round(endProgram - startProgram);

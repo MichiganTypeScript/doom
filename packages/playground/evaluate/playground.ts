@@ -9,7 +9,7 @@
 // type e = entry<[1, 2]>
 
 import type { entry } from "conformance-tests/from-c/conway.actual"
-type e = entry<[0], true, 0>
+type e = entry<[1], true, 0>
 
 // import type { entry } from 'conformance-tests/from-wat/memory.actual'
 // type e = entry<[16909320]>

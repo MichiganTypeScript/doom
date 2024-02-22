@@ -30,7 +30,8 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "typescript@5.3.3": "patches/typescript@5.3.3.patch"
+      "typescript@5.3.3": "patches/typescript@5.3.3.patch",
+      "@biomejs/js-api@0.3.0-nightly.cfef948": "patches/@biomejs__js-api@0.3.0-nightly.cfef948.patch"
     }
   }
 }
