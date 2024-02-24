@@ -8,7 +8,7 @@ use wast::token::Index;
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
     source.add_import("wasm-to-typescript-types", "Func");
-    source.add_import("wasm-to-typescript-types", "runProgram");
+    source.add_import("wasm-to-typescript-types", "bootstrap");
 
     let name = "$".to_string()
         + func

@@ -135,7 +135,7 @@ impl ToString for SourceFile {
   arguments extends {arguments},
   debugMode extends boolean = false,
   stopAt extends number = number,
-> = runProgram<
+> = bootstrap<
   {{
     arguments: arguments;
     funcs: {{

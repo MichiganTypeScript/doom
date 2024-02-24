@@ -32,7 +32,7 @@ export type ProcessInputStack<
   ]>
 >
 
-export type runProgram<
+export type bootstrap<
   input extends ProgramInput,
   debugMode extends boolean = false,
   stopAt extends number = number,

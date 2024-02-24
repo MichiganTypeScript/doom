@@ -1,4 +1,4 @@
-import type { Func, runProgram } from 'wasm-to-typescript-types'
+import type { Func, bootstrap } from 'wasm-to-typescript-types'
 
 type $my_loop = Satisfies<Func, {
   kind: 'func';
@@ -48,7 +48,7 @@ export type entry<
   arguments extends [number],
   debugMode extends boolean = false,
   stopAt extends number = number,
-> = runProgram<
+> = bootstrap<
   {
     arguments: arguments;
     funcs: {
