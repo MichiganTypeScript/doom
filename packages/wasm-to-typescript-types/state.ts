@@ -15,7 +15,7 @@ import * as TypeMath from "ts-type-math";
 import { WasmValue, WasmType, Convert, Wasm } from 'ts-type-math';
 
 export namespace State {
-  export type Error<
+  export type error<
     reason extends string,
     instruction extends Instruction,
 
@@ -33,6 +33,7 @@ export namespace State {
 
   export type debug<
     stuff extends any,
+
     state extends ProgramState
   > = Satisfies<ProgramState,
     State.Instructions.unshift<
@@ -46,6 +47,7 @@ export namespace State {
 
   export type unimplemented<
     instruction extends Instruction,
+
     state extends ProgramState
   > = Satisfies<ProgramState,
     State.Instructions.unshift<
@@ -127,20 +129,6 @@ export namespace State {
       >
     >
 
-    export type pop<
-      state extends ProgramState
-    > = Satisfies<ProgramState,
-      get<state> extends [
-        infer discarded extends Instruction,
-        ...infer remaining extends Instruction[],
-      ]
-      ? set<
-          remaining,
-          state
-        >
-      : never
-    >
-
     export type popUntil<
       instruction extends Instruction,
       state extends ProgramState
@@ -162,7 +150,7 @@ export namespace State {
               state
             >
           >
-      : never
+      : State.error<"stack exhausted", instruction, state>
     >
 
     export type push<

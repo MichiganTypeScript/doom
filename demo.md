@@ -1,13 +1,12 @@
 # Demo
 
+## TODO
+
 what is conways
-send to trash netflix
 no signed or unsgined
-bootstrapProgram
 explain what entry is
 lost at first dashboard look
 globals
-evaluate memory in cold boot
 "code generation"
 laser focused on Doom sells it short
 "it's the way you got there that makes it special"

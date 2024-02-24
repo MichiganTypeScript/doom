@@ -78,7 +78,7 @@ export type I32Load<
 
       state
     >
-  : State.Error<"stack exhausted", instruction, state>
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type I32Load8U<
@@ -103,7 +103,7 @@ type I32Load8U<
 
       state
     >
-  : State.Error<"stack exhausted", instruction, state>
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type Store<
@@ -134,7 +134,7 @@ type I32Store<
         state
       >
     >
-  : State.Error<"stack exhausted", instruction, state>
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type I32Store8<
@@ -155,5 +155,5 @@ type I32Store8<
         state
       >
     >
-  : State.Error<"stack exhausted", instruction, state>
+  : State.error<"stack exhausted", instruction, state>
 >

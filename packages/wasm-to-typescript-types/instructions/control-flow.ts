@@ -458,7 +458,6 @@ export type Return<
         { kind: 'EndFunction', id: State.ExecutionContexts.Active.get<state>['funcId'] },
         state
       >
-      
     >
 
   // we need to recurse more to grab more values off the stack

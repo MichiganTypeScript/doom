@@ -13,6 +13,8 @@ remove StartWithZeros uses
 
 ## Other
 
+- look into variance annotations
+
 - add program-wide stats
 
 - noErrorTruncation short

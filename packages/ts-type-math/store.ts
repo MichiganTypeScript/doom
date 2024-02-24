@@ -34,13 +34,13 @@ export type _StoreString<
     _StoreString<
       Wasm.I32Add<Wasm.I32True, Address>,
       Rest,
-      
+      evaluate<
       & _Acc
       & {
           [A in Address]:
             Convert.Ascii.ToU8Binary<Char>
-            // Char
         }
+      >
     >
   : _Acc
 >
@@ -49,14 +49,11 @@ export type StoreString<
   StartingAddress extends WasmValue,
   Input extends string
 > = Satisfies<Record<WasmValue, string>,
-  // QUESTION: why can't I use evaluate here??
-  // evaluate<
     _StoreString<
       StartingAddress,
       Input,
       {}
     >
-  // >
 >
 
 export namespace Store {
