@@ -2,7 +2,7 @@ import { AddBinary } from "./add";
 import { BitwiseNotBinary } from "./bitwise";
 import type { Div, Mod } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
-import type { Add } from "ts-arithmetic"
+import type { Add } from './hotscript-fork/numbers/impl/addition';
 
 type PowersOfTwo = [
     /* 2**0  */ 1,

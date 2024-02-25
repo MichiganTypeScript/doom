@@ -59,7 +59,12 @@ export type ProgramState = {
   /** the currently executing instructions */
   instructions: Instruction[];
 
-  activeExecutionContext: ExecutionContext;
+  /** the current execution context locals */
+  activeLocals: LocalsById;
+  /** the current execution context funcId */
+  activeFuncId: string;
+  /** the current execution context branches */
+  activeBranches: BranchesById;
 
   globals: GlobalsById;
 

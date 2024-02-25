@@ -22,7 +22,6 @@
     "@typescript/vfs": "^1.5.0",
     "lz-string": "^1.5.0",
     "ramda": "0.29.1",
-    "ts-arithmetic": "^0.1.1",
     "ts-node": "^10.9.2",
     "ts-toolbelt": "^9.6.0",
     "tsx": "^4.7.0",

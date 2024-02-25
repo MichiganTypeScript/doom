@@ -1,8 +1,6 @@
 
 // import type { Add } from "ts-type-math"; // the hotscript implementation
 
-// import type {Add} from "ts-arithmetic"
-
 // import type { Sum as Add } from "./ch3cknull-dimitri"; // dummy implementation, as a baseline
 
 // import type { AddBinary as Add } from "../../ts-type-math/add"

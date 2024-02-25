@@ -35,11 +35,11 @@ export type _StoreString<
       Wasm.I32Add<Wasm.I32True, Address>,
       Rest,
       evaluate<
-      & _Acc
-      & {
-          [A in Address]:
-            Convert.Ascii.ToU8Binary<Char>
-        }
+        & _Acc
+        & {
+            [A in Address]:
+              Convert.Ascii.ToU8Binary<Char>
+          }
       >
     >
   : _Acc
@@ -49,11 +49,13 @@ export type StoreString<
   StartingAddress extends WasmValue,
   Input extends string
 > = Satisfies<Record<WasmValue, string>,
+  // evaluate< // QUESTION: why is there a memory leak if I evaluate here instead of in `_StoreString`?
     _StoreString<
       StartingAddress,
       Input,
       {}
     >
+  // >
 >
 
 export namespace Store {

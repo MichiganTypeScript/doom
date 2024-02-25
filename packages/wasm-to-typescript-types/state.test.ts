@@ -16,11 +16,9 @@ type blankProgram = Satisfies<ProgramState, {
   stack: ['00000000000000000000000000000011']
   globals: {}
   executionContexts: []
-  activeExecutionContext: {
-    locals: {}
-    funcId: "root"
-    branches: {}
-  }
+  activeLocals: {}
+  activeFuncId: "root"
+  activeBranches: {}
   memory: {}
   memorySize: '00000000000000000000000000000001'
   indirect: []

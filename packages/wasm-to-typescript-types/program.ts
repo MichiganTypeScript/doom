@@ -39,27 +39,23 @@ export type bootstrap<
 > =
   executeInstruction<
     {
-      activeExecutionContext: {
-        locals: {};
-        funcId: "root";
-        branches: {};
-      };
       count: 0;
-      executionContexts: [];
-      funcs: input['funcs'];
-      globals: input['globals'];
-      indirect: input['indirect'];
+      result: null;
+      stack: ProcessInputStack<input>; // since the stack is a stack, we need to reverse it
       instructions: [
         { kind: "Call", id: "$entry" }
       ];
 
-      // copy readonly memory into memory registers
-      memory: input['memory'];
-      memorySize: input['memorySize'];
+      activeLocals: {};
+      activeFuncId: "root";
+      activeBranches: {};
 
-      // since the stack is a stack, we need to reverse it
-      stack: ProcessInputStack<input>;
-      result: null;
+      globals: input['globals'];
+      memory: input['memory']; // copy readonly memory into memory registers
+      indirect: input['indirect'];
+      memorySize: input['memorySize'];
+      executionContexts: [];
+      funcs: input['funcs'];
     },
     debugMode,
     stopAt

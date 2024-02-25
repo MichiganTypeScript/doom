@@ -159,7 +159,7 @@ export type Block<
     instruction['instructions'],
 
     // first cache existing instructions (as they are at this moment) in the execution context for when we break to this block later
-    State.ExecutionContexts.Active.Branches.merge<
+    State.ExecutionContexts.Active.Branches.insert<
       instruction['id'],
       State.Instructions.get<state>,
 
@@ -409,11 +409,11 @@ export type Loop<
 // State.debug<
 //   [
 //     'anything I want',
-//     State.ExecutionContexts.Active.get<state>,
+//     State.ExecutionContexts.Active.Branches.get<state>,
 //   ],
 
   // cache this loop's following instructions for when we (more than likely) Branch to it later
-  State.ExecutionContexts.Active.Branches.merge<
+  State.ExecutionContexts.Active.Branches.insert<
     instruction['id'],
     _withEndLoop,
     
@@ -455,7 +455,7 @@ export type Return<
 
       // pop instructions until we reach a matching `EndFunction` instruction
       State.Instructions.popUntil<
-        { kind: 'EndFunction', id: State.ExecutionContexts.Active.get<state>['funcId'] },
+        { kind: 'EndFunction', id: State.ExecutionContexts.Active.FuncId.get<state> },
         state
       >
     >

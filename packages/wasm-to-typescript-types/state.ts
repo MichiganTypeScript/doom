@@ -76,7 +76,9 @@ export namespace State {
         result: state['result'];
         stack: state['stack'];
         instructions: state['instructions'];
-        activeExecutionContext: state['activeExecutionContext'];
+        activeLocals: state['activeLocals'];
+        activeFuncId: state['activeFuncId'];
+        activeBranches: state['activeBranches'];
         globals: state['globals'];
         memory: state['memory'];
         indirect: state['indirect'];
@@ -100,7 +102,9 @@ export namespace State {
 
         instructions: instructions;
 
-        activeExecutionContext: state['activeExecutionContext'];
+        activeLocals: state['activeLocals'];
+        activeFuncId: state['activeFuncId'];
+        activeBranches: state['activeBranches'];
         globals: state['globals'];
         memory: state['memory'];
         indirect: state['indirect'];
@@ -199,7 +203,9 @@ export namespace State {
         stack: stack;
 
         instructions: state['instructions'];
-        activeExecutionContext: state['activeExecutionContext'];
+        activeLocals: state['activeLocals'];
+        activeFuncId: state['activeFuncId'];
+        activeBranches: state['activeBranches'];
         globals: state['globals'];
         memory: state['memory'];
         indirect: state['indirect'];
@@ -225,28 +231,6 @@ export namespace State {
 
   /** Helpers for ExecutionContext manipulation */
   export namespace ExecutionContexts {
-    /** destructively set all execution contexts at once */
-    export type set<
-      executionContexts extends ExecutionContext[],
-      state extends ProgramState
-    > = Satisfies<ProgramState,
-      {
-        count: state['count'];
-        result: state['result'];
-        stack: state['stack'];
-        instructions: state['instructions'];
-        activeExecutionContext: state['activeExecutionContext'];
-        globals: state['globals'];
-        memory: state['memory'];
-        indirect: state['indirect'];
-        memorySize: state['memorySize'];
-        
-        executionContexts: executionContexts;
-        
-        funcs: state['funcs'];
-      }
-    >
-
     /** push a brand new execution context */
     export type push<
       executionContext extends ExecutionContext,
@@ -259,7 +243,9 @@ export namespace State {
         instructions: state['instructions'];
 
         // set the new one
-        activeExecutionContext: executionContext;
+        activeLocals: executionContext['locals'];
+        activeFuncId: executionContext['funcId'];
+        activeBranches: executionContext['branches'];
 
         globals: state['globals'];
         memory: state['memory'];
@@ -269,7 +255,11 @@ export namespace State {
         executionContexts: [
           ...state['executionContexts'],
           // add the old active execution context to the stack
-          state['activeExecutionContext']
+          {
+            locals: state['activeLocals'];
+            funcId: state['activeFuncId'];
+            branches: state['activeBranches'];
+          },
         ];
 
         funcs: state['funcs'];
@@ -291,8 +281,10 @@ export namespace State {
           instructions: state['instructions'];
           
           // set the new one
-          activeExecutionContext: active;
-          
+          activeLocals: active['locals'];
+          activeFuncId: active['funcId'];
+          activeBranches: active['branches'];
+
           globals: state['globals'];
           memory: state['memory'];
           indirect: state['indirect'];
@@ -306,38 +298,11 @@ export namespace State {
     >
 
     export namespace Active {
-      export type get<
-        state extends ProgramState
-      > = Satisfies<ExecutionContext,
-        state['activeExecutionContext']
-      >
-
-      export type set<
-        executionContext extends ExecutionContext,
-        state extends ProgramState
-      > = Satisfies<ProgramState,
-        {
-          count: state['count'];
-          result: state['result'];
-          stack: state['stack'];
-          instructions: state['instructions'];
-
-          activeExecutionContext: executionContext;
-
-          globals: state['globals'];
-          memory: state['memory'];
-          indirect: state['indirect'];
-          memorySize: state['memorySize'];
-          executionContexts: state['executionContexts'];
-          funcs: state['funcs'];
-        }
-      >
-
       export namespace Locals {
         export type get<
           state extends ProgramState
         > = Satisfies<LocalsById,
-          State.ExecutionContexts.Active.get<state>['locals']
+          state['activeLocals']
         >
 
         export type insert<
@@ -345,57 +310,81 @@ export namespace State {
           value extends WasmValue,
           state extends ProgramState
         > = Satisfies<ProgramState,
-          State.ExecutionContexts.Active.set<
-            {
-              locals:
-                evaluate<
-                & Omit<get<state>, id>
-                // get<state>
-                & { [k in id]: value }
-                >;
+          {
+            count: state['count'];
+            result: state['result'];
+            stack: state['stack'];
+            instructions: state['instructions'];
 
-              funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-              branches: State.ExecutionContexts.Active.get<state>['branches'];
-            },
-            state
-            >
-          >
+            activeLocals:
+              evaluate<
+                & Omit<get<state>, id>
+                & { [k in id]: value }
+              >;
+
+            activeFuncId: state['activeFuncId'];
+            activeBranches: state['activeBranches'];
+
+            globals: state['globals'];
+            memory: state['memory'];
+            indirect: state['indirect'];
+            memorySize: state['memorySize'];
+            executionContexts: state['executionContexts'];
+            funcs: state['funcs'];
+          }
+        >
       }
 
       export namespace Branches {
         export type get<
           state extends ProgramState
         > = Satisfies<BranchesById,
-          State.ExecutionContexts.Active.get<state>['branches']
+          state['activeBranches']
         >
 
         export type set<
           branches extends BranchesById,
           state extends ProgramState
         > = Satisfies<ProgramState,
-          State.ExecutionContexts.Active.set<
-            {
-              branches: branches;
-              funcId: State.ExecutionContexts.Active.get<state>['funcId'];
-              locals: State.ExecutionContexts.Active.get<state>['locals'];
-            },
-            state
-          >
+          {
+            count: state['count'];
+            result: state['result'];
+            stack: state['stack'];
+            instructions: state['instructions'];
+
+            activeLocals: state['activeLocals']
+            activeFuncId: state['activeFuncId'];
+            activeBranches: branches;
+
+            globals: state['globals'];
+            memory: state['memory'];
+            indirect: state['indirect'];
+            memorySize: state['memorySize'];
+            executionContexts: state['executionContexts'];
+            funcs: state['funcs'];
+          }
         >
 
-        export type merge<
+        export type insert<
           id extends string,
           instructions extends Instruction[],
           state extends ProgramState
         > = Satisfies<ProgramState,
           set<
             evaluate<
-            & Omit<get<state>, id>
-            & { [k in id]: instructions }
-            >
-            ,
+              & Omit<get<state>, id>
+              & { [k in id]: instructions }
+            >,
             state
           >
+        >
+      }
+
+      export namespace FuncId {
+        export type get<
+          state extends ProgramState
+        > = Satisfies<string,
+          state['activeFuncId']
         >
       }
     }
@@ -446,12 +435,14 @@ export namespace State {
         result: state['result'];
         stack: state['stack'];
         instructions: state['instructions'];
-        activeExecutionContext: state['activeExecutionContext'];
+        activeLocals: state['activeLocals'];
+        activeFuncId: state['activeFuncId'];
+        activeBranches: state['activeBranches'];
 
         globals:
           evaluate<
-          & Omit<get<state>, keyof globals>
-          & globals
+            & Omit<get<state>, keyof globals>
+            & globals
           >;
 
         memory: state['memory'];
@@ -482,7 +473,10 @@ export namespace State {
       ? CollectBytes<
           Wasm.I32Add<address, Wasm.I32True>,
           tail,
-          evaluate<_Acc & { [k in address]: head }>
+          evaluate<
+            & _Acc
+            & { [k in address]: head }
+          >
         >
       : _Acc
     >
@@ -503,13 +497,14 @@ export namespace State {
         result: state['result'];
         stack: state['stack'];
         instructions: state['instructions'];
-        activeExecutionContext: state['activeExecutionContext'];
+        activeLocals: state['activeLocals'];
+        activeFuncId: state['activeFuncId'];
+        activeBranches: state['activeBranches'];
         globals: state['globals'];
 
         memory:
           evaluate<
             & Omit<get<state>, keyof _update>
-            // & get<state>
             & _update
           >;
 
@@ -568,7 +563,9 @@ export namespace State {
 
         stack: state['stack'];
         instructions: state['instructions'];
-        activeExecutionContext: state['activeExecutionContext'];
+        activeLocals: state['activeLocals'];
+        activeFuncId: state['activeFuncId'];
+        activeBranches: state['activeBranches'];
         globals: state['globals'];
         memory: state['memory'];
         indirect: state['indirect'];
