@@ -2,7 +2,7 @@ import { writeFile, readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import ts from 'typescript';
 import { mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
-import { incrementBy, statsDirectory, statsJsonPath, statsPath } from './config';
+import { incrementBy, shouldTakeABreath, statsDirectory, statsJsonPath, statsPath } from './config';
 
 const stackSize = (depth = 1): number => {
   try {
@@ -97,14 +97,23 @@ export const getProgramStats = (program: ts.Program) => ({
   filesCount: program.getSourceFiles().length,
 })
 
-export const runStats = (
+export const runStats = ({
+  programStats,
+  typeStringLength,
+  activeInstruction,
+  tGetTypeAtLocation,
+  current,
+  writeToDisk,
+  time,
+}: {
   programStats: ReturnType<typeof getProgramStats>,
   typeStringLength: number,
   activeInstruction: string,
   tGetTypeAtLocation: number,
   current: number,
-  time: Record<string, any>
-) => {
+  writeToDisk: boolean,
+  time: Record<string, number>,
+}) => {
   const stats = {
     ...programStats,
     typeStringLength,
@@ -119,8 +128,9 @@ export const runStats = (
     activeInstruction,
   });
 
-
-  writeResultsStats(current, time, stats)
+  if (writeToDisk) {
+    writeResultsStats(current, time, stats)
+  }
 };
 
 const getTotal = (path: string[], runs: Runs): Record<string, Totals> => {

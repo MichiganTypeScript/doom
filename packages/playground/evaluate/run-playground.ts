@@ -1,10 +1,10 @@
 import { dirname, join } from 'path';
 import tsvfs from '@typescript/vfs';
 import ts from 'typescript';
-import { writeFile } from 'fs/promises'
+import { writeFile, readFile } from 'fs/promises'
 import { statSync, mkdirSync, readdirSync, unlinkSync } from 'fs'
 import { Rome, Distribution } from '@biomejs/js-api';
-import { clearStats, encourage, getProgramFiles, getProgramStats, runStats, writeProgramStats } from './stats';
+import { clearStats, encourage, getProgramStats, runStats, writeProgramStats } from './stats';
 import {
   bootstrapFilePath,
   createResultFilePath,
@@ -17,6 +17,7 @@ import {
   projectRoot,
   readStringFromMemory,
   resultsDirectory,
+  shouldTakeABreath,
   targetTypeAlias,
   tsconfigFilePath,
 } from './config';
@@ -67,10 +68,17 @@ interface ProgramRun {
   /** where to look for an `Evaluate` type */
   evaluationFilePath: string;
 
+  evaluationSourceCode: string;
+
   /** where to save the result of this evaluation */
   resultFilePath: string | null;
 
   justPrint?: boolean;
+
+  env: tsvfs.VirtualTypeScriptEnvironment;
+
+  /** the program can "take a breath" (meaning, dump everything to disk and start a new env) in order to avoid out-of-memory and call-stack-exceeded errors */
+  timeSpentUnderwater: number;
 }
 
 const configFile = ts.readConfigFile(tsconfigFilePath, ts.sys.readFile)
@@ -89,31 +97,33 @@ const programIsComplete = ({ stopAt, current }: ProgramRun) => {
   return false
 }
 
+const startCreateFSBackedSystem = performance.now();
+const system = tsvfs.createFSBackedSystem(
+  libFiles,
+  projectRoot,
+  ts
+)
+const endCreateFSBackedSystem = performance.now();
+
+const createEnv = () => tsvfs.createVirtualTypeScriptEnvironment(
+  system,
+  [globalDefinitions],
+  ts,
+  options
+)
+
 const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
-  let { current } = programRun;
+  let { current, env, timeSpentUnderwater } = programRun;
   const {
     stopAt,
     incrementBy,
     evaluationFilePath,
+    evaluationSourceCode,
     resultFilePath,
     justPrint,
   } = programRun;
-  const startCreateFSBackedSystem = performance.now();
-  const system = tsvfs.createFSBackedSystem(
-    libFiles,
-    projectRoot,
-    ts
-  )
-  const endCreateFSBackedSystem = performance.now();
 
-  const startVirtualTSEnv = performance.now();
-  const env = tsvfs.createVirtualTypeScriptEnvironment(
-    system,
-    [evaluationFilePath, globalDefinitions],
-    ts,
-    options
-  )
-  const endVirtualTSEnv = performance.now();
+  env.createFile(evaluationFilePath, evaluationSourceCode);
 
   const startGetProgram = performance.now();
   const program = env?.languageService.getProgram()!
@@ -188,7 +198,11 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
 
   // WARNING: if you move this to after `reportErrors` (which calls ts.preEmitDiagnostics), it will report wildly larger numbers
   const programStats = getProgramStats(program);
-  // reportErrors(program);
+
+  // this DRAMATICALLY slows down the program, but it's useful for debugging
+  if (process.argv.includes('--report-ts-diagnostics')) {
+    reportErrors(program);
+  }
 
   const startFormatter = performance.now();
   const {
@@ -207,19 +221,21 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   const isComplete = typeString.includes('instructions: [];');
 
   const writeFilePath = isComplete ? createResultFilePath(current) : resultFilePath;
+  if (isComplete) {
+    await writeFile(writeFilePath, formattedFile, 'utf-8');
+  }
 
-  await writeFile(writeFilePath, formattedFile, 'utf-8');
   const endWriteResults = performance.now();
 
-  runStats(
+  runStats({
     programStats,
     typeStringLength,
     activeInstruction,
     tGetTypeAtLocation,
     current,
-    {
+    writeToDisk: shouldTakeABreath(timeSpentUnderwater),
+    time: {
       createFSBackedSystem: endCreateFSBackedSystem - startCreateFSBackedSystem,
-      virtualTSEnv: endVirtualTSEnv - startVirtualTSEnv,
       getProgram: endGetProgram - startGetProgram,
       getSourceFile: endTargetSourceFile - startTargetSourceFile,
       getTypeAlias: endTypeAlias - startGetTypeAlias,
@@ -229,8 +245,8 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
       formatter: endFormatter - startFormatter,
       writeResults: endWriteResults - startWriteResults,
       total: endWriteResults - startCreateFSBackedSystem,
-    }
-  );
+    },
+  });
 
   if (isComplete) {
     return await isolatedProgram({
@@ -238,7 +254,10 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
       stopAt: current,
       incrementBy,
       evaluationFilePath: writeFilePath,
+      evaluationSourceCode: formattedFile,
       resultFilePath: null,
+      env,
+      timeSpentUnderwater,
     })
   }
 
@@ -248,13 +267,23 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     throw new Error(`stopped because errors found in the file (search ${writeFilePath} for "never")`);
   }
 
+  if (shouldTakeABreath(timeSpentUnderwater)) {
+    timeSpentUnderwater = 0; // reset the counter
+    await writeFile(evaluationFilePath, evaluationSourceCode, 'utf-8');
+    env = createEnv();
+  }
+
+  timeSpentUnderwater += incrementBy;
   const nextCurrent = current + incrementBy;
   return {
     current: nextCurrent,
     stopAt,
     incrementBy,
     evaluationFilePath: writeFilePath,
+    evaluationSourceCode: formattedFile,
     resultFilePath: createResultFilePath(nextCurrent),
+    env,
+    timeSpentUnderwater,
   };
 }
 
@@ -293,8 +322,11 @@ const finalizeProgram = async (
     stopAt: 0,
     incrementBy,
     evaluationFilePath: finalResultPath,
+    evaluationSourceCode: file,
     resultFilePath: null,
     justPrint: true,
+    env: createEnv(),
+    timeSpentUnderwater: 0,
   });
 }
 
@@ -338,13 +370,18 @@ const runProgram = async () => {
 
   const startProgram = performance.now();
 
+  const playgroundSource = await readFile(playgroundFilePath, 'utf-8');
+
   // Bootstrap the program
-  await isolatedProgram({
+  const { evaluationSourceCode, env } = await isolatedProgram({
     current: 0,
     stopAt: 0,
     incrementBy,
     evaluationFilePath: playgroundFilePath,
+    evaluationSourceCode: playgroundSource,
     resultFilePath: bootstrapFilePath,
+    env: createEnv(),
+    timeSpentUnderwater: 0,
   });
 
   let runConfig: ProgramRun = {
@@ -352,11 +389,15 @@ const runProgram = async () => {
     stopAt: initialConditions.stopAt,
     incrementBy,
     evaluationFilePath: bootstrapFilePath,
+    evaluationSourceCode: evaluationSourceCode!,
     resultFilePath: createResultFilePath(incrementBy),
+    env,
+    timeSpentUnderwater: 0,
   };
 
   while (true) {
     runConfig = await isolatedProgram(runConfig);
+
     if (programIsComplete(runConfig)) {
       break;
     }

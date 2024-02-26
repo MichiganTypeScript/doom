@@ -7,7 +7,7 @@ mod stats;
 mod utils;
 mod wat_to_dts;
 
-use std::fs;
+use std::{fs, path::Path};
 use wat_to_dts::wat_to_dts;
 
 #[macro_use]
@@ -15,10 +15,11 @@ extern crate pretty_assertions;
 
 fn main() {
     let current_dir = std::env::current_dir().unwrap();
-    let wat_path = current_dir.join("../packages/playground/doom/doom.wat");
+    let going_to = Path::new("packages/playground/doom/doom.wat");
+    let wat_path = current_dir.join(going_to);
     let wat = fs::read_to_string(wat_path).unwrap();
-    let output = wat_to_dts(wat, "../packages/playground/doom/doom.dump").to_string();
-    fs::write("../packages/playground/code.ts", output).unwrap();
+    let output = wat_to_dts(wat, "packages/playground/doom/doom.dump").to_string();
+    fs::write("packages/playground/doom/doom.actual.ts", output).unwrap();
 }
 
 #[cfg(test)]
