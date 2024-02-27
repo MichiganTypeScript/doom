@@ -79,7 +79,8 @@ export type Add<
       [
         ...remaining,
         instruction['type'] extends 'i32' ? Wasm.I32Add<a, b> :
-        never // Todo i64, f32, f64
+        instruction['type'] extends 'i64' ? Wasm.I64Add<a, b> :
+        never // TODO(float)
       ],
       state
     >

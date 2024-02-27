@@ -137,6 +137,15 @@ export type I32AddBinary<
   >
 >
 
+export type I64AddBinary<
+  a extends WasmValue,
+  b extends WasmValue
+> = Satisfies<WasmValue,
+  Clamp.Last64Bits<
+    AddBinary<a, b>
+  >
+>
+
 export type I32AddDecimal<
   a extends number,
   b extends number,

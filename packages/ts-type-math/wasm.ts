@@ -1,4 +1,4 @@
-import { I32AddBinary } from "./add";
+import { I32AddBinary, I64AddBinary } from "./add";
 import { ShiftLeftBinaryO, ShiftRightBinary, ShiftRightBinary64, ShiftLeftBinary64 } from "./shift";
 import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary } from "./bitwise";
 import { EqualsBinary, GreaterThanSignedBinary, GreaterThanUnsignedBinary, LessThanSignedBinary, LessThanUnsignedBinary, NotEqualsBinary } from "./comparison";
@@ -28,6 +28,13 @@ export namespace Wasm {
     b extends WasmValue
   > = Satisfies<WasmValue,
     I32AddBinary<a, b>
+  >
+
+  export type I64Add<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I64AddBinary<a, b>
   >
 
   export type I32Sub<
