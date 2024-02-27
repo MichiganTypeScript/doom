@@ -39,7 +39,7 @@ type test = [
   Expect<Equal<ShiftLeft<T[12]['a'], T[12]['b']>, T[12]['shl']>>,
   Expect<Equal<ShiftLeft<T[13]['a'], T[13]['b']>, T[13]['shl']>>,
   Expect<Equal<ShiftLeft<T[14]['a'], T[14]['b']>, T[14]['shl']>>,
-  // Expect<Equal<ShiftLeft<T[15]['a'], T[15]['b']>, T[15]['shl']>>, // TODO: bug
+  Expect<Equal<ShiftLeft<T[15]['a'], T[15]['b']>, T[15]['shl']>>,
   Expect<Equal<ShiftLeft<T[16]['a'], T[16]['b']>, T[16]['shl']>>,
   Expect<Equal<ShiftLeft<T[17]['a'], T[17]['b']>, T[17]['shl']>>,
   Expect<Equal<ShiftLeft<T[18]['a'], T[18]['b']>, T[18]['shl']>>,

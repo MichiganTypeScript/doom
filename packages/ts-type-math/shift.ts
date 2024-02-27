@@ -8,13 +8,15 @@ export type ShiftLeft<
   Decimal extends number,
   Shift extends number
 > = Satisfies<number,
-  ToDecimalUnsigned<
-    ShiftLeftBinaryO<
-      To32Binary<Decimal>,
-      '',
-      Shift
+  Shift extends 0
+  ? Decimal
+  : ToDecimalUnsigned<
+      ShiftLeftBinaryO<
+        To32Binary<Decimal>,
+        '',
+        Shift
+      >
     >
-  >
 >
 
 /** input must be a Binary32 */
@@ -133,10 +135,10 @@ export type ShiftRightBinary<
     : ReverseString<ShiftLeftBinaryO<Rev, Shift>>
 >
 
-type b = '0000000000000000000000000000000000000000000000000000000000000001'
-type a = '1111111111111111111111111111111110000000000000000000000000000010'
-type e = '1111111111111111111111111111111100000000000000000000000000000100'
-type x = ShiftLeftBinary64<a, b, '0'> // =>
+// type b = '0000000000000000000000000000000000000000000000000000000000000001'
+// type a = '1111111111111111111111111111111110000000000000000000000000000010'
+// type e = '1111111111111111111111111111111100000000000000000000000000000100'
+// type x = ShiftLeftBinary64<a, b, '0'> // =>
 
 export type ShiftLeftBinary64<
   a extends WasmValue,
