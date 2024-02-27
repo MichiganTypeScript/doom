@@ -55,10 +55,18 @@ export namespace Convert {
   }
 
   export namespace U64Binary {
-    export type ToU64Decimal<
+    export type ToTSBigInt<
       binary extends U64Binary
     > = Satisfies<bigint,
       ToDecimalSignedBigInt<binary>
+    >
+
+    export type ToTSNumber<
+      binary extends U64Binary
+    > = Satisfies<number,
+      Convert.TSBigInt.ToTSNumber<
+        Convert.U64Binary.ToTSBigInt<binary>
+      >
     >
   }
 
@@ -136,7 +144,7 @@ export namespace Convert {
   export namespace WasmValue {
     export type ToTSNumber<
       value extends WasmValue,
-      wasmType extends WasmType
+      wasmType extends 'i32' | 'f32' | 'f64',
     > = Satisfies<number,
       wasmType extends 'i32' ? Convert.U32Binary.ToU32Decimal<value> :
       wasmType extends 'f32' ? never : // TODO(float)
@@ -147,7 +155,7 @@ export namespace Convert {
     export type ToTSBigInt<
       value extends WasmValue,
     > = Satisfies<bigint,
-      Convert.U64Binary.ToU64Decimal<value>
+      Convert.U64Binary.ToTSBigInt<value>
     >
   }
 }

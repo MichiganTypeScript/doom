@@ -264,10 +264,10 @@ const stringifyBigint = (_: any, v: any) => typeof v === 'bigint' ? v.toString()
 //   bitwiseBigInt.shr_u(a, b),
 // )
 
-console.log(Array.from(Array(64))
+console.log(Array.from(Array(65))
   .map((_ ,index) => index)
   .map(index => (
-    `    ${index} extends Shift ? (a extends \`${"${string}".repeat(index)}\${infer R}\` ? \`\${R}${"0".repeat(index)}\` : never) :`
+    `  ${index}: '${'0'.repeat(index)}';`
   ))
   .join("\n")
 );

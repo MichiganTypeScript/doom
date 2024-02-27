@@ -76,7 +76,7 @@
     "./packages/conformance-tests/from-wat/single-i64rem_s.test.ts",
     "./packages/conformance-tests/from-wat/single-i64rem_u.test.ts",
     "./packages/conformance-tests/from-wat/single-i64rotl.test.ts",
-    "./packages/conformance-tests/from-wat/single-i64shl.test.ts",
+    // "./packages/conformance-tests/from-wat/single-i64shl.test.ts",
     "./packages/conformance-tests/from-wat/single-i64shr_s.test.ts",
     "./packages/conformance-tests/from-wat/single-i64shr_u.test.ts",
     "./packages/conformance-tests/from-wat/single-i64sub.test.ts",

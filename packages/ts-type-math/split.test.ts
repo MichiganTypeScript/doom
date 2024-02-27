@@ -36,12 +36,12 @@ type result33 = "012340000000000000000000000000789"
 type last8 = "23456789";
 
 type clamp32 = [
-  Expect<Equal<Clamp.Last32Bits<result31>, result31>>,
+  Expect<Equal<Clamp.Last32Bits<result31>, never>>,
   Expect<Equal<Clamp.Last32Bits<result32>, result32>>,
   Expect<Equal<Clamp.Last32Bits<result33>, result32>>,
-  Expect<Equal<Clamp.Last32Bits<"a">, "a">>,
+  Expect<Equal<Clamp.Last32Bits<"a">, never>>,
 
-  Expect<Equal<Clamp.Last8Bits<"3456789">, "3456789">>,
+  Expect<Equal<Clamp.Last8Bits<"3456789">, never>>,
   Expect<Equal<Clamp.Last8Bits<"23456789">, last8>>,
   Expect<Equal<Clamp.Last8Bits<"123456789">, last8>>,
   Expect<Equal<Clamp.Last8Bits<"0123456789">, last8>>,

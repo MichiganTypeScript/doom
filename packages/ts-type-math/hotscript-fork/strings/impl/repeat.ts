@@ -28,12 +28,3 @@ export type Repeat<
   : Calc["Remainder"] extends 0
   ? Repeat<RepeatX2<T>, Calc["Quotient"], Acc>
   : Repeat<T, Sub<N, 1>, `${Acc}${T}`>;
-
-export type RepeatBigInt<
-  T extends string,
-  N extends bigint,
-> =
-  Repeat<
-    T,
-    Convert.TSBigInt.ToTSNumber<N>
-  >
