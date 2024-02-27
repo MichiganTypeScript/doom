@@ -45,7 +45,7 @@ type tests = [
   Expect<Equal<entry<[T[25]['a'], T[25]['b']]>, T[25]['shr_s']>>,
   Expect<Equal<entry<[T[26]['a'], T[26]['b']]>, T[26]['shr_s']>>,
   Expect<Equal<entry<[T[27]['a'], T[27]['b']]>, T[27]['shr_s']>>,
-  // Expect<Equal<entry<[T[28]['a'], T[28]['b']]>, T[28]['shr_s']>>,
+  Expect<Equal<entry<[T[28]['a'], T[28]['b']]>, T[28]['shr_s']>>,
 
   Expect<Equal<T['length'], 29>>,
 ]

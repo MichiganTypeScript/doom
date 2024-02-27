@@ -264,11 +264,18 @@ const stringifyBigint = (_: any, v: any) => typeof v === 'bigint' ? v.toString()
 //   bitwiseBigInt.shr_u(a, b),
 // )
 
+// console.log(Array.from(Array(65))
+//   .map((_ ,index) => index)
+//   .map(index => (
+//     `  ${index}: '${'0'.repeat(index)}';`
+//   ))
+//   .join("\n")
+// );
+
 console.log(Array.from(Array(65))
   .map((_ ,index) => index)
   .map(index => (
-    `  ${index}: '${'0'.repeat(index)}';`
+    `    /* 2**${index} */ ${2n**BigInt(index)}n,`
   ))
   .join("\n")
 );
-

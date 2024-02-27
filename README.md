@@ -119,8 +119,8 @@ Usage count (in Doom) is the number on the right
 | I32ShrU           | 234   | ✅           |
 | I32ShrS           | 230   | ✅           |
 | I64Or             | 129   | ✅           |
-| I64ShrU           | 83    | 🪚           |
-| I64Shl            | 80    | 🪚           |
+| I64ShrU           | 83    | ✅           |
+| I64Shl            | 80    | ✅           |
 | I64And            | 73    | ✅           |
 | I64Xor            | 34    | ✅           |
 | I64Clz            | 7     | 🪚           |

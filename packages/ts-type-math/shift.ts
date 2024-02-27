@@ -1,4 +1,4 @@
-import { ReverseString, SignBit, To32Binary, ToDecimalSigned, ToDecimalUnsigned, ToDecimalUnsignedBigInt } from "./binary";
+import { ReverseString, SignBit, To32Binary, ToDecimalSigned, ToDecimalSignedBigInt, ToDecimalUnsigned, ToDecimalUnsignedBigInt } from "./binary";
 import { Wasm, WasmValue } from "./wasm";
 import type { Convert } from './conversion';
 import { Clamp } from "./split";
@@ -140,10 +140,24 @@ export type ShiftRightBinary<
 // type e = '1111111111111111111111111111111100000000000000000000000000000100'
 // type x = ShiftLeftBinary64<a, b, '0'> // =>
 
+export type ShiftLeftBigInt<
+  Decimal extends bigint,
+  Shift extends bigint
+> = Satisfies<bigint,
+  ToDecimalSignedBigInt<
+    ShiftLeftBinary64<
+      Convert.TSBigInt.ToWasmValue<Decimal>,
+      Convert.TSBigInt.ToWasmValue<Shift>
+    >
+  >
+>
+
 export type ShiftLeftBinary64<
   a extends WasmValue,
   shiftBy extends WasmValue,
-  shiftWith extends '0' | '1',
+
+  /** strictly speaking, ShiftLeft doesn't need this, but since the ShiftRight (signed and unsigned) implementations use this, it's here as an option */
+  shiftWith extends '0' | '1' = '0',
 
   lookup =
     shiftWith extends '0'
@@ -186,6 +200,21 @@ export type ShiftRightBinary64<
           '0'
         >
       >
+>
+
+/** inputs are unsigned Decimal32, under the hood is binary */
+export type ShiftRightBigInt<
+  Decimal extends bigint,
+  Shift extends bigint,
+  Signed extends boolean
+> = Satisfies<bigint,
+  Convert.WasmValue.ToTSBigInt<
+    ShiftRightBinary64<
+      Convert.TSBigInt.ToWasmValue<Decimal>,
+      Convert.TSBigInt.ToWasmValue<Shift>,
+      Signed
+    >
+  >
 >
 
 type Repeat0Lookup = {
