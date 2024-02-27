@@ -541,7 +541,7 @@ export namespace State {
 
     export type get<
       state extends ProgramState
-    > = Satisfies<number | null,
+    > = Satisfies<number | bigint | null,
       state['result']
     >
 
@@ -553,12 +553,9 @@ export namespace State {
 
         result:
           getWasmType<state> extends infer result
-          ? result extends WasmType
-            ? Convert.WasmValue.ToTSNumber<
-                State.Stack.get<state>[0],
-                result
-              >
-            : never // technically this should be possible (i.e. a program that has side effects), but all programs in this universe should return _something_ (even if it's just a memory pointer) because otherwise there's no point in doing anything
+          ? result extends 'i32' | 'f32' | 'f64'
+            ? Convert.WasmValue.ToTSNumber<State.Stack.get<state>[0], result>
+            : Convert.WasmValue.ToTSBigInt<State.Stack.get<state>[0]>
           : never // this suggests there's a missing $entry function
 
         stack: state['stack'];
@@ -577,7 +574,7 @@ export namespace State {
 
     export type finish<
       state extends ProgramState
-    > = Satisfies<number | null,
+    > = Satisfies<number | bigint | null,
       get<
         set<state>
       >

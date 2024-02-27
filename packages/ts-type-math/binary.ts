@@ -2,73 +2,109 @@ import { AddBinary } from "./add";
 import { BitwiseNotBinary } from "./bitwise";
 import type { DivTSBigInt, DivTSNumbers, Mod, ModBigInt } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
-import type { Add } from './hotscript-fork/numbers/impl/addition';
+import type { Add, AddBigInt } from './hotscript-fork/numbers/impl/addition';
+
 
 type PowersOfTwo = [
-    /* 2**0  */ 1,
-    /* 2**1  */ 2,
-    /* 2**2  */ 4,
-    /* 2**3  */ 8,
-    /* 2**4  */ 16,
-    /* 2**5  */ 32,
-    /* 2**6  */ 64,
-    /* 2**7  */ 128,
-    /* 2**8  */ 256,
-    /* 2**9  */ 512,
-    /* 2**10 */ 1024,
-    /* 2**11 */ 2048,
-    /* 2**12 */ 4096,
-    /* 2**13 */ 8192,
-    /* 2**14 */ 16384,
-    /* 2**15 */ 32768,
-    /* 2**16 */ 65536,
-    /* 2**17 */ 131072,
-    /* 2**18 */ 262144,
-    /* 2**19 */ 524288,
-    /* 2**20 */ 1048576,
-    /* 2**21 */ 2097152,
-    /* 2**22 */ 4194304,
-    /* 2**23 */ 8388608,
-    /* 2**24 */ 16777216,
-    /* 2**25 */ 33554432,
-    /* 2**26 */ 67108864,
-    /* 2**27 */ 134217728,
-    /* 2**28 */ 268435456,
-    /* 2**29 */ 536870912,
-    /* 2**30 */ 1073741824,
-    /* 2**31 */ 2147483648,
-    /* 2**32 */ 4294967296,
-    /* 2**33 */ 8589934592,
-    /* 2**34 */ 17179869184,
-    /* 2**35 */ 34359738368,
-    /* 2**36 */ 68719476736,
-    /* 2**37 */ 137438953472,
-    /* 2**38 */ 274877906944,
-    /* 2**39 */ 549755813888,
-    /* 2**40 */ 1099511627776,
-    /* 2**41 */ 2199023255552,
-    /* 2**42 */ 4398046511104,
-    /* 2**43 */ 8796093022208,
-    /* 2**44 */ 17592186044416,
-    /* 2**45 */ 35184372088832,
-    /* 2**46 */ 70368744177664,
-    /* 2**47 */ 140737488355328,
-    /* 2**48 */ 281474976710656,
-    /* 2**49 */ 562949953421312,
-    /* 2**50 */ 1125899906842624,
-    /* 2**51 */ 2251799813685248,
-    /* 2**52 */ 4503599627370496,
-    /* 2**53 */ 9007199254740992,
-    /* 2**54 */ 18014398509481984,
-    /* 2**55 */ 36028797018963970,
-    /* 2**56 */ 72057594037927940,
-    /* 2**57 */ 144115188075855870,
-    /* 2**58 */ 288230376151711740,
-    /* 2**59 */ 576460752303423500,
-    /* 2**60 */ 1152921504606847000,
-    /* 2**61 */ 2305843009213694000,
-    /* 2**62 */ 4611686018427388000,
-    /* 2**63 */ 9223372036854776000,
+  /* 2**0  */ 1,
+  /* 2**1  */ 2,
+  /* 2**2  */ 4,
+  /* 2**3  */ 8,
+  /* 2**4  */ 16,
+  /* 2**5  */ 32,
+  /* 2**6  */ 64,
+  /* 2**7  */ 128,
+  /* 2**8  */ 256,
+  /* 2**9  */ 512,
+  /* 2**10 */ 1024,
+  /* 2**11 */ 2048,
+  /* 2**12 */ 4096,
+  /* 2**13 */ 8192,
+  /* 2**14 */ 16384,
+  /* 2**15 */ 32768,
+  /* 2**16 */ 65536,
+  /* 2**17 */ 131072,
+  /* 2**18 */ 262144,
+  /* 2**19 */ 524288,
+  /* 2**20 */ 1048576,
+  /* 2**21 */ 2097152,
+  /* 2**22 */ 4194304,
+  /* 2**23 */ 8388608,
+  /* 2**24 */ 16777216,
+  /* 2**25 */ 33554432,
+  /* 2**26 */ 67108864,
+  /* 2**27 */ 134217728,
+  /* 2**28 */ 268435456,
+  /* 2**29 */ 536870912,
+  /* 2**30 */ 1073741824,
+  /* 2**31 */ 2147483648,
+];
+
+type PowersOfTwoBigInt = [
+    /* 2**0  */ 1n,
+    /* 2**1  */ 2n,
+    /* 2**2  */ 4n,
+    /* 2**3  */ 8n,
+    /* 2**4  */ 16n,
+    /* 2**5  */ 32n,
+    /* 2**6  */ 64n,
+    /* 2**7  */ 128n,
+    /* 2**8  */ 256n,
+    /* 2**9  */ 512n,
+    /* 2**10 */ 1024n,
+    /* 2**11 */ 2048n,
+    /* 2**12 */ 4096n,
+    /* 2**13 */ 8192n,
+    /* 2**14 */ 16384n,
+    /* 2**15 */ 32768n,
+    /* 2**16 */ 65536n,
+    /* 2**17 */ 131072n,
+    /* 2**18 */ 262144n,
+    /* 2**19 */ 524288n,
+    /* 2**20 */ 1048576n,
+    /* 2**21 */ 2097152n,
+    /* 2**22 */ 4194304n,
+    /* 2**23 */ 8388608n,
+    /* 2**24 */ 16777216n,
+    /* 2**25 */ 33554432n,
+    /* 2**26 */ 67108864n,
+    /* 2**27 */ 134217728n,
+    /* 2**28 */ 268435456n,
+    /* 2**29 */ 536870912n,
+    /* 2**30 */ 1073741824n,
+    /* 2**31 */ 2147483648n,
+    /* 2**32 */ 4294967296n,
+    /* 2**33 */ 8589934592n,
+    /* 2**34 */ 17179869184n,
+    /* 2**35 */ 34359738368n,
+    /* 2**36 */ 68719476736n,
+    /* 2**37 */ 137438953472n,
+    /* 2**38 */ 274877906944n,
+    /* 2**39 */ 549755813888n,
+    /* 2**40 */ 1099511627776n,
+    /* 2**41 */ 2199023255552n,
+    /* 2**42 */ 4398046511104n,
+    /* 2**43 */ 8796093022208n,
+    /* 2**44 */ 17592186044416n,
+    /* 2**45 */ 35184372088832n,
+    /* 2**46 */ 70368744177664n,
+    /* 2**47 */ 140737488355328n,
+    /* 2**48 */ 281474976710656n,
+    /* 2**49 */ 562949953421312n,
+    /* 2**50 */ 1125899906842624n,
+    /* 2**51 */ 2251799813685248n,
+    /* 2**52 */ 4503599627370496n,
+    /* 2**53 */ 9007199254740992n,
+    /* 2**54 */ 18014398509481984n,
+    /* 2**55 */ 36028797018963970n,
+    /* 2**56 */ 72057594037927940n,
+    /* 2**57 */ 144115188075855870n,
+    /* 2**58 */ 288230376151711740n,
+    /* 2**59 */ 576460752303423500n,
+    /* 2**60 */ 1152921504606847000n,
+    /* 2**61 */ 2305843009213694000n,
+    /* 2**62 */ 4611686018427388000n,
+    /* 2**63 */ 9223372036854776000n,
 ];
 
 type ProcessTSNumber<
@@ -150,7 +186,6 @@ export namespace Pad {
     : StartWithOnes<`1${input}`, finalLength>
   >
 }
-
 
 export type TsBigIntIsNegative<
   T extends bigint
@@ -242,6 +277,45 @@ type _ToDecimalUnsigned<
       : never
   : 0
 
+type TSNumberToTSBigint<
+  T extends number
+> = Satisfies<bigint,
+  `${T}` extends `${infer X extends bigint}` ? X : never
+>
+
+
+export type ToDecimalUnsignedBigInt<
+  T extends string
+> = Satisfies<bigint,
+  _ToDecimalUnsignedBigInt<ReverseString<T>>
+>;
+
+type _ToDecimalUnsignedBigInt<
+  Binary extends string,
+
+  _PowerOfTwo extends bigint = 0n,
+  _NextPowerOfTwo extends bigint = AddBigInt<_PowerOfTwo,  1n>
+> =
+  Binary extends `${infer Head}${infer Tail}`
+
+  ? Head extends '0'
+    ? _ToDecimalUnsignedBigInt<
+        Tail,
+        _NextPowerOfTwo
+      >
+
+    : Head extends '1'
+      ? AddBigInt<
+          _ToDecimalUnsignedBigInt<
+            Tail,
+            _NextPowerOfTwo
+          >,
+          PowersOfTwoBigInt[TSBigIntToTSNumber<_PowerOfTwo>]
+        >
+
+      : never
+  : 0n
+
 // QUESTION
 // maybe performance would be better if this were just `string`?
 export type Bit = '0' | '1';
@@ -283,10 +357,21 @@ export type WithNegativeSign<
   T extends number
 > = `-${T}` extends `${infer U extends number}` ? U : never
 
+// this takes a positive TsNumber nad makes it negative
+export type WithNegativeSignBigInt<
+  T extends bigint
+> = `-${T}` extends `${infer U extends bigint}` ? U : never
+
+type TSBigIntToTSNumber<
+  T extends bigint
+> = Satisfies<number,
+  `${T}` extends `${infer X extends number}` ? X : never
+>
+
 export type ToDecimalSigned<
   binary extends string
 > = Satisfies<number,
-  binary extends `${infer Head extends Bit}${infer remainder extends string}`
+  binary extends `${infer Head}${infer remainder}`
   ? Head extends '0'
     ? // positive number
       ToDecimalUnsigned<remainder>
@@ -301,6 +386,27 @@ export type ToDecimalSigned<
       >
   : never
 >
+
+export type ToDecimalSignedBigInt<
+  binary extends string
+> = Satisfies<bigint,
+  binary extends `${infer Head}${infer remainder}`
+  ? Head extends '0'
+    ? // positive number
+      ToDecimalUnsignedBigInt<remainder>
+
+    : // negative number
+      WithNegativeSignBigInt<
+        ToDecimalUnsignedBigInt<
+          TwosComplementFlip<
+            remainder
+          >
+        >
+      >
+  : never
+>
+
+
 
 type i = '101110';
 type a = ToDecimalSigned<i>  // =>

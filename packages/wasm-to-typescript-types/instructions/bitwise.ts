@@ -126,7 +126,8 @@ export type And<
       [
         ...remaining,
         instruction['type'] extends 'i32' ? TypeMath.Wasm.I32And<a, b> :
-        never // Todo i64
+        instruction['type'] extends 'i64' ? TypeMath.Wasm.I64And<a, b> :
+        never
       ],
       state
     >
@@ -146,7 +147,8 @@ export type Or<
       [
         ...remaining,
         instruction['type'] extends 'i32' ? TypeMath.Wasm.I32Or<a, b> :
-        never // Todo i64
+        instruction['type'] extends 'i64' ? TypeMath.Wasm.I64Or<a, b> :
+        never
       ],
 
       state
@@ -167,7 +169,8 @@ export type Xor<
       [
         ...remaining,
         instruction['type'] extends 'i32' ? TypeMath.Wasm.I32Xor<a, b> :
-        never // Todo i64
+        instruction['type'] extends 'i64' ? TypeMath.Wasm.I64Xor<a, b> :
+        never
       ],
 
       state

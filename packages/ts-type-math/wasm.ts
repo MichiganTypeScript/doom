@@ -139,6 +139,33 @@ export namespace Wasm {
     BitwiseXorBinary<a, b>
   >
 
+  export type I64And<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    BitwiseAndBinary<a, b>
+  >
+
+  export type I64Or<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    BitwiseOrBinary<a, b>
+  >
+
+  export type I64Xor<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    BitwiseXorBinary<a, b>
+  >
+
   export type I32GtU<
     a extends WasmValue,
     b extends WasmValue

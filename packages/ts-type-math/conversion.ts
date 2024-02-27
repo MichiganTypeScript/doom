@@ -1,4 +1,4 @@
-import { To32Binary, To64Binary, ToDecimalSigned, Pad } from "./binary";
+import { To32Binary, To64Binary, ToDecimalSigned, Pad, ToDecimalSignedBigInt } from "./binary";
 import { WasmType, WasmValue } from './wasm';
 
 // export type Nibble = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
@@ -57,8 +57,8 @@ export namespace Convert {
   export namespace U64Binary {
     export type ToU64Decimal<
       binary extends U64Binary
-    > = Satisfies<number,
-      ToDecimalSigned<binary>
+    > = Satisfies<bigint,
+      ToDecimalSignedBigInt<binary>
     >
   }
 
@@ -127,10 +127,15 @@ export namespace Convert {
       wasmType extends WasmType
     > = Satisfies<number,
       wasmType extends 'i32' ? Convert.U32Binary.ToU32Decimal<value> :
-      wasmType extends 'i64' ? Convert.U64Binary.ToU64Decimal<value> :
       wasmType extends 'f32' ? never : // TODO(float)
       wasmType extends 'f64' ? never : // TODO(float)
       never
+    >
+
+    export type ToTSBigInt<
+      value extends WasmValue,
+    > = Satisfies<bigint,
+      Convert.U64Binary.ToU64Decimal<value>
     >
   }
 }

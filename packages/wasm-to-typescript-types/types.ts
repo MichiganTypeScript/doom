@@ -51,7 +51,7 @@ export type ProgramState = {
   count: number;
 
   /** the result of the program */
-  result: number | null;
+  result: number | bigint | null;
 
   /** a stack of values */
   stack: WasmValue[];

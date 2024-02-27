@@ -19,7 +19,7 @@ Usage count (in Doom) is the number on the right
 | Instruction       | Count | Implemented? |Binary
 | ----------------- | ----- | ------------ |
 | I32Const          | 17073 | ✅           |
-| I64Const          | 712   | 🪚           |
+| I64Const          | 712   | ✅           |
 | F64Const          | 37    | ❌           |
 | F32Const          | 4     | ❌           |
 
@@ -39,10 +39,10 @@ Usage count (in Doom) is the number on the right
 | I32LeU            | 95    | ✅           |
 | I32GeU            | 74    | ✅           |
 | I64LtU            | 62    | 🪚           |
-| I64Eqz            | 57    | 🪚           |
+| I64Eqz            | 57    | ✅           |
 | I64GtU            | 35    | 🪚           |
-| I64Ne             | 30    | 🪚           |
-| I64Eq             | 26    | 🪚           |
+| I64Ne             | 30    | ✅           |
+| I64Eq             | 26    | ✅           |
 | I64GeS            | 21    | 🪚           |
 | I64LtS            | 19    | 🪚           |
 | I64LeU            | 8     | 🪚           |
@@ -63,7 +63,7 @@ Usage count (in Doom) is the number on the right
 | I32Sub            | 1424  | ✅           |
 | I32Mul            | 478   | ✅           | ❌ some negative number overflow edge cases
 | I32DivS           | 165   | ❌           |
-| I64Add            | 130   | 🪚           |
+| I64Add            | 130   | ✅           |
 | I64Sub            | 53    | 🪚           |
 | I64Mul            | 46    | 🪚           |
 | I32RemS           | 44    | ❌           |
@@ -118,11 +118,11 @@ Usage count (in Doom) is the number on the right
 | I32Rotl           | 240   | ❌           |
 | I32ShrU           | 234   | ✅           |
 | I32ShrS           | 230   | ✅           |
-| I64Or             | 129   | 🪚           |
+| I64Or             | 129   | ✅           |
 | I64ShrU           | 83    | 🪚           |
 | I64Shl            | 80    | 🪚           |
-| I64And            | 73    | 🪚           |
-| I64Xor            | 34    | 🪚           |
+| I64And            | 73    | ✅           |
+| I64Xor            | 34    | ✅           |
 | I64Clz            | 7     | 🪚           |
 | I32Clz            | 5     | ❌           |
 | I64Rotl           | 1     | 🪚           |
