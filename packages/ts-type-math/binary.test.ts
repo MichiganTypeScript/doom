@@ -1,7 +1,7 @@
 import type { Expect, Equal } from 'type-testing'
 import { expect, test } from "vitest"
 import { To32Binary, ToDecimalSigned } from './binary';
-import { binaryTwosComplementToNumber, numberToTwosComplementBinary } from './test-utils';
+import { twosComplementToNumber, numberToTwosComplement } from './test-utils';
 
 const t = [
   {
@@ -46,8 +46,8 @@ test.each(t)('$binary === $decimal', ({
   decimal,
   binary,
 }) => {
-  expect(binaryTwosComplementToNumber(binary)).toBe(decimal);
-  expect(numberToTwosComplementBinary(decimal)).toBe(binary);
+  expect(twosComplementToNumber(binary)).toBe(decimal);
+  expect(numberToTwosComplement(decimal)).toBe(binary);
 });
 
 type T = typeof t;

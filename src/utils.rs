@@ -26,6 +26,16 @@ pub fn format_id(id: &Id) -> String {
     "$".to_string() + id.name()
 }
 
+pub fn val_type_to_typescript_type(val_type: &ValType) -> String {
+    match val_type {
+        ValType::I32 => "number".to_string(),
+        ValType::I64 => "bigint".to_string(),
+        ValType::F32 => "number".to_string(),
+        ValType::F64 => "number".to_string(),
+        _ => panic!("unsupported type"),
+    }
+}
+
 pub fn format_val_type(val_type: &ValType) -> String {
     match val_type {
         ValType::I32 => "'i32'".to_string(),

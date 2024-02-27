@@ -8,6 +8,8 @@ words:
   - dblass
   - Deque
   - dipset
+  - divs
+  - divu
   - emcc
   - errno
   - Expecto
@@ -20,9 +22,11 @@ words:
   - Omniverse
   - Patronum
   - prolly
+  - remu
   - Sarlacc
   - Trunc
   - typeconstraint
   - valtype
+  - wabt
 ignoreWords: []
 import: []

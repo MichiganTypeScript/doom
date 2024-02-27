@@ -1,12 +1,12 @@
 import type { Add } from "./addition"
 import type { AddDigits } from "./digits/addition";
-import type { Digit, Num, ToDigitNumber, ToString } from "./utils"
+import type { Digit, Num, ToDigitNumber, TsNumberToString } from "./utils"
 import type { Sub } from "./substraction"
 
 export type SequenceOfDigits<
   T extends number,
   Min extends number = 0,
-  MinDigits extends Digit[] = Num<ToDigitNumber<ToString<Min>>>,
+  MinDigits extends Digit[] = Num<ToDigitNumber<TsNumberToString<Min>>>,
   Acc extends Digit[][] = [MinDigits]
 > = Acc["length"] extends T
   ? Acc
@@ -16,7 +16,7 @@ export type SequenceOfDigits<
       MinDigits,
       [
         ...Acc,
-        AddDigits<Num<ToDigitNumber<ToString<Acc["length"]>>>, MinDigits>
+        AddDigits<Num<ToDigitNumber<TsNumberToString<Acc["length"]>>>, MinDigits>
       ]
     >;
 

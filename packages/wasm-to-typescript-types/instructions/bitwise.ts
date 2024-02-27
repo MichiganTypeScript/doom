@@ -46,6 +46,24 @@ export type IRotateRight = {
   type: WasmInt
 }
 
+export type ICountLeadingZeros = {
+  kind: "CountLeadingZeros"
+
+  type: WasmInt
+}
+
+export type ICountTrailingZeros = {
+  kind: "CountTrailingZeros"
+
+  type: WasmInt
+}
+
+export type IPopCount = {
+  kind: "PopCount"
+
+  type: WasmInt
+}
+
 export type BitwiseInstruction =
   | IAnd
   | IOr
@@ -54,6 +72,9 @@ export type BitwiseInstruction =
   | IShiftRight
   | IRotateLeft
   | IRotateRight
+  | ICountLeadingZeros
+  | ICountTrailingZeros
+  | IPopCount
 
 export type HandleBitwiseInstructions<
   instruction extends BitwiseInstruction,
@@ -79,6 +100,15 @@ export type HandleBitwiseInstructions<
 
   : instruction extends IRotateRight
   ? RotateRight<instruction, state>
+
+  : instruction extends ICountLeadingZeros
+  ? CountLeadingZeros<instruction, state>
+
+  : instruction extends ICountTrailingZeros
+  ? CountTrailingZeros<instruction, state>
+
+  : instruction extends IPopCount
+  ? PopCount<instruction, state>
 
   : never
 >
@@ -200,6 +230,27 @@ export type RotateLeft<
 
 export type RotateRight<
   instruction extends IRotateRight,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.unimplemented<instruction, state>
+>
+
+export type CountLeadingZeros<
+  instruction extends ICountLeadingZeros,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.unimplemented<instruction, state>
+>
+
+export type CountTrailingZeros<
+  instruction extends ICountTrailingZeros,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.unimplemented<instruction, state>
+>
+
+export type PopCount<
+  instruction extends IPopCount,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.unimplemented<instruction, state>

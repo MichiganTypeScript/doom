@@ -5,19 +5,25 @@ import type { ProgramInput, ProgramState } from "./types"
 import type { Convert, WasmType, WasmValue } from "ts-type-math"
 
 type _ProcessInputStack<
-  args extends [number[], WasmType[]],
+  args extends [number[]  | bigint[], WasmType[]],
 
   _Acc extends WasmValue[] = []
 > = Satisfies<WasmValue[],
   args extends [
-    [infer headValue extends number, ...infer tailValue extends number[]],
+    [infer headValue extends (number | bigint), ...infer tailValue extends number[] | bigint[]],
     [infer headType extends WasmType, ...infer tailType extends WasmType[]],
   ]
   ? _ProcessInputStack<
       [tailValue, tailType],
       [
         ..._Acc,
-        Convert.TSNumber.ToWasmValue<headValue, headType>,
+        headValue extends bigint
+        ? Convert.TSBigInt.ToWasmValue<headValue>
+        : headValue extends number
+          ? headType extends 'i32'
+            ? Convert.TSNumber.ToWasmValue<headValue, headType>
+            : never
+          : never
       ]
     >
   : _Acc

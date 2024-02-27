@@ -1,14 +1,15 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
-import type { ArithmeticInstruction, HandleArithmeticInstructions } from "./arithmetic"
-import type { BitwiseInstruction, HandleBitwiseInstructions } from "./bitwise"
+import type { HandleArithmeticInstructions, ArithmeticInstruction } from "./arithmetic"
+import type { HandleBitwiseInstructions, BitwiseInstruction } from "./bitwise"
 import type { HandleComparisonInstruction, ComparisonInstruction } from "./comparison"
 import type { HandleConstInstruction, ConstInstruction } from "./const"
-import type { ControlFlowInstruction, HandleControlFlowInstructions } from "./control-flow"
-import type { FloatingPointInstruction, HandleFloatingPointInstructions } from "./floating-point"
+import type { HandleControlFlowInstructions, ControlFlowInstruction } from "./control-flow"
+import type { HandleFloatingPointInstructions, FloatingPointInstruction } from "./floating-point"
 import type { HandleMemoryInstructions, MemoryInstruction } from "./memory"
 import type { HandleSyntheticInstructions, SyntheticInstruction } from "./synthetic"
 import type { HandleVariableInstructions, VariableInstruction } from "./variable"
+import type { HandleConversionInstructions, ConversionInstruction } from "./converstion"
 
 export type Instruction =
   | ConstInstruction
@@ -20,6 +21,7 @@ export type Instruction =
   | MemoryInstruction
   | ControlFlowInstruction
   | SyntheticInstruction
+  | ConversionInstruction
 
 export type selectInstruction<
   initialState extends ProgramState,
@@ -58,6 +60,9 @@ export type selectInstruction<
 
   : instruction extends SyntheticInstruction
   ? HandleSyntheticInstructions<instruction, state>
+
+  : instruction extends ConversionInstruction
+  ? HandleConversionInstructions<instruction, state>
 
   // Global Fallback
   : State.error<'unrecognized instruction', instruction, state>

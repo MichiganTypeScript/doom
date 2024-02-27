@@ -1,5 +1,5 @@
 use crate::source_file::{ModuleType, SourceFile};
-use crate::utils::format_id;
+use crate::utils::{format_id, val_type_to_typescript_type};
 use crate::{handle_instructions::handle_func, utils::format_val_type};
 use std::collections::HashMap;
 use std::str;
@@ -34,7 +34,12 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
                 let params_types = &params_and_types.map(|(_, val_type)| val_type.clone()).collect::<Vec<String>>().join(", ");
 
                 if name == "$entry" {
-                    let internals = (0..function_type.params.len()).map(|_| "number").collect::<Vec<&str>>().join(", ");
+                    let internals = function_type
+                        .params
+                        .iter()
+                        .map(|(_, _, val_type)| val_type_to_typescript_type(val_type))
+                        .collect::<Vec<String>>()
+                        .join(", ");
                     source.set_args(format!("[{internals}]"));
                 }
 

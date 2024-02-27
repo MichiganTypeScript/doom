@@ -61,6 +61,9 @@ importers:
       vitest:
         specifier: ^1.2.1
         version: 1.2.1(@types/node@20.11.5)
+      wabt:
+        specifier: ^1.0.32
+        version: 1.0.32
 
   packages/conformance-tests: {}
 
@@ -1125,6 +1128,11 @@ packages:
       - sugarss
       - supports-color
       - terser
+    dev: false
+
+  /wabt@1.0.32:
+    resolution: {integrity: sha512-1aHvkKaSrrl7qFtAbQ1RWVHLuJApRh7PtUdYvRtiUEKEhk0MOV0sTuz5cLF6jL5jPLRyifLbZcR65AEga/xBhQ==}
+    hasBin: true
     dev: false
 
   /which@2.0.2:

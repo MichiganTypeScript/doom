@@ -1,6 +1,6 @@
 import { AddBinary } from "./add";
 import { BitwiseNotBinary } from "./bitwise";
-import type { Div, Mod } from "./hotscript-fork/numbers/impl/division";
+import type { DivTSBigInt, DivTSNumbers, Mod, ModBigInt } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
 import type { Add } from './hotscript-fork/numbers/impl/addition';
 
@@ -71,7 +71,7 @@ type PowersOfTwo = [
     /* 2**63 */ 9223372036854776000,
 ];
 
-type Process<
+type ProcessTSNumber<
   T extends number,
 
   _Acc extends string = ''
@@ -80,8 +80,21 @@ type Process<
   ? _Acc
   : Mod<T, 2> extends infer remainder
     ? remainder extends 0
-      ? Process<Div<T, 2>, `0${_Acc}`>
-      : Process<Div<T, 2>, `1${_Acc}`>
+      ? ProcessTSNumber<DivTSNumbers<T, 2>, `0${_Acc}`>
+      : ProcessTSNumber<DivTSNumbers<T, 2>, `1${_Acc}`>
+    :never;
+
+type ProcessTSBigInt<
+  T extends bigint,
+
+  _Acc extends string = ''
+> =
+  T extends 0n
+  ? _Acc
+  : ModBigInt<T, 2n> extends infer remainder
+    ? remainder extends 0n
+      ? ProcessTSBigInt<DivTSBigInt<T, 2n>, `0${_Acc}`>
+      : ProcessTSBigInt<DivTSBigInt<T, 2n>, `1${_Acc}`>
     :never;
 
 export namespace Pad {
@@ -139,6 +152,13 @@ export namespace Pad {
 }
 
 
+export type TsBigIntIsNegative<
+  T extends bigint
+> =
+  `${T}` extends `-${string}`
+  ? true
+  : false
+
 export type TsNumberIsNegative<
   T extends number
 > =
@@ -152,22 +172,22 @@ export type To32Binary<
   TsNumberIsNegative<T> extends true
 
   ? // we need do the Two's Complement fliperouney thing
-    TwosComplementFlip<Pad.StartWithZeros<Process<T>, 32>>
+    TwosComplementFlip<Pad.StartWithZeros<ProcessTSNumber<T>, 32>>
   
   : // full 32 bit
-    Pad.StartWithZeros<Process<T>, 32>
+    Pad.StartWithZeros<ProcessTSNumber<T>, 32>
 >
 
 export type To64Binary<
-  T extends number,
+  T extends bigint,
 > = Satisfies<string,
-  TsNumberIsNegative<T> extends true
+  TsBigIntIsNegative<T> extends true
 
   ? // we need do the Two's Complement fliperouney thing
-    TwosComplementFlip<Pad.StartWithZeros<Process<T>, 64>>
+    TwosComplementFlip<Pad.StartWithZeros<ProcessTSBigInt<T>, 64>>
 
   : // full 64 bit
-    Pad.StartWithZeros<Process<T>, 64>
+    Pad.StartWithZeros<ProcessTSBigInt<T>, 64>
 >
 
 /**

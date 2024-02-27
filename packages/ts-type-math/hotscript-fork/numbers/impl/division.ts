@@ -1,5 +1,5 @@
 import type {
-  ToNumber,
+  StringToTSNumber,
   MakeDigitNumber,
   FromDigitNumber,
   Normalize,
@@ -7,9 +7,11 @@ import type {
   Sign,
   Num,
   ToDigitNumber,
-  ToString,
+  TsNumberToString,
   MulSign,
   Digit,
+  TsBigIntToString,
+  StringToTSBigInt,
 } from "./utils"
 import type { DivDigits, ModDigits, DivModDigits } from "./digits/division";
 
@@ -18,13 +20,27 @@ export type DivDigitNumbers<
   U extends DigitNumber
 > = MakeDigitNumber<MulSign<Sign<T>, Sign<U>>, DivDigits<Num<T>, Num<U>>>;
 
-export type Div<
+export type DivTSNumbers<
   T extends number,
   U extends number
-> = ToNumber<
+> = StringToTSNumber<
   FromDigitNumber<
     Normalize<
-      DivDigitNumbers<ToDigitNumber<ToString<T>>, ToDigitNumber<ToString<U>>>
+      DivDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>
+    >
+  >
+>;
+
+export type DivTSBigInt<
+  T extends bigint,
+  U extends bigint
+> = StringToTSBigInt<
+  FromDigitNumber<
+    Normalize<
+      DivDigitNumbers<
+        ToDigitNumber<TsBigIntToString<T>>,
+        ToDigitNumber<TsBigIntToString<U>>
+      >
     >
   >
 >;
@@ -37,10 +53,28 @@ export type ModDigitNumbers<
 export type Mod<
   T extends number,
   U extends number
-> = ToNumber<
+> = StringToTSNumber<
   FromDigitNumber<
     Normalize<
-      ModDigitNumbers<ToDigitNumber<ToString<T>>, ToDigitNumber<ToString<U>>>
+      ModDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>
+    >
+  >
+>;
+
+export type ModBigInt<
+  T extends bigint,
+  U extends bigint
+> = StringToTSBigInt<
+  FromDigitNumber<
+    Normalize<
+      ModDigitNumbers<
+        ToDigitNumber<
+          TsBigIntToString<T>
+        >,
+        ToDigitNumber<
+          TsBigIntToString<U>
+        >
+      >
     >
   >
 >;
@@ -63,8 +97,8 @@ export type DivMod<
   DivModNumbers extends {
     Quotient: DigitNumber;
     Remainder: DigitNumber;
-  } = DivModDigitNumbers<ToDigitNumber<ToString<T>>, ToDigitNumber<ToString<U>>>
+  } = DivModDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>
 > = {
-  Quotient: ToNumber<FromDigitNumber<Normalize<DivModNumbers["Quotient"]>>>;
-  Remainder: ToNumber<FromDigitNumber<Normalize<DivModNumbers["Remainder"]>>>;
+  Quotient: StringToTSNumber<FromDigitNumber<Normalize<DivModNumbers["Quotient"]>>>;
+  Remainder: StringToTSNumber<FromDigitNumber<Normalize<DivModNumbers["Remainder"]>>>;
 };

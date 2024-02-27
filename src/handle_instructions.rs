@@ -224,10 +224,15 @@ fn handle_instruction(
         }
 
         /* Conversion Instructions */
-        Instruction::I64ExtendI32U => {
-            vec![(*indent, format!("{{ kind: 'Extend8Unsigned' }},"))]
+        Instruction::I32WrapI64 => {
+            vec![(*indent, format!("{{ kind: 'Wrap' }},"))]
         }
-        // Wrap
+        Instruction::I64ExtendI32S => {
+            vec![(*indent, format!("{{ kind: 'Extend', signed: true }},"))]
+        }
+        Instruction::I64ExtendI32U => {
+            vec![(*indent, format!("{{ kind: 'Extend', signed: false }},"))]
+        }
         // Promote
         // Demote
         // Convert
@@ -299,9 +304,24 @@ fn handle_instruction(
         Instruction::I64Rotr => {
             vec![(*indent, format!("{{ kind: 'RotateRight', type: 'i64' }},"))]
         }
-        // CountLeadingZeros
-        // CountTrailingZeros
-        // PopulationCount
+        Instruction::I32Clz => {
+            vec![(*indent, format!("{{ kind: 'CountLeadingZeros', type: 'i32' }},"))]
+        }
+        Instruction::I64Clz => {
+            vec![(*indent, format!("{{ kind: 'CountLeadingZeros', type: 'i64' }},"))]
+        }
+        Instruction::I32Ctz => {
+            vec![(*indent, format!("{{ kind: 'CountTrailingZeros', type: 'i32' }},"))]
+        }
+        Instruction::I64Ctz => {
+            vec![(*indent, format!("{{ kind: 'CountTrailingZeros', type: 'i64' }},"))]
+        }
+        Instruction::I32Popcnt => {
+            vec![(*indent, format!("{{ kind: 'PopulationCount', type: 'i32' }},"))]
+        }
+        Instruction::I64Popcnt => {
+            vec![(*indent, format!("{{ kind: 'PopulationCount', type: 'i64' }},"))]
+        }
 
         /**************
          * Variable Instructions

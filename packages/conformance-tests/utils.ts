@@ -14,6 +14,7 @@ export const getWasm = async <
   return instance.exports.entry as entry;
 }
 
+
 export const getWasmMemory = (
   testDirectory: string,
   testName: string,

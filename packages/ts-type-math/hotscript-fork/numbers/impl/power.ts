@@ -1,5 +1,5 @@
 import type {
-  ToNumber,
+  StringToTSNumber,
   MakeDigitNumber,
   FromDigitNumber,
   Normalize,
@@ -7,7 +7,7 @@ import type {
   Sign,
   Num,
   ToDigitNumber,
-  ToString,
+  TsNumberToString,
   Digit,
 } from "./utils"
 import type { PowerDigits } from "./digits/power";
@@ -28,10 +28,10 @@ export type PowerDigitNumbers<
 export type Power<
   T extends number,
   U extends number
-> = ToNumber<
+> = StringToTSNumber<
   FromDigitNumber<
     Normalize<
-      PowerDigitNumbers<ToDigitNumber<ToString<T>>, ToDigitNumber<ToString<U>>>
+      PowerDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>
     >
   >
 >;

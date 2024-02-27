@@ -86,7 +86,7 @@ export type ProgramInput = Pick<
   ProgramState,
   | "memory" | "indirect" | "globals" | "memorySize"
 > & {
-  arguments: number[];
+  arguments: number[] | bigint[];
   funcs: FuncsById & {
     $entry: Func;
   };

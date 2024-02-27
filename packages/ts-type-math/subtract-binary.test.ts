@@ -2,11 +2,11 @@ import { Equal, Expect } from "type-testing"
 import type { I32SubtractBinary } from './subtract';
 import { t, T } from './test-cases/arithmetic';
 import { expect, test } from 'vitest';
-import { binaryTwosComplementToNumber, numberToTwosComplementBinary } from "./test-utils";
+import { twosComplementToNumber, numberToTwosComplement } from "./test-utils";
 
 test.each(t)('$a_binary - $b_binary === $sub_binary', ({ a_binary, b_binary, sub_binary }) => {
-  const actual = binaryTwosComplementToNumber(a_binary) - binaryTwosComplementToNumber(b_binary);
-  const actual_binary = numberToTwosComplementBinary(actual);
+  const actual = twosComplementToNumber(a_binary) - twosComplementToNumber(b_binary);
+  const actual_binary = numberToTwosComplement(actual);
   expect(actual_binary).toBe(sub_binary);
 })
 

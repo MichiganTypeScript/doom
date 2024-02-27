@@ -1,5 +1,5 @@
 import type {
-  ToString,
+  TsNumberToString,
   Digit,
   DigitNumber,
   ToDigitNumber,
@@ -74,7 +74,7 @@ export type Compare<
   U extends number
 > = _Equal<T, U> extends true
   ? 0
-  : CompareDigitNumbers<ToDigitNumber<ToString<T>>, ToDigitNumber<ToString<U>>>;
+  : CompareDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>;
 
 export type LessThan<
   T extends number,

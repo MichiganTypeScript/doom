@@ -1,0 +1,91 @@
+import { WasmInt } from "../../ts-type-math/wasm"
+import { State } from "../state"
+import { ProgramState } from "../types"
+
+// https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Numeric/Wrap
+export type IWrap = {
+  kind: "Wrap" // can only be i32.wrap_i64
+}
+
+export type IExtend = {
+  kind: "Extend" // can only be i64.extend_i32_s or i64.extend_i32_u
+  signed: boolean
+}
+
+export type ICountLeadingZeros = {
+  kind: "CountLeadingZeros"
+  type: WasmInt
+}
+
+export type ICountTrailingZeros = {
+  kind: "CountTrailingZeros"
+  type: WasmInt
+}
+
+export type IPopCount = {
+  kind: "PopCount"
+  type: WasmInt
+}
+
+export type ConversionInstruction =
+  | IWrap
+  | IExtend
+  | ICountLeadingZeros
+  | ICountTrailingZeros
+  | IPopCount
+
+export type HandleConversionInstructions<
+  instruction extends ConversionInstruction,
+  state extends ProgramState
+> =
+    instruction extends IWrap
+  ? Warp<instruction, state>
+
+  : instruction extends IExtend
+  ? Extend<instruction, state>
+
+  : instruction extends ICountLeadingZeros
+  ? CountLeadingZeros<instruction, state>
+
+  : instruction extends ICountTrailingZeros
+  ? CountTrailingZeros<instruction, state>
+
+  : instruction extends IPopCount
+  ? PopCount<instruction, state>
+
+  : never
+
+export type Warp<
+  instruction extends IWrap,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.unimplemented<instruction, state>
+>
+
+export type Extend<
+  instruction extends IExtend,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.unimplemented<instruction, state>
+>
+
+export type CountLeadingZeros<
+  instruction extends ICountLeadingZeros,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.unimplemented<instruction, state>
+>
+
+export type CountTrailingZeros<
+  instruction extends ICountTrailingZeros,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.unimplemented<instruction, state>
+>
+
+export type PopCount<
+  instruction extends IPopCount,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.unimplemented<instruction, state>
+>

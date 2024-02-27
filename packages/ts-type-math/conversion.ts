@@ -6,17 +6,6 @@ import { WasmType, WasmValue } from './wasm';
 
 // ASCII is used here to mean _extended ASCII_ (8-bit)
 
-/*
-| From | To-> | U8Hex | U8Decimal | U8Binary | U32Decimal | U32Binary | ASCII      |
-|-------------|-------|-----------|----------|------------|-----------|------------|
-| U8Hex       | -     |           |          |            |           |            |
-| U8Decimal   |       | -         | x        |            |           | x          |
-| U8Binary    |       | x         |          |            |           | x          |
-| U32Decimal  |       |           | -        | -          | x         |            |
-| U32Binary   |       |           |          |            | -         |            |
-| ASCII       |       | x         | x        |            | -         | -          |
-*/
-
 export namespace Convert {
   export namespace U8Hex {
   }
@@ -67,7 +56,7 @@ export namespace Convert {
 
   export namespace U64Decimal {
     export type ToU64Binary<
-      decimal extends number
+      decimal extends bigint
     > = Satisfies<WasmValue,
       To64Binary<decimal>
     >
@@ -107,13 +96,20 @@ export namespace Convert {
   export namespace TSNumber {
     export type ToWasmValue<
       value extends number,
-      wasmType extends WasmType
+      wasmType extends 'i32' | 'f32' | 'f64',
     > = Satisfies<WasmValue,
       wasmType extends 'i32' ? Convert.U32Decimal.ToU32Binary<value> :
-      wasmType extends 'i64' ? Convert.U64Decimal.ToU64Binary<value> :
       wasmType extends 'f32' ? never : // TODO
       wasmType extends 'f64' ? never : // TODO
       never
+    >
+  }
+
+  export namespace TSBigInt {
+    export type ToWasmValue<
+      value extends bigint,
+    > = Satisfies<WasmValue,
+      Convert.U64Decimal.ToU64Binary<value>
     >
   }
 

@@ -1,7 +1,7 @@
 import type { AddDigits } from "./digits/addition";
 import type {
-  ToNumber,
-  ToString,
+  StringToTSNumber,
+  TsNumberToString,
   DigitNumber,
   FromDigitNumber,
   ToDigitNumber,
@@ -27,10 +27,10 @@ type AddDigitNumbers<
 export type Add<
   T extends number,
   U extends number
-> = ToNumber<
+> = StringToTSNumber<
   FromDigitNumber<
     Normalize<
-      AddDigitNumbers<ToDigitNumber<ToString<T>>, ToDigitNumber<ToString<U>>>
+      AddDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>
     >
   >
 >;

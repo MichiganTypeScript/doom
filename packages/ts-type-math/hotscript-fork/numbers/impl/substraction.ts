@@ -8,8 +8,8 @@ import type {
   Num,
   Sign,
   ToDigitNumber,
-  ToNumber,
-  ToString,
+  StringToTSNumber,
+  TsNumberToString,
 } from "./utils";
 import type { CompareDigits } from "./compare"
 import type { SubDigits } from "./digits/substraction";
@@ -26,10 +26,10 @@ type SubDigitNumbers<
 export type Sub<
   T extends number,
   U extends number
-> = ToNumber<
+> = StringToTSNumber<
   FromDigitNumber<
     Normalize<
-      SubDigitNumbers<ToDigitNumber<ToString<T>>, ToDigitNumber<ToString<U>>>
+      SubDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>
     >
   >
 >;

@@ -1,5 +1,5 @@
 import type {
-  ToNumber,
+  StringToTSNumber,
   MakeDigitNumber,
   FromDigitNumber,
   Normalize,
@@ -7,7 +7,7 @@ import type {
   Sign,
   Num,
   ToDigitNumber,
-  ToString,
+  TsNumberToString,
   MulSign,
 } from "./utils"
 import type { MulDigits } from "./digits/multiply";
@@ -20,10 +20,10 @@ export type MulDigitNumbers<
 export type Mul<
   T extends number,
   U extends number
-> = ToNumber<
+> = StringToTSNumber<
   FromDigitNumber<
     Normalize<
-      MulDigitNumbers<ToDigitNumber<ToString<T>>, ToDigitNumber<ToString<U>>>
+      MulDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>
     >
   >
 >;
