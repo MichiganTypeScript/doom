@@ -64,7 +64,7 @@ Usage count (in Doom) is the number on the right
 | I32Mul            | 478   | ✅           | ❌ some negative number overflow edge cases
 | I32DivS           | 165   | ❌           |
 | I64Add            | 130   | ✅           |
-| I64Sub            | 53    | 🪚           |
+| I64Sub            | 53    | ✅           |
 | I64Mul            | 46    | 🪚           |
 | I32RemS           | 44    | ❌           |
 | I32DivU           | 30    | ❌           |

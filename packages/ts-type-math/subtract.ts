@@ -39,6 +39,16 @@ export type I32SubtractBinary<
   >
 >
 
+export type I64SubtractBinary<
+  a extends WasmValue,
+  b extends WasmValue
+> = Satisfies<WasmValue,
+  Clamp.Last64Bits<
+    SubtractBinary<a, b>
+  >
+>
+
+
 // 5
 type p5="00000101"
 
