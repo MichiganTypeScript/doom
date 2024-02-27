@@ -1,5 +1,6 @@
-import { ReverseString, SignBit, To32Binary, ToDecimalSigned, ToDecimalUnsigned } from "./binary";
-import { Wasm } from "./wasm";
+import { ReverseString, SignBit, To32Binary, ToDecimalSigned, ToDecimalUnsigned, ToDecimalUnsignedBigInt } from "./binary";
+import { RepeatBigInt } from "./hotscript-fork/strings/impl/repeat";
+import { Wasm, WasmValue } from "./wasm";
 
 /** inputs are unsigned Decimal32, under the hood is binary */
 export type ShiftLeft<
@@ -7,7 +8,7 @@ export type ShiftLeft<
   Shift extends number
 > = Satisfies<number,
   ToDecimalUnsigned<
-    ShiftLeftBinary<
+    ShiftLeftBinaryO<
       To32Binary<Decimal>,
       '',
       Shift
@@ -18,7 +19,7 @@ export type ShiftLeft<
 // lol
 // Array.from(Array(32)).map((_ ,index) => index).map(index => `    ${index} extends Shift ? (a extends \`${"${string}".repeat(index)}\${infer R}\` ? \`\${R}${"0".repeat(index)}\` : never) :`).join("\n")
 /** input must be a Binary32 */
-export type ShiftLeftBinary<
+export type ShiftLeftBinaryO<
   a extends string,
   Shift extends string,
   s extends number = ToDecimalUnsigned<Shift>
@@ -59,7 +60,7 @@ export type ShiftLeftBinary<
   never
 >
 
-export type ShiftLeftBinaryFill1<
+export type ShiftLeftBinary1<
   a extends string,
   Shift extends string,
   s extends number = ToDecimalUnsigned<Shift>
@@ -121,22 +122,62 @@ export type ShiftRight<
 
 /** input must be a Binary32 */
 export type ShiftRightBinary<
-  a extends string,
-  Shift extends string,
+  a extends WasmValue,
+  Shift extends WasmValue,
   Signed extends boolean,
 
   Rev extends string = ReverseString<a>
-> = Satisfies<string,
+> = Satisfies<WasmValue,
   Wasm.I32False extends Shift
   ? a
   : // first check if this is a signed shift and we're supposed to be
     [Signed, SignBit<a>] extends [true, "1"]
-    ? ReverseString<ShiftLeftBinaryFill1<Rev, Shift>>
-    : ReverseString<ShiftLeftBinary<Rev, Shift>>
+    ? ReverseString<ShiftLeftBinary1<Rev, Shift>>
+    : ReverseString<ShiftLeftBinaryO<Rev, Shift>>
 >
 
-//
-// 10000000000000000000000000000010 start
-// 01000000000000000000000000000001 reverse
-// 10000000000000000000000000000010 shift left by 1 and fill with 0
-// 01000000000000000000000000000001 reverse back
+type r = RepeatBigInt<'a', 13n> // =>
+type a = '0000000000000000000000000000000000000000001001011010110100001110'
+type b = '0000000000000000000000000000000000000000000000000000000000000001'
+type x = ShiftLeftBinary64<a, b, '0'> // =>
+
+export type ShiftLeftBinary64<
+  a extends WasmValue,
+  shiftBy extends WasmValue,
+  shiftWith extends '0' | '1',
+
+  _shiftBy extends bigint = ToDecimalUnsignedBigInt<shiftBy>,
+> = Satisfies<string,
+  ''
+  // _shiftBy extends 0n
+  // ? a
+  // : `${a}${RepeatBigInt<shiftWith, _shiftBy>}`
+>
+
+export type ShiftRightBinary64<
+  a extends WasmValue,
+  Shift extends WasmValue,
+  Signed extends boolean,
+
+  Rev extends string = ReverseString<a>
+> = Satisfies<WasmValue,
+  ''
+  // Wasm.I64False extends Shift
+  // ? a
+  // : // first check if this is a signed shift and we're supposed to be
+  //   [Signed, SignBit<a>] extends [true, "1"]
+  //   ? ReverseString<
+  //       ShiftLeftBinary64<
+  //         Rev,
+  //         Shift,
+  //         '1'
+  //       >
+  //     >
+  //   : ReverseString<
+  //       ShiftLeftBinary64<
+  //         Rev,
+  //         Shift,
+  //         '0'
+  //       >
+  //     >
+>

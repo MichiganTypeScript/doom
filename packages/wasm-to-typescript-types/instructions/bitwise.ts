@@ -190,8 +190,9 @@ export type ShiftLeft<
   ? State.Stack.set<
       [
         ...remaining,
-        instruction['type'] extends 'i32' ? TypeMath.Wasm.I32Shl<a, b> :
-        never // TODO i64
+        instruction['type'] extends 'i32'
+        ? TypeMath.Wasm.I32Shl<a, b>
+        : TypeMath.Wasm.I64Shl<a, b>
       ],
 
       state
@@ -214,9 +215,11 @@ export type ShiftRight<
 
         instruction['type'] extends 'i32'
           ? instruction['signed'] extends true
-              ? TypeMath.Wasm.I32ShrS<a, b>
-              : TypeMath.Wasm.I32ShrU<a, b>
-          : never // TODO i64
+            ? TypeMath.Wasm.I32ShrS<a, b>
+            : TypeMath.Wasm.I32ShrU<a, b>
+          : instruction['signed'] extends true
+            ? TypeMath.Wasm.I64ShrS<a, b>
+            : TypeMath.Wasm.I64ShrU<a, b>
       ],
 
       state

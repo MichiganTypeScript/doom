@@ -22,9 +22,15 @@ export const twosComplementToNumber = (binary: string) => {
   return +`0b${binary}` >> 0;
 }
 
-export const bigintToTwosComplement = (decimal: bigint) => {
-  if(decimal >= 0n){
-    return decimal.toString(2).padStart(64, '0');
+export const bigIntToTwosComplement = (decimal: bigint) => {
+  if (decimal >= 0n) {
+    const padded = decimal.toString(2).padStart(64, '0');
+    // make sure it only has 64 bits
+    return padded.slice(-64);
+  }
+
+  if (decimal === 0n) {
+    return '0'.repeat(64);
   }
 
   // Start at the LSB and work up. Copy 64 up to and including the
@@ -35,12 +41,18 @@ export const bigintToTwosComplement = (decimal: bigint) => {
     if(bit === '0') return bit;
     invert = true;
     return bit;
-  }).reverse().join('').padStart(64, '1');
+  }).reverse().join('').padStart(64, '1').slice(-64);
 };
 
 export const twosComplementToBigInt = (binary: string) => {
-  if(binary[0] === '0'){
+  if (binary[0] === '0') {
     return BigInt(`0b${binary}`);
+  }
+
+  if (binary == '1') {
+    return 1n
+  } else if (binary == '0') {
+    return 0n
   }
 
   let invert = false;
@@ -53,7 +65,7 @@ export const twosComplementToBigInt = (binary: string) => {
 }
 
 export const clampTo64Bits = (input: bigint): bigint => {
-  const tc = bigintToTwosComplement(input);
+  const tc = bigIntToTwosComplement(input);
   const clamped = tc.slice(-64);
   return twosComplementToBigInt(clamped);
 }
@@ -72,11 +84,11 @@ export const compare = {
 }
 
 export const bitwise = {
-  and: (a: number, b: number) => a & b,
-  or: (a: number, b: number) => a | b,
-  xor: (a: number, b: number) => a ^ b,
-  not: (a: number) => ~a,
-  shl: (a: number, b: number) => a << b,
+    and: (a: number, b: number) => a & b,
+     or: (a: number, b: number) => a | b,
+    xor: (a: number, b: number) => a ^ b,
+    not: (a: number) => ~a,
+    shl: (a: number, b: number) => a << b,
   shr_s: (a: number, b: number) => a >> b,
   shr_u: (a: number, b: number) => a >>> b,
 }
@@ -94,7 +106,7 @@ export const arithmetic = {
 
 export const unsignedBigint = (x: bigint) => x < 0 ? x + (2n ** 64n) : x;
 
-export const bigintCompare = {
+export const compareBigInt = {
   gts: (a: bigint, b: bigint) => a > b ? 1n : 0n,
   gtu: (a: bigint, b: bigint) => unsignedBigint(a) > unsignedBigint(b) ? 1n : 0n,
   ges: (a: bigint, b: bigint) => a >= b ? 1n : 0n,
@@ -107,17 +119,27 @@ export const bigintCompare = {
   eqz: (a: bigint) => a === 0n ? 1n : 0n,
 }
 
-export const bitwiseBigint = {
-  and: (a: bigint, b: bigint) => a & b,
-  or: (a: bigint, b: bigint) => a | b,
-  xor: (a: bigint, b: bigint) => a ^ b,
-  not: (a: bigint) => ~a,
-  shl: (a: bigint, b: bigint) => a << b,
-  shr_s: (a: bigint, b: bigint) => a >> b,
-  shr_u: (a: bigint, b: bigint) => a >> b,
+const bigintShiftRightUnsigned = (a: bigint, b: bigint) => {
+  if (b === 0n) {
+    return a;
+  }
+  const aTwos = bigIntToTwosComplement(a);
+  const shifted = aTwos.slice(0, -Number(b)).padStart(64, '0').slice(-64);
+  const result = twosComplementToBigInt(shifted);
+  return result;
 }
 
-export const bigintArithmetic = {
+export const bitwiseBigInt = {
+    and: (a: bigint, b: bigint) => a & b,
+     or: (a: bigint, b: bigint) => a | b,
+    xor: (a: bigint, b: bigint) => a ^ b,
+    not: (a: bigint) => ~a,
+    shl: (a: bigint, b: bigint) => clampTo64Bits(a << b),
+  shr_s: (a: bigint, b: bigint) => clampTo64Bits(a >> b),
+  shr_u: (a: bigint, b: bigint) => bigintShiftRightUnsigned(a, b),
+}
+
+export const arithmeticBigInt = {
    add: (a: bigint, b: bigint) => clampTo64Bits(a + b),
    sub: (a: bigint, b: bigint) => a - b,
    mul: (a: bigint, b: bigint) => clampTo64Bits(a * b),
@@ -127,6 +149,3 @@ export const bigintArithmetic = {
   remu: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(unsignedBigint(a) % unsignedBigint(b)),
    clz: (a: bigint) => a === 0n ? 64n : BigInt(64 - a.toString(2).length),
 }
-
-/** this type casts a number to a bigint */
-export type ToBigInt<T extends number | bigint> = `${T}` extends `${infer X extends bigint}` ? X : T;

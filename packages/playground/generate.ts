@@ -2,12 +2,12 @@ import { writeFileSync } from "fs";
 import {
   arithmetic,
   numberToTwosComplement,
-  bigintToTwosComplement,
+  bigIntToTwosComplement,
   twosComplementToBigInt,
   twosComplementToNumber,
-  bigintArithmetic,
+  arithmeticBigInt,
   bitwise,
-  bitwiseBigint,
+  bitwiseBigInt,
 } from "../ts-type-math/test-utils";
 // import { t } from "../ts-type-math/test-cases/arithmetic";
 
@@ -205,54 +205,70 @@ const stringifyBigint = (_: any, v: any) => typeof v === 'bigint' ? v.toString()
 
 // import { generate } from '../ts-type-math/wasm-t
 
-import { t } from '../ts-type-math/test-cases/arithmetic'
-const file = JSON.stringify(
-  t.map(({
-    a,
-    b,
-    add,
-    sub,
-    mul,
-    div_s,
-    div_u,
-    rem_s,
-    rem_u,
-    a_binary,
-    b_binary,
-    add_binary,
-    sub_binary,
-    mul_binary,
-    div_s_binary,
-    div_u_binary,
-    rem_s_binary,
-    rem_u_binary,
-  }) => {
-    const clz = arithmetic.clz(a);
+// import { t } from '../ts-type-math/test-cases/arithmetic'
+// const file = JSON.stringify(
+//   t.map(({
+//     a,
+//     b,
+//     add,
+//     sub,
+//     mul,
+//     div_s,
+//     div_u,
+//     rem_s,
+//     rem_u,
+//     a_binary,
+//     b_binary,
+//     add_binary,
+//     sub_binary,
+//     mul_binary,
+//     div_s_binary,
+//     div_u_binary,
+//     rem_s_binary,
+//     rem_u_binary,
+//   }) => {
+//     const clz = arithmetic.clz(a);
 
-    return {
-      a,
-      b,
-      add,
-      sub,
-      mul,
-      div_s,
-      div_u,
-      rem_s,
-      rem_u,
-      clz,
-      a_binary,
-      b_binary,
-      add_binary,
-      sub_binary,
-      mul_binary,
-      div_s_binary,
-      div_u_binary,
-      rem_s_binary,
-      rem_u_binary,
-      clz_binary: numberToTwosComplement(clz),
-    }
-  }),
-  stringifyBigint,
-  2
+//     return {
+//       a,
+//       b,
+//       add,
+//       sub,
+//       mul,
+//       div_s,
+//       div_u,
+//       rem_s,
+//       rem_u,
+//       clz,
+//       a_binary,
+//       b_binary,
+//       add_binary,
+//       sub_binary,
+//       mul_binary,
+//       div_s_binary,
+//       div_u_binary,
+//       rem_s_binary,
+//       rem_u_binary,
+//       clz_binary: numberToTwosComplement(clz),
+//     }
+//   }),
+//   stringifyBigint,
+//   2
+// );
+// writeFileSync('./packages/ts-type-math/test-cases/arithmetic.ts', file)
+
+// const a = -9223372036854775806n
+// const b = 1n
+
+// console.log(
+//   bitwiseBigInt.shr_u(a, b),
+// )
+
+console.log(Array.from(Array(64))
+  .map((_ ,index) => index)
+  .map(index => (
+    `    ${index} extends Shift ? (a extends \`${"${string}".repeat(index)}\${infer R}\` ? \`\${R}${"0".repeat(index)}\` : never) :`
+  ))
+  .join("\n")
 );
-writeFileSync('./packages/ts-type-math/test-cases/arithmetic.ts', file)
+

@@ -38,17 +38,17 @@ Usage count (in Doom) is the number on the right
 | I32GtU            | 118   | ✅           |
 | I32LeU            | 95    | ✅           |
 | I32GeU            | 74    | ✅           |
-| I64LtU            | 62    | 🪚           |
+| I64LtU            | 62    | ✅           |
 | I64Eqz            | 57    | ✅           |
-| I64GtU            | 35    | 🪚           |
+| I64GtU            | 35    | ✅           |
 | I64Ne             | 30    | ✅           |
 | I64Eq             | 26    | ✅           |
-| I64GeS            | 21    | 🪚           |
-| I64LtS            | 19    | 🪚           |
-| I64LeU            | 8     | 🪚           |
-| I64LeS            | 5     | 🪚           |
-| I64GtS            | 5     | 🪚           |
-| I64GeU            | 5     | 🪚           |
+| I64GeS            | 21    | ✅           |
+| I64LtS            | 19    | ✅           |
+| I64LeU            | 8     | ✅           |
+| I64LeS            | 5     | ✅           |
+| I64GtS            | 5     | ✅           |
+| I64GeU            | 5     | ✅           |
 | F64Lt             | 4     | ❌           |
 | F64Ne             | 4     | ❌           |
 | F64Eq             | 3     | ❌           |
@@ -188,7 +188,7 @@ Usage count (in Doom) is the number on the right
 
 <sub>✅ means things are in progress</sub>
 <sub>🐛 means things are known problems</sub>
-<sub>🪚 are for I64 instructions</sub>
+<sub>🪚 means test scaffolding is in place</sub>
 
 ## Design decisions
 

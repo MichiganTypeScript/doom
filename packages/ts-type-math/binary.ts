@@ -3,6 +3,7 @@ import { BitwiseNotBinary } from "./bitwise";
 import type { DivTSBigInt, DivTSNumbers, Mod, ModBigInt } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
 import type { Add, AddBigInt } from './hotscript-fork/numbers/impl/addition';
+import type { Convert } from './conversion';
 
 
 type PowersOfTwo = [
@@ -310,7 +311,7 @@ type _ToDecimalUnsignedBigInt<
             Tail,
             _NextPowerOfTwo
           >,
-          PowersOfTwoBigInt[TSBigIntToTSNumber<_PowerOfTwo>]
+          PowersOfTwoBigInt[Convert.TSBigInt.ToTSNumber<_PowerOfTwo>]
         >
 
       : never
@@ -361,12 +362,6 @@ export type WithNegativeSign<
 export type WithNegativeSignBigInt<
   T extends bigint
 > = `-${T}` extends `${infer U extends bigint}` ? U : never
-
-type TSBigIntToTSNumber<
-  T extends bigint
-> = Satisfies<number,
-  `${T}` extends `${infer X extends number}` ? X : never
->
 
 export type ToDecimalSigned<
   binary extends string

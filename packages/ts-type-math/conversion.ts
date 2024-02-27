@@ -111,6 +111,12 @@ export namespace Convert {
       wasmType extends 'f64' ? never : // TODO(float)
       never
     >
+
+    export type ToTSBigInt<
+      value extends number,
+    > = Satisfies<bigint,
+      `${value}` extends `${infer B extends bigint}` ? B : never
+    >
   }
 
   export namespace TSBigInt {
@@ -118,6 +124,12 @@ export namespace Convert {
       value extends bigint,
     > = Satisfies<WasmValue,
       Convert.U64Decimal.ToU64Binary<value>
+    >
+
+    export type ToTSNumber<
+      value extends bigint,
+    > = Satisfies<number,
+      `${value}` extends `${infer N extends number}` ? N : never
     >
   }
 

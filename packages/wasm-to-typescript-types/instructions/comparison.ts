@@ -173,7 +173,11 @@ export type GreaterThan<
         ? instruction['signed'] extends true
           ? Wasm.I32GtS<a, b>
           : Wasm.I32GtU<a, b>
-        : never // Todo add i64, f32, f64
+        : instruction['type'] extends 'i64'
+          ? instruction['signed'] extends true
+            ? Wasm.I64GtS<a, b>
+            : Wasm.I64GtU<a, b>
+          : never // TODO(float)
       ],
 
       state
@@ -197,7 +201,11 @@ export type LessThan<
         ? instruction['signed'] extends true
           ? Wasm.I32LtS<a, b>
           : Wasm.I32LtU<a, b>
-        : never // Todo add i64, f32, f64
+        : instruction['type'] extends 'i64'
+          ? instruction['signed'] extends true
+            ? Wasm.I64LtS<a, b>
+            : Wasm.I64LtU<a, b>
+          : never // TODO(float)
       ],
       state
     >
@@ -220,7 +228,11 @@ export type GreaterThanOrEqual<
         ? instruction['signed'] extends true
           ? Wasm.I32GeS<a, b>
           : Wasm.I32GeU<a, b>
-        : never // Todo add i64, f32, f64
+        : instruction['type'] extends 'i64'
+          ? instruction['signed'] extends true
+            ? Wasm.I64GeS<a, b>
+            : Wasm.I64GeU<a, b>
+          : never // TODO(float)
       ],
 
       state
@@ -244,7 +256,11 @@ export type LessThanOrEqual<
         ? instruction['signed'] extends true
           ? Wasm.I32LeS<a, b>
           : Wasm.I32LeU<a, b>
-        : never // Todo add i64, f32, f64
+        : instruction['type'] extends 'i64'
+          ? instruction['signed'] extends true
+            ? Wasm.I64LeS<a, b>
+            : Wasm.I64LeU<a, b>
+          : never // TODO(float)
       ],
       state
     >

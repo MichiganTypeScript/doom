@@ -1,5 +1,5 @@
 import { I32AddBinary } from "./add";
-import { ShiftLeftBinary, ShiftRightBinary } from "./shift";
+import { ShiftLeftBinaryO, ShiftRightBinary, ShiftRightBinary64, ShiftLeftBinary64 } from "./shift";
 import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary } from "./bitwise";
 import { EqualsBinary, GreaterThanSignedBinary, GreaterThanUnsignedBinary, LessThanSignedBinary, LessThanUnsignedBinary, NotEqualsBinary } from "./comparison";
 import { I32SubtractBinary } from "./subtract";
@@ -91,7 +91,7 @@ export namespace Wasm {
     /** amount to shift by */
     b extends WasmValue
   > = Satisfies<WasmValue,
-    ShiftLeftBinary<a, b>
+    ShiftLeftBinaryO<a, b>
   >
 
   export type I32ShrU<
@@ -229,5 +229,114 @@ export namespace Wasm {
     EqualsBinary<a, b> extends I32True
     ? I32True
     : LessThanSignedBinary<a, b>
+  >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  export type I64GtU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    GreaterThanUnsignedBinary<a, b>
+  >
+
+  export type I64GeU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    EqualsBinary<a, b> extends I32True
+    ? I32True
+    : GreaterThanUnsignedBinary<a, b>
+  >
+
+  export type I64LtU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    LessThanUnsignedBinary<a, b>
+  >
+
+  export type I64LeU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    EqualsBinary<a, b> extends I32True
+    ? I32True
+    : LessThanUnsignedBinary<a, b>
+  >
+
+
+  export type I64GtS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    GreaterThanSignedBinary<a, b>
+  >
+
+  export type I64GeS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    EqualsBinary<a, b> extends I32True
+    ? I32True
+    : GreaterThanSignedBinary<a, b>
+  >
+
+  export type I64LtS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    LessThanSignedBinary<a, b>
+  >
+
+  export type I64LeS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    EqualsBinary<a, b> extends I32True
+    ? I32True
+    : LessThanSignedBinary<a, b>
+  >
+
+
+
+
+  export type I64Shl<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    ShiftLeftBinary64<a, b, '0'>
+  >
+
+  export type I64ShrU<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    ShiftRightBinary64<a, b, false>
+  >
+
+  export type I64ShrS<
+    /** value to shift */
+    a extends WasmValue,
+    /** amount to shift by */
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    ShiftRightBinary64<a, b, true>
   >
 }
