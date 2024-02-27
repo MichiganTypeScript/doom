@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { t } from "./test-cases/bitwise";
-import { numberToTwosComplement, bitwise, twosComplementToNumber } from "./test-utils";
+import { t } from "../test-cases/bitwise";
+import { numberToTwosComplement, bitwise, twosComplementToNumber } from "../test-utils";
 
 test.each(t)("encoding i32 decimal bitwise to i32 binary (and back)", ({
   a,

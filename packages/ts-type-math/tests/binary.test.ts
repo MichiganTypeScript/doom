@@ -1,7 +1,7 @@
 import type { Expect, Equal } from 'type-testing'
 import { expect, test } from "vitest"
-import { To32Binary, ToDecimalSigned } from './binary';
-import { twosComplementToNumber, numberToTwosComplement } from './test-utils';
+import { To32Binary, ToDecimalSigned } from '../binary';
+import { twosComplementToNumber, numberToTwosComplement } from '../test-utils';
 
 const t = [
   {

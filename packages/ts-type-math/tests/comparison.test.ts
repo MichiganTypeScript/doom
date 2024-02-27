@@ -1,8 +1,8 @@
 import type { Expect, Equal } from 'type-testing';
-import { t, T } from './test-cases/comparison'
-import { compare } from './test-utils';
+import { t, T } from '../test-cases/comparison'
+import { compare } from '../test-utils';
 import { expect, test } from 'vitest';
-import { Wasm } from './wasm';
+import { Wasm } from '../wasm';
 
 test.each(t)('$a === $b', ({ a, b, eq }) => {
   expect(compare.eq(a, b)).toStrictEqual(eq);

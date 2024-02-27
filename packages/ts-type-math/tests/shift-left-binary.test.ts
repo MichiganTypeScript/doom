@@ -1,8 +1,8 @@
 import { Equal, Expect } from 'type-testing';
 import { test, expect } from 'vitest';
-import { ShiftLeft, ShiftLeftBinaryO } from './shift';
-import { t, T } from './test-cases/bitwise-shift';
-import { twosComplementToNumber, numberToTwosComplement } from './test-utils';
+import { ShiftLeft, ShiftLeftBinaryO } from '../shift';
+import { t, T } from '../test-cases/bitwise-shift';
+import { twosComplementToNumber, numberToTwosComplement } from '../test-utils';
 
 //----------------------------------------------------------------------
 // SHIFT LEFT UNSIGNED

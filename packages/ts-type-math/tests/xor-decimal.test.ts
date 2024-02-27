@@ -1,8 +1,8 @@
 import type { Expect, Equal } from 'type-testing';
 import { test, expect } from "vitest";
-import { t, T } from "./test-cases/bitwise";
-import { BitwiseXor, BitwiseXorBinary } from './bitwise';
-import { twosComplementToNumber, numberToTwosComplement } from './test-utils';
+import { t, T } from "../test-cases/bitwise";
+import { BitwiseXor, BitwiseXorBinary } from '../bitwise';
+import { twosComplementToNumber, numberToTwosComplement } from '../test-utils';
 
 //----------------------------------------------------------------------
 // BITWISE XOR
@@ -24,17 +24,16 @@ test.each(t)('$a ^ $b === $e', ({
   expect(twosComplementToNumber(b_binary)).toBe(b);
   expect(twosComplementToNumber(xor_binary)).toBe(xor);
 
-  const expected = twosComplementToNumber(a_binary) ^ twosComplementToNumber(b_binary);
-  expect(expected >> 0).toBe(twosComplementToNumber(xor_binary));
+  expect((a ^ b) >> 0).toBe(xor);
 
   expect(t).toHaveLength(24);
 });
 
-type iX = 5;
+type iX = 9;
 
 type aX = T[iX]['a'];        // =>
 type bX = T[iX]['b'];        // =>
-type eX = T[iX]['xor'];      // =>
+type eX = T[iX]['xor']       // =>
 type xX = BitwiseXor<aX, bX> // =>
 
 type aXb = T[iX]['a_binary'];         // =>

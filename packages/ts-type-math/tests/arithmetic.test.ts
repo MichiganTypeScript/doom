@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { t } from "./test-cases/arithmetic";
-import { arithmetic, numberToTwosComplement, twosComplementToNumber } from "./test-utils";
+import { t } from "../test-cases/arithmetic";
+import { arithmetic, numberToTwosComplement, twosComplementToNumber } from "../test-utils";
 
 test.each(t)("encoding i32 decimal arithmetic to i32 binary (and back)", ({
   a,

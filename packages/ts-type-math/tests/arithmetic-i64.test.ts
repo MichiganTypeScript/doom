@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { t } from "./test-cases/arithmetic-i64";
-import { arithmeticBigInt, bigIntToTwosComplement, twosComplementToBigInt } from "./test-utils";
+import { t } from "../test-cases/arithmetic-i64";
+import { arithmeticBigInt, bigIntToTwosComplement, twosComplementToBigInt } from "../test-utils";
 
 test.each(t)("encoding i64 decimal arithmetic to i64 binary (and back)", ({
   a,

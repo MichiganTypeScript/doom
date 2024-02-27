@@ -1,7 +1,7 @@
-import { t, T } from './test-cases/bitwise';
+import { t, T } from '../test-cases/bitwise';
 import { test, expect } from 'vitest';
 import { Expect, Equal } from 'type-testing';
-import { BitwiseNot, BitwiseNotBinary } from './bitwise';
+import { BitwiseNot, BitwiseNotBinary } from '../bitwise';
 
 //----------------------------------------------------------------------
 // BITWISE NOT

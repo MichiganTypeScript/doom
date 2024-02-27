@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { t } from "./test-cases/bitwise-shift-i64";
-import { bigIntToTwosComplement, bitwiseBigInt, twosComplementToBigInt } from "./test-utils";
+import { t } from "../test-cases/bitwise-shift-i64";
+import { bigIntToTwosComplement, bitwiseBigInt, twosComplementToBigInt } from "../test-utils";
 
 test.each(t)("encoding i64 decimal bitwise to i64 binary (and back) %#", ({
   a,

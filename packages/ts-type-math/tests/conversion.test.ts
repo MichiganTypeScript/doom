@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { Convert } from './conversion'
+import type { Convert } from '../conversion'
 import { test } from 'vitest';
 
 test('conversion')

@@ -1,7 +1,7 @@
 import { Equal, Expect } from 'type-testing';
 import { test, expect } from 'vitest';
-import { ShiftLeft } from './shift';
-import { t, T } from './test-cases/bitwise-shift';
+import { ShiftLeft } from '../shift';
+import { t, T } from '../test-cases/bitwise-shift';
 
 //----------------------------------------------------------------------
 // SHIFT LEFT UNSIGNED

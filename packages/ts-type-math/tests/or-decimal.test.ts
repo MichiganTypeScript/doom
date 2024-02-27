@@ -1,8 +1,8 @@
 import type { Expect, Equal } from 'type-testing'
 import { test, expect } from "vitest"
-import { BitwiseOr, BitwiseOrBinary } from './bitwise'
-import { t, T } from './test-cases/bitwise'
-import { twosComplementToNumber, numberToTwosComplement } from './test-utils';
+import { BitwiseOr, BitwiseOrBinary } from '../bitwise'
+import { t, T } from '../test-cases/bitwise'
+import { twosComplementToNumber, numberToTwosComplement } from '../test-utils';
 
 //----------------------------------------------------------------------
 // BITWISE OR

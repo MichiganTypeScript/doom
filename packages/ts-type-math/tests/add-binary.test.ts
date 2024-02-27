@@ -1,8 +1,8 @@
 import { Equal, Expect } from "type-testing"
-import type { I32AddBinary } from './add';
-import { t, T } from './test-cases/arithmetic';
+import type { I32AddBinary } from '../add';
+import { t, T } from '../test-cases/arithmetic';
 import { expect, test } from 'vitest';
-import { twosComplementToNumber, numberToTwosComplement } from "./test-utils";
+import { twosComplementToNumber, numberToTwosComplement } from "../test-utils";
 
 test.each(t)('$a_binary + $b_binary === $add_binary', ({ a_binary, b_binary, add_binary }) => {
   const actual = twosComplementToNumber(a_binary) + twosComplementToNumber(b_binary);

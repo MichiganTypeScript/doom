@@ -1,5 +1,5 @@
 import { Equal, Expect } from "type-testing";
-import { Load } from "./load";
+import { Load } from "../load";
 import { test } from 'vitest';
 
 test('load')

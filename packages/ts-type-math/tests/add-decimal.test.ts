@@ -1,7 +1,7 @@
-import { t, T } from './test-cases/arithmetic';
+import { t, T } from '../test-cases/arithmetic';
 import { expect, test } from 'vitest';
 import { Expect, Equal } from 'type-testing';
-import { I32AddDecimal } from './add';
+import { I32AddDecimal } from '../add';
 
 test.each(t)('$a + $b === $add', ({ a, b, add }) => {
   expect(a + b).toBe(add);

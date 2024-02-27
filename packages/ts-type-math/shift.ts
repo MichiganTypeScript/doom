@@ -168,40 +168,37 @@ export type ShiftRightBinary64<
 
   Rev extends string = ReverseString<a>
 > = Satisfies<WasmValue,
-  ''
-  // Wasm.I64False extends Shift
-  // ? a
-  // : // first check if this is a signed shift and we're supposed to be
-  //   [Signed, SignBit<a>] extends [true, "1"]
-  //   ? ReverseString<
-  //       ShiftLeftBinary64<
-  //         Rev,
-  //         Shift,
-  //         '1'
-  //       >
-  //     >
-  //   : ReverseString<
-  //       ShiftLeftBinary64<
-  //         Rev,
-  //         Shift,
-  //         '0'
-  //       >
-  //     >
+  Shift extends Wasm.I64False
+  ? a
+  : // first check if this is a signed shift and we're supposed to be
+    [Signed, SignBit<a>] extends [true, "1"]
+    ? ReverseString<
+        ShiftLeftBinary64<
+          Rev,
+          Shift,
+          '1'
+        >
+      >
+    : ReverseString<
+        ShiftLeftBinary64<
+          Rev,
+          Shift,
+          '0'
+        >
+      >
 >
 
-
-
 type Repeat0Lookup = {
-  0: '';
-  1: '0';
-  2: '00';
-  3: '000';
-  4: '0000';
-  5: '00000';
-  6: '000000';
-  7: '0000000';
-  8: '00000000';
-  9: '000000000';
+   0: '';
+   1: '0';
+   2: '00';
+   3: '000';
+   4: '0000';
+   5: '00000';
+   6: '000000';
+   7: '0000000';
+   8: '00000000';
+   9: '000000000';
   10: '0000000000';
   11: '00000000000';
   12: '000000000000';
