@@ -103,7 +103,7 @@ export type EqualsZero<
         
         instruction['type'] extends 'i32' ? Wasm.I32Eqz<a> :
         instruction['type'] extends 'i64' ? Wasm.I64Eqz<a> :
-        never //  TODO Add f32, f64
+        never //  TODO(float)
       ],
 
       state
@@ -126,7 +126,7 @@ export type Equals<
         
         instruction['type'] extends 'i32' ? Wasm.I32Eq<a, b> :
         instruction['type'] extends 'i64' ? Wasm.I64Eq<a, b> :
-        never //  TODO Add f32, f64
+        never //  TODO(float)
       ],
 
       state
@@ -149,7 +149,7 @@ export type NotEqual<
         
         instruction['type'] extends 'i32' ? Wasm.I32Neq<a, b> :
         instruction['type'] extends 'i64' ? Wasm.I64Neq<a, b> :
-        never //  TODO Add f32, f64
+        never //  TODO(float)
       ],
 
       state

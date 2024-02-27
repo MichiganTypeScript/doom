@@ -33,37 +33,12 @@ export type AbsoluteValue<
   instruction extends IAbsoluteValue,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
-    ...infer remainingStack extends WasmValue[],
-    infer a extends WasmValue,
-  ]
-  ? State.Stack.set<
-      [
-        ...remainingStack,
-        // TypeMath.AbsoluteValue<a> // TODO Broken
-      ],
-      state
-    >
-  : never
+  State.unimplemented<instruction, state>
 >
 
 export type Negate<
   instruction extends INegate,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
-    ...infer remaining extends WasmValue[],
-    infer a extends WasmValue,
-  ]
-  ? State.Stack.set<
-      [
-        ...remaining,
-        // a extends 0 // this check is only necessary due to a bug in hotscript: https://github.com/gvergnaud/hotscript/issues/117
-        // ? 0
-        // : TypeMath.Negate<a> // TODO Broken
-      ],
-
-      state
-    >
-  : never
+  State.unimplemented<instruction, state>
 >

@@ -54,6 +54,14 @@ export namespace Convert {
     >
   }
 
+  export namespace U64Binary {
+    export type ToU64Decimal<
+      binary extends U64Binary
+    > = Satisfies<number,
+      ToDecimalSigned<binary>
+    >
+  }
+
   export namespace U64Decimal {
     export type ToU64Binary<
       decimal extends bigint
@@ -99,8 +107,8 @@ export namespace Convert {
       wasmType extends 'i32' | 'f32' | 'f64',
     > = Satisfies<WasmValue,
       wasmType extends 'i32' ? Convert.U32Decimal.ToU32Binary<value> :
-      wasmType extends 'f32' ? never : // TODO
-      wasmType extends 'f64' ? never : // TODO
+      wasmType extends 'f32' ? never : // TODO(float)
+      wasmType extends 'f64' ? never : // TODO(float)
       never
     >
   }
@@ -119,9 +127,9 @@ export namespace Convert {
       wasmType extends WasmType
     > = Satisfies<number,
       wasmType extends 'i32' ? Convert.U32Binary.ToU32Decimal<value> :
-      wasmType extends 'i64' ? Convert.U32Binary.ToU32Decimal<value> : // TODO
-      wasmType extends 'f32' ? never : // TODO
-      wasmType extends 'f64' ? never : // TODO
+      wasmType extends 'i64' ? Convert.U64Binary.ToU64Decimal<value> :
+      wasmType extends 'f32' ? never : // TODO(float)
+      wasmType extends 'f64' ? never : // TODO(float)
       never
     >
   }
@@ -2202,6 +2210,9 @@ export type U8Decimal =
 
 /** a string 32 bits long */
 export type U32Binary = string; // `${U8Binary}${U8Binary}${U8Binary}${U8Binary}`;
+
+/** a string 64 bits long */
+export type U64Binary = string;
 
 export type Ascii =
   | "\u0000"

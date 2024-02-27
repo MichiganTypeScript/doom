@@ -1,16 +1,5 @@
 # Demo
 
-## TODO
-
-what is conways
-no signed or unsgined
-explain what entry is
-lost at first dashboard look
-globals
-"code generation"
-laser focused on Doom sells it short
-"it's the way you got there that makes it special"
-
 ## Overall Demo
 
 - [the spark](./packages/playground/conway-stateless/conway-types.ts)
@@ -28,10 +17,10 @@ laser focused on Doom sells it short
 - [arithmetic](./packages/ts-type-math/test-cases/arithmetic.ts)
   - [many more like this](./packages/ts-type-math/test-cases/comparison.ts)
 - Tested many times!
-  1. [JavaScript Decimal](./packages/ts-type-math/add-decimal.ts)
-  2. [TypeScript Decimal](./packages/ts-type-math/add-decimal.ts)
-  3. [JavaScript Binary](./packages/ts-type-math/add-binary.ts)
-  4. [TypeScript Binary](./packages/ts-type-math/add-binary.ts)
+  1. [JavaScript Decimal](./packages/ts-type-math/add-decimal.test.ts)
+  2. [TypeScript Decimal](./packages/ts-type-math/add-decimal.test.ts)
+  3. [JavaScript Binary](./packages/ts-type-math/add-binary.test.ts)
+  4. [TypeScript Binary](./packages/ts-type-math/add-binary.test.ts)
   5. WASM
      - [hand-written WASM](./packages/conformance-tests/from-wat/add.wat)
      - [running the WASM](./packages/conformance-tests/utils.ts)
