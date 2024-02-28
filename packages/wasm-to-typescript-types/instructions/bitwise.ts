@@ -2,6 +2,7 @@ import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
 import { WasmValue, WasmInt } from "ts-type-math"
+import { StaticKeyword } from "typescript"
 
 export type IAnd = {
   kind: "And"
@@ -245,7 +246,21 @@ export type CountLeadingZeros<
   instruction extends ICountLeadingZeros,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.unimplemented<instruction, state>
+  State.Stack.get<state> extends [
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        instruction['type'] extends 'i32'
+        ? TypeMath.Wasm.I32Clz<a>
+        : TypeMath.Wasm.I64Clz<a>
+      ],
+
+      state
+    >
+  : never
 >
 
 export type CountTrailingZeros<

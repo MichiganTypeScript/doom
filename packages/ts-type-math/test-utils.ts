@@ -147,7 +147,7 @@ export const arithmeticBigInt = {
   divu: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(unsignedBigint(a) / unsignedBigint(b)),
   rems: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(a % b),
   remu: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(unsignedBigint(a) % unsignedBigint(b)),
-   clz: (a: bigint) => a === 0n ? 64n : BigInt(64 - a.toString(2).length),
+   clz: (a: bigint) => BigInt(bigIntToTwosComplement(a).match(/^0*/)?.[0].length || 0),
 }
 
 export const wasmConversion = {

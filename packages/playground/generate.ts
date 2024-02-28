@@ -9,6 +9,7 @@ import {
   bitwise,
   bitwiseBigInt,
 } from "../ts-type-math/test-utils";
+import { t } from "../ts-type-math/test-cases/arithmetic-i64";
 // import { t } from "../ts-type-math/test-cases/arithmetic";
 
 // const randomlyNegative = Math.random() > 0.5 ? 1 : -1;
@@ -272,10 +273,14 @@ const stringifyBigint = (_: any, v: any) => typeof v === 'bigint' ? v.toString()
 //   .join("\n")
 // );
 
-console.log(Array.from(Array(65))
-  .map((_ ,index) => index)
-  .map(index => (
-    `    /* 2**${index} */ ${2n**BigInt(index)}n,`
-  ))
-  .join("\n")
-);
+// console.log(Array.from(Array(65))
+//   .map((_ ,index) => index)
+//   .map(index => (
+//     `    /* 2**${index} */ ${2n**BigInt(index)}n,`
+//   ))
+//   .join("\n")
+// );
+
+console.log(t.map(({ a, b, add, sub, mul, div_s, div_u, rem_s, rem_u, clz_binary64 }) => {
+  return twosComplementToBigInt(clz_binary64);
+}).join('\n'));

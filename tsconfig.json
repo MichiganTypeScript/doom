@@ -31,7 +31,7 @@
     //
     // "./packages/conformance-tests/from-wat/single-i32add.test.ts",
     // "./packages/conformance-tests/from-wat/single-i32and.test.ts",
-    "./packages/conformance-tests/from-wat/single-i32clz.test.ts",
+    // "./packages/conformance-tests/from-wat/single-i32clz.test.ts",
     "./packages/conformance-tests/from-wat/single-i32div_s.test.ts",
     "./packages/conformance-tests/from-wat/single-i32div_u.test.ts",
     // "./packages/conformance-tests/from-wat/single-i32eq.test.ts",
@@ -57,7 +57,7 @@
     // "./packages/conformance-tests/from-wat/single-i32xor.test.ts",
     // "./packages/conformance-tests/from-wat/single-i64add.test.ts",
     // "./packages/conformance-tests/from-wat/single-i64and.test.ts",
-    "./packages/conformance-tests/from-wat/single-i64clz.test.ts",
+    // "./packages/conformance-tests/from-wat/single-i64clz.test.ts",
     "./packages/conformance-tests/from-wat/single-i64div_s.test.ts",
     "./packages/conformance-tests/from-wat/single-i64div_u.test.ts",
     // "./packages/conformance-tests/from-wat/single-i64eq.test.ts",

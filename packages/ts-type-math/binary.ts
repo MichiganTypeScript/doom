@@ -4,6 +4,7 @@ import type { DivTSBigInt, DivTSNumbers, Mod, ModBigInt } from "./hotscript-fork
 import type { Length } from "./hotscript-fork/strings/impl/length";
 import type { Add, AddBigInt } from './hotscript-fork/numbers/impl/addition';
 import type { Convert } from './conversion';
+import { WasmValue } from "./wasm";
 
 
 type PowersOfTwo = [
@@ -404,15 +405,38 @@ export type ToDecimalSignedBigInt<
 
 
 
-type i = '101110';
-type a = ToDecimalSigned<i>  // =>
-type b = ToDecimalUnsigned<i>// =>
 
 
-export type DisregardMSB<
-  binary extends string
-> = Satisfies<string,
-  binary extends `${infer Head}${infer Tail}`
-  ? Tail
-  : never
+
+
+
+type CountLeadingZeros<
+  a extends WasmValue,
+  count extends 1[] = []
+> = Satisfies<number,
+  a extends `0${infer tail extends string}`
+  ? CountLeadingZeros<
+      tail,
+      [...count, 1]
+    >
+  : count['length']
+>
+
+export type I32ClzBinary<
+  a extends WasmValue
+> = Satisfies<WasmValue,
+  Convert.TSNumber.ToWasmValue<
+    CountLeadingZeros<a>,
+    'i32'
+  >
+>
+
+export type I64ClzBinary64<
+  a extends WasmValue
+> = Satisfies<WasmValue,
+  Convert.TSBigInt.ToWasmValue<
+    Convert.TSNumber.ToTSBigInt<
+      CountLeadingZeros<a>
+    >
+  >
 >

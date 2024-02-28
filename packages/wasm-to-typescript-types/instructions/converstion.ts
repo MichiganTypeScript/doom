@@ -94,7 +94,20 @@ export type CountLeadingZeros<
   instruction extends ICountLeadingZeros,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.unimplemented<instruction, state>
+  State.Stack.get<state> extends [
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        instruction['type'] extends 'i32'
+          ? Wasm.I32Clz<a>
+          : Wasm.I64Clz<a>
+      ],
+      state
+    >
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type CountTrailingZeros<
