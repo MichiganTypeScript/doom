@@ -156,4 +156,5 @@ export const wasmConversion = {
     const aTwos = numberToTwosComplement(a);
     return twosComplementToBigInt(`${aTwos[0].repeat(32)}${aTwos}`)
   },
+  wrap: (a: bigint) => Number(a & 0xFFFFFFFFn) >> 0,
 }

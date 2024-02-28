@@ -4,7 +4,7 @@ import { ProgramState } from "../types"
 
 // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Numeric/Wrap
 export type IWrap = {
-  kind: "Wrap" // can only be i32.wrap_i64
+  kind: "Wrap"
 }
 
 export type IExtend = {
@@ -67,7 +67,18 @@ export type Warp<
   instruction extends IWrap,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.unimplemented<instruction, state>
+  State.Stack.get<state> extends [
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        Wasm.I32WrapI64<a>
+      ],
+      state
+    >
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type Extend<

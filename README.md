@@ -84,7 +84,7 @@ Usage count (in Doom) is the number on the right
 | Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | I64ExtendI32U     | 118   | ✅           |
-| I32WrapI64        | 53    | ❌           |
+| I32WrapI64        | 53    | ✅           |
 | I64ExtendI32S     | 29    | ✅           |
 | F64ConvertI32S    | 9     | ❌           |
 | F32ConvertI32S    | 4     | ❌           |

@@ -1,4 +1,5 @@
 import { ReverseString } from "./binary"
+import { WasmValue } from "./wasm"
 
 export type SplitToBytes<
   T extends string,
@@ -106,3 +107,10 @@ export namespace Clamp {
       never
   >
 }
+
+
+export type WrapBinary<
+  a extends WasmValue,
+> = Satisfies<WasmValue,
+  Clamp.Last32Bits<a>
+>
