@@ -16,12 +16,10 @@ Usage count (in Doom) is the number on the right
 
 #### Constants
 
-| Instruction       | Count | Implemented? |Binary
+| Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | I32Const          | 17073 | ✅           |
 | I64Const          | 712   | ✅           |
-| F64Const          | 37    | ❌           |
-| F32Const          | 4     | ❌           |
 
 #### Comparison
 
@@ -49,11 +47,6 @@ Usage count (in Doom) is the number on the right
 | I64LeS            | 5     | ✅           |
 | I64GtS            | 5     | ✅           |
 | I64GeU            | 5     | ✅           |
-| F64Lt             | 4     | ❌           |
-| F64Ne             | 4     | ❌           |
-| F64Eq             | 3     | ❌           |
-| F32Lt             | 1     | ❌           |
-| F64Ge             | 1     | ❌           |
 
 #### Arithmetic
 
@@ -68,16 +61,9 @@ Usage count (in Doom) is the number on the right
 | I64Mul            | 46    | ❌           |
 | I32RemS           | 44    | ❌           |
 | I32DivU           | 30    | ❌           |
-| F64Mul            | 18    | ❌           |
 | I32RemU           | 13    | ❌           |
-| F64Sub            | 5     | ❌           |
-| F64Add            | 5     | ❌           |
 | I64DivU           | 3     | ❌           |
-| F32Div            | 2     | ❌           |
-| F32Mul            | 2     | ❌           |
-| F32Add            | 1     | ❌           |
 | I64DivS           | 1     | ❌           |
-| F64Div            | 1     | ❌           |
 
 #### Conversion
 
@@ -86,26 +72,6 @@ Usage count (in Doom) is the number on the right
 | I64ExtendI32U     | 118   | ✅           |
 | I32WrapI64        | 53    | ✅           |
 | I64ExtendI32S     | 29    | ✅           |
-| F64ConvertI32S    | 9     | ❌           |
-| F32ConvertI32S    | 4     | ❌           |
-| F64ReinterpretI64 | 3     | ✅           |
-| I64ReinterpretF64 | 3     | ✅           |
-| F64PromoteF32     | 2     | ❌           |
-| I32TruncF32S      | 1     | ❌           |
-| F32DemoteF64      | 1     | ❌           |
-| I32TruncF64U      | 1     | ❌           |
-| F64ConvertI32U    | 1     | ❌           |
-| I32TruncF64S      | 1     | ❌           |
-| I32ReinterpretF32 | 1     | ✅           |
-| F32ReinterpretI32 | 1     | ✅           |
-
-#### Floating Point Specific Instructions
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| F64Neg            | 5     | ❌           |
-| F32Abs            | 2     | ❌           |
-| F64Abs            | 1     | ❌           |
 
 #### Bitwise
 
@@ -144,26 +110,22 @@ Usage count (in Doom) is the number on the right
 | I32Load           | 5853  | ✅           |
 | I32Store          | 3413  | ✅           |
 | I32Load8u         | 460   | ✅           |
-| I64Load           | 357   | 🪚           |
-| I32Load16s        | 278   | ❌           |
+| I64Load           | 357   | ✅           |
+| I32Load16s        | 278   | ✅           |
 | I32Store8         | 253   | ✅           |
-| I64Store          | 196   | 🪚           |
-| I32Store16        | 188   | ❌           |
-| I32Load16u        | 176   | ❌           |
-| I32Load8s         | 71    | ❌           |
-| I64Load32u        | 6     | 🪚           |
-| F64Store          | 4     | ❌           |
-| I64Store32        | 4     | 🪚           |
-| F32Load           | 2     | ❌           |
-| F32Store          | 2     | ❌           |
-| F64Load           | 2     | ❌           |
-| I64Store8         | 2     | 🪚           |
-| I64Load16s        | 1     | 🪚           |
-| I64Load16u        | 1     | 🪚           |
-| I64Load8s         | 1     | 🪚           |
-| I64Load8u         | 1     | 🪚           |
-| I64Load32s        | 1     | 🪚           |
-| I64Store16        | 1     | 🪚           |
+| I64Store          | 196   | ✅           |
+| I32Store16        | 188   | ✅           |
+| I32Load16u        | 176   | ✅           |
+| I32Load8s         | 71    | ✅           |
+| I64Load32u        | 6     | ✅           |
+| I64Store32        | 4     | ✅           |
+| I64Store8         | 2     | ✅           |
+| I64Load16s        | 1     | ✅           |
+| I64Load16u        | 1     | ✅           |
+| I64Load8s         | 1     | ✅           |
+| I64Load8u         | 1     | ✅           |
+| I64Load32s        | 1     | ✅           |
+| I64Store16        | 1     | ✅           |
 | MemorySize        | 1     | ✅           |
 
 ### Control Flow Instructions
@@ -185,6 +147,46 @@ Usage count (in Doom) is the number on the right
 | CallIndirect      | 89    | ✅           |
 | Else              | 70    | ✅           |
 | Nop               | 40    | ✅           |
+
+#### Floating Point Instructions
+
+Doom itself doesn't need or use floating point.  So it's debatable whether this is actually necessary to implement at all.
+
+| Instruction       | Count | Implemented? |
+| ----------------- | ----- | ------------ |
+| F64Const          | 37    | ❌           |
+| F64Mul            | 18    | ❌           |
+| F64ConvertI32S    | 9     | ❌           |
+| F64Add            | 5     | ❌           |
+| F64Neg            | 5     | ❌           |
+| F64Sub            | 5     | ❌           |
+| F32Const          | 4     | ❌           |
+| F32ConvertI32S    | 4     | ❌           |
+| F64Lt             | 4     | ❌           |
+| F64Ne             | 4     | ❌           |
+| F64Store          | 4     | ❌           |
+| F64Eq             | 3     | ❌           |
+| F64ReinterpretI64 | 3     | ✅           |
+| I64ReinterpretF64 | 3     | ✅           |
+| F32Abs            | 2     | ❌           |
+| F32Div            | 2     | ❌           |
+| F32Load           | 2     | ❌           |
+| F32Mul            | 2     | ❌           |
+| F32Store          | 2     | ❌           |
+| F64Load           | 2     | ❌           |
+| F64PromoteF32     | 2     | ❌           |
+| F32Add            | 1     | ❌           |
+| F32DemoteF64      | 1     | ❌           |
+| F32Lt             | 1     | ❌           |
+| F32ReinterpretI32 | 1     | ✅           |
+| F64Abs            | 1     | ❌           |
+| F64ConvertI32U    | 1     | ❌           |
+| F64Div            | 1     | ❌           |
+| F64Ge             | 1     | ❌           |
+| I32ReinterpretF32 | 1     | ✅           |
+| I32TruncF32S      | 1     | ❌           |
+| I32TruncF64S      | 1     | ❌           |
+| I32TruncF64U      | 1     | ❌           |
 
 <sub>✅ means things are in progress</sub>
 <sub>🐛 means things are known problems</sub>

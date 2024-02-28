@@ -1,6 +1,7 @@
 import { ReverseString } from "./binary"
 import { WasmValue } from "./wasm"
 
+/** this algorithm ABSO-FUCKING-LUTELY requires the string to be some multiple of 8 in length.  Don't fuck it up. */
 export type SplitToBytes<
   T extends string,
 
@@ -73,7 +74,28 @@ export namespace Clamp {
     : // we have fewer than 32 bits.  this is probably an error (?)
       never
   >
-  
+
+  export type Last16Bits<
+    toLast8Bits extends string
+  > = Satisfies<string,
+    ReverseString<toLast8Bits> extends
+       `${infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer b08
+       }${infer b09}${infer b10}${infer b11}${infer b12}${infer b13}${infer b14}${infer b15}${infer b16
+       }${
+         // if the string is exactly 8 bits, this will be an empty string
+         // if it's more, it'll just be the rest
+         infer Tail
+       }`
+
+    ? // put the characters back in the right order
+      `${b16}${b15}${b14}${b13}${b12}${b11}${b10}${b09
+      }${b08}${b07}${b06}${b05}${b04}${b03}${b02}${b01
+      }`
+
+    : // we have fewer than 8 bits.  this is probably an error (?)
+      never
+  >
+
   export type Last8Bits<
     toLast8Bits extends string
   > = Satisfies<string,

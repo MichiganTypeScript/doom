@@ -1,3 +1,4 @@
+import { Pad, ReverseString, SignBit } from "./binary";
 import type { Ascii, U8Binary, U8Decimal } from "./conversion"
 import type { Convert } from "./conversion"
 import type { SplitToBytes } from "./split"
@@ -69,8 +70,67 @@ export namespace Store {
   export type GetLSB<
     a extends WasmValue
   > = Satisfies<[Wasm.Byte],
-    a extends `${infer b0}${infer b1}${infer b2}${infer b3}${infer b4}${infer b5}${infer b6}${infer b7}${infer b8}${infer b9}${infer b10}${infer b11}${infer b12}${infer b13}${infer b14}${infer b15}${infer b16}${infer b17}${infer b18}${infer b19}${infer b20}${infer b21}${infer b22}${infer b23}${infer b24}${infer b25}${infer b26}${infer b27}${infer b28}${infer b29}${infer b30}${infer b31}`
-    ? [`${b24}${b25}${b26}${b27}${b28}${b29}${b30}${b31}`]
+    ReverseString<a> extends `${infer b00}${infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer Tail}`
+    ? [`${b07}${b06}${b05}${b04}${b03}${b02}${b01}${b00}`]
     : never
+  >
+
+  export type GoodLuckBro<
+    a extends WasmValue,
+    count extends 8 | 16 | 32 | 64
+  > = Satisfies<Wasm.Byte[],
+    SplitToBytes<
+      GetLast<a, count>
+    >
+  >
+
+  type _GetLast<
+    rev extends string,
+    count extends number,
+    _Acc extends string = '',
+    _Count extends 1[] = []
+  > = Satisfies<string,
+    count extends _Count['length']
+    ? _Acc
+    : rev extends `${infer Head}${infer Tail}`
+      ? _GetLast<
+          Tail,
+          count,
+          `${Head}${_Acc}`, // we add on the start because it's already been reversed and we don't want to have to bother reversing it again
+          [..._Count, 1] // increment the counter
+        >
+      : never // this will only happen if the requested count is greater than the number of characters in the string and the string has been exhausted
+  >
+
+  export type GetLast<
+    a extends string,
+    count extends number,
+  > = Satisfies<string,
+    _GetLast<ReverseString<a>, count>
+  >
+
+  export type SignedFill<
+    a extends string,
+    fillSize extends 8 | 16 | 24 | 32 | 48 | 56
+  > = Satisfies<string,
+    SignBit<a> extends '1'
+
+    ? // we got ourselves a negative number
+      fillSize extends 8 ? Pad.StartWith8Ones<a> :
+      fillSize extends 16 ? Pad.StartWith16Ones<a> :
+      fillSize extends 24 ? Pad.StartWith24Ones<a> :
+      fillSize extends 32 ? Pad.StartWith32Ones<a> :
+      fillSize extends 48 ? Pad.StartWith48Ones<a> :
+      fillSize extends 56 ? Pad.StartWith56Ones<a> :
+      never
+
+    : // this number is positive, just like DoomGuy's outlook on life
+      fillSize extends 8 ? Pad.StartWith8Zeros<a> :
+      fillSize extends 16 ? Pad.StartWith16Zeros<a> :
+      fillSize extends 24 ? Pad.StartWith24Zeros<a> :
+      fillSize extends 32 ? Pad.StartWith32Zeros<a> :
+      fillSize extends 48 ? Pad.StartWith48Zeros<a> :
+      fillSize extends 56 ? Pad.StartWith56Zeros<a> :
+      never
   >
 }

@@ -153,6 +153,19 @@ export namespace Pad {
     input extends string
   > = `00000000000000000000000000000000${input}`
 
+  export type StartWith40Zeros<
+    input extends string
+  > = `0000000000000000000000000000000000000000${input}`
+
+  export type StartWith48Zeros<
+    input extends string
+  > = `000000000000000000000000000000000000000000000000${input}`
+
+  export type StartWith56Zeros<
+    input extends string
+  > = `00000000000000000000000000000000000000000000000000000000${input}`
+
+
   /** @deprecated avoid using this and try to use one of the dedicated ones if you know how many 0s you want to add */
   export type StartWithZeros<
     input extends string,
@@ -178,6 +191,18 @@ export namespace Pad {
   export type StartWith32Ones<
     input extends string
   > = `11111111111111111111111111111111${input}`
+
+  export type StartWith40Ones<
+    input extends string
+  > = `1111111111111111111111111111111111111111${input}`
+
+  export type StartWith48Ones<
+    input extends string
+  > = `111111111111111111111111111111111111111111111111${input}`
+
+  export type StartWith56Ones<
+    input extends string
+  > = `11111111111111111111111111111111111111111111111111111111${input}`
 
   /** @deprecated avoid using this and try to use one of the dedicated ones if you know how many 0s you want to add */
   export type StartWithOnes<
