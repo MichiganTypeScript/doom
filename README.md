@@ -65,18 +65,18 @@ Usage count (in Doom) is the number on the right
 | I32DivS           | 165   | ❌           |
 | I64Add            | 130   | ✅           |
 | I64Sub            | 53    | ✅           |
-| I64Mul            | 46    | 🪚           |
+| I64Mul            | 46    | ❌           |
 | I32RemS           | 44    | ❌           |
 | I32DivU           | 30    | ❌           |
 | F64Mul            | 18    | ❌           |
 | I32RemU           | 13    | ❌           |
 | F64Sub            | 5     | ❌           |
 | F64Add            | 5     | ❌           |
-| I64DivU           | 3     | 🪚           |
+| I64DivU           | 3     | ❌           |
 | F32Div            | 2     | ❌           |
 | F32Mul            | 2     | ❌           |
 | F32Add            | 1     | ❌           |
-| I64DivS           | 1     | 🪚           |
+| I64DivS           | 1     | ❌           |
 | F64Div            | 1     | ❌           |
 
 #### Conversion
@@ -88,24 +88,24 @@ Usage count (in Doom) is the number on the right
 | I64ExtendI32S     | 29    | ✅           |
 | F64ConvertI32S    | 9     | ❌           |
 | F32ConvertI32S    | 4     | ❌           |
-| F64ReinterpretI64 | 3     | ❌           |
-| I64ReinterpretF64 | 3     | 🪚           |
+| F64ReinterpretI64 | 3     | ✅           |
+| I64ReinterpretF64 | 3     | ✅           |
 | F64PromoteF32     | 2     | ❌           |
 | I32TruncF32S      | 1     | ❌           |
 | F32DemoteF64      | 1     | ❌           |
 | I32TruncF64U      | 1     | ❌           |
 | F64ConvertI32U    | 1     | ❌           |
 | I32TruncF64S      | 1     | ❌           |
-| I32ReinterpretF32 | 1     | ❌           |
-| F32ReinterpretI32 | 1     | ❌           |
+| I32ReinterpretF32 | 1     | ✅           |
+| F32ReinterpretI32 | 1     | ✅           |
 
 #### Floating Point Specific Instructions
 
 | Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
-| F64Neg            | 5     | ✅           |
-| F32Abs            | 2     | ✅           |
-| F64Abs            | 1     | ✅           |
+| F64Neg            | 5     | ❌           |
+| F32Abs            | 2     | ❌           |
+| F64Abs            | 1     | ❌           |
 
 #### Bitwise
 
@@ -123,9 +123,9 @@ Usage count (in Doom) is the number on the right
 | I64Shl            | 80    | ✅           |
 | I64And            | 73    | ✅           |
 | I64Xor            | 34    | ✅           |
-| I64Clz            | 7     | 🪚           |
+| I64Clz            | 7     | ❌           |
 | I32Clz            | 5     | ❌           |
-| I64Rotl           | 1     | 🪚           |
+| I64Rotl           | 1     | ❌           |
 
 ### Variable Instructions
 

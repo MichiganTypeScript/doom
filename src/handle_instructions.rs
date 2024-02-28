@@ -233,11 +233,13 @@ fn handle_instruction(
         Instruction::I64ExtendI32U => {
             vec![(*indent, format!("{{ kind: 'Extend', signed: false }},"))]
         }
+        Instruction::F32ReinterpretI32 | Instruction::I32ReinterpretF32 | Instruction::F64ReinterpretI64 | Instruction::I64ReinterpretF64 => {
+            vec![(*indent, format!("{{ kind: 'Reinterpret' }},"))]
+        }
         // Promote
         // Demote
         // Convert
         // Trunc (float to int)
-        // Reinterpret
 
         /* Floating Point Specific Instructions */
         // Min

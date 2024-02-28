@@ -27,12 +27,17 @@ export type IPopCount = {
   type: WasmInt
 }
 
+export type IReinterpret = {
+  kind: "Reinterpret"
+}
+
 export type ConversionInstruction =
   | IWrap
   | IExtend
   | ICountLeadingZeros
   | ICountTrailingZeros
   | IPopCount
+  | IReinterpret
 
 export type HandleConversionInstructions<
   instruction extends ConversionInstruction,
@@ -52,6 +57,9 @@ export type HandleConversionInstructions<
 
   : instruction extends IPopCount
   ? PopCount<instruction, state>
+
+  : instruction extends IReinterpret
+  ? Reinterpret<instruction, state>
 
   : never
 
@@ -101,4 +109,12 @@ export type PopCount<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.unimplemented<instruction, state>
+>
+
+/** here's the thing about this.  since we're only ever using the binary representation, the Reinterpret instruction is a no-op. */
+export type Reinterpret<
+  instruction extends IReinterpret, // unused
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  state
 >
