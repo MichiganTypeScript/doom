@@ -233,7 +233,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     activeInstruction,
     tGetTypeAtLocation,
     current,
-    writeToDisk: shouldTakeABreath(timeSpentUnderwater),
+    writeToDisk: shouldTakeABreath(timeSpentUnderwater, current),
     time: {
       createFSBackedSystem: endCreateFSBackedSystem - startCreateFSBackedSystem,
       getProgram: endGetProgram - startGetProgram,
@@ -267,7 +267,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     throw new Error(`stopped because errors found in the file (search ${writeFilePath} for "never")`);
   }
 
-  if (shouldTakeABreath(timeSpentUnderwater)) {
+  if (shouldTakeABreath(timeSpentUnderwater, current)) {
     timeSpentUnderwater = 0; // reset the counter
     await writeFile(evaluationFilePath, evaluationSourceCode, 'utf-8');
     env = createEnv();
@@ -383,6 +383,8 @@ const runProgram = async () => {
     env: createEnv(),
     timeSpentUnderwater: 0,
   });
+
+  await writeFile(bootstrapFilePath, evaluationSourceCode, 'utf-8');
 
   let runConfig: ProgramRun = {
     current: incrementBy,

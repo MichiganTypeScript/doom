@@ -10,7 +10,7 @@ test.each(t)('$a_binary + $b_binary === $add_binary', ({ a_binary, b_binary, add
   expect(actual_binary).toBe(add_binary);
 });
 
-type i = 35
+type i = 18
 type a = T[i]['a']  // =>
 type b = T[i]['b']  // =>
 type e = T[i]['add']// =>

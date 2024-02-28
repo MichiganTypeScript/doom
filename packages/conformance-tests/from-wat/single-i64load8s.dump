@@ -1,0 +1,123 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Memory(
+                Memory {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "memory",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "memory",
+                        ],
+                    },
+                    kind: Normal(
+                        B32 {
+                            limits: Limits {
+                                min: 1,
+                                max: None,
+                            },
+                            shared: false,
+                        },
+                    ),
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 51,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "value",
+                                    ),
+                                ),
+                                I64Store(
+                                    MemArg {
+                                        align: 8,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 162,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                I64Load8s(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 195,
+                                            },
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "value",
+                                        ),
+                                        None,
+                                        I64,
+                                    ),
+                                ],
+                                results: [
+                                    I64,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "I32Const": 2,
+    "LocalGet": 1,
+    "I64Store": 1,
+    "I64Load8s": 1,
+}

@@ -158,3 +158,30 @@ export const wasmConversion = {
   },
   wrap: (a: bigint) => Number(a & 0xFFFFFFFFn) >> 0,
 }
+
+export const memory = {
+  load: (a: string) => a,
+  load8_s: (a: string) => a.slice(-8).padStart(32, a[0]),
+  load8_u: (a: string) => a.slice(-8).padStart(32, '0'),
+  load16_s: (a: string) => a.slice(-16).padStart(32, a[0]),
+  load16_u: (a: string) => a.slice(-16).padStart(32, '0'),
+
+  store: (a: string) => a,
+  store8: (a: string) => a.slice(-8).padStart(32, '0'),
+  store16: (a: string) => a.slice(-16).padStart(32, '0'),
+}
+
+export const memoryBigInt = {
+  load: (a: string) => a,
+  load8_s: (a: string) => a.slice(-8).padStart(64, a[0]),
+  load8_u: (a: string) => a.slice(-8).padStart(64, '0'),
+  load16_s: (a: string) => a.slice(-16).padStart(64, a[0]),
+  load16_u: (a: string) => a.slice(-16).padStart(64, '0'),
+  load32_s: (a: string) => a.slice(-32).padStart(64, a[0]),
+  load32_u: (a: string) => a.slice(-32).padStart(64, '0'),
+
+  store: (a: string) => a,
+  store8: (a: string) => a.slice(-8).padStart(64, '0'),
+  store16: (a: string) => a.slice(-16).padStart(64, '0'),
+  store32: (a: string) => a.slice(-32).padStart(64, '0'),
+}

@@ -9,8 +9,9 @@ import {
   bitwise,
   bitwiseBigInt,
   wasmConversion,
+  memory,
 } from "../ts-type-math/test-utils";
-import { t } from "../ts-type-math/test-cases/wrap";
+// import { t } from "../ts-type-math/test-cases/wrap";
 // import { t } from "../ts-type-math/test-cases/arithmetic";
 
 // const randomlyNegative = Math.random() > 0.5 ? 1 : -1;
@@ -282,7 +283,49 @@ const stringifyBigint = (_: any, v: any) => typeof v === 'bigint' ? v.toString()
 //   .join("\n")
 // );
 
-console.log(JSON.stringify(t.map(({ a }) => {
-  const wrap = wasmConversion.wrap(a);
-  return wrap
+const t = [
+  '00000000000000000000000000000000',
+  '11111111111111111111111111111111',
+  '10000000010000000010000000010000',
+  '01000000001000000001000000001000',
+  '00100000000100000000100000000100',
+  '00010000000010000000010000000010',
+  '00001000000001000000001000000001',
+  '00000100000000100000000100000000',
+  '00000010000000010000000010000000',
+  '00000001000000001000000001000000',
+  '00000000100000000100000000100000',
+]
+
+console.log(JSON.stringify(t.map((a_binary) => {
+  const load_binary = memory.load(a_binary);
+  const load8_s_binary = memory.load8_s(a_binary);
+  const load8_u_binary = memory.load8_u(a_binary);
+  const load16_s_binary = memory.load16_s(a_binary);
+  const load16_u_binary = memory.load16_u(a_binary);
+
+  const store_binary = memory.store(a_binary);
+  const store8_binary = memory.store8(a_binary);
+  const store16_binary = memory.store16(a_binary);
+  
+  return {
+    a: twosComplementToNumber(a_binary),
+    load: twosComplementToNumber(load_binary),
+    load8_s: twosComplementToNumber(load8_s_binary),
+    load8_u: twosComplementToNumber(load8_u_binary),
+    load16_s: twosComplementToNumber(load16_s_binary),
+    load16_u: twosComplementToNumber(load16_u_binary),
+    store: twosComplementToNumber(store_binary),
+    store8: twosComplementToNumber(store8_binary),
+    store16: twosComplementToNumber(store16_binary),
+    a_binary,
+    load_binary,
+    load8_s_binary,
+    load8_u_binary,
+    load16_s_binary,
+    load16_u_binary,
+    store_binary,
+    store8_binary,
+    store16_binary,
+  }
 }), stringifyBigint, 2));

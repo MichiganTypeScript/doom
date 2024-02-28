@@ -12,16 +12,14 @@ It looks like it can be run with 4 MiB which equates to 64 pages.
 
 Usage count (in Doom) is the number on the right
 
-### Numeric Instructions
-
-#### Constants
+### Constants
 
 | Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | I32Const          | 17073 | ✅           |
 | I64Const          | 712   | ✅           |
 
-#### Comparison
+### Comparison
 
 | Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
@@ -48,13 +46,13 @@ Usage count (in Doom) is the number on the right
 | I64GtS            | 5     | ✅           |
 | I64GeU            | 5     | ✅           |
 
-#### Arithmetic
+### Arithmetic
 
 | Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
 | I32Add            | 4175  | ✅           |
 | I32Sub            | 1424  | ✅           |
-| I32Mul            | 478   | ✅           | ❌ some negative number overflow edge cases
+| I32Mul            | 478   | 🐛           | some negative number overflow edge cases
 | I32DivS           | 165   | ❌           |
 | I64Add            | 130   | ✅           |
 | I64Sub            | 53    | ✅           |
@@ -65,7 +63,7 @@ Usage count (in Doom) is the number on the right
 | I64DivU           | 3     | ❌           |
 | I64DivS           | 1     | ❌           |
 
-#### Conversion
+### Conversion
 
 | Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
@@ -73,7 +71,7 @@ Usage count (in Doom) is the number on the right
 | I32WrapI64        | 53    | ✅           |
 | I64ExtendI32S     | 29    | ✅           |
 
-#### Bitwise
+### Bitwise
 
 | Instruction       | Count | Implemented? |
 | ----------------- | ----- | ------------ |
@@ -148,7 +146,7 @@ Usage count (in Doom) is the number on the right
 | Else              | 70    | ✅           |
 | Nop               | 40    | ✅           |
 
-#### Floating Point Instructions
+### Floating Point Instructions
 
 Doom itself doesn't need or use floating point.  So it's debatable whether this is actually necessary to implement at all.
 
@@ -190,7 +188,7 @@ Doom itself doesn't need or use floating point.  So it's debatable whether this 
 
 <sub>✅ means things are in progress</sub>
 <sub>🐛 means things are known problems</sub>
-<sub>🪚 means test scaffolding is in place</sub>
+<sub>❌ means the work has not yet started</sub>
 
 ## Design decisions
 

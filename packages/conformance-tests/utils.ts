@@ -8,6 +8,7 @@ export const getWasm = async <
   testName: string
 ) => {
   const wasmPath = join(__dirname, testDirectory, `${testName}.wasm`);
+  console.log(wasmPath);
   const wasmBuffer = await readFile(wasmPath);
   const wasmModule = await WebAssembly.compile(wasmBuffer);
   const instance = await WebAssembly.instantiate(wasmModule);
