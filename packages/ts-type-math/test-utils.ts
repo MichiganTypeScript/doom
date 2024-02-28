@@ -149,3 +149,11 @@ export const arithmeticBigInt = {
   remu: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(unsignedBigint(a) % unsignedBigint(b)),
    clz: (a: bigint) => a === 0n ? 64n : BigInt(64 - a.toString(2).length),
 }
+
+export const wasmConversion = {
+  extend_i32_u: (a: number) => twosComplementToBigInt(`${'0'.repeat(32)}${numberToTwosComplement(a)}`),
+  extend_i32_s: (a: number) => {
+    const aTwos = numberToTwosComplement(a);
+    return twosComplementToBigInt(`${aTwos[0].repeat(32)}${aTwos}`)
+  },
+}

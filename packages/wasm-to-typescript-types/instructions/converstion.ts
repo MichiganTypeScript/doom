@@ -1,4 +1,4 @@
-import { WasmInt } from "../../ts-type-math/wasm"
+import { WasmInt, WasmValue, Wasm } from "../../ts-type-math/wasm"
 import { State } from "../state"
 import { ProgramState } from "../types"
 
@@ -66,7 +66,20 @@ export type Extend<
   instruction extends IExtend,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.unimplemented<instruction, state>
+  State.Stack.get<state> extends [
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        instruction['signed'] extends true
+          ? Wasm.I64ExtendI32S<a>
+          : Wasm.I64ExtendI32U<a>
+      ],
+      state
+    >
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type CountLeadingZeros<
