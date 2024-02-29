@@ -220,7 +220,7 @@ type I64Load32U<
   address extends WasmValue
 > = Satisfies<WasmValue,
   Pad.StartWith32Zeros<
-    TypeMath.Load.Read2Bytes<
+    TypeMath.Load.Read4Bytes<
       State.Memory.get<state>,
       Wasm.I32Add<address, instruction['offset']>
     >
