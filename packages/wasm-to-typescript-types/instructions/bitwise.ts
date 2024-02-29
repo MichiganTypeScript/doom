@@ -1,8 +1,7 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
-import { WasmValue, WasmInt } from "ts-type-math"
-import { StaticKeyword } from "typescript"
+import { WasmValue, WasmInt, Wasm } from "ts-type-math"
 
 export type IAnd = {
   kind: "And"
@@ -114,7 +113,7 @@ export type HandleBitwiseInstructions<
   : never
 >
 
-export type And<
+type And<
   instruction extends IAnd,
   state extends ProgramState
 > = Satisfies<ProgramState,
@@ -135,7 +134,7 @@ export type And<
   : never
 >
 
-export type Or<
+type Or<
   instruction extends IOr,
   state extends ProgramState
 > = Satisfies<ProgramState,
@@ -157,7 +156,7 @@ export type Or<
   : never
 >
 
-export type Xor<
+type Xor<
   instruction extends IXor,
   state extends ProgramState
 > = Satisfies<ProgramState,
@@ -179,7 +178,7 @@ export type Xor<
   : never
 >
 
-export type ShiftLeft<
+type ShiftLeft<
   instruction extends IShiftLeft,
   state extends ProgramState
 > = Satisfies<ProgramState,
@@ -201,7 +200,7 @@ export type ShiftLeft<
   : never
 >
 
-export type ShiftRight<
+type ShiftRight<
   instruction extends IShiftRight,
   state extends ProgramState
 > = Satisfies<ProgramState,
@@ -228,21 +227,36 @@ export type ShiftRight<
   : never
 >
 
-export type RotateLeft<
+type RotateLeft<
   instruction extends IRotateLeft,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.unimplemented<instruction, state>
+  State.Stack.get<state> extends [
+    ...infer remaining extends WasmValue[],
+    infer a extends WasmValue,
+    infer b extends WasmValue,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+
+        instruction['type'] extends 'i32'
+        ? Wasm.I32Rotl<a, b>
+        : Wasm.I64Rotl<a, b>
+      ],
+      state
+    >
+  : never
 >
 
-export type RotateRight<
+type RotateRight<
   instruction extends IRotateRight,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.unimplemented<instruction, state>
 >
 
-export type CountLeadingZeros<
+type CountLeadingZeros<
   instruction extends ICountLeadingZeros,
   state extends ProgramState
 > = Satisfies<ProgramState,
@@ -263,14 +277,14 @@ export type CountLeadingZeros<
   : never
 >
 
-export type CountTrailingZeros<
+type CountTrailingZeros<
   instruction extends ICountTrailingZeros,
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.unimplemented<instruction, state>
 >
 
-export type PopCount<
+type PopCount<
   instruction extends IPopCount,
   state extends ProgramState
 > = Satisfies<ProgramState,

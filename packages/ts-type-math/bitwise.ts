@@ -1,4 +1,5 @@
 import { Bit, To32Binary, ToDecimalSigned } from "./binary";
+import { WasmValue } from "./wasm";
 
 type LookupBitAnd = {
   '0': {
@@ -89,3 +90,26 @@ export type BitwiseNotBinary<
 export type BitwiseNot<
   T extends number
 > = ToDecimalSigned<BitwiseNotBinary<To32Binary<T>>>
+
+export type RotateLeft<
+  T extends WasmValue,
+  ShiftBy extends number
+> = Satisfies<WasmValue,
+  LeftRotateString<T, ShiftBy>
+>
+
+type LeftRotateString<
+  T extends string,
+  N extends number,
+
+  _Count extends 1[] = []
+> =
+  _Count['length'] extends N
+    ? T
+    : T extends `${infer A}${infer Rest}`
+      ? LeftRotateString<
+          `${Rest}${A}`,
+          N,
+          [..._Count, 1]
+        >
+      : never;

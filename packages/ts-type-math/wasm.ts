@@ -1,12 +1,13 @@
 import { I32AddBinary, I64AddBinary } from "./add";
 import { ShiftLeftBinaryO, ShiftRightBinary, ShiftRightBinary64, ShiftLeftBinary64 } from "./shift";
-import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary } from "./bitwise";
+import { BitwiseAndBinary, BitwiseOrBinary, BitwiseXorBinary, RotateLeft } from "./bitwise";
 import { EqualsBinary, GreaterThanSignedBinary, GreaterThanUnsignedBinary, LessThanSignedBinary, LessThanUnsignedBinary, NotEqualsBinary } from "./comparison";
 import { I32SubtractBinary, I64SubtractBinary } from "./subtract";
 import { I32MultiplyBinary } from "./multiply";
 import { I64ExtendI32SBinary64, I64ExtendI32UBinary64 } from "./wasm-conversion";
 import { I32ClzBinary, I64ClzBinary64 } from "./binary";
 import { WrapBinary } from "./split";
+import { Convert } from "./conversion";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 export type WasmInt = 'i32' | 'i64';
@@ -369,4 +370,27 @@ export namespace Wasm {
   > = Satisfies<WasmValue,
     WrapBinary<a>
   >
+
+  export type I32Rotl<
+    a extends WasmValue,
+    shiftBy extends WasmValue
+  > = Satisfies<WasmValue,
+    RotateLeft<
+      a,
+      Convert.WasmValue.ToTSNumber<shiftBy, 'i32'>
+    >
+  >
+
+  export type I64Rotl<
+    a extends WasmValue,
+    shiftBy extends WasmValue
+  > = Satisfies<WasmValue,
+    RotateLeft<
+      a,
+      Convert.TSBigInt.ToTSNumber<
+        Convert.WasmValue.ToTSBigInt<shiftBy>
+      >
+    >
+  >
+
 }

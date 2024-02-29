@@ -91,6 +91,7 @@ export const bitwise = {
     shl: (a: number, b: number) => a << b,
   shr_s: (a: number, b: number) => a >> b,
   shr_u: (a: number, b: number) => a >>> b,
+   rotl: (a: number, b: number) => (a << b) | (a >>> (32 - b)),
 }
 
 export const arithmetic = {
@@ -137,6 +138,11 @@ export const bitwiseBigInt = {
     shl: (a: bigint, b: bigint) => clampTo64Bits(a << b),
   shr_s: (a: bigint, b: bigint) => clampTo64Bits(a >> b),
   shr_u: (a: bigint, b: bigint) => bigintShiftRightUnsigned(a, b),
+   rotl: (a: bigint, b: bigint) => twosComplementToBigInt(
+            `${bigIntToTwosComplement(a).slice(Number(b), 64)
+            }${bigIntToTwosComplement(a).slice(0, Number(b))
+            }`
+          ),
 }
 
 export const arithmeticBigInt = {

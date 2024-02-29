@@ -1,13 +1,21 @@
 import type { Expect, Equal } from 'type-testing';
 import type { entry } from './single-i32rotl.actual'
-import { t, T } from '../../ts-type-math/test-cases/bitwise-shift'
+import { t, T } from '../../ts-type-math/test-cases/rotate'
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
+import { numberToTwosComplement, twosComplementToNumber } from '../../ts-type-math/test-utils';
 
-test.todo.each(t)('rotl($a, $b) === $rotl', async ({ a, b, }) => {
-  // const entry = await getWasm("from-wat", 'single-i32rotl');
-  // expect(entry(a, b)).toStrictEqual(rotl);
+test.todo.each(t)('rotl($a, $b) === $rotl', async ({ a, a_binary, b, b_binary, rotl, rotl_binary }) => {
+  expect(a).toBe(twosComplementToNumber(a_binary))
+  expect(a_binary).toBe(numberToTwosComplement(a))
+  expect(b).toBe(twosComplementToNumber(b_binary))
+  expect(b_binary).toBe(numberToTwosComplement(b))
+  expect(rotl).toBe(twosComplementToNumber(rotl_binary))
+  expect(rotl_binary).toBe(numberToTwosComplement(rotl))
+
+  const entry = await getWasm("from-wat", 'single-i32rotl');
+  expect(entry(a, b)).toStrictEqual(rotl);
 });
 
 type tests = [
@@ -44,51 +52,6 @@ type tests = [
   Expect<Equal<entry<[T[30]['a'], T[30]['b']]>, T[30]['rotl']>>,
   Expect<Equal<entry<[T[31]['a'], T[31]['b']]>, T[31]['rotl']>>,
   Expect<Equal<entry<[T[32]['a'], T[32]['b']]>, T[32]['rotl']>>,
-  Expect<Equal<entry<[T[33]['a'], T[33]['b']]>, T[33]['rotl']>>,
-  Expect<Equal<entry<[T[34]['a'], T[34]['b']]>, T[34]['rotl']>>,
-  Expect<Equal<entry<[T[35]['a'], T[35]['b']]>, T[35]['rotl']>>,
-  Expect<Equal<entry<[T[36]['a'], T[36]['b']]>, T[36]['rotl']>>,
-  Expect<Equal<entry<[T[37]['a'], T[37]['b']]>, T[37]['rotl']>>,
-  Expect<Equal<entry<[T[38]['a'], T[38]['b']]>, T[38]['rotl']>>,
-  Expect<Equal<entry<[T[39]['a'], T[39]['b']]>, T[39]['rotl']>>,
-  Expect<Equal<entry<[T[40]['a'], T[40]['b']]>, T[40]['rotl']>>,
-  Expect<Equal<entry<[T[41]['a'], T[41]['b']]>, T[41]['rotl']>>,
-  Expect<Equal<entry<[T[42]['a'], T[42]['b']]>, T[42]['rotl']>>,
-  Expect<Equal<entry<[T[43]['a'], T[43]['b']]>, T[43]['rotl']>>,
-  Expect<Equal<entry<[T[44]['a'], T[44]['b']]>, T[44]['rotl']>>,
-  Expect<Equal<entry<[T[45]['a'], T[45]['b']]>, T[45]['rotl']>>,
-  Expect<Equal<entry<[T[46]['a'], T[46]['b']]>, T[46]['rotl']>>,
-  Expect<Equal<entry<[T[47]['a'], T[47]['b']]>, T[47]['rotl']>>,
-  Expect<Equal<entry<[T[48]['a'], T[48]['b']]>, T[48]['rotl']>>,
-  Expect<Equal<entry<[T[49]['a'], T[49]['b']]>, T[49]['rotl']>>,
-  Expect<Equal<entry<[T[50]['a'], T[50]['b']]>, T[50]['rotl']>>,
-  Expect<Equal<entry<[T[51]['a'], T[51]['b']]>, T[51]['rotl']>>,
-  Expect<Equal<entry<[T[52]['a'], T[52]['b']]>, T[52]['rotl']>>,
-  Expect<Equal<entry<[T[53]['a'], T[53]['b']]>, T[53]['rotl']>>,
-  Expect<Equal<entry<[T[54]['a'], T[54]['b']]>, T[54]['rotl']>>,
-  Expect<Equal<entry<[T[55]['a'], T[55]['b']]>, T[55]['rotl']>>,
-  Expect<Equal<entry<[T[56]['a'], T[56]['b']]>, T[56]['rotl']>>,
-  Expect<Equal<entry<[T[57]['a'], T[57]['b']]>, T[57]['rotl']>>,
-  Expect<Equal<entry<[T[58]['a'], T[58]['b']]>, T[58]['rotl']>>,
-  Expect<Equal<entry<[T[59]['a'], T[59]['b']]>, T[59]['rotl']>>,
-  Expect<Equal<entry<[T[60]['a'], T[60]['b']]>, T[60]['rotl']>>,
-  Expect<Equal<entry<[T[61]['a'], T[61]['b']]>, T[61]['rotl']>>,
-  Expect<Equal<entry<[T[62]['a'], T[62]['b']]>, T[62]['rotl']>>,
-  Expect<Equal<entry<[T[63]['a'], T[63]['b']]>, T[63]['rotl']>>,
-  Expect<Equal<entry<[T[64]['a'], T[64]['b']]>, T[64]['rotl']>>,
-  Expect<Equal<entry<[T[65]['a'], T[65]['b']]>, T[65]['rotl']>>,
-  Expect<Equal<entry<[T[66]['a'], T[66]['b']]>, T[66]['rotl']>>,
-  Expect<Equal<entry<[T[67]['a'], T[67]['b']]>, T[67]['rotl']>>,
-  Expect<Equal<entry<[T[68]['a'], T[68]['b']]>, T[68]['rotl']>>,
-  Expect<Equal<entry<[T[69]['a'], T[69]['b']]>, T[69]['rotl']>>,
-  Expect<Equal<entry<[T[70]['a'], T[70]['b']]>, T[70]['rotl']>>,
-  Expect<Equal<entry<[T[71]['a'], T[71]['b']]>, T[71]['rotl']>>,
-  Expect<Equal<entry<[T[72]['a'], T[72]['b']]>, T[72]['rotl']>>,
-  Expect<Equal<entry<[T[73]['a'], T[73]['b']]>, T[73]['rotl']>>,
-  Expect<Equal<entry<[T[74]['a'], T[74]['b']]>, T[74]['rotl']>>,
-  Expect<Equal<entry<[T[75]['a'], T[75]['b']]>, T[75]['rotl']>>,
-  Expect<Equal<entry<[T[76]['a'], T[76]['b']]>, T[76]['rotl']>>,
-  Expect<Equal<entry<[T[77]['a'], T[77]['b']]>, T[77]['rotl']>>,
 
-  Expect<Equal<T['length'], 78>>,
+  Expect<Equal<T['length'], 33>>,
 ]

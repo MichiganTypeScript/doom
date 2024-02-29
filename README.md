@@ -79,7 +79,7 @@ Usage count (in Doom) is the number on the right
 | I32And            | 819   | ✅           |
 | I32Or             | 488   | ✅           |
 | I32Xor            | 411   | ✅           |
-| I32Rotl           | 240   | ❌           |
+| I32Rotl           | 240   | ✅           |
 | I32ShrU           | 234   | ✅           |
 | I32ShrS           | 230   | ✅           |
 | I64Or             | 129   | ✅           |
@@ -89,7 +89,7 @@ Usage count (in Doom) is the number on the right
 | I64Xor            | 34    | ✅           |
 | I64Clz            | 7     | ✅           |
 | I32Clz            | 5     | ✅           |
-| I64Rotl           | 1     | ❌           |
+| I64Rotl           | 1     | ✅           |
 
 ### Variable Instructions
 
