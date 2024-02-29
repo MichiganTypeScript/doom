@@ -17,7 +17,7 @@ macro_rules! dbg_dump_file {
 
 pub fn format_index(index: &Index) -> String {
     match index {
-        Index::Id(id) => "'$".to_string() + id.name() + "'",
+        Index::Id(id) => "'$".to_string() + &id.name().replace('.', "_") + "'",
         _ => panic!("numeric index not supported"),
     }
 }

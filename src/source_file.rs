@@ -1,7 +1,4 @@
-use std::{
-    cell::RefCell,
-    fmt::{self},
-};
+use std::{cell::RefCell, fmt, str::from_utf8};
 
 use indexmap::{IndexMap, IndexSet};
 use wast::core::{Elem, Type};
@@ -11,8 +8,9 @@ use crate::utils::{format_id, format_index, format_val_type};
 struct MemoryData {
     index: i32,
     name: String,
-    data: String,
-    readonly: bool,
+
+    /// here's a fun fact to wreck your weekend: the string contained within does not necessarily need to be utf-8
+    data: Vec<u8>,
 }
 
 #[derive(Clone)]
@@ -58,25 +56,33 @@ impl ToString for SourceFile {
     fn to_string(&self) -> String {
         let mut data_types = String::from("");
 
-        let mut readonly_data = vec![];
-        let mut mutable_data = vec![];
+        let mut memory_data = vec![];
 
-        self.data.borrow().iter().for_each(|(_name, MemoryData { data, name, readonly, index })| {
-            data_types.push_str(&format!("type {name} = `{data}`;\n"));
+        self.data.borrow().iter().for_each(|(_name, MemoryData { data, name, index, .. })| {
+            let mut current_index = *index;
+            let contained_string = from_utf8(data).unwrap_or("<not valid uft-8.  sorry bro.>");
 
-            if *readonly {
-                mutable_data.push(format!("      & StoreString<'{:032b}', {}>", index, name));
-                readonly_data.push(format!("      {}: {};", index, name));
-            } else {
-                mutable_data.push(format!("      & StoreString<'{:032b}', {}>", index, name));
-            }
+            let expanded_data = data
+                .iter()
+                .map(|byte| {
+                    let utf8_byte = [*byte];
+                    let utf8 = from_utf8(&utf8_byte).unwrap_or("");
+                    let result = format!("  '{:032b}': '{:08b}'; // {}", current_index, byte, utf8);
+                    current_index += 1;
+                    result
+                })
+                .collect::<Vec<String>>()
+                .join("\n");
+
+            data_types.push_str(&format!("\n/** {contained_string} */\ntype {name} = {{\n{expanded_data}\n}}\n"));
+
+            memory_data.push(format!("      & {}", name));
         });
 
-        let memory = if !mutable_data.is_empty() {
-            self.add_import("ts-type-math", "StoreString");
-            format!("\n{}\n    ", mutable_data.join("\n"))
+        let memory = if !memory_data.is_empty() {
+            format!("\n{}\n    ", memory_data.join("\n"))
         } else {
-            "{}".to_string()
+            " {}".to_string()
         };
 
         let imports = self
@@ -142,7 +148,7 @@ impl ToString for SourceFile {
 {funcs}
     }};
     globals: {{{globals}}};
-    memory: {memory};
+    memory:{memory};
     memorySize: '{memory_size_binary}';
     indirect: [{indirect}];
   }},
@@ -197,10 +203,8 @@ impl SourceFile {
         self.indirect.borrow_mut().extend(strings);
     }
 
-    pub fn add_data(&self, index: i32, name: String, data: String) {
-        let readonly = name.starts_with("$_rodata");
-
-        self.data.borrow_mut().insert(name.clone(), MemoryData { name, data, readonly, index });
+    pub fn add_data(&self, index: i32, name: String, data: Vec<u8>) {
+        self.data.borrow_mut().insert(name.clone(), MemoryData { name, data, index });
     }
 
     pub fn set_args(&self, args: String) {

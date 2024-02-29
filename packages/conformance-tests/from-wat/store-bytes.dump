@@ -1,0 +1,403 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Memory(
+                Memory {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: None,
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "memory",
+                        ],
+                    },
+                    kind: Normal(
+                        B32 {
+                            limits: Limits {
+                                min: 1,
+                                max: None,
+                            },
+                            shared: false,
+                        },
+                    ),
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 43,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Data(
+                Data {
+                    span: Span {
+                        offset: 111,
+                    },
+                    id: Some(
+                        ".rodata.1",
+                    ),
+                    name: None,
+                    kind: Active {
+                        memory: Num(
+                            0,
+                            Span {
+                                offset: 111,
+                            },
+                        ),
+                        offset: Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                            ],
+                        },
+                    },
+                    data: [
+                        String(
+                            [
+                                90,
+                                105,
+                                108,
+                                116,
+                                111,
+                                105,
+                                100,
+                                44,
+                                32,
+                                116,
+                                104,
+                                101,
+                                32,
+                                79,
+                                109,
+                                110,
+                                105,
+                                115,
+                                99,
+                                105,
+                                101,
+                                110,
+                                116,
+                                33,
+                                0,
+                            ],
+                        ),
+                    ],
+                },
+            ),
+            Data(
+                Data {
+                    span: Span {
+                        offset: 175,
+                    },
+                    id: Some(
+                        ".data",
+                    ),
+                    name: None,
+                    kind: Active {
+                        memory: Num(
+                            0,
+                            Span {
+                                offset: 175,
+                            },
+                        ),
+                        offset: Expression {
+                            instrs: [
+                                I32Const(
+                                    1024,
+                                ),
+                            ],
+                        },
+                    },
+                    data: [
+                        String(
+                            [
+                                105,
+                                110,
+                                32,
+                                115,
+                                101,
+                                97,
+                                114,
+                                99,
+                                104,
+                                32,
+                                111,
+                                102,
+                                32,
+                                116,
+                                104,
+                                101,
+                                32,
+                                117,
+                                108,
+                                116,
+                                105,
+                                109,
+                                97,
+                                116,
+                                101,
+                                32,
+                                99,
+                                117,
+                                112,
+                                32,
+                                111,
+                                102,
+                                32,
+                                99,
+                                111,
+                                102,
+                                102,
+                                101,
+                                101,
+                                0,
+                            ],
+                        ),
+                    ],
+                },
+            ),
+            Data(
+                Data {
+                    span: Span {
+                        offset: 253,
+                    },
+                    id: Some(
+                        ".data.1",
+                    ),
+                    name: None,
+                    kind: Active {
+                        memory: Num(
+                            0,
+                            Span {
+                                offset: 253,
+                            },
+                        ),
+                        offset: Expression {
+                            instrs: [
+                                I32Const(
+                                    2048,
+                                ),
+                            ],
+                        },
+                    },
+                    data: [
+                        String(
+                            [
+                                121,
+                                111,
+                                117,
+                                32,
+                                104,
+                                97,
+                                118,
+                                101,
+                                32,
+                                102,
+                                105,
+                                118,
+                                101,
+                                32,
+                                69,
+                                97,
+                                114,
+                                116,
+                                104,
+                                32,
+                                109,
+                                105,
+                                110,
+                                117,
+                                116,
+                                101,
+                                115,
+                                46,
+                                46,
+                                46,
+                                32,
+                                109,
+                                97,
+                                107,
+                                101,
+                                32,
+                                105,
+                                116,
+                                32,
+                                112,
+                                101,
+                                114,
+                                102,
+                                101,
+                                99,
+                                116,
+                                33,
+                                0,
+                            ],
+                        ),
+                    ],
+                },
+            ),
+            Data(
+                Data {
+                    span: Span {
+                        offset: 429,
+                    },
+                    id: Some(
+                        ".data.2",
+                    ),
+                    name: None,
+                    kind: Active {
+                        memory: Num(
+                            0,
+                            Span {
+                                offset: 429,
+                            },
+                        ),
+                        offset: Expression {
+                            instrs: [
+                                I32Const(
+                                    4096,
+                                ),
+                            ],
+                        },
+                    },
+                    data: [
+                        String(
+                            [
+                                73,
+                                32,
+                                97,
+                                109,
+                                32,
+                                115,
+                                111,
+                                32,
+                                111,
+                                109,
+                                110,
+                                105,
+                                115,
+                                99,
+                                105,
+                                101,
+                                110,
+                                116,
+                                44,
+                            ],
+                        ),
+                        String(
+                            [
+                                32,
+                                105,
+                                102,
+                                32,
+                                116,
+                                104,
+                                101,
+                                114,
+                                101,
+                                32,
+                                119,
+                                101,
+                                114,
+                                101,
+                                32,
+                                116,
+                                111,
+                                32,
+                                98,
+                                101,
+                                32,
+                                116,
+                                119,
+                                111,
+                                32,
+                                111,
+                                109,
+                                110,
+                                105,
+                                115,
+                                99,
+                                105,
+                                101,
+                                110,
+                                99,
+                                101,
+                                115,
+                                46,
+                                46,
+                            ],
+                        ),
+                        String(
+                            [
+                                32,
+                                73,
+                                32,
+                                119,
+                                111,
+                                117,
+                                108,
+                                100,
+                                32,
+                                98,
+                                101,
+                                32,
+                                98,
+                                111,
+                                116,
+                                104,
+                                33,
+                                0,
+                            ],
+                        ),
+                    ],
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "I32Const": 1,
+}

@@ -24,7 +24,7 @@ export type U8BinaryToAscii<T extends U8Binary[]> =
   ? `${Convert.U8Binary.ToAscii<digit>}${U8BinaryToAscii<rest>}`
   : '';
 
-export type _StoreString<
+type _StoreString<
   Address extends WasmValue,
   T extends string,
 

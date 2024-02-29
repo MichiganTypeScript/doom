@@ -18,6 +18,7 @@ export const getWasm = async <
 export const getWasmMemory = (
   testDirectory: string,
   testName: string,
+  pointerOverride?: number
 ) => async <
   Input extends number[],
 >(...input: Input) => {
@@ -31,7 +32,7 @@ export const getWasmMemory = (
     memory: WebAssembly.Memory
   };
 
-  const pointer = entry(...input);
+  const pointer = pointerOverride ?? entry(...input);
 
   const buffer = new Uint8Array(memory.buffer);
 

@@ -10,9 +10,6 @@ mod wat_to_dts;
 use std::{fs, path::Path};
 use wat_to_dts::wat_to_dts;
 
-#[macro_use]
-extern crate pretty_assertions;
-
 fn main() {
     let current_dir = std::env::current_dir().unwrap();
     let going_to = Path::new("packages/playground/doom/doom.wat");
@@ -29,6 +26,8 @@ mod tests {
         fs::{self, DirEntry},
         process::Command,
     };
+
+    use pretty_assertions::assert_eq;
 
     /// SETTING THIS TO TRUE WILL FORCIBLY OVERWRITE ALL TESTS
     const OVERWRITE: bool = true;

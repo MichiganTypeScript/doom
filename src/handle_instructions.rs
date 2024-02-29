@@ -35,14 +35,12 @@ fn handle_instruction(
         Instruction::I64Const(value) => {
             vec![(*indent, format!("{{ kind: 'Const'; value: '{:064b}' }},", value))]
         }
-        // Instruction::F32Const(raw_bits) => {
-        //     let value = f32::from_bits(raw_bits.bits).to_string();
-        //     vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
-        // }
-        // Instruction::F64Const(raw_bits) => {
-        //     let value = f64::from_bits(raw_bits.bits).to_string();
-        //     vec![(*indent, format!("{{ kind: 'Const'; value: {value} }},"))]
-        // }
+        Instruction::F32Const(f32) => {
+            vec![(*indent, format!("{{ kind: 'Const'; value: '{:032b}' }},", f32.bits))]
+        }
+        Instruction::F64Const(f64) => {
+            vec![(*indent, format!("{{ kind: 'Const'; value: '{:064b}' }},", f64.bits))]
+        }
 
         /* Comparison Instructions */
         Instruction::I32Eqz => {
@@ -57,26 +55,23 @@ fn handle_instruction(
         Instruction::I64Eq => {
             vec![(*indent, format!("{{ kind: 'Equals', type: 'i64' }},"))]
         }
-        // Instruction::F32Eq => {
-        //     vec![(*indent, format!("{{ kind: 'Equals', type: 'f32' }},"))]
-        // }
-        // Instruction::F64Eq => {
-        //     vec![(*indent, format!("{{ kind: 'Equals', type: 'f64' }},"))]
-        // }
+        Instruction::F32Eq => {
+            vec![(*indent, format!("{{ kind: 'Equals', type: 'f32' }},"))]
+        }
+        Instruction::F64Eq => {
+            vec![(*indent, format!("{{ kind: 'Equals', type: 'f64' }},"))]
+        }
         Instruction::I32Ne => {
             vec![(*indent, format!("{{ kind: 'NotEqual', type: 'i32' }},"))]
         }
         Instruction::I64Ne => {
             vec![(*indent, format!("{{ kind: 'NotEqual', type: 'i64' }},"))]
         }
-        // Instruction::F32Ne => {
-        //     vec![(*indent, format!("{{ kind: 'NotEqual', type: 'i32' }},"))]
-        // }
-        // Instruction::F64Ne => {
-        //     vec![(*indent, format!("{{ kind: 'NotEqual', type: 'f64' }},"))]
-        // }
         Instruction::F32Ne => {
-            vec![(*indent, format!("{{ kind: 'NotEqual' }},"))]
+            vec![(*indent, format!("{{ kind: 'NotEqual', type: 'i32' }},"))]
+        }
+        Instruction::F64Ne => {
+            vec![(*indent, format!("{{ kind: 'NotEqual', type: 'f64' }},"))]
         }
 
         Instruction::I32GtS => {
@@ -236,10 +231,45 @@ fn handle_instruction(
         Instruction::F32ReinterpretI32 | Instruction::I32ReinterpretF32 | Instruction::F64ReinterpretI64 | Instruction::I64ReinterpretF64 => {
             vec![(*indent, format!("{{ kind: 'Reinterpret' }},"))]
         }
-        // Promote
-        // Demote
-        // Convert
-        // Trunc (float to int)
+        Instruction::F64PromoteF32 => {
+            vec![(*indent, format!("{{ kind: 'Promote' }},"))]
+        }
+        Instruction::F32ConvertI32S => {
+            vec![(*indent, format!("{{ kind: 'Convert', signed: true, from: 'f32', to: 'i32' }},"))]
+        }
+        Instruction::F32ConvertI32U => {
+            vec![(*indent, format!("{{ kind: 'Convert', signed: false, from: 'f32', to: 'i32' }},"))]
+        }
+        Instruction::F32ConvertI64S => {
+            vec![(*indent, format!("{{ kind: 'Convert', signed: true, from: 'f32', to: 'i64' }},"))]
+        }
+        Instruction::F32ConvertI64U => {
+            vec![(*indent, format!("{{ kind: 'Convert', signed: false, from: 'f32', to: 'i64' }},"))]
+        }
+        Instruction::F64ConvertI32S => {
+            vec![(*indent, format!("{{ kind: 'Convert', signed: true, from: 'f64', to: 'i32' }},"))]
+        }
+        Instruction::F64ConvertI32U => {
+            vec![(*indent, format!("{{ kind: 'Convert', signed: false, from: 'f64', to: 'i32' }},"))]
+        }
+        Instruction::F64ConvertI64S => {
+            vec![(*indent, format!("{{ kind: 'Convert', signed: true, from: 'f64', to: 'i64' }},"))]
+        }
+        Instruction::F64ConvertI64U => {
+            vec![(*indent, format!("{{ kind: 'Convert', signed: false, from: 'f64', to: 'i64' }},"))]
+        }
+        Instruction::I32TruncF32S => {
+            vec![(*indent, format!("{{ kind: 'Truncate', signed: true, from: 'i32', to: 'f32' }},"))]
+        }
+        Instruction::I32TruncF64U => {
+            vec![(*indent, format!("{{ kind: 'Truncate', signed: false, from: 'i32', to: 'f64' }},"))]
+        }
+        Instruction::I32TruncF64S => {
+            vec![(*indent, format!("{{ kind: 'Truncate', signed: true, from: 'i32', to: 'f64' }},"))]
+        }
+        Instruction::F32DemoteF64 => {
+            vec![(*indent, format!("{{ kind: 'Demote' }},"))]
+        }
 
         /* Floating Point Specific Instructions */
         // Min
@@ -580,7 +610,8 @@ fn handle_instruction(
             vec![(*indent, format!("{{ kind: 'Nop'; ziltoid: 'theOmniscient' }},"))]
         }
         Instruction::Return => {
-            let count = func.ty.inline.clone().expect("must have a return type").results.len();
+            let maybe_inline = func.ty.inline.clone();
+            let count = if let Some(ft) = maybe_inline { ft.results.len() } else { 0 };
             vec![(*indent, format!("{{ kind: 'Return'; count: {count} }},"))]
         }
         Instruction::Select(_) => {

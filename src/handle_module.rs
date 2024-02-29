@@ -3,18 +3,24 @@ use crate::utils::{format_id, val_type_to_typescript_type};
 use crate::{handle_instructions::handle_func, utils::format_val_type};
 use std::collections::HashMap;
 use std::str;
-use wast::core::{DataVal, Func, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField};
+use wast::core::{DataVal, Func, FuncKind, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, ModuleField};
 use wast::token::Index;
 
 fn handle_module_field_func(source: &SourceFile, func: &Func) {
+    if let FuncKind::Import(_) = func.kind {
+        // imports are not supported
+        return;
+    }
+
     source.add_import("wasm-to-typescript-types", "Func");
     source.add_import("wasm-to-typescript-types", "bootstrap");
 
     let name = "$".to_string()
-        + func
+        + &func
             .id
             .unwrap_or_else(|| panic!("need to implement no name funcs but it looks like I can skirt by without having to do any of it"))
-            .name();
+            .name()
+            .replace('.', "_");
 
     if name == "$entry" {
         source.set_args(String::from("[]"));
@@ -26,7 +32,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
             .clone()
             .map(|function_type| {
                 let params_and_types = function_type.params.iter().map(|(id, _, val_type)| {
-                    let id = id.expect("params must have an id").name();
+                    let id = id.unwrap_or_else(|| panic!("params must have an id: {}", &name)).name();
                     (format!("'${id}'"), format_val_type(val_type))
                 });
 
@@ -138,7 +144,6 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
             ModuleField::Func(func) => {
                 let count = module_index.entry("Func").or_insert(0);
                 *count += 1;
-                // handle_module_field_func(source, func);
                 handle_module_field_func(source, func);
             }
 
@@ -172,17 +177,14 @@ pub fn handle_module_fields(source: &SourceFile, fields: &Vec<ModuleField>) {
                     _ => panic!("only Active DataKind supported"),
                 };
 
-                let s = data
+                let s: Vec<u8> = data
                     .data
                     .iter()
-                    .map(|x| match x {
+                    .flat_map(|x| match x {
                         DataVal::Integral(_) => panic!("data should only be strings"),
-                        DataVal::String(x) => {
-                            str::from_utf8(x).unwrap().to_string() // Fix: Convert the result of str::from_utf8() to a String
-                        }
+                        DataVal::String(x) => x.to_vec(),
                     })
-                    .collect::<Vec<String>>()
-                    .join(", ");
+                    .collect::<_>();
 
                 source.add_data(*index, name, s);
             }
