@@ -161,27 +161,72 @@ export const wasmConversion = {
 
 export const memory = {
   load: (a: string) => a,
-  load8_s: (a: string) => a.slice(-8).padStart(32, a[0]),
-  load8_u: (a: string) => a.slice(-8).padStart(32, '0'),
-  load16_s: (a: string) => a.slice(-16).padStart(32, a[0]),
-  load16_u: (a: string) => a.slice(-16).padStart(32, '0'),
+  load8_s: (a: string) => {
+    const slice = a.slice(-8)
+    return slice.padStart(32, slice[0])
+  },
+  load8_u: (a: string) => {
+    const slice = a.slice(-8).padStart(32, '0')
+    return slice
+  },
+  load16_s: (a: string) => {
+    const slice = a.slice(-16)
+    return slice.padStart(32, slice[0])
+  },
+  load16_u: (a: string) => {
+    const slice = a.slice(-16).padStart(32, '0')
+    return slice
+  },
 
   store: (a: string) => a,
-  store8: (a: string) => a.slice(-8).padStart(32, '0'),
-  store16: (a: string) => a.slice(-16).padStart(32, '0'),
+  store8: (a: string) => {
+    const slice = a.slice(-8).padStart(32, '0')
+    return slice
+  },
+  store16: (a: string) => {
+    const slice = a.slice(-16).padStart(32, '0')
+    return slice
+  },
 }
 
 export const memoryBigInt = {
   load: (a: string) => a,
-  load8_s: (a: string) => a.slice(-8).padStart(64, a[0]),
-  load8_u: (a: string) => a.slice(-8).padStart(64, '0'),
-  load16_s: (a: string) => a.slice(-16).padStart(64, a[0]),
-  load16_u: (a: string) => a.slice(-16).padStart(64, '0'),
-  load32_s: (a: string) => a.slice(-32).padStart(64, a[0]),
-  load32_u: (a: string) => a.slice(-32).padStart(64, '0'),
+  load8_s: (a: string) => {
+    const slice = a.slice(-8)
+    return slice.padStart(64, slice[0])
+  },
+  load8_u: (a: string) => {
+    const slice = a.slice(-8).padStart(64, '0')
+    return slice
+  },
+  load16_s: (a: string) => {
+    const slice = a.slice(-16)
+    return slice.padStart(64, slice[0])
+  },
+  load16_u: (a: string) => {
+    const slice = a.slice(-16).padStart(64, '0')
+    return slice
+  },
+  load32_s: (a: string) => {
+    const slice = a.slice(-32)
+    return slice.padStart(64, slice[0])
+  },
+  load32_u: (a: string) => {
+    const slice = a.slice(-32).padStart(64, '0')
+    return slice
+  },
 
   store: (a: string) => a,
-  store8: (a: string) => a.slice(-8).padStart(64, '0'),
-  store16: (a: string) => a.slice(-16).padStart(64, '0'),
-  store32: (a: string) => a.slice(-32).padStart(64, '0'),
+  store8: (a: string) => {
+    const slice = a.slice(-8).padStart(64, '0')
+    return slice
+  },
+  store16: (a: string) => {
+    const slice = a.slice(-16).padStart(64, '0')
+    return slice
+  },
+  store32: (a: string) => {
+    const slice = a.slice(-32).padStart(64, '0')
+    return slice
+  },
 }

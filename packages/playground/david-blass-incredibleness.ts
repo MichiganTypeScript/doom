@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/single-i32load.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[33620096], true>// =>
+import { entry } from 'conformance-tests/from-wat/single-i32load8_s.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[-2143281136], true, 5>// =>
 type r=e['result'] // =>
 type s=e['stack']  // =>
 type s0=s[0]       // =>

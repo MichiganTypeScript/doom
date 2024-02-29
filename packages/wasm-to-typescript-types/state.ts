@@ -1,3 +1,4 @@
+import { I32AddBinary } from "../ts-type-math/add";
 import type { Instruction } from "./instructions/instructions"
 import type {
   BranchesById,
@@ -467,11 +468,11 @@ export namespace State {
       _Acc extends Record<WasmValue, Wasm.Byte> = {}
     > = Satisfies<Record<WasmValue, Wasm.Byte>,
       bytes extends [
-        infer head extends Wasm.Byte, // WASM is little-endian so these go in first
         ...infer tail extends Wasm.Byte[],
+        infer head extends Wasm.Byte, // WASM is little-endian so these go in first
       ]
       ? CollectBytes<
-          Wasm.I32Add<address, Wasm.I32True>,
+          I32AddBinary<address, '1'>,
           tail,
           evaluate<
             & _Acc

@@ -5,7 +5,7 @@ import { numberToTwosComplement, twosComplementToNumber } from "../../ts-type-ma
 import { getWasm } from "../utils";
 import { Expect, Equal } from "type-testing";
 
-test.each(t)('i32load $a', async ({ a, a_binary, load, load_binary }) => {
+test.each(t)('i32load($a) === $load (%#)', async ({ a, a_binary, load, load_binary }) => {
   expect(a).toEqual(twosComplementToNumber(a_binary));
   expect(a_binary).toEqual(numberToTwosComplement(a));
   expect(load).toEqual(twosComplementToNumber(load_binary));

@@ -19,9 +19,9 @@ export namespace Load {
     // WARNING this is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
     // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
       `${
-        memory[address]
-      }${
         memory[AddBinary<address, '1'>]
+      }${
+        memory[address]
       }`
   
   export type Read4Bytes<
@@ -33,13 +33,13 @@ export namespace Load {
   // WARNING this is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
   // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     `${
-      memory[address]
-    }${
-      memory[AddBinary<address,  '1'>]
+      memory[AddBinary<address, '11'>]
     }${
       memory[AddBinary<address, '10'>]
     }${
-      memory[AddBinary<address, '11'>]
+      memory[AddBinary<address,  '1'>]
+    }${
+      memory[address]
     }`
   
   export type Read8Bytes<
@@ -51,21 +51,21 @@ export namespace Load {
   // WARNING this is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
   // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     `${
-      memory[address]
-    }${
-      memory[AddBinary<address,   '1'>]
-    }${
-      memory[AddBinary<address,  '10'>]
-    }${
-      memory[AddBinary<address,  '11'>]
-    }${
-      memory[AddBinary<address, '100'>]
-    }${
-      memory[AddBinary<address, '101'>]
+      memory[AddBinary<address, '111'>]
     }${
       memory[AddBinary<address, '110'>]
     }${
-      memory[AddBinary<address, '111'>]
+      memory[AddBinary<address, '101'>]
+    }${
+      memory[AddBinary<address, '100'>]
+    }${
+      memory[AddBinary<address,  '11'>]
+    }${
+      memory[AddBinary<address,  '10'>]
+    }${
+      memory[AddBinary<address,   '1'>]
+    }${
+      memory[address]
     }`
 
 
