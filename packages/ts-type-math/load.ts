@@ -2,70 +2,100 @@ import { AddBinary } from "./add";
 import { WasmValue, Wasm } from "./wasm";
 
 export namespace Load {
+  /**
+   * in WebAssembly, linear memory is "zeroed out" when the program initializes, which means it's actually totally fine to read memory beyond what's been written.
+   * all that happens is you get zero bytes.  check out the single-i32store8.wat for a simple example.
+   */
+  type ZeroedByte = '00000000';
+
+  /**
+   * this function will use a fallback if the resulting value is equal to any or unknown
+   * 
+   * specifically, this is useful for when you're reading from memory and you want to use a fallback value if the memory is uninitialized.
+   */
+  type IsUnknownOrAnyFallback<T, Fallback> = unknown extends T ? Fallback : T
+
   export type Read1Byte<
     /** memory object to read from */
     memory extends Record<WasmValue, Wasm.Byte>,
   
     address extends WasmValue,
+
+    _b0 extends string = memory[address]
   > =
-    `${memory[address]}`
+    `${IsUnknownOrAnyFallback<_b0, ZeroedByte>}`
   
   export type Read2Bytes<
       /** memory object to read from */
       memory extends Record<WasmValue, Wasm.Byte>,
   
       address extends WasmValue,
+
+      // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
+      // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
+      _b1 extends string = memory[AddBinary<address, '1'>],
+      _b0 extends string = memory[address],
     > =
-    // WARNING this is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
-    // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
       `${
-        memory[AddBinary<address, '1'>]
+        IsUnknownOrAnyFallback<_b1, ZeroedByte>
       }${
-        memory[address]
+        IsUnknownOrAnyFallback<_b0, ZeroedByte>
       }`
   
   export type Read4Bytes<
     /** memory object to read from */
     memory extends Record<WasmValue, Wasm.Byte>,
   
+    // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
+    // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     address extends WasmValue,
+    _b3 extends string = memory[AddBinary<address, '11'>],
+    _b2 extends string = memory[AddBinary<address, '10'>],
+    _b1 extends string = memory[AddBinary<address, '1'>],
+    _b0 extends string = memory[address],
   > =
-  // WARNING this is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
-  // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     `${
-      memory[AddBinary<address, '11'>]
+      IsUnknownOrAnyFallback<_b3, ZeroedByte>
     }${
-      memory[AddBinary<address, '10'>]
+      IsUnknownOrAnyFallback<_b2, ZeroedByte>
     }${
-      memory[AddBinary<address,  '1'>]
+      IsUnknownOrAnyFallback<_b1, ZeroedByte>
     }${
-      memory[address]
+      IsUnknownOrAnyFallback<_b0, ZeroedByte>
     }`
   
   export type Read8Bytes<
     /** memory object to read from */
     memory extends Record<WasmValue, Wasm.Byte>,
   
+    // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
+    // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     address extends WasmValue,
+    _b7 extends string = memory[AddBinary<address, '111'>],
+    _b6 extends string = memory[AddBinary<address, '110'>],
+    _b5 extends string = memory[AddBinary<address, '101'>],
+    _b4 extends string = memory[AddBinary<address, '100'>],
+    _b3 extends string = memory[AddBinary<address,  '11'>],
+    _b2 extends string = memory[AddBinary<address,  '10'>],
+    _b1 extends string = memory[AddBinary<address,   '1'>],
+    _b0 extends string = memory[address],
   > =
-  // WARNING this is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
-  // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     `${
-      memory[AddBinary<address, '111'>]
+      IsUnknownOrAnyFallback<_b7, ZeroedByte>
     }${
-      memory[AddBinary<address, '110'>]
+      IsUnknownOrAnyFallback<_b6, ZeroedByte>
     }${
-      memory[AddBinary<address, '101'>]
+      IsUnknownOrAnyFallback<_b5, ZeroedByte>
     }${
-      memory[AddBinary<address, '100'>]
+      IsUnknownOrAnyFallback<_b4, ZeroedByte>
     }${
-      memory[AddBinary<address,  '11'>]
+      IsUnknownOrAnyFallback<_b3, ZeroedByte>
     }${
-      memory[AddBinary<address,  '10'>]
+      IsUnknownOrAnyFallback<_b2, ZeroedByte>
     }${
-      memory[AddBinary<address,   '1'>]
+      IsUnknownOrAnyFallback<_b1, ZeroedByte>
     }${
-      memory[address]
+      IsUnknownOrAnyFallback<_b0, ZeroedByte>
     }`
 
 
