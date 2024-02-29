@@ -39,8 +39,6 @@ type programState = entry<[], true>;
 
 type memory = programState['memory'];
 
-type result = ReadStringFromMemory<programState>;
-
 type tests = [
   Expect<Equal<ReadStringFromMemory<programState>, typeof results['at0']>>,
 

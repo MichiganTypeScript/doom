@@ -5,7 +5,7 @@ import { t, T } from '../../ts-type-math/test-cases/arithmetic'
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
 
-test.todo.each(t)('mul($a, $b) === $mul', async ({ a, b, mul }) => {
+test.each(t)('mul($a, $b) === $mul', async ({ a, b, mul }) => {
   const entry = await getWasm("from-wat", 'single-i32mul');
   expect(entry(a, b)).toStrictEqual(mul);
 });

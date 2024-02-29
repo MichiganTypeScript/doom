@@ -8,41 +8,6 @@ type a = "00000000000000000000000001100100"
 type b = "00000000000000000000000000001010"
 type x = MultiplyBinary<a, b> // =>
 
-
-// export type MultiplyBinary<
-//   a extends string, // multiplicand
-//   q extends string // multiplier
-// > =
-//   _MultiplyBinary<
-//     a,
-//     ReverseString<q>,
-//     Wasm.I32False,
-
-//     '',
-//     ''
-//   >
-
-// export type _MultiplyBinary<
-//   m extends string,
-//   revQ extends string,
-//   register extends string,
-
-//   _Place extends string,
-//   _Acc extends string
-// > =
-//   revQ extends `${infer digit}${infer tail}`
-//   ? // Q has digits left
-//     digit extends "0"
-//     ? //
-//       ShiftRightBinary<register, Wasm.I32True, false>
-
-//     : // we have a digit to multiply
-//       m
-
-//   : //
-//     never
-
-
 export type I32MultiplyBinary<
   a extends WasmValue,
   b extends WasmValue
@@ -54,9 +19,16 @@ export type I32MultiplyBinary<
   >
 >
 
-
-
-
+export type I64MultiplyBinary<
+  a extends WasmValue,
+  b extends WasmValue
+> = Satisfies<WasmValue,
+  a extends Wasm.I64False ? Wasm.I64False :
+  b extends Wasm.I64False ? Wasm.I64False :
+  Clamp.Last64Bits<
+    MultiplyBinary<a, b>
+  >
+>
 
 // Hopefully there's a more efficient way to do this, but I'm using the method for repeated addition I learned in middle school
 // apparently there's another way using right shift called the "partial sum" approach https://youtu.be/PjmWG_8b3os

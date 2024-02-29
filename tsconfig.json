@@ -32,9 +32,6 @@
     // "./packages/playground/evaluate/results/result.ts",
     // "./packages/playground/evaluate/playground.ts",
     //
-    "./packages/conformance-tests/from-wat/single-i32mul.test.ts",
-    "./packages/conformance-tests/from-wat/single-i64mul.test.ts",
-    //
     "./packages/conformance-tests/from-wat/single-i32div_s.test.ts",
     "./packages/conformance-tests/from-wat/single-i64div_s.test.ts",
     //

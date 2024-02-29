@@ -97,7 +97,10 @@ export const bitwise = {
 export const arithmetic = {
    add: (a: number, b: number) => (a + b) >> 0,
    sub: (a: number, b: number) => (a - b) >> 0,
-   mul: (a: number, b: number) => (a * b) >> 0,
+   mul: (a: number, b: number) => {
+    const realResult = BigInt(a) * BigInt(b)
+    return Number(realResult & 0xFFFFFFFFn) >> 0;
+  },
   divs: (a: number, b: number) => b === 0 ? 0 : Math.floor(a / b) >> 0,
   divu: (a: number, b: number) => b === 0 ? 0 : Math.floor((a >>> 0) / (b >>> 0)) >> 0,
   rems: (a: number, b: number) => b === 0 ? 0 : (a % b) >> 0,

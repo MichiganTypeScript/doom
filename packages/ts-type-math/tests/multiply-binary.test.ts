@@ -2,13 +2,22 @@ import { Equal, Expect } from "type-testing"
 import type { I32MultiplyBinary } from '../multiply';
 import { t, T } from '../test-cases/arithmetic';
 import { expect, test } from 'vitest';
-import { twosComplementToNumber, numberToTwosComplement } from "../test-utils";
+import { twosComplementToNumber, numberToTwosComplement, arithmetic } from "../test-utils";
 
 test.each(t)('$a_binary * $b_binary === $mul_binary', ({ a_binary, b_binary, mul_binary }) => {
-  const actual = twosComplementToNumber(a_binary) * twosComplementToNumber(b_binary);
+  const actual = arithmetic.mul(twosComplementToNumber(a_binary), twosComplementToNumber(b_binary));
   const actual_binary = numberToTwosComplement(actual);
   expect(actual_binary).toBe(mul_binary);
 })
+
+type i = 72
+type a = T[i]['a']  // =>
+type b = T[i]['b']  // =>
+type e = T[i]['mul']// =>
+type ab = T[i]['a_binary']         // =>
+type bb = T[i]['b_binary']         // =>
+type eb = T[i]['mul_binary']       // =>
+type xb = I32MultiplyBinary<ab, bb>// =>
 
 type tests = [
   Expect<Equal<I32MultiplyBinary<T[ 0]['a_binary'], T[ 0]['b_binary']>, T[ 0]['mul_binary']>>,
@@ -45,20 +54,20 @@ type tests = [
   Expect<Equal<I32MultiplyBinary<T[31]['a_binary'], T[31]['b_binary']>, T[31]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[32]['a_binary'], T[32]['b_binary']>, T[32]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[33]['a_binary'], T[33]['b_binary']>, T[33]['mul_binary']>>,
-  // Expect<Equal<I32MultiplyBinary<T[34]['a_binary'], T[34]['b_binary']>, T[34]['mul_binary']>>,
+  Expect<Equal<I32MultiplyBinary<T[34]['a_binary'], T[34]['b_binary']>, T[34]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[35]['a_binary'], T[35]['b_binary']>, T[35]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[36]['a_binary'], T[36]['b_binary']>, T[36]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[37]['a_binary'], T[37]['b_binary']>, T[37]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[38]['a_binary'], T[38]['b_binary']>, T[38]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[39]['a_binary'], T[39]['b_binary']>, T[39]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[40]['a_binary'], T[40]['b_binary']>, T[40]['mul_binary']>>,
-  // Expect<Equal<I32MultiplyBinary<T[41]['a_binary'], T[41]['b_binary']>, T[41]['mul_binary']>>,
+  Expect<Equal<I32MultiplyBinary<T[41]['a_binary'], T[41]['b_binary']>, T[41]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[42]['a_binary'], T[42]['b_binary']>, T[42]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[43]['a_binary'], T[43]['b_binary']>, T[43]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[44]['a_binary'], T[44]['b_binary']>, T[44]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[45]['a_binary'], T[45]['b_binary']>, T[45]['mul_binary']>>,
-  // Expect<Equal<I32MultiplyBinary<T[46]['a_binary'], T[46]['b_binary']>, T[46]['mul_binary']>>,
-  // Expect<Equal<I32MultiplyBinary<T[47]['a_binary'], T[47]['b_binary']>, T[47]['mul_binary']>>,
+  Expect<Equal<I32MultiplyBinary<T[46]['a_binary'], T[46]['b_binary']>, T[46]['mul_binary']>>,
+  Expect<Equal<I32MultiplyBinary<T[47]['a_binary'], T[47]['b_binary']>, T[47]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[48]['a_binary'], T[48]['b_binary']>, T[48]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[49]['a_binary'], T[49]['b_binary']>, T[49]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[50]['a_binary'], T[50]['b_binary']>, T[50]['mul_binary']>>,
@@ -72,7 +81,7 @@ type tests = [
   Expect<Equal<I32MultiplyBinary<T[58]['a_binary'], T[58]['b_binary']>, T[58]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[59]['a_binary'], T[59]['b_binary']>, T[59]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[60]['a_binary'], T[60]['b_binary']>, T[60]['mul_binary']>>,
-  // Expect<Equal<I32MultiplyBinary<T[61]['a_binary'], T[61]['b_binary']>, T[61]['mul_binary']>>,
+  Expect<Equal<I32MultiplyBinary<T[61]['a_binary'], T[61]['b_binary']>, T[61]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[62]['a_binary'], T[62]['b_binary']>, T[62]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[63]['a_binary'], T[63]['b_binary']>, T[63]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[64]['a_binary'], T[64]['b_binary']>, T[64]['mul_binary']>>,
@@ -83,7 +92,7 @@ type tests = [
   Expect<Equal<I32MultiplyBinary<T[69]['a_binary'], T[69]['b_binary']>, T[69]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[70]['a_binary'], T[70]['b_binary']>, T[70]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[71]['a_binary'], T[71]['b_binary']>, T[71]['mul_binary']>>,
-  // Expect<Equal<I32MultiplyBinary<T[72]['a_binary'], T[72]['b_binary']>, T[72]['mul_binary']>>,
+  Expect<Equal<I32MultiplyBinary<T[72]['a_binary'], T[72]['b_binary']>, T[72]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[73]['a_binary'], T[73]['b_binary']>, T[73]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[74]['a_binary'], T[74]['b_binary']>, T[74]['mul_binary']>>,
   Expect<Equal<I32MultiplyBinary<T[75]['a_binary'], T[75]['b_binary']>, T[75]['mul_binary']>>,
@@ -92,13 +101,3 @@ type tests = [
 
   Expect<Equal<T['length'], 78>>,
 ]
-
-type i = 41
-type a = T[i]['a']  // =>
-type b = T[i]['b']  // =>
-type e = T[i]['mul']// =>
-type ab = T[i]['a_binary']  // =>
-type bb = T[i]['b_binary']  // =>
-type eb = T[i]['mul_binary']// =>
-type x = xb                  // =>
-type xb = I32MultiplyBinary<ab, bb> // =>
