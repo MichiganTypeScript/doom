@@ -8,7 +8,7 @@ import { I64ExtendI32SBinary64, I64ExtendI32UBinary64 } from "./wasm-conversion"
 import { I32ClzBinary, I64ClzBinary64 } from "./binary";
 import { WrapBinary } from "./split";
 import { Convert } from "./conversion";
-import { DivideBinary32, RemainderBinary32 } from "./divide";
+// import { DivideBinary32, RemainderBinary32 } from "./divide";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 export type WasmInt = 'i32' | 'i64';
@@ -405,7 +405,8 @@ export namespace Wasm {
     a extends WasmValue,
     b extends WasmValue
   > = Satisfies<WasmValue,
-    DivideBinary32<a, b>
+    I32False
+    // DivideBinary32<a, b>
   >
 
   export type I32DivU<
@@ -436,7 +437,8 @@ export namespace Wasm {
     a extends WasmValue,
     b extends WasmValue
   > = Satisfies<WasmValue,
-    RemainderBinary32<a, b>
+    I32False
+    // RemainderBinary32<a, b>
   >
 
   export type I32RemU<

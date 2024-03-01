@@ -31,7 +31,7 @@
     "./packages/playground/evaluate/results/results-*",
     "./packages/playground/evaluate/results/bootstrap.ts",
     "./packages/playground/evaluate/results/result.ts",
-    // "./packages/playground/evaluate/playground.ts",
+    "./packages/playground/evaluate/playground.ts",
     //
     "./packages/conformance-tests/from-wat/single-i32div_s.test.ts",
     "./packages/conformance-tests/from-wat/single-i64div_s.test.ts",
