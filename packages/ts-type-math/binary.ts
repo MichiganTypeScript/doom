@@ -257,18 +257,18 @@ export type To64Binary<
  * @interesting this can do a 32 bit string in four gulps (rather than 32)
  * 
  */
-export type ReverseString<T extends string> =
+export type ReverseString8Segments<T extends string> =
   // let's go 8 at a time (rather than 1)
   T extends `${infer h1}${infer h2}${infer h3}${infer h4}${infer h5}${infer h6}${infer h7}${infer h8}${infer Tail}`
 
   ? // put them back together (but backwards)
-    `${ReverseString<Tail>}${h8}${h7}${h6}${h5}${h4}${h3}${h2}${h1}`
+    `${ReverseString8Segments<Tail>}${h8}${h7}${h6}${h5}${h4}${h3}${h2}${h1}`
   
   : // we have less than 8 left
     T extends `${infer h0}${infer t0}`
     
     ? // it wasn't some multiple of 8 so to finish up let's go one at a time
-      `${ReverseString<t0>}${h0}`
+      `${ReverseString8Segments<t0>}${h0}`
       
     : // we're done
       ''
@@ -277,7 +277,7 @@ export type ReverseString<T extends string> =
 // Would it be better or faster to just check that object real quick first and return that value if it exists?
 
 export type ToDecimalUnsigned<T extends string> =
-  _ToDecimalUnsigned<ReverseString<T>>;
+  _ToDecimalUnsigned<ReverseString8Segments<T>>;
 
 type _ToDecimalUnsigned<
   Binary extends string,
@@ -315,7 +315,7 @@ type TSNumberToTSBigint<
 export type ToDecimalUnsignedBigInt<
   T extends string
 > = Satisfies<bigint,
-  _ToDecimalUnsignedBigInt<ReverseString<T>>
+  _ToDecimalUnsignedBigInt<ReverseString8Segments<T>>
 >;
 
 type _ToDecimalUnsignedBigInt<

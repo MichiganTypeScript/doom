@@ -1,4 +1,4 @@
-import { ReverseString, SignBit } from "./binary";
+import { ReverseString8Segments, SignBit } from "./binary";
 import { SubtractBinary } from "./subtract";
 import { WasmValue, Wasm } from "./wasm";
 import { Clamp } from './split'
@@ -38,9 +38,9 @@ type ShiftLeftOnceBinaryArbitrary<
 
 //   /** should be '0' or '1' */
 //   fillWith extends string,
-// > = ReverseString<
+// > = ReverseString8Segments<
 //   ShiftLeftOnceBinaryArbitrary<
-//     ReverseString<a>,
+//     ReverseString8Segments<a>,
 //     fillWith
 //   >
 // >
@@ -49,7 +49,7 @@ type ShiftLeftOnceBinaryArbitrary<
 type ShiftRightOnceBinaryArbitrary<
   a extends string,
   fillWith extends '0' | '1',
-> = ReverseString<
+> = ReverseString8Segments<
   Clamp.First32Bits<`${fillWith}${a}`>
 >
 

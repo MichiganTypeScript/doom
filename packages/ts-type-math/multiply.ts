@@ -1,5 +1,5 @@
 import { AddBinary } from "./add";
-import { ReverseString } from "./binary";
+import { ReverseString8Segments } from "./binary";
 import { ShiftRightBinary } from "./shift";
 import { Clamp } from "./split";
 import { Wasm, WasmValue } from "./wasm";
@@ -44,7 +44,7 @@ export type MultiplyBinary<
 > =
   _MultiplyBinary<
     a,
-    ReverseString<b>,
+    ReverseString8Segments<b>,
     '',
     ''
   >

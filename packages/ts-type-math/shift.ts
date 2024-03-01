@@ -1,4 +1,4 @@
-import { ReverseString, SignBit, To32Binary, ToDecimalSigned, ToDecimalSignedBigInt, ToDecimalUnsigned, ToDecimalUnsignedBigInt } from "./binary";
+import { ReverseString8Segments, SignBit, To32Binary, ToDecimalSigned, ToDecimalSignedBigInt, ToDecimalUnsigned, ToDecimalUnsignedBigInt } from "./binary";
 import { Wasm, WasmValue } from "./wasm";
 import type { Convert } from './conversion';
 import { Clamp } from "./split";
@@ -125,14 +125,14 @@ export type ShiftRightBinary<
   Shift extends WasmValue,
   Signed extends boolean,
 
-  Rev extends string = ReverseString<a>
+  Rev extends string = ReverseString8Segments<a>
 > = Satisfies<WasmValue,
   Wasm.I32False extends Shift
   ? a
   : // first check if this is a signed shift and we're supposed to be
     [Signed, SignBit<a>] extends [true, "1"]
-    ? ReverseString<ShiftLeftBinary1<Rev, Shift>>
-    : ReverseString<ShiftLeftBinaryO<Rev, Shift>>
+    ? ReverseString8Segments<ShiftLeftBinary1<Rev, Shift>>
+    : ReverseString8Segments<ShiftLeftBinaryO<Rev, Shift>>
 >
 
 // type b = '0000000000000000000000000000000000000000000000000000000000000001'
@@ -180,20 +180,20 @@ export type ShiftRightBinary64<
   Shift extends WasmValue,
   Signed extends boolean,
 
-  Rev extends string = ReverseString<a>
+  Rev extends string = ReverseString8Segments<a>
 > = Satisfies<WasmValue,
   Shift extends Wasm.I64False
   ? a
   : // first check if this is a signed shift and we're supposed to be
     [Signed, SignBit<a>] extends [true, "1"]
-    ? ReverseString<
+    ? ReverseString8Segments<
         ShiftLeftBinary64<
           Rev,
           Shift,
           '1'
         >
       >
-    : ReverseString<
+    : ReverseString8Segments<
         ShiftLeftBinary64<
           Rev,
           Shift,

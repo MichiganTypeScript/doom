@@ -1,4 +1,4 @@
-import { ReverseString } from "./binary"
+import { ReverseString8Segments } from "./binary"
 import { WasmValue } from "./wasm"
 
 /** this algorithm ABSO-FUCKING-LUTELY requires the string to be some multiple of 8 in length.  Don't fuck it up. */
@@ -16,7 +16,7 @@ export namespace Clamp {
   export type Last64Bits<
     to64BitClamp extends string
   > = Satisfies<string,
-    ReverseString<to64BitClamp> extends `${
+    ReverseString8Segments<to64BitClamp> extends `${
          infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer b08
       }${infer b09}${infer b10}${infer b11}${infer b12}${infer b13}${infer b14}${infer b15}${infer b16
       }${infer b17}${infer b18}${infer b19}${infer b20}${infer b21}${infer b22}${infer b23}${infer b24
@@ -78,7 +78,7 @@ export namespace Clamp {
   export type Last32Bits<
     to32BitClamp extends string
   > = Satisfies<string,
-    ReverseString<to32BitClamp> extends `${
+    ReverseString8Segments<to32BitClamp> extends `${
          infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer b08
       }${infer b09}${infer b10}${infer b11}${infer b12}${infer b13}${infer b14}${infer b15}${infer b16
       }${infer b17}${infer b18}${infer b19}${infer b20}${infer b21}${infer b22}${infer b23}${infer b24
@@ -104,7 +104,7 @@ export namespace Clamp {
   export type Last16Bits<
     toLast8Bits extends string
   > = Satisfies<string,
-    ReverseString<toLast8Bits> extends
+    ReverseString8Segments<toLast8Bits> extends
        `${infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer b08
        }${infer b09}${infer b10}${infer b11}${infer b12}${infer b13}${infer b14}${infer b15}${infer b16
        }${
@@ -125,7 +125,7 @@ export namespace Clamp {
   export type Last8Bits<
     toLast8Bits extends string
   > = Satisfies<string,
-    ReverseString<toLast8Bits> extends
+    ReverseString8Segments<toLast8Bits> extends
       `${
         infer b1
       }${
