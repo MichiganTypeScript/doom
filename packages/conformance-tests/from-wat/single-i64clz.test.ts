@@ -5,7 +5,7 @@ import { t, T, Ops } from '../../ts-type-math/test-cases/arithmetic-i64'
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
 
-test.todo.each(t)('clz($a) === $clz', async ({ a, clz }) => {
+test.each(t)('clz($a) === $clz', async ({ a, clz }) => {
   const entry = await getWasm<Ops['clz']>("from-wat", 'single-i64clz');
   expect(entry(a)).toStrictEqual(clz);
 });

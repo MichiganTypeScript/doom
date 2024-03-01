@@ -101,10 +101,10 @@ export const arithmetic = {
     const realResult = BigInt(a) * BigInt(b)
     return Number(realResult & 0xFFFFFFFFn) >> 0;
   },
-  divs: (a: number, b: number) => b === 0 ? 0 : Math.floor(a / b) >> 0,
-  divu: (a: number, b: number) => b === 0 ? 0 : Math.floor((a >>> 0) / (b >>> 0)) >> 0,
-  rems: (a: number, b: number) => b === 0 ? 0 : (a % b) >> 0,
-  remu: (a: number, b: number) => b === 0 ? 0 : ((a >>> 0) % (b >>> 0)) >> 0,
+  div_s: (a: number, b: number) => b === 0 ? 0 : (a / b) >> 0,
+  div_u: (a: number, b: number) => b === 0 ? 0 : ((a >>> 0) / (b >>> 0)) >> 0,
+  rem_s: (a: number, b: number) => b === 0 ? 0 : (a % b) >> 0,
+  rem_u: (a: number, b: number) => b === 0 ? 0 : ((a >>> 0) % (b >>> 0)) >> 0,
    clz: (a: number) => a === 0 ? 32 : Math.clz32(a),
 }
 
@@ -152,10 +152,10 @@ export const arithmeticBigInt = {
    add: (a: bigint, b: bigint) => clampTo64Bits(a + b),
    sub: (a: bigint, b: bigint) => a - b,
    mul: (a: bigint, b: bigint) => clampTo64Bits(a * b),
-  divs: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(a / b),
-  divu: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(unsignedBigint(a) / unsignedBigint(b)),
-  rems: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(a % b),
-  remu: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(unsignedBigint(a) % unsignedBigint(b)),
+  div_s: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(a / b),
+  div_u: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(unsignedBigint(a) / unsignedBigint(b)),
+  rem_s: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(a % b),
+  rem_u: (a: bigint, b: bigint) => b === 0n ? 0n : clampTo64Bits(unsignedBigint(a) % unsignedBigint(b)),
    clz: (a: bigint) => BigInt(bigIntToTwosComplement(a).match(/^0*/)?.[0].length || 0),
 }
 

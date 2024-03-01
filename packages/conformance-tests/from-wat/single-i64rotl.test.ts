@@ -6,7 +6,7 @@ import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
 import { bigIntToTwosComplement, twosComplementToBigInt } from '../../ts-type-math/test-utils';
 
-test.todo.each(t)('rotl($a, $b) === $rotl', async ({ a, a_binary64, b, b_binary64, rotl, rotl_binary64 }) => {
+test.each(t)('rotl($a, $b) === $rotl', async ({ a, a_binary64, b, b_binary64, rotl, rotl_binary64 }) => {
   expect(a).toBe(twosComplementToBigInt(a_binary64))
   expect(a_binary64).toBe(bigIntToTwosComplement(a))
   expect(b).toBe(twosComplementToBigInt(b_binary64))

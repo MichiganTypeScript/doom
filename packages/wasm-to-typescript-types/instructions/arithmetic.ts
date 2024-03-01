@@ -135,12 +135,54 @@ export type Divide<
   instruction extends IDivide,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.unimplemented<instruction, state>
+  State.Stack.get<state> extends [
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        // instruction['type'] extends 'i32'
+        //   ? instruction['signed'] extends true
+        //     ? Wasm.I32DivS<a, b>
+        //     : Wasm.I32DivU<a, b>
+        //   : instruction['type'] extends 'i64'
+        //     ? instruction['signed'] extends true
+        //       ? Wasm.I64DivS<a, b>
+        //       : Wasm.I64DivU<a, b>
+        //     : never // TODO(float)
+      ],
+
+      state
+    >
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type Remainder<
   instruction extends IRemainder,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.unimplemented<instruction, state>
+  State.Stack.get<state> extends [
+    ...infer remaining extends WasmValue[],
+    infer b extends WasmValue,
+    infer a extends WasmValue,
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        // instruction['type'] extends 'i32'
+        //   ? instruction['signed'] extends true
+        //     ? Wasm.I32RemS<a, b>
+        //     : Wasm.I32RemU<a, b>
+        //   : instruction['type'] extends 'i64'
+        //     ? instruction['signed'] extends true
+        //       ? Wasm.I64RemS<a, b>
+        //       : Wasm.I64RemU<a, b>
+        //     : never // should not be reachable
+      ],
+
+      state
+    >
+  : State.error<"stack exhausted", instruction, state>
 >

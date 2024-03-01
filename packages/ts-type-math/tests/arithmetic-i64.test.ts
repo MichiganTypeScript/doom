@@ -63,9 +63,9 @@ test.each(t)("i64 arithmetic in i64: $a, $b", async ({
   expect(arithmeticBigInt.add(a, b)).toEqual(add);
   expect(arithmeticBigInt.sub(a, b)).toEqual(sub);
   expect(arithmeticBigInt.mul(a, b)).toEqual(mul);
-  expect(arithmeticBigInt.divs(a, b)).toEqual(div_s);
-  expect(arithmeticBigInt.divu(a, b)).toEqual(div_u);
-  expect(arithmeticBigInt.rems(a, b)).toEqual(rem_s);
-  expect(arithmeticBigInt.remu(a, b)).toEqual(rem_u);
+  expect(arithmeticBigInt.div_s(a, b)).toEqual(div_s);
+  expect(arithmeticBigInt.div_u(a, b)).toEqual(div_u);
+  expect(arithmeticBigInt.rem_s(a, b)).toEqual(rem_s);
+  expect(arithmeticBigInt.rem_u(a, b)).toEqual(rem_u);
   expect(arithmeticBigInt.clz(a)).toEqual(clz);
 });

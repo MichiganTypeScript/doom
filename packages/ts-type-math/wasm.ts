@@ -8,6 +8,7 @@ import { I64ExtendI32SBinary64, I64ExtendI32UBinary64 } from "./wasm-conversion"
 import { I32ClzBinary, I64ClzBinary64 } from "./binary";
 import { WrapBinary } from "./split";
 import { Convert } from "./conversion";
+import { DivideBinary32, RemainderBinary32 } from "./divide";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';
 export type WasmInt = 'i32' | 'i64';
@@ -398,6 +399,68 @@ export namespace Wasm {
         Convert.WasmValue.ToTSBigInt<shiftBy>
       >
     >
+  >
+
+  export type I32DivS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    DivideBinary32<a, b>
+  >
+
+  export type I32DivU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I32False
+    // DivideBinary32<a, b>
+  >
+
+  export type I64DivS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I64False
+    // DivideBinary64<a, b>
+  >
+
+  export type I64DivU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I64False
+    // DivideBinary64<a, b>
+  >
+
+  export type I32RemS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    RemainderBinary32<a, b>
+  >
+
+  export type I32RemU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I32False
+    // RemainderBinary32<a, b>
+  >
+
+  export type I64RemS<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I64False
+    // RemainderBinary64<a, b>
+  >
+
+  export type I64RemU<
+    a extends WasmValue,
+    b extends WasmValue
+  > = Satisfies<WasmValue,
+    I64False
+    // RemainderBinary64<a, b>
   >
 
 }

@@ -63,9 +63,9 @@ test.each(t)("i32 arithmetic in i32: $a, $b", async ({
   expect(arithmetic.add(a, b)).toEqual(add);
   expect(arithmetic.sub(a, b)).toEqual(sub);
   expect(arithmetic.mul(a, b)).toEqual(mul);
-  expect(arithmetic.divs(a, b)).toEqual(div_s);
-  expect(arithmetic.divu(a, b)).toEqual(div_u);
-  expect(arithmetic.rems(a, b)).toEqual(rem_s);
-  expect(arithmetic.remu(a, b)).toEqual(rem_u);
+  expect(arithmetic.div_s(a, b)).toEqual(div_s);
+  expect(arithmetic.div_u(a, b)).toEqual(div_u);
+  expect(arithmetic.rem_s(a, b)).toEqual(rem_s);
+  expect(arithmetic.rem_u(a, b)).toEqual(rem_u);
   expect(arithmetic.clz(a)).toEqual(clz);
 });
