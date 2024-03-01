@@ -49,6 +49,32 @@ export namespace Clamp {
       never
   >
 
+  export type First32Bits<
+    to32BitClamp extends string
+  > = Satisfies<string,
+    to32BitClamp extends `${
+        infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer b08
+      }${infer b09}${infer b10}${infer b11}${infer b12}${infer b13}${infer b14}${infer b15}${infer b16
+      }${infer b17}${infer b18}${infer b19}${infer b20}${infer b21}${infer b22}${infer b23}${infer b24
+      }${infer b25}${infer b26}${infer b27}${infer b28}${infer b29}${infer b30}${infer b31}${infer b32
+      }${
+        // if the string is exactly 32 bits, this will be an empty string
+        // if it's more, it'll just be the rest
+        infer Tail
+      }`
+
+    ? // assemble the cake again
+      `${
+          b01}${b02}${b03}${b04}${b05}${b06}${b07}${b08
+      }${b09}${b10}${b11}${b12}${b13}${b14}${b15}${b16
+      }${b17}${b18}${b19}${b20}${b21}${b22}${b23}${b24
+      }${b25}${b26}${b27}${b28}${b29}${b30}${b31}${b32
+      }`
+
+    : // we have fewer than 32 bits.  this is probably an error (?)
+      never
+  >
+
   export type Last32Bits<
     to32BitClamp extends string
   > = Satisfies<string,
