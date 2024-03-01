@@ -72,7 +72,7 @@ Module {
                         offset: 111,
                     },
                     id: Some(
-                        ".rodata.1",
+                        ".rodata",
                     ),
                     name: None,
                     kind: Active {
@@ -126,7 +126,7 @@ Module {
             Data(
                 Data {
                     span: Span {
-                        offset: 175,
+                        offset: 173,
                     },
                     id: Some(
                         ".data",
@@ -136,7 +136,7 @@ Module {
                         memory: Num(
                             0,
                             Span {
-                                offset: 175,
+                                offset: 173,
                             },
                         ),
                         offset: Expression {
@@ -198,7 +198,7 @@ Module {
             Data(
                 Data {
                     span: Span {
-                        offset: 253,
+                        offset: 251,
                     },
                     id: Some(
                         ".data.1",
@@ -208,7 +208,7 @@ Module {
                         memory: Num(
                             0,
                             Span {
-                                offset: 253,
+                                offset: 251,
                             },
                         ),
                         offset: Expression {
@@ -278,7 +278,7 @@ Module {
             Data(
                 Data {
                     span: Span {
-                        offset: 429,
+                        offset: 427,
                     },
                     id: Some(
                         ".data.2",
@@ -288,7 +288,7 @@ Module {
                         memory: Num(
                             0,
                             Span {
-                                offset: 429,
+                                offset: 427,
                             },
                         ),
                         offset: Expression {

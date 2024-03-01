@@ -8,7 +8,7 @@ test.each(t)('$a + $b === $add', ({ a, b, add }) => {
   expect(t).toHaveLength(78);
 })
 
-type i = 38
+type i = 8
 type a = T[i]['a']          // =>
 type b = T[i]['b']          // =>
 type e = T[i]['add']        // =>

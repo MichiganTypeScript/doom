@@ -57,7 +57,7 @@ export type bootstrap<
       activeBranches: {};
 
       globals: input['globals'];
-      memory: input['memory']; // copy readonly memory into memory registers
+      memory: evaluate<input['memory']>; // copy readonly memory into memory registers
       indirect: input['indirect'];
       memorySize: input['memorySize'];
       executionContexts: [];

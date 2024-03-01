@@ -5,7 +5,7 @@
     (i32.const 0)
   )
 
-  (data $.rodata.1 (i32.const 0) "Ziltoid, the Omniscient!\00")
+  (data $.rodata (i32.const 0) "Ziltoid, the Omniscient!\00")
   (data $.data (i32.const 1024) "in search of the ultimate cup of coffee\00")
   (data $.data.1 (i32.const 2048) "you have five Earth minutes... make it perfect!\00")
 

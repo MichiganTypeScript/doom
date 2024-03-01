@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/single-i32store8.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[-2143281136], true, 6>// =>
+import { entry } from 'conformance-tests/from-wat/loop.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[1], true>// =>
 type r=e['result'] // =>
 type s=e['stack']  // =>
 type s0=s[0]       // =>
@@ -23,7 +23,7 @@ type c0b=ec[0]['branches']// =>
 
 type c1f=ec[1]['funcId']  // =>
 type c1l=ec[1]['locals']  // =>
-type c1b=ec[1]['brahches']// =>
+type c1b=ec[1]['branches']// =>
 
 type c3=ec[2]// =>
 type c4=ec[3]// =>
