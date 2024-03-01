@@ -54,10 +54,10 @@ type ShiftRightOnceBinaryArbitrary<
 >
 
 
-type StopAt = 1 // maybe this needs to be 32?
+type StopAt = 32 // maybe this needs to be 32?
 type divisor ="00000000000000000000000000000011"
 type dividend="00000000000000000000000000011010"
-type x = _DivideBinary32<dividend, divisor>  // =>
+export type e = _DivideBinary32<dividend, divisor>  // =>
 type d = DivideBinary32<dividend, divisor>   // =>
 type r = RemainderBinary32<dividend, divisor>// =>
 

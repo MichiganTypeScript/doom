@@ -18,6 +18,7 @@ import {
   readStringFromMemory,
   resultsDirectory,
   shouldTakeABreath,
+  simpleTypeMode,
   targetTypeAlias,
   tsconfigFilePath,
 } from './config';
@@ -160,6 +161,14 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   const typeStringLength = typeString.length;
 
   // console.log(getProgramFiles(program));
+
+  if (simpleTypeMode) {
+    console.log("instantiations:", program.getInstantiationCount())
+    console.log()
+    console.log(typeString.replaceAll('\\n', '\n'));
+    console.log();
+    throw new Error("not really an error, but we're all set, boss.")
+  }
 
   if (justPrint) {
     console.log(typeString.replaceAll('\\n', '\n'));

@@ -15,6 +15,8 @@ export const initialConditions = {
   stopAt: 1_000_000,
 }
 
+export const simpleTypeMode = process.argv.includes('--simple');
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
