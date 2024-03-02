@@ -6,6 +6,8 @@ update typescript patch for truncation limit
 
 ## Implementation improvements
 
+look into an MSB->LSB addition operation.  will be a huge savings.
+
 create a type for wasm runtime entry
 
 ## Refactors
