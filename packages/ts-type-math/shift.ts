@@ -2,6 +2,7 @@ import { ReverseString8Segments, SignBit, To32Binary, ToDecimalSigned, ToDecimal
 import { Wasm, WasmValue } from "./wasm";
 import type { Convert } from './conversion';
 import { Clamp } from "./split";
+import { Ensure } from "./ensure";
 
 /** inputs are unsigned Decimal32, under the hood is binary */
 export type ShiftLeft<
@@ -172,7 +173,7 @@ export type ShiftLeftBinary64<
 > = Satisfies<string,
   shiftBy extends Wasm.I64False
   ? a
-  : Clamp.Last64Bits<`${a}${_fill}`>
+  : Ensure.I64<`${a}${_fill}`>
 >
 
 export type ShiftRightBinary64<

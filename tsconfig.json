@@ -26,8 +26,9 @@
   },
   "exclude": [
     //
-    "./packages/playground/doom/*",
     //
+    "./packages/playground/doom/*",
+    "./packages/playground/add/*",
     "./packages/playground/evaluate/results/results-*",
     "./packages/playground/evaluate/results/bootstrap.ts",
     "./packages/playground/evaluate/results/result.ts",

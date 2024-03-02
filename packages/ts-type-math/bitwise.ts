@@ -34,6 +34,7 @@ type LookupBitXor = {
   };
 }
 
+// QUESTION maybe don't make Lookup generic for better performance?
 type ProcessLookup<
   A extends string,
   B extends string,
@@ -42,8 +43,12 @@ type ProcessLookup<
   A extends `${infer AHead extends Bit}${infer ATail extends string}`
   ? B extends `${infer BHead extends Bit}${infer BTail extends string}`
     ? `${Lookup[AHead][BHead]}${ProcessLookup<ATail, BTail, Lookup>}`
-    : never // should always be equal number of digits
-  : ''
+
+    : // B is empty
+      ''
+
+  : // A is empty
+    ''
 
 export type BitwiseAnd<
   T extends number,

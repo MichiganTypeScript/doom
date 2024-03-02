@@ -48,7 +48,12 @@ export type DivTSBigInt<
 export type ModDigitNumbers<
   T extends DigitNumber,
   U extends DigitNumber
-> = MakeDigitNumber<Sign<T>, ModDigits<Num<T>, Num<U>>>;
+> =
+  MakeDigitNumber<
+    Sign<T>,
+    ModDigits<Num<T>,
+    Num<U>>
+  >;
 
 export type Mod<
   T extends number,
@@ -56,7 +61,10 @@ export type Mod<
 > = StringToTSNumber<
   FromDigitNumber<
     Normalize<
-      ModDigitNumbers<ToDigitNumber<TsNumberToString<T>>, ToDigitNumber<TsNumberToString<U>>>
+      ModDigitNumbers<
+        ToDigitNumber<TsNumberToString<T>>,
+        ToDigitNumber<TsNumberToString<U>>
+      >
     >
   >
 >;

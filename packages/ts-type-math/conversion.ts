@@ -94,11 +94,10 @@ export namespace Convert {
     export type ToU32Binary<
       ascii extends Ascii
     > = Satisfies<WasmValue,
-      Pad.StartWithZeros<
+      Pad.StartWith24Zeros<
         Convert.U8Decimal.ToU8Binary<
           Convert.Ascii.ToU8Decimal<ascii>
-        >,
-        32
+        >
       >
     >
 

@@ -1,7 +1,6 @@
 import { AddBinary } from "./add";
 import { ReverseString8Segments } from "./binary";
-import { ShiftRightBinary } from "./shift";
-import { Clamp } from "./split";
+import { Ensure } from "./ensure";
 import { Wasm, WasmValue } from "./wasm";
 
 type a = "00000000000000000000000001100100"
@@ -14,7 +13,7 @@ export type I32MultiplyBinary<
 > = Satisfies<WasmValue,
   a extends Wasm.I32False ? Wasm.I32False :
   b extends Wasm.I32False ? Wasm.I32False :
-  Clamp.Last32Bits<
+  Ensure.I32<
     MultiplyBinary<a, b>
   >
 >
@@ -25,7 +24,7 @@ export type I64MultiplyBinary<
 > = Satisfies<WasmValue,
   a extends Wasm.I64False ? Wasm.I64False :
   b extends Wasm.I64False ? Wasm.I64False :
-  Clamp.Last64Bits<
+  Ensure.I64<
     MultiplyBinary<a, b>
   >
 >

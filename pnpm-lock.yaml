@@ -31,24 +31,15 @@ importers:
       '@types/node':
         specifier: ^20.11.5
         version: 20.11.5
-      '@types/ramda':
-        specifier: ^0.29.10
-        version: 0.29.10
       '@typescript/vfs':
         specifier: ^1.5.0
         version: 1.5.0
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
-      ramda:
-        specifier: 0.29.1
-        version: 0.29.1
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.11.5)(typescript@5.3.3)
-      ts-toolbelt:
-        specifier: ^9.6.0
-        version: 9.6.0
       tsx:
         specifier: ^4.7.0
         version: 4.7.0
@@ -478,12 +469,6 @@ packages:
       undici-types: 5.26.5
     dev: false
 
-  /@types/ramda@0.29.10:
-    resolution: {integrity: sha512-0BzWVKtSEtignlk+XBuK88Il5wzQwbRVfEkzE8iKm02NYHMGQ/9ffB05M+zXhTCqo50DOIAT9pNSJsjFMMG4rQ==}
-    dependencies:
-      types-ramda: 0.29.7
-    dev: false
-
   /@typescript/vfs@1.5.0:
     resolution: {integrity: sha512-AJS307bPgbsZZ9ggCT3wwpg3VbTKMFNHfaY/uF0ahSkYYrPF2dSSKDNIDIQAHm9qJqbLvCsSJH7yN4Vs/CsMMg==}
     dependencies:
@@ -841,10 +826,6 @@ packages:
       react-is: 18.2.0
     dev: false
 
-  /ramda@0.29.1:
-    resolution: {integrity: sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==}
-    dev: false
-
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
@@ -966,10 +947,6 @@ packages:
       yn: 3.1.1
     dev: false
 
-  /ts-toolbelt@9.6.0:
-    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
-    dev: false
-
   /tsx@4.7.0:
     resolution: {integrity: sha512-I+t79RYPlEYlHn9a+KzwrvEwhJg35h/1zHsLC2JXvhC2mdynMv6Zxzvhv5EMV6VF5qJlLlkSnMVvdZV3PSIGcg==}
     engines: {node: '>=18.0.0'}
@@ -989,12 +966,6 @@ packages:
   /type-testing@0.2.0:
     resolution: {integrity: sha512-HAf4o9LjUAh9xEIXZTNm+ak2tjTgK64QhTlT/D8UNedII2/eagdEbtbaVK6920K7+QBrwfvxpjPGlfWVKZ+MZQ==}
     engines: {node: '>= 20.x'}
-    dev: false
-
-  /types-ramda@0.29.7:
-    resolution: {integrity: sha512-8KBxZGJwUF3MpRkkJauSpvfHXk8Ssq15QXGuCBTDGeKd9PfheokkC3wAKRV3djej9O31Qa5M7Owsg8hF0GjtAw==}
-    dependencies:
-      ts-toolbelt: 9.6.0
     dev: false
 
   /typescript@5.3.3(patch_hash=ql2g3ldqijd3lmbiyonc63iflm):

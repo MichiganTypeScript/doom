@@ -6,7 +6,6 @@ import type { Add, AddBigInt } from './hotscript-fork/numbers/impl/addition';
 import type { Convert } from './conversion';
 import { WasmValue } from "./wasm";
 
-
 type PowersOfTwo = [
   /* 2**0  */ 1,
   /* 2**1  */ 2,
@@ -165,7 +164,6 @@ export namespace Pad {
     input extends string
   > = `00000000000000000000000000000000000000000000000000000000${input}`
 
-
   /** @deprecated avoid using this and try to use one of the dedicated ones if you know how many 0s you want to add */
   export type StartWithZeros<
     input extends string,
@@ -203,16 +201,6 @@ export namespace Pad {
   export type StartWith56Ones<
     input extends string
   > = `11111111111111111111111111111111111111111111111111111111${input}`
-
-  /** @deprecated avoid using this and try to use one of the dedicated ones if you know how many 0s you want to add */
-  export type StartWithOnes<
-    input extends string,
-    finalLength extends number,
-  > = Satisfies<string,
-    Length<input> extends finalLength
-    ? input
-    : StartWithOnes<`1${input}`, finalLength>
-  >
 }
 
 export type TsBigIntIsNegative<
@@ -344,9 +332,8 @@ type _ToDecimalUnsignedBigInt<
       : never
   : 0n
 
-// QUESTION
-// maybe performance would be better if this were just `string`?
-export type Bit = '0' | '1';
+/** '0' or '1' */
+export type Bit = string;
 
 export type IsNegativeBinary<
   binary extends string

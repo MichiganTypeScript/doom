@@ -1,6 +1,7 @@
 import { AddBinary } from "./add";
 import { ToDecimalSigned, TwosComplementFlip } from "./binary";
 import { IsPositiveSignedBinary } from "./comparison";
+import { Ensure } from "./ensure";
 import { Clamp } from "./split";
 import { WasmValue } from "./wasm";
 
@@ -34,7 +35,7 @@ export type I32SubtractBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  Clamp.Last32Bits<
+  Ensure.I32<
     SubtractBinary<a, b>
   >
 >
@@ -43,7 +44,7 @@ export type I64SubtractBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  Clamp.Last64Bits<
+  Ensure.I64<
     SubtractBinary<a, b>
   >
 >

@@ -6,8 +6,6 @@ update typescript patch for truncation limit
 
 ## Implementation improvements
 
-remove StartWithZeros uses
-
 create a type for wasm runtime entry
 
 ## Refactors

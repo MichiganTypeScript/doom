@@ -64,7 +64,7 @@
 //   _counter extends 1[] = [],
 
 //   _shiftedV extends WasmValue = ShiftRightOnceBinaryArbitrary<v, '0'>,
-//   _subtracted extends WasmValue = Clamp.Last32Bits<SubtractBinary<dr, _shiftedV>>,
+//   _subtracted extends WasmValue = Ensure.I32<SubtractBinary<dr, _shiftedV>>,
 // > = Satisfies<{ quotient: string; remainder: string },
 
 //   _counter['length'] extends StopAt
@@ -107,4 +107,4 @@
 //   divisor extends WasmValue
 // > =
 //   divisor extends Wasm.I32False ? Wasm.I32False :
-//   Clamp.Last32Bits<_DivideBinary32<dividend, divisor>['remainder']>
+//  Ensure.I32<_DivideBinary32<dividend, divisor>['remainder']>
