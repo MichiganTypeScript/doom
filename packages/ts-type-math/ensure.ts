@@ -42,7 +42,7 @@ export namespace Ensure {
     input extends string,
     overflow extends string
   > =
-    input extends `${infer discarded}${infer InputTail}`
+    input extends `${string}${infer InputTail}`
     ? overflow extends `${infer OHead}${infer ORest}`
       ? OverflowProtection<`${InputTail}${OHead}`, ORest>
       : input
