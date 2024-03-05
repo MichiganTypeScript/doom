@@ -82,9 +82,12 @@ mod tests {
     }
 
     fn get_wat_files() -> Vec<DirEntry> {
-        fs::read_dir("./packages/conformance-tests/from-wat/")
-            .unwrap()
-            .flatten()
+        let from_wat = fs::read_dir("./packages/conformance-tests/from-wat/").unwrap().flatten();
+        let single_wat = fs::read_dir("./packages/conformance-tests/single/").unwrap().flatten();
+
+        let files = from_wat.chain(single_wat);
+
+        files
             .filter_map(|dir_entry| {
                 let path = dir_entry.path();
                 // dbg!(&path);
