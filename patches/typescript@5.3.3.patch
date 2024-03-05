@@ -1,5 +1,5 @@
 diff --git a/lib/tsc.js b/lib/tsc.js
-index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..c2f463379427112ee4d5fdd53c006662df7d33b7 100644
+index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..cb8e7d7957332b5614201cc5b95ccdda9c4c5dc2 100644
 --- a/lib/tsc.js
 +++ b/lib/tsc.js
 @@ -6177,7 +6177,7 @@ var Diagnostics = {
@@ -94,6 +94,17 @@ index d98c47c3d7d3085fddbd5bd6e6b5c103f6c890e1..c2f463379427112ee4d5fdd53c006662
            overflow = true;
            return 0 /* False */;
          }
+@@ -122641,6 +122641,10 @@ function emitFilesAndReportErrorsAndGetExitStatus(program, reportDiagnostic, wri
+     emitOnlyDtsFiles,
+     customTransformers
+   );
++  if (process.env.MICHIGAN_TYPESCRIPT) {
++    const MiTSProgram = Object.hasOwn(program, "getInstantiationCount") ? program : program.getProgram();
++    console.log(MiTSProgram.getInstantiationCount(), "instantiations | ", MiTSProgram.getTypeCount(), "types")
++  }
+   if (emitResult.emitSkipped && diagnostics.length > 0) {
+     return 1 /* DiagnosticsPresent_OutputsSkipped */;
+   } else if (diagnostics.length > 0) {
 diff --git a/lib/tsserver.js b/lib/tsserver.js
 index dd6b532de2dd7c8651ebbd01b1488ba82d58f8e0..2752cd8b61521a6bf2b7506399348c38d01cdae0 100644
 --- a/lib/tsserver.js

@@ -10,7 +10,8 @@
     "test:create-new": "pnpm --filter conformance-tests run test:create-new",
     "test:rust": "cargo test",
     "test": "pnpm run test:rust && CI=true pnpm run test:math && CI=true pnpm run test:conformance && pnpm run build",
-    "build": "tsc"
+    "build": "tsc",
+    "build:force": "MICHIGAN_TYPESCRIPT=true time pnpm run build --generateCpuProfile tsc-output.cpuprofile"
   },
   "dependencies": {
     "@biomejs/js-api": "0.3.0-nightly.cfef948",

@@ -9,7 +9,7 @@ patchedDependencies:
     hash: zizv6l7zla7jxpytik5rmyr6wi
     path: patches/@biomejs__js-api@0.3.0-nightly.cfef948.patch
   typescript@5.3.3:
-    hash: ql2g3ldqijd3lmbiyonc63iflm
+    hash: bnl77azyknnedqohsc3d4mfkne
     path: patches/typescript@5.3.3.patch
 
 importers:
@@ -48,7 +48,7 @@ importers:
         version: 0.2.0
       typescript:
         specifier: 5.3.3
-        version: 5.3.3(patch_hash=ql2g3ldqijd3lmbiyonc63iflm)
+        version: 5.3.3(patch_hash=bnl77azyknnedqohsc3d4mfkne)
       vitest:
         specifier: ^1.2.1
         version: 1.2.1(@types/node@20.11.5)
@@ -942,7 +942,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.3.3(patch_hash=ql2g3ldqijd3lmbiyonc63iflm)
+      typescript: 5.3.3(patch_hash=bnl77azyknnedqohsc3d4mfkne)
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: false
@@ -968,7 +968,7 @@ packages:
     engines: {node: '>= 20.x'}
     dev: false
 
-  /typescript@5.3.3(patch_hash=ql2g3ldqijd3lmbiyonc63iflm):
+  /typescript@5.3.3(patch_hash=bnl77azyknnedqohsc3d4mfkne):
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true

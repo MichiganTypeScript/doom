@@ -3,3 +3,4 @@ target/
 *.tsbuildinfo
 packages/playground/evaluate/results*
 packages/playground/doom/doom.actual.ts
+tsc-output.cpuprofile
