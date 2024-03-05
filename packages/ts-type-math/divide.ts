@@ -169,30 +169,31 @@ type RemoveMSB<
   : never
 
 
-type dividend = '111'
-type divisor =  '011'
+// type dividend = '111'
+// type divisor =  '011'
 
-type x0 = DivideBinaryArbitrary<dividend, divisor, 0, '000'>
-//   ^?
-type x1 = DivideBinaryArbitrary<dividend, divisor, 1, '000'>
-//   ^?
-type x2 = DivideBinaryArbitrary<dividend, divisor, 2, '000'>
-//   ^?
+// type x0 = DivideBinaryArbitrary<dividend, divisor, 0, '000'>
+// //   ^?
+// type x1 = DivideBinaryArbitrary<dividend, divisor, 1, '000'>
+// //   ^?
+// type x2 = DivideBinaryArbitrary<dividend, divisor, 2, '000'>
+// //   ^?
 
-type x = [
-  Expect<Equal<x2['quotient'],  '010'>>,
-  Expect<Equal<x2['remainder'], '001'>>,
-  // Expect<Equal<x2['remainder'], 'bad'>>,
-]
+// type x = [
+//   Expect<Equal<x2['quotient'],  '010'>>,
+//   Expect<Equal<x2['remainder'], '001'>>,
+//   // Expect<Equal<x2['remainder'], 'bad'>>,
+// ]
 
-type s = SubtractBinary<'001', '011'> // =>
-type a =      AddBinary<'101', '011'> // =>
+type s = SubtractBinary<'00001', '00011'> // =>
+type a =      AddBinary<'00101', '00011'> // =>
 
 type DivideBinaryArbitrary<
   Q extends string, // = dividend
   M extends string, // = divisor
   StopAt extends number,
   finalize extends string,
+
   A extends string = finalize,
 
   Count extends 1[] = [],
@@ -204,11 +205,10 @@ type DivideBinaryArbitrary<
     >,
 
   _newA extends string =
-    Ensure.Length<
+    Clamp.Last32Bits<
       GetMSB<A> extends '0'
         ? SubtractBinary<_AShift, M>
-        :      AddBinary<_AShift, M>,
-      '000'
+        :      AddBinary<_AShift, M>
     >,
 
   _newQ extends string =
@@ -222,12 +222,13 @@ type DivideBinaryArbitrary<
   Count['length'] extends StopAt
   ? // finalize
     {
-      M: M,
-      A: A,
-      Q: Q,
-      _AShift: _AShift,
-      _newA: _newA,
-      _newQ: _newQ,
+      // // useful for debugging:
+      // M: M,
+      // A: A,
+      // Q: Q,
+      // _AShift: _AShift,
+      // _newA: _newA,
+      // _newQ: _newQ,
 
       quotient: _newQ,
       remainder:
@@ -244,3 +245,39 @@ type DivideBinaryArbitrary<
       _newA,
       [1, ...Count]
     >
+
+type fallback = '00000000000000000000000000000000';
+
+type inputs = [
+  {
+    dividend: '00000000000000000000000000000111';
+    divisor:  '00000000000000000000000000000011';
+
+    quotient: '00000000000000000000000000000010';
+    remainder:'00000000000000000000000000000001';
+  }
+]
+
+type z = DivideBinaryArbitrary<inputs[0]['dividend'], inputs[0]['divisor'], 31, fallback>
+//   ^?
+
+// export type DivideBinary32<
+//   dividend extends WasmValue,
+//   divisor extends WasmValue
+// > = DivideBinaryArbitrary<
+//   dividend,
+//   divisor,
+//   31,
+//   fallback
+// >
+
+// type d = DivideBinary32<inputs[0]['dividend'], inputs[0]['divisor']>
+// //   ^?
+
+type x = [
+  Expect<Equal<z['quotient'],  inputs[0]['quotient']>>,
+  Expect<Equal<z['remainder'], inputs[0]['remainder']>>,
+
+  // Expect<Equal<d['quotient'],  inputs[0]['quotient']>>,
+  // Expect<Equal<d['remainder'], inputs[0]['remainder']>>,
+]

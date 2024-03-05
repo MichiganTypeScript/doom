@@ -53,12 +53,12 @@ export namespace Ensure {
 type preventsOverflows = // =>
   Ensure.Length<
     "abcdefghijk",
-    "00000000"
+       "12345678"
   >
 
 /** note that it adds the zeros AT THE BEGINNING */
 type padsUnderflows = // =>
   Ensure.Length<
-    "abcd",
-    "00000000"
+        "abcd",
+    "12345678"
   >

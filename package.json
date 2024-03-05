@@ -11,7 +11,7 @@
     "test:rust": "cargo test",
     "test": "pnpm run test:rust && CI=true pnpm run test:math && CI=true pnpm run test:conformance && pnpm run build",
     "build": "tsc",
-    "build:force": "MICHIGAN_TYPESCRIPT=true time pnpm run build --generateCpuProfile tsc-output.cpuprofile"
+    "build:force": "MICHIGAN_TYPESCRIPT=true time tsc --project tsconfig.force.json"
   },
   "dependencies": {
     "@biomejs/js-api": "0.3.0-nightly.cfef948",
