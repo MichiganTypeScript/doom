@@ -1,6 +1,9 @@
 import { Equal, Expect } from "type-testing";
 import { Ensure } from "../ensure";
 import { Wasm } from "../wasm";
+import { test } from "vitest";
+
+test('Ensure.Length', () => {});
 
 type test = [
   Expect<Equal<

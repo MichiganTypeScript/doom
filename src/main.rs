@@ -83,7 +83,7 @@ mod tests {
 
     fn get_wat_files() -> Vec<DirEntry> {
         let from_wat = fs::read_dir("./packages/conformance-tests/from-wat/").unwrap().flatten();
-        let single_wat = fs::read_dir("./packages/conformance-tests/single/").unwrap().flatten();
+        let single_wat = fs::read_dir("./packages/conformance-tests/from-wat-single/").unwrap().flatten();
 
         let files = from_wat.chain(single_wat);
 

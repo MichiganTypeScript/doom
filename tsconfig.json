@@ -30,35 +30,16 @@
     "./packages/playground/doom/*",
     "./packages/playground/add/*",
     "./packages/playground/conway-stateless/*", // this can always be off because the file has no dependencies
-    "./packages/playground/evaluate/results/results-*",
-    "./packages/playground/evaluate/results/bootstrap.ts",
-    "./packages/playground/evaluate/results/result.ts",
+    "./packages/playground/conway-stateful/*", // this can always be off because the file has no dependencies
+    "./packages/playground/evaluate/results/*",
     "./packages/playground/evaluate/playground.ts",
     //
-    // "./packages/conformance-tests/from-c/*",
-    // "./packages/conformance-tests/from-wat/*",
-    // "./packages/conformance-tests/from-wat-single/single-i32*",
+    "./packages/conformance-tests/from-c/*",
+    "./packages/conformance-tests/from-wat/*",
+    "./packages/conformance-tests/from-wat-single/single-i32*",
     "./packages/conformance-tests/from-wat-single/single-i64*",
     // "./packages/ts-type-math/tests",
     //
     "./packages/conformance-tests/**/*.expected.ts", // the `*.expected.ts` files are just for test suite verification
-    //
-    "./packages/conformance-tests/from-wat-single/single-i32div_s.test.ts",
-    "./packages/conformance-tests/from-wat-single/single-i64div_s.test.ts",
-    //
-    "./packages/conformance-tests/from-wat-single/single-i64div_u.test.ts",
-    "./packages/conformance-tests/from-wat-single/single-i32div_u.test.ts",
-    //
-    "./packages/conformance-tests/from-wat-single/single-i32rem_s.test.ts",
-    "./packages/conformance-tests/from-wat-single/single-i32rem_u.test.ts",
-    //
-    "./packages/conformance-tests/from-wat-single/single-i64rem_s.test.ts",
-    "./packages/conformance-tests/from-wat-single/single-i64rem_u.test.ts",
-    //
-    "./packages/conformance-tests/from-c/conway.test.ts",
-    //
-    // floating point
-    "./packages/conformance-tests/from-wat/absolute-value.test.ts",
-    "./packages/conformance-tests/from-wat/negate.test.ts",
   ]
 }

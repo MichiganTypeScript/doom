@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 
 /** this is the magic type alias that the script is looking for in the evaluationFilePath */
 export const targetTypeAlias = 'Evaluate';
-export const incrementBy = 50;
+export const incrementBy = 1;
 export const readStringFromMemory = true;
 
 /** controls how often the program prints to file.  set to 0 for it to always print */
