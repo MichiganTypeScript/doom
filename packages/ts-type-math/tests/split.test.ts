@@ -1,8 +1,9 @@
 import { Equal, Expect } from "type-testing";
-import { Clamp, SplitToBytes } from "./split";
-import { Load } from "./load";
-import { Convert } from "./conversion";
+import { Clamp, SplitToBytes } from "../split";
+import { Load } from "../load";
+import { Convert } from "../conversion";
 import { test } from 'vitest';
+
 test('split')
 
 type s = SplitToBytes<"000000001"> // =>

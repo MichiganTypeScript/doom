@@ -1,7 +1,7 @@
 import type { Expect, Equal } from "type-testing";
-import type { AsciiToU8Binary, AsciiToU8Decimal, Store, StoreString, U8BinaryToAscii, U8DecimalToAscii } from "./store";
+import type { AsciiToU8Binary, AsciiToU8Decimal, Store, StoreString, U8BinaryToAscii, U8DecimalToAscii } from "../store";
 import { test } from 'vitest';
-import { ReadStringFromMemory } from "./memory-read-string";
+import { ReadStringFromMemory } from "../memory-read-string";
 
 test('store')
 

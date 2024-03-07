@@ -4,24 +4,6 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    // {
-    //   "type": "lldb",
-    //   "request": "launch",
-    //   "name": "Debug executable 'doom_but_typescript_types'",
-    //   "cargo": {
-    //     "args": [
-    //       "build",
-    //       "--bin=doom_but_typescript_types",
-    //       "--package=doom_but_typescript_types"
-    //     ],
-    //     "filter": {
-    //       "name": "doom_but_typescript_types",
-    //       "kind": "bin"
-    //     }
-    //   },
-    //   "args": [],
-    //   "cwd": "${workspaceFolder}"
-    // },
     {
       "type": "lldb",
       "request": "launch",
@@ -40,6 +22,23 @@
       },
       "args": [],
       "cwd": "${workspaceFolder}"
-    }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug TSC",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "./node_modules/typescript/bin/tsc"
+      ],
+      "args": [
+        "-p",
+        "./tsconfig.json"
+      ], // Add your tsconfig or other necessary arguments
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "cwd": "${workspaceFolder}"
+    },
   ]
 }
