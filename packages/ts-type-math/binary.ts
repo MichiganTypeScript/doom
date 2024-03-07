@@ -1,4 +1,4 @@
-import { AddBinary, StringAddFixedReversed } from "./add";
+import { AddBinaryFixed, StringAddFixedReversed } from "./add";
 import { BitwiseNotBinary } from "./bitwise";
 import type { DivTSBigInt, DivTSNumbers, Mod, ModBigInt } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
@@ -375,11 +375,11 @@ export type TwosComplementFlip<
 >
 
 type x1 = BitwiseNotBinary<"00000011"> // =>
-type x2 = AddBinary<x1, "1">           // =>
+type x2 = AddBinaryFixed<x1, "1">           // =>
 
 type x = TwosComplementFlip<"00000011"> // =>
 
-type x3 = AddBinary<x, "1"> // =>
+type x3 = AddBinaryFixed<x, "1"> // =>
 
 type y = ToDecimalUnsigned<x> // =>
 

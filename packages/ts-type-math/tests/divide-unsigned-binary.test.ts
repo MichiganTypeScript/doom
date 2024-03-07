@@ -2,7 +2,7 @@ import { Equal, Expect } from "type-testing"
 import { t, T } from '../test-cases/arithmetic';
 import { expect, test } from 'vitest';
 import { twosComplementToNumber, numberToTwosComplement, arithmetic } from "../test-utils";
-// import { DivideUnsignedBinary32 } from "../divide";
+import { DivideUnsignedBinary32 } from "../divide";
 
 test.each(t)('division, yo.  check it. (%#)', ({ a, a_binary, b, b_binary, div_u, div_u_binary }) => {
   expect(a_binary).toEqual(numberToTwosComplement(a));

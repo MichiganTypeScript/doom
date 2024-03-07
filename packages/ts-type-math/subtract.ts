@@ -1,11 +1,11 @@
-import { AddBinary } from "./add";
+import { AddBinaryFixed } from "./add";
 import { ToDecimalSigned, TwosComplementFlip } from "./binary";
 import { IsPositiveSignedBinary } from "./comparison";
 import { Ensure } from "./ensure";
 import { WasmValue } from "./wasm";
 
 /** NOTE! this is unclamped!  that means if you subtract two negative numbers you could get an overflow! */
-export type SubtractBinary<
+export type SubtractBinaryFixed<
   a extends WasmValue, // minuend
   b extends WasmValue  // subtrahend
 > =  Satisfies<WasmValue,
@@ -15,19 +15,19 @@ export type SubtractBinary<
     IsPositiveSignedBinary<b> extends true
 
     ? // +a +b
-      AddBinary<a, TwosComplementFlip<b>>
+      AddBinaryFixed<a, TwosComplementFlip<b>>
 
     : // +a -b
-      AddBinary<a, TwosComplementFlip<b>>
+      AddBinaryFixed<a, TwosComplementFlip<b>>
 
   : // -a
     IsPositiveSignedBinary<b> extends true
 
     ? // -a +b
-      AddBinary<a, TwosComplementFlip<b>>
+      AddBinaryFixed<a, TwosComplementFlip<b>>
 
     : // -a -b
-      AddBinary<a, TwosComplementFlip<b>>
+      AddBinaryFixed<a, TwosComplementFlip<b>>
   >
 
 export type I32SubtractBinary<
@@ -35,7 +35,7 @@ export type I32SubtractBinary<
   b extends WasmValue
 > = Satisfies<WasmValue,
   Ensure.I32<
-    SubtractBinary<a, b>
+    SubtractBinaryFixed<a, b>
   >
 >
 
@@ -44,7 +44,7 @@ export type I64SubtractBinary<
   b extends WasmValue
 > = Satisfies<WasmValue,
   Ensure.I64<
-    SubtractBinary<a, b>
+    SubtractBinaryFixed<a, b>
   >
 >
 
@@ -65,16 +65,16 @@ type a = '10000101101100000011000010111010'
 type b = '00110001001101100101000101001110'
 type s = '11010100011110011101111101101100'
 
-type x1 = SubtractBinary<p3, p5> // =>
+type x1 = SubtractBinaryFixed<p3, p5> // =>
 type z1 = ToDecimalSigned<x1>    // =>
 
-type x2 = SubtractBinary<p3, n5> // =>
+type x2 = SubtractBinaryFixed<p3, n5> // =>
 type z2 = ToDecimalSigned<x2>    // =>
 
-type x3 = SubtractBinary<n3, p5> // =>
+type x3 = SubtractBinaryFixed<n3, p5> // =>
 type z3 = ToDecimalSigned<x3>    // =>
 
-type x4 = SubtractBinary<n3, n5> // =>
+type x4 = SubtractBinaryFixed<n3, n5> // =>
 type z4 = ToDecimalSigned<x4>    // =>
 
-type ab = AddBinary<n3, p5>; // =>
+type ab = AddBinaryFixed<n3, p5>; // =>

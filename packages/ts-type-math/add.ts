@@ -80,8 +80,7 @@ export type StringAddFixedReversed<
     ''
 
 
-/** this is an arbitrary precision add, which means it can return more bits than it was given (as in the case of an overflow) */
-export type AddBinary<
+export type AddBinaryFixed<
   A extends string,
   B extends string,
 > = Satisfies<string,
@@ -170,7 +169,7 @@ export type I32AddBinary<
   b extends WasmValue
 > = Satisfies<WasmValue,
   Ensure.I32<
-    AddBinary<a, b>
+    AddBinaryFixed<a, b>
   >
 >
 
@@ -179,7 +178,7 @@ export type I64AddBinary<
   b extends WasmValue
 > = Satisfies<WasmValue,
   Ensure.I64<
-    AddBinary<a, b>
+    AddBinaryFixed<a, b>
   >
 >
 

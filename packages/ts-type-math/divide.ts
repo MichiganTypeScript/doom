@@ -1,8 +1,6 @@
-import { SubtractBinary } from "./subtract";
-import { Clamp } from './split'
-import { AddBinary } from "./add";
+import { SubtractBinaryFixed } from "./subtract";
+import { AddBinaryFixed } from "./add";
 import { Wasm } from "./wasm";
-import { Ensure } from "./ensure";
 
 /*
   Yes, I need this reference. I'm not good at this stuff.  Truly.
@@ -18,7 +16,7 @@ import { Ensure } from "./ensure";
   Divisor
 */
 
-// lifted from https://youtu.be/l3fM0XslOS0?si=V-7lzZJMAI7k5_X8&t=350
+// lifted from https://youtu.be/l3fM0XslOS0?t=350
 
 type ShiftLeftOnceBinaryArbitraryFill1<
   slobaf1 extends string
@@ -39,43 +37,70 @@ export type _DivideBinary32<
   Q extends string, // = dividend
   M extends string, // = divisor
   A extends string,
-  Count extends 1[],
+  StopAt extends number,
+  debugMode extends boolean = false,
+
+  Count extends 1[] = [],
 
   _AShift extends string =
-    // effectively shifting Q once into A
-    Q extends `0${string}` // is Q positive
-    ? ShiftLeftOnceBinaryArbitraryFill0<A>
-    : ShiftLeftOnceBinaryArbitraryFill1<A>,
+    `${
+      A extends `${string}${infer tail}` ? tail : never
+    }${
+      // effectively shifting Q once into A
+      Q extends `${infer bit}${string}` ? bit : never
+    }`,
 
-  _newA extends string =
-    Ensure.OverflowProtection<
-      A extends `0${string}` // is A Positive
-        ? SubtractBinary<_AShift, M>
-        :      AddBinary<_AShift, M>,
-      Wasm.I32False
+  _AShiftMinusM extends string =
+    SubtractBinaryFixed<
+      _AShift,
+      M
     >,
 
+  _newA extends string =
+    _AShiftMinusM extends `1${string}`
+    ? // A-M is negative, so restore
+      _AShift
+
+    : // A-M is positive, so update
+      _AShiftMinusM,
+
+
   _newQ extends string =
-    _newA extends `0${string}` // is _newA positive
-    ? ShiftLeftOnceBinaryArbitraryFill1<Q>
-    : ShiftLeftOnceBinaryArbitraryFill0<Q>,
+    _AShiftMinusM extends `1${string}`
+    ? ShiftLeftOnceBinaryArbitraryFill0<Q>
+    : ShiftLeftOnceBinaryArbitraryFill1<Q>,
 
 > =
-  Count['length'] extends 31
-  ? _newQ
-      // remainder:
-      //   GetMSB<_newA> extends '1'
-      //   ? _AShift // restore the accumulator because it's negative otherwise
-      //   : _newA,
+  Count['length'] extends StopAt
+  ? debugMode extends false
+    ? {
+        quotient: _newQ
+        remainder:
+          _newA extends `1${string}`
+          ? _AShift // restore the accumulator because it's negative otherwise
+          : _newA
+      }
+
+    : {
+        M: M,
+        A: A,
+        Q: Q,
+        _AShift: _AShift,
+        _AShiftMinusM: _AShiftMinusM,
+        _newA: _newA,
+        _newQ: _newQ,
+        quotient: _newQ,
+
+      }
 
   : _DivideBinary32<
       _newQ,
       M,
       _newA,
+      StopAt,
+      debugMode,
       [1, ...Count]
     >
-
-
 
 export type DivideUnsignedBinary32<
   dividend extends string,
@@ -89,9 +114,8 @@ export type DivideUnsignedBinary32<
     dividend,
     divisor,
     Wasm.I32False,
-    []
+    31
   >
-
 
 // import { ReverseString8Segments, SignBit } from "./binary";
 // import { SubtractBinary } from "./subtract";

@@ -93,11 +93,9 @@ export type LessThanUnsignedBinary<
 export type IsPositiveSignedBinary<
   a extends WasmValue
 > = Satisfies<boolean,
-  a extends `${infer A}${infer TailA}`
-  ? A extends '1'
-    ? false
-    : true
-  : never
+  a extends `0${string}`
+  ? true
+  : false
 >
 
 export type GreaterThanSignedBinary<
