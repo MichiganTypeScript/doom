@@ -104,12 +104,9 @@ type StringAdd<
           ]>
         >
 
-      : // A and B do not have digits left.  just need to resolve the carry
-        carry extends []
-        ? // there was no a carry, base case of recursion
-          ''
-        : // there was a carry, base case of recursion
-          '1'
+      : // A and B do not have digits left. we don't overflow because there's no use-case for that in this context.
+        // If we did want to overflow we should check whether there's a carry and return a '1' here if so
+        ''
 
 // type x = AddBinary<"1", "110101010111101"> // =>
 

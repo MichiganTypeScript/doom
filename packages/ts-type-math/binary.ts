@@ -380,39 +380,35 @@ export type WithNegativeSignBigInt<
 export type ToDecimalSigned<
   binary extends string
 > = Satisfies<number,
-  binary extends `${infer Head}${infer remainder}`
-  ? Head extends '0'
+  binary extends `0${string}`
     ? // positive number
-      ToDecimalUnsigned<remainder>
+      ToDecimalUnsigned<binary>
 
     : // negative number
       WithNegativeSign<
         ToDecimalUnsigned<
           TwosComplementFlip<
-            remainder
+            binary
           >
         >
       >
-  : never
 >
 
 export type ToDecimalSignedBigInt<
   binary extends string
 > = Satisfies<bigint,
-  binary extends `${infer Head}${infer remainder}`
-  ? Head extends '0'
+  binary extends `0${string}`
     ? // positive number
-      ToDecimalUnsignedBigInt<remainder>
+      ToDecimalUnsignedBigInt<binary>
 
     : // negative number
       WithNegativeSignBigInt<
         ToDecimalUnsignedBigInt<
           TwosComplementFlip<
-            remainder
+          binary
           >
         >
       >
-  : never
 >
 
 
