@@ -33,7 +33,7 @@ export namespace Load {
 
       // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
       // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
-      _b1 extends string = memory[AddBinary<address, '1'>],
+      _b1 extends string = memory[AddBinary<address, '00000000000000000000000000000001'>],
       _b0 extends string = memory[address],
     > =
       `${
@@ -49,9 +49,9 @@ export namespace Load {
     // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
     // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     address extends WasmValue,
-    _b3 extends string = memory[AddBinary<address, '11'>],
-    _b2 extends string = memory[AddBinary<address, '10'>],
-    _b1 extends string = memory[AddBinary<address, '1'>],
+    _b3 extends string = memory[AddBinary<address, '00000000000000000000000000000011'>],
+    _b2 extends string = memory[AddBinary<address, '00000000000000000000000000000010'>],
+    _b1 extends string = memory[AddBinary<address, '00000000000000000000000000000001'>],
     _b0 extends string = memory[address],
   > =
     `${
@@ -71,13 +71,13 @@ export namespace Load {
     // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
     // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     address extends WasmValue,
-    _b7 extends string = memory[AddBinary<address, '111'>],
-    _b6 extends string = memory[AddBinary<address, '110'>],
-    _b5 extends string = memory[AddBinary<address, '101'>],
-    _b4 extends string = memory[AddBinary<address, '100'>],
-    _b3 extends string = memory[AddBinary<address,  '11'>],
-    _b2 extends string = memory[AddBinary<address,  '10'>],
-    _b1 extends string = memory[AddBinary<address,   '1'>],
+    _b7 extends string = memory[AddBinary<address, '00000000000000000000000000000111'>],
+    _b6 extends string = memory[AddBinary<address, '00000000000000000000000000000110'>],
+    _b5 extends string = memory[AddBinary<address, '00000000000000000000000000000101'>],
+    _b4 extends string = memory[AddBinary<address, '00000000000000000000000000000100'>],
+    _b3 extends string = memory[AddBinary<address, '00000000000000000000000000000011'>],
+    _b2 extends string = memory[AddBinary<address, '00000000000000000000000000000010'>],
+    _b1 extends string = memory[AddBinary<address, '00000000000000000000000000000001'>],
     _b0 extends string = memory[address],
   > =
     `${

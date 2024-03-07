@@ -10,7 +10,7 @@ test.each(t)('$a_binary * $b_binary === $mul_binary', ({ a_binary, b_binary, mul
   expect(actual_binary).toBe(mul_binary);
 })
 
-type i = 72
+type i = 32
 type a = T[i]['a']  // =>
 type b = T[i]['b']  // =>
 type e = T[i]['mul']// =>

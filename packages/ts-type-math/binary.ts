@@ -1,4 +1,4 @@
-import { AddBinary } from "./add";
+import { AddBinary, StringAddFixedReversed } from "./add";
 import { BitwiseNotBinary } from "./bitwise";
 import type { DivTSBigInt, DivTSNumbers, Mod, ModBigInt } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
@@ -261,6 +261,14 @@ export type ReverseString8Segments<T extends string> =
     : // we're done
       ''
 
+/** You better be absolutely sure there's no other way to chunk up the string. */
+export type ReverseStringTheWorstWayPossible<
+  T extends string
+> =
+  T extends `${infer L}${infer R}`
+  ? `${ReverseStringTheWorstWayPossible<R>}${L}`
+  : ''
+
 // QUESTION: I have lookup tables for 0-255 (from both binary and decimal).
 // Would it be better or faster to just check that object real quick first and return that value if it exists?
 
@@ -338,7 +346,7 @@ export type Bit = string;
 export type IsNegativeBinary<
   binary extends string
 > = Satisfies<boolean,
-  binary extends `${infer Head extends '1'}${string}`
+  binary extends `1${string}`
     ? true
     : false
 >
@@ -356,7 +364,15 @@ export type SignBit<
 
 export type TwosComplementFlip<
   T extends string
-> = AddBinary<BitwiseNotBinary<T>, "1">
+> = ReverseString8Segments<
+  StringAddFixedReversed<
+    ReverseString8Segments<
+      BitwiseNotBinary<T>
+    >,
+    "1000000000000000000000000000000000000000000000000000000000000000", // pre-reversed 1
+    []
+  >
+>
 
 type x1 = BitwiseNotBinary<"00000011"> // =>
 type x2 = AddBinary<x1, "1">           // =>

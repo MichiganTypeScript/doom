@@ -1,7 +1,7 @@
 import { t, T } from '../test-cases/bitwise';
 import { test, expect } from 'vitest';
 import { Expect, Equal } from 'type-testing';
-import { BitwiseNot, BitwiseNotBinary } from '../bitwise';
+import { BitwiseNot } from '../bitwise';
 
 //----------------------------------------------------------------------
 // BITWISE NOT
@@ -16,7 +16,7 @@ test.each(t)('~$a === $not', ({
   expect(t).toHaveLength(24);
 });
 
-type i = 5;
+type i = 9;
 type a = T[i]['a'];   // =>
 type e = T[i]['not']; // =>
 type x = BitwiseNot<a>// =>

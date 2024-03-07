@@ -26,11 +26,6 @@ export type BranchesById = Record<BranchId, Instruction[]>;
 
 export type FuncsById = Record<string, Func>;
 
-export type Reverse<T extends any[]> =
-  T extends [infer head, ...infer tail]
-  ? [...Reverse<tail>, head]
-  : []
-
 export type StorageBits = 8 | 16 | 32 | 64;
 
 export type ExecutionContext = {

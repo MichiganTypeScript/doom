@@ -1,11 +1,10 @@
-import { AddBinary } from "./add";
-import { ReverseString8Segments } from "./binary";
+import { StringAddArbitraryReversed } from "./add";
+import { ReverseString8Segments, ReverseStringTheWorstWayPossible } from "./binary";
 import { Ensure } from "./ensure";
 import { Wasm, WasmValue } from "./wasm";
 
 type a = "00000000000000000000000001100100"
 type b = "00000000000000000000000000001010"
-type x = MultiplyBinary<a, b> // =>
 
 export type I32MultiplyBinary<
   a extends WasmValue,
@@ -13,8 +12,15 @@ export type I32MultiplyBinary<
 > = Satisfies<WasmValue,
   a extends Wasm.I32False ? Wasm.I32False :
   b extends Wasm.I32False ? Wasm.I32False :
+  a extends Wasm.I32True ? b :
+  b extends Wasm.I32True ? a :
   Ensure.I32<
-    MultiplyBinary<a, b>
+    _MultiplyBinary<
+      ReverseString8Segments<a>,
+      ReverseString8Segments<b>,
+      '',
+      ''
+    >
   >
 >
 
@@ -24,29 +30,17 @@ export type I64MultiplyBinary<
 > = Satisfies<WasmValue,
   a extends Wasm.I64False ? Wasm.I64False :
   b extends Wasm.I64False ? Wasm.I64False :
+  a extends Wasm.I64True ? b :
+  b extends Wasm.I64True ? a :
   Ensure.I64<
-    MultiplyBinary<a, b>
+    _MultiplyBinary<
+      ReverseString8Segments<a>,
+      ReverseString8Segments<b>,
+      '',
+      ''
+    >
   >
 >
-
-// Hopefully there's a more efficient way to do this, but I'm using the method for repeated addition I learned in middle school
-// apparently there's another way using right shift called the "partial sum" approach https://youtu.be/PjmWG_8b3os
-
-/**
- * this is an unsigned arbitrary precision multiplication algo where both sides much be the same length
- * 
- * as yet another optimization, it also does not handle multiplication by zero so if you use this type you have to check first that both sides are not zero
- */
-export type MultiplyBinary<
-  a extends string, // multiplicand
-  b extends string // multiplier
-> =
-  _MultiplyBinary<
-    a,
-    ReverseString8Segments<b>,
-    '',
-    ''
-  >
 
 export type _MultiplyBinary<
   a extends string,
@@ -57,11 +51,11 @@ export type _MultiplyBinary<
 > =
   revB extends `${infer digit}${infer tail}`
   ? digit extends "0"
-    ? // there's no point in doing any work, so we can just move on to the next digit
+    ? // there's no point in doing any "work", so we can just move on to the next digit
       _MultiplyBinary<
         a,
         tail,
-        `${_Place}0`,
+        `0${_Place}`,
         _Acc
       >
 
@@ -69,12 +63,13 @@ export type _MultiplyBinary<
       _MultiplyBinary<
         a,
         tail,
-        `${_Place}0`,
+        `0${_Place}`,
 
-        AddBinary<
-          `${a}${_Place}`,
-          _Acc
+        StringAddArbitraryReversed<
+          `${_Place}${a}`,
+          _Acc,
+          []
         >
       >
 
-  : _Acc
+  : ReverseStringTheWorstWayPossible<_Acc>

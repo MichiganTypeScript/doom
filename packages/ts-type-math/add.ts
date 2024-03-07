@@ -1,17 +1,9 @@
-import { Convert } from "./conversion";
+import { ReverseString8Segments } from "./binary";
 import { Ensure } from "./ensure";
 import { Add } from "./hotscript-fork/numbers/impl/addition";
-import { Clamp } from "./split";
 import { WasmValue } from "./wasm";
 
 type Counter = 1[];
-
-type Reverse<
-  T extends string
-> =
-  T extends `${infer L}${infer R}`
-  ? `${Reverse<R>}${L}`
-  : ''
 
 type DigitToCounter<T extends string> =
   T extends '0'
@@ -47,21 +39,21 @@ type Calculate<T extends Counter> =
 
 
 /** This function's purpose in life is to avoid needing to calculate C twice */
-type AppendCalculation<
+type AppendCalculationFixedReversed<
   A_Remaining extends string,
   B_Remaining extends string,
   C extends Calculation
 > = `${
   C['digit']
 }${
-  StringAdd<
+  StringAddFixedReversed<
     A_Remaining,
     B_Remaining,
     C['carry']
   >
 }`
 
-type StringAdd<
+export type StringAddFixedReversed<
   A extends string,
   B extends string,
   carry extends Counter,
@@ -71,7 +63,7 @@ type StringAdd<
   ? // A has a digit
     B extends `${infer B_Digit}${infer B_Remaining}`
     ? // A and B both have a digit
-      AppendCalculation<
+      AppendCalculationFixedReversed<
         A_Remaining,
         B_Remaining,
         Calculate<[
@@ -82,7 +74,67 @@ type StringAdd<
       >
 
     : // A has a digit, but B does not
-      AppendCalculation<
+      ''
+
+  : // out of digits.  fuck the carry.
+    ''
+
+
+/** this is an arbitrary precision add, which means it can return more bits than it was given (as in the case of an overflow) */
+export type AddBinary<
+  A extends string,
+  B extends string,
+> = Satisfies<string,
+  // we reverse the strings so we can add them from right to left
+  // there's no simply way in TypeScript to pick a character off the end of a string
+  // this is a huge performance bottleneck (in terms of recursions)
+  ReverseString8Segments<
+    StringAddFixedReversed<
+      ReverseString8Segments<A>,
+      ReverseString8Segments<B>,
+      []
+    >
+  >
+>
+
+/** This function's purpose in life is to avoid needing to calculate C twice */
+type AppendCalculationArbitraryReversed<
+  A_Remaining extends string,
+  B_Remaining extends string,
+  C extends Calculation
+> = `${
+  C['digit']
+}${
+  StringAddArbitraryReversed<
+    A_Remaining,
+    B_Remaining,
+    C['carry']
+  >
+}`
+
+
+export type StringAddArbitraryReversed<
+  A extends string,
+  B extends string,
+  carry extends Counter,
+> =
+  A extends `${infer A_Digit}${infer A_Remaining}`
+  
+  ? // A has a digit
+    B extends `${infer B_Digit}${infer B_Remaining}`
+    ? // A and B both have a digit
+      AppendCalculationArbitraryReversed<
+        A_Remaining,
+        B_Remaining,
+        Calculate<[
+          ...DigitToCounter<A_Digit>,
+          ...DigitToCounter<B_Digit>,
+          ...carry,
+        ]>
+      >
+
+    : // A has a digit, but B does not
+      AppendCalculationArbitraryReversed<
         A_Remaining,
         '', // since we know B is out of digits, we can just pass an empty string
         Calculate<[
@@ -95,7 +147,7 @@ type StringAdd<
       B extends `${infer B_Digit}${infer B_Remaining}`
 
       ? // A does not have a digit, but B does
-        AppendCalculation<
+        AppendCalculationArbitraryReversed<
           '', // since we know A is out of digits, we can just pass an empty string
           B_Remaining,
           Calculate<[
@@ -104,28 +156,14 @@ type StringAdd<
           ]>
         >
 
-      : // A and B do not have digits left. we don't overflow because there's no use-case for that in this context.
-        // If we did want to overflow we should check whether there's a carry and return a '1' here if so
+
+      : // A and B do not have digits left.  just need to resolve the carry
+      carry extends []
+      ? // there was no a carry, base case of recursion
         ''
+      : // there was a carry, base case of recursion
+        '1'
 
-// type x = AddBinary<"1", "110101010111101"> // =>
-
-/** this is an arbitrary precision add, which means it can return more bits than it was given (as in the case of an overflow) */
-export type AddBinary<
-  A extends string,
-  B extends string,
-> = Satisfies<string,
-  // we reverse the strings so we can add them from right to left
-  // there's no simply way in TypeScript to pick a character off the end of a string
-  // this is a huge performance bottleneck (in terms of recursions)
-  Reverse<
-    StringAdd<
-      Reverse<A>,
-      Reverse<B>,
-      []
-    >
-  >
->
 
 export type I32AddBinary<
   a extends WasmValue,
