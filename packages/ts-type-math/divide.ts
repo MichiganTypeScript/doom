@@ -1,5 +1,4 @@
 import { SubtractBinaryFixed } from "./subtract";
-import { AddBinaryFixed } from "./add";
 import { Wasm } from "./wasm";
 
 /*
@@ -18,26 +17,12 @@ import { Wasm } from "./wasm";
 
 // lifted from https://youtu.be/l3fM0XslOS0?t=350
 
-type ShiftLeftOnceBinaryArbitraryFill1<
-  slobaf1 extends string
-> =
-  slobaf1 extends `${string}${infer tail}`
-  ? `${tail}1`
-  : 'you dun goofed1'
-
-type ShiftLeftOnceBinaryArbitraryFill0<
-  slobaf0 extends string
-> =
-  slobaf0 extends `${string}${infer tail}`
-  ? `${tail}0`
-  : 'you dun goofed0'
-
-
 export type _DivideBinaryArbitrary<
   Q extends string, // = dividend
   M extends string, // = divisor
   A extends string,
   StopAt extends number,
+  debugMode extends boolean = false,
 
   Count extends 1[] = [],
 
@@ -65,25 +50,40 @@ export type _DivideBinaryArbitrary<
 
 
   _newQ extends string =
-    _AShiftMinusM extends `1${string}`
-    ? ShiftLeftOnceBinaryArbitraryFill0<Q>
-    : ShiftLeftOnceBinaryArbitraryFill1<Q>,
+    Q extends `${string}${infer tail}` // remove first digit to prep for shift left
+    ? `${
+        tail
+      }${
+        _AShiftMinusM extends `1${string}` ? '0' : '1' // replace shifted digit depending on A-M
+      }`
+    : never
 
 > =
-  `${Count['length']}` extends `${StopAt}`
-    ? {
-        quotient: _newQ
-        remainder:
-          _newA extends `1${string}`
-          ? _AShift // restore the accumulator because it's negative otherwise
-          : _newA
-      }
+  Count['length'] extends StopAt
+    ? debugMode extends false
+      ? {
+          quotient: _newQ
+          remainder:
+            _newA extends `1${string}`
+            ? _AShift // restore the accumulator because it's negative otherwise
+            : _newA
+        }
+      : {
+          M: M,
+          A: A,
+          Q: Q,
+          _AShift: _AShift,
+          _AShiftMinusM: _AShiftMinusM,
+          _newA: _newA,
+          _newQ: _newQ,
+        }
 
     : _DivideBinaryArbitrary<
         _newQ,
         M,
       _newA,
         StopAt,
+        debugMode,
         [1, ...Count]
       >
 
@@ -91,9 +91,9 @@ export type DivideUnsignedBinary32<
   dividend extends string,
   divisor extends string
 > =
-  divisor extends Wasm.I32False ? Wasm.I32False : // if divide by zero return zero
-  dividend extends divisor ? Wasm.I32True : // if equal return 1
-  divisor extends Wasm.I32True ? dividend : // if divide by 1 return dividend
+  [divisor] extends [Wasm.I32False] ? Wasm.I32False : // if divide by zero return zero
+  [dividend] extends [divisor] ? Wasm.I32True : // if equal return 1
+  [divisor] extends [Wasm.I32True] ? dividend : // if divide by 1 return dividend
 
   _DivideBinaryArbitrary<
     dividend,

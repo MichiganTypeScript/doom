@@ -1,8 +1,7 @@
 declare global {
   // Development Mode
 
-  /** guess who gets credit for this one :) */
-  type Satisfies<David, Blass extends David> = Blass
+  type Satisfies<T, U extends T> = U
 
   // WARNING: changing this (as in to a noop) will cause catastrophic performance degradation
   type evaluate<T> = {

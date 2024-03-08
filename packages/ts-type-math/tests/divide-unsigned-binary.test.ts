@@ -54,7 +54,7 @@ type e = T[i]['div_u_binary'] // =>
 // type Case29 = Expect<Equal<DivideUnsignedBinary32<T[29]['a_binary'], T[29]['b_binary']>, T[29]['div_u_binary']>>
 // type Case30 = Expect<Equal<DivideUnsignedBinary32<T[30]['a_binary'], T[30]['b_binary']>, T[30]['div_u_binary']>>
 // type Case31 = Expect<Equal<DivideUnsignedBinary32<T[31]['a_binary'], T[31]['b_binary']>, T[31]['div_u_binary']>>
-// type Case32 = Expect<Equal<DivideBinaryArbitrary<T[32]['a_binary'], T[32]['b_binary']>, T[32]['div_u_binary']>>
+// type Case32 = Expect<Equal<DivideUnsignedBinary32<T[32]['a_binary'], T[32]['b_binary']>, T[32]['div_u_binary']>>
 // type Case33 = Expect<Equal<DivideUnsignedBinary32<T[33]['a_binary'], T[33]['b_binary']>, T[33]['div_u_binary']>>
 // type Case34 = Expect<Equal<DivideUnsignedBinary32<T[34]['a_binary'], T[34]['b_binary']>, T[34]['div_u_binary']>>
 // type Case35 = Expect<Equal<DivideUnsignedBinary32<T[35]['a_binary'], T[35]['b_binary']>, T[35]['div_u_binary']>>
