@@ -15,7 +15,7 @@ test.each(t)('i32load($a) === $load (%#)', async ({ a, a_binary, load, load_bina
   expect(entry(a)).toStrictEqual(load);
 });
 
-type i = 8
+type i = 1
 type a = T[i]['a']   // =>
 type e = T[i]['load']// =>
 type x = entry<[a]>  // =>

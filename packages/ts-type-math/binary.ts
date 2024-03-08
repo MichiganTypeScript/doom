@@ -375,15 +375,6 @@ export type TwosComplementFlip<
   >
 >
 
-type x1 = BitwiseNotBinary<"00000011"> // =>
-type x2 = AddBinaryFixed<x1, "1">           // =>
-
-type x = TwosComplementFlip<"00000011"> // =>
-
-type x3 = AddBinaryFixed<x, "1"> // =>
-
-type y = ToDecimalUnsigned<x> // =>
-
 // this takes a positive TsNumber nad makes it negative
 export type WithNegativeSign<
   T extends number

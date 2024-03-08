@@ -472,7 +472,7 @@ export namespace State {
         infer head extends Wasm.Byte, // WASM is little-endian so these go in first
       ]
       ? CollectBytes<
-          I32AddBinary<address, '1'>,
+          I32AddBinary<address, Wasm.I32True>,
           tail,
           evaluate<
             & _Acc
