@@ -10,8 +10,6 @@ type Example<
       [...Count, 1]
     >;
 
-
-
 type RESTART_TYPESCRIPT_AND_SEE_THAT_THIS_IS_A_UNION_WHILE_ITS_LOADING = Example;
 
 type MiTS = any extends string ? "a" : "b"

@@ -2,7 +2,7 @@ import type { Instruction, selectInstruction } from "./instructions/instructions
 import type { IHalt } from "./instructions/synthetic"
 import type { State } from "./state"
 import type { ProgramInput, ProgramState } from "./types"
-import type { Convert, WasmType, WasmValue } from "ts-type-math"
+import type { Convert, WasmType, WasmValue, evaluate } from "ts-type-math"
 
 type _ProcessInputStack<
   args extends [number[]  | bigint[], WasmType[]],
