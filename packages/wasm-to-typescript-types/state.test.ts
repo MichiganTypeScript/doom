@@ -1,6 +1,7 @@
 import { Equal, Expect } from "type-testing"
 import { ProgramState } from "./types"
 import { State } from './state'
+import type { Satisfies } from 'ts-type-math'
 
 type blankProgram = Satisfies<ProgramState, {
   funcs: {

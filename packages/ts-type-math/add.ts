@@ -2,6 +2,7 @@ import { ReverseString8Segments } from "./binary";
 import { Ensure } from "./ensure";
 import { Add } from "./hotscript-fork/numbers/impl/addition";
 import { WasmValue } from "./wasm";
+import type { Satisfies } from './utils'
 
 type Counter = 1[];
 

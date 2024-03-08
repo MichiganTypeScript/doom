@@ -1,5 +1,6 @@
 import { Bit, To32Binary, ToDecimalSigned } from "./binary";
 import { WasmValue } from "./wasm";
+import type { Satisfies } from './utils'
 
 type LookupBitAnd = {
   '0': {

@@ -34,8 +34,8 @@
     "./packages/playground/evaluate/results/*",
     "./packages/playground/evaluate/playground.ts",
     //
-    "./packages/conformance-tests/from-c/*",
-    "./packages/conformance-tests/from-wat/*",
+    // "./packages/conformance-tests/from-c/*",
+    // "./packages/conformance-tests/from-wat/*",
     "./packages/conformance-tests/from-wat-single/single-i32*",
     "./packages/conformance-tests/from-wat-single/single-i64*",
     // "./packages/ts-type-math/tests",

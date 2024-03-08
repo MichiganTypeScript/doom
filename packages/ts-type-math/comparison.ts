@@ -1,4 +1,5 @@
 import { WasmValue, Wasm } from "./wasm"
+import type { Satisfies } from './utils'
 
 export type EqualsBinary<
   a extends WasmValue,

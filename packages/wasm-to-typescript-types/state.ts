@@ -13,7 +13,7 @@ import type {
   ProgramState,
 } from "./types"
 import * as TypeMath from "ts-type-math";
-import { WasmValue, WasmType, Convert, Wasm, evaluate } from 'ts-type-math';
+import { WasmValue, WasmType, Convert, Wasm, evaluate, Satisfies } from 'ts-type-math';
 
 export namespace State {
   export type error<

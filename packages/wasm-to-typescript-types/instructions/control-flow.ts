@@ -1,7 +1,7 @@
 import type { Func, Param, ProgramState } from "../types"
 import type { State } from '../state'
 import type { Instruction } from "./instructions"
-import type { Wasm, WasmValue } from 'ts-type-math'
+import type { Wasm, WasmValue, Satisfies } from 'ts-type-math'
 
 export type IBlock = {
   kind: "Block"

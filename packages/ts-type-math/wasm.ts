@@ -8,6 +8,7 @@ import { I64ExtendI32SBinary64, I64ExtendI32UBinary64 } from "./wasm-conversion"
 import { I32ClzBinary, I64ClzBinary64 } from "./binary";
 import { WrapBinary } from "./split";
 import { Convert } from "./conversion";
+import type { Satisfies } from './utils'
 // import { DivideBinary32, RemainderBinary32 } from "./divide";
 
 export type WasmType = 'i32' | 'i64' | 'f32' | 'f64';

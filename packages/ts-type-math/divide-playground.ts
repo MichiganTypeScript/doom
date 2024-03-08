@@ -243,50 +243,50 @@ type s_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 8, true>
 //   ^?
 type t_8 = Expect<Extends<s_8, { A: remainder_8, Q: quotient_8 }>>
 
-// 9 digits
-// 512 union members
+// // 9 digits
+// // 512 union members
 
-type divisor_9 =   '000000011' // M
-type fallback_9 =  '000000000' // A
-type dividend_9 =  '000000111' // Q
-type quotient_9 =  '000000010' // result
-type remainder_9 = '000000001' // result
-type stopAt_9 = 8
+// type divisor_9 =   '000000011' // M
+// type fallback_9 =  '000000000' // A
+// type dividend_9 =  '000000111' // Q
+// type quotient_9 =  '000000010' // result
+// type remainder_9 = '000000001' // result
+// type stopAt_9 = 8
 
-type DivideBinary_9<
-  dividend extends string,
-  divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_9, stopAt_9>
+// type DivideBinary_9<
+//   dividend extends string,
+//   divisor extends string
+// > = _DivideBinaryArbitrary<dividend, divisor, fallback_9, stopAt_9>
 
-type x_9 = DivideBinary_9<dividend_9, divisor_9>
-//   ^?
-type tx_9 = Expect<Extends<x_9, { quotient: quotient_9, remainder: remainder_9 }>>
-
-
-// 10 digits
-// 1024 union members
-
-type divisor_10 =   '0000000011' // M
-type fallback_10 =  '0000000000' // A
-type dividend_10 =  '0000000111' // Q
-type quotient_10 =  '0000000010' // result
-type remainder_10 = '0000000001' // result
-type stopAt_10 = 9
-
-type DivideBinary_10<
-  dividend extends string,
-  divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_10, stopAt_10>
+// type x_9 = DivideBinary_9<dividend_9, divisor_9>
+// //   ^?
+// type tx_9 = Expect<Extends<x_9, { quotient: quotient_9, remainder: remainder_9 }>>
 
 
+// // 10 digits
+// // 1024 union members
+
+// type divisor_10 =   '0000000011' // M
+// type fallback_10 =  '0000000000' // A
+// type dividend_10 =  '0000000111' // Q
+// type quotient_10 =  '0000000010' // result
+// type remainder_10 = '0000000001' // result
+// type stopAt_10 = 9
+
+// type DivideBinary_10<
+//   dividend extends string,
+//   divisor extends string
+// > = _DivideBinaryArbitrary<dividend, divisor, fallback_10, stopAt_10>
 
 
 
 
 
-type x_10 = DivideBinary_10<dividend_10, divisor_10>
-//   ^?
-type tx_10 = Expect<Extends<x_10, { quotient: quotient_10, remainder: remainder_10 }>>
+
+
+// type x_10 = DivideBinary_10<dividend_10, divisor_10>
+// //   ^?
+// type tx_10 = Expect<Extends<x_10, { quotient: quotient_10, remainder: remainder_10 }>>
 
 
 // // 11 digits

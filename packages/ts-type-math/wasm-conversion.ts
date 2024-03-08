@@ -1,6 +1,7 @@
 import { SignBit } from "./binary"
 import { Convert } from "./conversion"
 import { WasmValue } from "./wasm"
+import type { Satisfies } from './utils'
 
 
 type thirtyTwoZeros = '00000000000000000000000000000000'

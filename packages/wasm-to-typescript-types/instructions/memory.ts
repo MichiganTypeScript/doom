@@ -1,6 +1,6 @@
 import type { MemoryAddress, ProgramState } from "../types"
 import type { State } from '../state'
-import { WasmValue, Wasm, Pad, Store as Storage } from "ts-type-math"
+import { WasmValue, Wasm, Pad, Store as Storage, Satisfies } from "ts-type-math"
 import type * as TypeMath from 'ts-type-math'
 
 export type IMemorySize = {

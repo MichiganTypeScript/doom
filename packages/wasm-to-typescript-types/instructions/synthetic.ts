@@ -1,6 +1,7 @@
 import type { ProgramState } from "../types"
 import type { Instruction } from "./instructions"
 import type { State } from '../state'
+import type { Satisfies } from 'ts-type-math'
 
 /** this isn't really a webassembly instruction, but it's a sentinel put here so that the program can understand when to cull execution contexts (i.e. after the function returns) */
 export type IEndFunction = {

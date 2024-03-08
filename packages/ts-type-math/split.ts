@@ -1,6 +1,7 @@
 import { ReverseString8Segments } from "./binary"
 import { Ensure } from "./ensure"
 import { WasmValue } from "./wasm"
+import type { Satisfies } from './utils'
 
 /** this algorithm ABSO-FUCKING-LUTELY requires the string to be some multiple of 8 in length.  Don't fuck it up. */
 export type SplitToBytes<

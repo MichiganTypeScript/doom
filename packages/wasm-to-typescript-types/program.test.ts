@@ -2,6 +2,7 @@ import { test } from 'vitest';
 import { ProgramInput } from './types';
 import { ProcessInputStack } from './program';
 import { Equal, Expect } from 'type-testing';
+import type { Satisfies } from 'ts-type-math'
 
 test("program")
 

@@ -1,7 +1,7 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
 import * as TypeMath from "ts-type-math"
-import { WasmValue, WasmInt, Wasm } from "ts-type-math"
+import { WasmValue, WasmInt, Wasm, Satisfies } from "ts-type-math"
 
 export type IAnd = {
   kind: "And"

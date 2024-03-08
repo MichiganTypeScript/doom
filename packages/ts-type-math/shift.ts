@@ -3,6 +3,7 @@ import { Wasm, WasmValue } from "./wasm";
 import type { Convert } from './conversion';
 import { Clamp } from "./split";
 import { Ensure } from "./ensure";
+import type { Satisfies } from './utils'
 
 /** inputs are unsigned Decimal32, under the hood is binary */
 export type ShiftLeft<

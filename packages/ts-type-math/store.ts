@@ -3,7 +3,7 @@ import type { Ascii, U8Binary, U8Decimal } from "./conversion"
 import type { Convert } from "./conversion"
 import type { SplitToBytes } from "./split"
 import type { WasmValue, Wasm } from "./wasm"
-import type { evaluate } from 'ts-type-math'
+import type { evaluate, Satisfies } from './utils'
 
 export type AsciiToU8Decimal<T extends string> =
   T extends `${infer Char extends Ascii}${infer Rest}`

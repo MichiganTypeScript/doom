@@ -1,6 +1,7 @@
 import { U8Binary } from "./conversion";
 import type { Convert } from "./conversion"
 import { Wasm, WasmValue } from "./wasm";
+import type { Satisfies } from './utils'
 
 export type NullTerminatorBinary = "00000000";
 

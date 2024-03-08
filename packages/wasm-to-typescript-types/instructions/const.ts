@@ -1,6 +1,6 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
-import type { WasmValue } from 'ts-type-math'
+import type { WasmValue, Satisfies } from 'ts-type-math'
 
 export type IConst = {
   kind: "Const"

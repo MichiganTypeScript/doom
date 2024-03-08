@@ -5,6 +5,7 @@ import type { Length } from "./hotscript-fork/strings/impl/length";
 import type { Add, AddBigInt } from './hotscript-fork/numbers/impl/addition';
 import type { Convert } from './conversion';
 import { WasmValue } from "./wasm";
+import type { Satisfies } from './utils'
 
 type PowersOfTwo = [
   /* 2**0  */ 1,

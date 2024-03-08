@@ -3,6 +3,7 @@ import { ToDecimalSigned, TwosComplementFlip } from "./binary";
 import { IsPositiveSignedBinary } from "./comparison";
 import { Ensure } from "./ensure";
 import { WasmValue } from "./wasm";
+import type { Satisfies } from './utils'
 
 /** NOTE! this is unclamped!  that means if you subtract two negative numbers you could get an overflow! */
 export type SubtractBinaryFixed<

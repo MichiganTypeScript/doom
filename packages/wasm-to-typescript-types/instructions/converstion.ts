@@ -1,6 +1,7 @@
 import { WasmInt, WasmValue, Wasm } from "../../ts-type-math/wasm"
 import { State } from "../state"
 import { ProgramState } from "../types"
+import type { Satisfies } from "ts-type-math"
 
 // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Numeric/Wrap
 export type IWrap = {

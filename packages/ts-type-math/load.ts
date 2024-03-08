@@ -1,5 +1,6 @@
 import { AddBinaryFixed } from "./add";
 import { WasmValue, Wasm } from "./wasm";
+import type { Satisfies } from './utils'
 
 export namespace Load {
   /**

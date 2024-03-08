@@ -1,6 +1,6 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
-import { WasmValue, WasmType, Wasm } from "ts-type-math"
+import { WasmValue, WasmType, Wasm, Satisfies } from "ts-type-math"
 
 export type IEqualsZero = {
   kind: "EqualsZero"

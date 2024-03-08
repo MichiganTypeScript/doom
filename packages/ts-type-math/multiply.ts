@@ -2,6 +2,7 @@ import { StringAddArbitraryReversed } from "./add";
 import { ReverseString8Segments, ReverseStringTheWorstWayPossible } from "./binary";
 import { Ensure } from "./ensure";
 import { Wasm, WasmValue } from "./wasm";
+import type { Satisfies } from './utils'
 
 type a = "00000000000000000000000001100100"
 type b = "00000000000000000000000000001010"
