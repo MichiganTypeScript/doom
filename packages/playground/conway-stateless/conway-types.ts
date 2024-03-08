@@ -16,7 +16,7 @@ type ValidIndex<Arr extends unknown[]> =
 // Doesn't handle negative or decimal cases
 // It's annoying to handle the never case, so I'm using -1 as a sentinel value instead
 type Sub1<N extends number, C extends 0[] = []> =
-  true extends Equals<N, 0> | Equals<N, number> 
+  true extends Equals<N, 0> | Equals<N, number>
   ? -1
   : N extends [...C, 0]['length']
     ? C['length']
