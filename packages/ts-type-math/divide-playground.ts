@@ -349,7 +349,7 @@ type t_8 = Expect<Extends<s_8, { A: remainder_8, Q: quotient_8 }>>
 
 
 // // 14 digits
-// // 8192 union members
+// // 16384 union members
 // type divisor_14 =   '00000000000011' // M
 // type fallback_14 =  '00000000000000' // A
 // type dividend_14 =  '00000000000111' // Q

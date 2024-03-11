@@ -48,7 +48,6 @@ export type _DivideBinaryArbitrary<
     : // A-M is positive, so update
       _AShiftMinusM,
 
-
   _newQ extends string =
     Q extends `${string}${infer tail}` // remove first digit to prep for shift left
     ? `${
