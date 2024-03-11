@@ -190,7 +190,7 @@ mod tests {
             .args(["-s", "STANDALONE_WASM"]) // setting
             .arg("--no-entry") // no entry point (we disregard the main function and use the `entry` function instead)
             .output()
-            .expect("failed to execute wat2wasm");
+            .expect("failed to execute emcc");
 
         if !output.status.success() {
             // Print the standard error output
