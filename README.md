@@ -216,6 +216,29 @@ EVERY effort has been taken to not support something that Doom doesn't explicitl
 - https://github.com/eliben/wasm-wat-samples
 - https://github.com/WebAssembly/testsuite
 
+## Installatioon
+
+This list is a work in progress, you need:
+
+- node 20+
+- [pnpm](https://pnpm.io/installation) (this part is _CRITICAL_)
+- [Rust](https://www.rust-lang.org/tools/install)
+- the [`wabt` toolkit](https://github.com/WebAssembly/wabt)
+  - wasm2wat
+  - wat2wasm
+- `emcc` [Emscripten](https://github.com/emscripten-core/emscripten)
+
+### Editor Configuration
+
+You MUST change the TypeScript version in VSCode to the workspace's version (since it's patched to remove recursion limits).  To do this open the control palette with a TypeScript file active and select `TypeScript: Select TypeScript version...` and then `Use Workspace Version`.
+
+### Commands
+
+- `pnpm install` is important to do first.
+- `pnpm test` will test "all the things" and is the main workflow
+  - `pnpm build` will just run the TypeScript types tests (which also happens in the last step of `pnpm test`)
+- `pnpm playground` will run the playground process
+
 ## Tour of Ridiculous Types
 
 > _"we're not in Kansas anymore"_

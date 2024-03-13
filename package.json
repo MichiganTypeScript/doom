@@ -2,7 +2,12 @@
   "name": "doom-but-typescript-types",
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=8"
+  },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "playground": "pnpm --filter playground run playground",
     "generate": "tsx ./packages/playground/generate.ts",
     "test:conformance": "pnpm --filter conformance-tests run test",
@@ -31,7 +36,8 @@
   "pnpm": {
     "patchedDependencies": {
       "typescript@5.3.3": "patches/typescript@5.3.3.patch",
-      "@biomejs/js-api@0.3.0-nightly.cfef948": "patches/@biomejs__js-api@0.3.0-nightly.cfef948.patch"
+      "@biomejs/js-api@0.3.0-nightly.cfef948": "patches/@biomejs__js-api@0.3.0-nightly.cfef948.patch",
+      "type-testing@0.2.0": "patches/type-testing@0.2.0.patch"
     }
   }
 }

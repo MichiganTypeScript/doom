@@ -68,7 +68,6 @@ char* displayGrid(Grid grid, int rows, int columns) {
     return gridString;
 }
 
-
 EMSCRIPTEN_KEEPALIVE
 char* entry(int iterations) {
     Grid grid;

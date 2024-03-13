@@ -1,0 +1,12 @@
+diff --git a/dist/Extends.d.ts b/dist/Extends.d.ts
+index 14d647be5bb74790dcfd172486f2234e895eabcc..c956f0ea5972ddaeb8f1c4ea8858ba026175d966 100644
+--- a/dist/Extends.d.ts
++++ b/dist/Extends.d.ts
+@@ -28,6 +28,6 @@
+  * Extends<unknown, {}> //=> false
+  * ```
+  *
+- * @deprecated It's marked deprecated because the risk of accidental misuse is so high unless you're absolutely certain you know what you're doing.  There are rare but present situations when you want this type instead of Equal, hence it's inclusion in the library.
++ * It's marked deprecated because the risk of accidental misuse is so high unless you're absolutely certain you know what you're doing.  There are rare but present situations when you want this type instead of Equal, hence it's inclusion in the library.
+  */
+ export type Extends<A, B> = A extends B ? true : false;

@@ -8,6 +8,9 @@ patchedDependencies:
   '@biomejs/js-api@0.3.0-nightly.cfef948':
     hash: zizv6l7zla7jxpytik5rmyr6wi
     path: patches/@biomejs__js-api@0.3.0-nightly.cfef948.patch
+  type-testing@0.2.0:
+    hash: mqge5u3xndlzhni5zwcoadrh5u
+    path: patches/type-testing@0.2.0.patch
   typescript@5.3.3:
     hash: bnl77azyknnedqohsc3d4mfkne
     path: patches/typescript@5.3.3.patch
@@ -45,7 +48,7 @@ importers:
         version: 4.7.0
       type-testing:
         specifier: ^0.2.0
-        version: 0.2.0
+        version: 0.2.0(patch_hash=mqge5u3xndlzhni5zwcoadrh5u)
       typescript:
         specifier: 5.3.3
         version: 5.3.3(patch_hash=bnl77azyknnedqohsc3d4mfkne)
@@ -963,10 +966,11 @@ packages:
     engines: {node: '>=4'}
     dev: false
 
-  /type-testing@0.2.0:
+  /type-testing@0.2.0(patch_hash=mqge5u3xndlzhni5zwcoadrh5u):
     resolution: {integrity: sha512-HAf4o9LjUAh9xEIXZTNm+ak2tjTgK64QhTlT/D8UNedII2/eagdEbtbaVK6920K7+QBrwfvxpjPGlfWVKZ+MZQ==}
     engines: {node: '>= 20.x'}
     dev: false
+    patched: true
 
   /typescript@5.3.3(patch_hash=bnl77azyknnedqohsc3d4mfkne):
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
