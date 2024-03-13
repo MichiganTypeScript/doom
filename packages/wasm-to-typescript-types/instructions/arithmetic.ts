@@ -80,7 +80,7 @@ export type Add<
         ...remaining,
         instruction['type'] extends 'i32' ? Wasm.I32Add<a, b> :
         instruction['type'] extends 'i64' ? Wasm.I64Add<a, b> :
-        never // TODO(float)
+        never
       ],
       state
     >
@@ -101,7 +101,7 @@ export type Subtract<
         ...remaining,
         instruction['type'] extends 'i32' ? Wasm.I32Sub<a, b> :
         instruction['type'] extends 'i64' ? Wasm.I64Sub<a, b> :
-        never // TODO(float)
+        never
       ],
 
       state
@@ -123,7 +123,7 @@ export type Multiply<
         ...remaining,
         instruction['type'] extends 'i32' ? Wasm.I32Mul<a, b> :
         instruction['type'] extends 'i64' ? Wasm.I64Mul<a, b> :
-        never // TODO(float)
+        never
       ],
 
       state
@@ -151,7 +151,7 @@ export type Divide<
         //     ? instruction['signed'] extends true
         //       ? Wasm.I64DivS<a, b>
         //       : Wasm.I64DivU<a, b>
-        //     : never // TODO(float)
+        //     : never
       ],
 
       state

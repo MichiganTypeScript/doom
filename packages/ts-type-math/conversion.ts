@@ -115,8 +115,8 @@ export namespace Convert {
       wasmType extends 'i32' | 'f32' | 'f64',
     > = Satisfies<WasmValue,
       wasmType extends 'i32' ? Convert.U32Decimal.ToU32Binary<value> :
-      wasmType extends 'f32' ? never : // TODO(float)
-      wasmType extends 'f64' ? never : // TODO(float)
+      wasmType extends 'f32' ? never :
+      wasmType extends 'f64' ? never :
       never
     >
 
@@ -147,8 +147,8 @@ export namespace Convert {
       wasmType extends 'i32' | 'f32' | 'f64',
     > = Satisfies<number,
       wasmType extends 'i32' ? Convert.U32Binary.ToU32Decimal<value> :
-      wasmType extends 'f32' ? never : // TODO(float)
-      wasmType extends 'f64' ? never : // TODO(float)
+      wasmType extends 'f32' ? never :
+      wasmType extends 'f64' ? never :
       never
     >
 

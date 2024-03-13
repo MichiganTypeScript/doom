@@ -103,7 +103,7 @@ export type EqualsZero<
         
         instruction['type'] extends 'i32' ? Wasm.I32Eqz<a> :
         instruction['type'] extends 'i64' ? Wasm.I64Eqz<a> :
-        never //  TODO(float)
+        never
       ],
 
       state
@@ -126,7 +126,7 @@ export type Equals<
         
         instruction['type'] extends 'i32' ? Wasm.I32Eq<a, b> :
         instruction['type'] extends 'i64' ? Wasm.I64Eq<a, b> :
-        never //  TODO(float)
+        never
       ],
 
       state
@@ -149,7 +149,7 @@ export type NotEqual<
         
         instruction['type'] extends 'i32' ? Wasm.I32Neq<a, b> :
         instruction['type'] extends 'i64' ? Wasm.I64Neq<a, b> :
-        never //  TODO(float)
+        never
       ],
 
       state
@@ -177,7 +177,7 @@ export type GreaterThan<
           ? instruction['signed'] extends true
             ? Wasm.I64GtS<a, b>
             : Wasm.I64GtU<a, b>
-          : never // TODO(float)
+          : never
       ],
 
       state
@@ -205,7 +205,7 @@ export type LessThan<
           ? instruction['signed'] extends true
             ? Wasm.I64LtS<a, b>
             : Wasm.I64LtU<a, b>
-          : never // TODO(float)
+          : never
       ],
       state
     >
@@ -232,7 +232,7 @@ export type GreaterThanOrEqual<
           ? instruction['signed'] extends true
             ? Wasm.I64GeS<a, b>
             : Wasm.I64GeU<a, b>
-          : never // TODO(float)
+          : never
       ],
 
       state
@@ -260,7 +260,7 @@ export type LessThanOrEqual<
           ? instruction['signed'] extends true
             ? Wasm.I64LeS<a, b>
             : Wasm.I64LeU<a, b>
-          : never // TODO(float)
+          : never
       ],
       state
     >
