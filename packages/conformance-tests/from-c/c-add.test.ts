@@ -11,6 +11,12 @@ test.each(t)(name, async ({ a, b, add }) => {
   expect(entry(a, b)).toStrictEqual(add);
 });
 
+type i = 33
+type a = T[i]['a']    // =>
+type b = T[i]['b']    // =>
+type e = T[i]['add']  // =>
+type x = entry<[a, b]>// =>
+
 type tests = [
   Expect<Equal<entry<[T[ 0]['a'], T[ 0]['b']]>, T[ 0]['add']>>,
   Expect<Equal<entry<[T[ 1]['a'], T[ 1]['b']]>, T[ 1]['add']>>,
