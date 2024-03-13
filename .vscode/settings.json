@@ -10,4 +10,7 @@
     "**/package.json"
   ],
   "zenMode.showTabs": "none",
+  "files.associations": {
+    "doom dot ts": "plaintext"
+  }
 }
