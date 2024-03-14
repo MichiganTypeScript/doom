@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './single-i64extend_i32_u.actual'
+import type { entry } from './single-i64extend_i32_u'
 import { tExtend as t, TExtend as T, Ops } from '../../ts-type-math/test-cases/wasm-conversion';
 
 import { test, expect } from 'vitest';

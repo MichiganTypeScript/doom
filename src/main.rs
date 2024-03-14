@@ -16,7 +16,7 @@ fn main() {
     let wat_path = current_dir.join(going_to);
     let wat = fs::read_to_string(wat_path).unwrap();
     let output = wat_to_dts(wat, "packages/playground/doom/doom.dump").to_string();
-    fs::write("packages/playground/doom/doom.actual.ts", output).unwrap();
+    fs::write("packages/playground/doom/doom.ts", output).unwrap();
 }
 
 #[cfg(test)]
@@ -159,13 +159,9 @@ mod tests {
         wat_to_dts(wat, &dump_path)
     }
 
-    fn create_actual_d_ts(source_file: &SourceFile, dir_entry: &DirEntry) -> String {
-        let actual = source_file.to_string();
-
-        let path = dir_entry.path().with_extension("actual.ts");
-        fs::write(path, &actual).unwrap();
-
-        actual
+    fn create_ts(source_file: &SourceFile, dir_entry: &DirEntry) {
+        let path = dir_entry.path().with_extension("ts");
+        fs::write(path, source_file.to_string()).unwrap();
     }
 
     fn generate_wasm_from_c(c_input: &DirEntry) {
@@ -220,7 +216,7 @@ mod tests {
     fn run_conformance_tests() {
         /*
 
-        Here's how this works.  We can take two inputs.  One is a .wat file from the `test/from-wat` directory, and the other is a .c file from the `test/from-c` directory.  If it starts as a C file, we generate a .wat from that.  In both cases we generate `.wasm` files.  The `.dump` file is a debug representation of the `.wat` file's parsed contents.  We then generate an `.actual.ts` file from our program.  We then compare the `.d.ts` file to the `.expected.ts` file.
+        Here's how this works.  We can take two inputs.  One is a .wat file from the `test/from-wat` directory, and the other is a .c file from the `test/from-c` directory.  If it starts as a C file, we generate a .wat from that.  In both cases we generate `.wasm` files.  The `.dump` file is a debug representation of the `.wat` file's parsed contents.  We then generate a `.ts` file from our program.
 
         ## from-wat
             1. read .wat
@@ -233,8 +229,7 @@ mod tests {
 
         ## point of convergence
             - parse .wat and write .dump
-            - generate and write actual"
-            - compare actual.ts to expected"
+            - generate and write .ts file
 
         ## runtime tests
             runtime tests are done from javascript, so they need to be run with `pnpm test` in a separate step
@@ -252,7 +247,7 @@ mod tests {
 
         for dir_entry in all_files {
             let source_file = parse_wat_and_dump(dir_entry);
-            create_actual_d_ts(&source_file, dir_entry);
+            create_ts(&source_file, dir_entry);
         }
     }
 }

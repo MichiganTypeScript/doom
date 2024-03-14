@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './single-i64rotl.actual'
+import type { entry } from './single-i64rotl'
 import { t, T, Ops } from '../../ts-type-math/test-cases/rotate-i64'
 
 import { test, expect } from 'vitest';

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/loop.actual'; import type { ReadStringFromMemory } from 'ts-type-math';
+import { entry } from 'conformance-tests/from-wat/loop'; import type { ReadStringFromMemory } from 'ts-type-math';
 type e=entry<[1], true>// =>
 type r=e['result'] // =>
 type s=e['stack']  // =>

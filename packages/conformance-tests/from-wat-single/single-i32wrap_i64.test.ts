@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './single-i32wrap_i64.actual'
+import type { entry } from './single-i32wrap_i64'
 import { t, T, Ops } from '../../ts-type-math/test-cases/wrap'
 
 import { test, expect } from 'vitest';

@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from "./globals.actual"
+import type { entry } from "./globals"
 
 
 import { getWasm } from '../utils'

@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { entry } from './single-i64load8_u.actual';
+import { entry } from './single-i64load8_u';
 import { t, T, Ops } from "../../ts-type-math/test-cases/memory-i64";
 import { bigIntToTwosComplement, twosComplementToBigInt } from "../../ts-type-math/test-utils";
 import { getWasm } from "../utils";

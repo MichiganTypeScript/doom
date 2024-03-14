@@ -1,6 +1,6 @@
 import { getWasmMemory } from "../utils";
 import { expect, test } from "vitest";
-import { entry } from "./store-bytes.actual";
+import { entry } from "./store-bytes";
 import { Expect, Equal } from "type-testing";
 import { ReadStringFromMemory } from "../../ts-type-math/memory-read-string";
 

@@ -1,4 +1,4 @@
-import type { entry } from "./params.actual"
+import type { entry } from "./params"
 import type { Expect, Equal } from "type-testing";
 
 import { test, expect } from 'vitest';

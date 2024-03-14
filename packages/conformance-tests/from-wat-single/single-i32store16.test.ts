@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { entry } from './single-i32store16.actual';
+import { entry } from './single-i32store16';
 import { t, T, Ops } from "../../ts-type-math/test-cases/memory";
 import { numberToTwosComplement, twosComplementToNumber } from "../../ts-type-math/test-utils";
 import { getWasm } from "../utils";

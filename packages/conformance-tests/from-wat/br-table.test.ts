@@ -1,4 +1,4 @@
-import type { entry } from './br-table.actual'
+import type { entry } from './br-table'
 import type { Expect, Equal } from 'type-testing';
 
 import { test, expect } from 'vitest';

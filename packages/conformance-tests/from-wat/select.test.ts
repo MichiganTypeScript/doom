@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from "./select.actual"
+import type { entry } from "./select"
 
 
 import { getWasm } from '../utils'

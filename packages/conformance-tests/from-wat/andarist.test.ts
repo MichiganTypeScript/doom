@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './andarist.actual';
+import type { entry } from './andarist';
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'

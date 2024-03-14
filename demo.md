@@ -7,7 +7,7 @@
 - [Conway's in C](./packages/conformance-tests/from-c/conway.c)
 - [Conway's ported to WASM](./packages/conformance-tests/from-c/conway.wat)
 - [Rust code](./src/handle_module.rs)
-- [TypeScript Types Result](./packages/conformance-tests/from-c/c-add.actual.ts)
+- [TypeScript Types Result](./packages/conformance-tests/from-c/c-add.ts)
 - [working type](./packages/playground/evaluate/results/results.ts)
 
 ## Testing Demo
@@ -24,7 +24,7 @@
   5. WASM
      - [hand-written WASM](./packages/conformance-tests/from-wat/add.wat)
      - [running the WASM](./packages/conformance-tests/utils.ts)
-     - [types result](./packages/conformance-tests/from-wat/add.actual.ts)
+     - [types result](./packages/conformance-tests/from-wat/add.ts)
      - [testing the WASM](./packages/conformance-tests/from-wat/add.test.ts)
   6. [entry](from-wat/add.test.ts)
   7. Bonus: [C version](./packages/conformance-tests/from-c/c-add.c)
@@ -34,7 +34,7 @@
 ## Program Demo
 
 - [Dashboard](./packages/playground/david-blass-incredibleness.ts)
-- [the Loop instruction](./packages/conformance-tests/from-wat/loop.actual.ts)
+- [the Loop instruction](./packages/conformance-tests/from-wat/loop.ts)
   - (uncomment `{ kind: 'Halt', reason: 'in the name of the law!' },`)
 - [the Loop instruction implementation](./packages/wasm-to-typescript-types/instructions/control-flow.ts)
   - uncomment Debug

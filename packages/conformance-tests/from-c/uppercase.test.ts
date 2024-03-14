@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import { getWasmMemory } from '../utils'
-import type { entry } from './uppercase.actual'
+import type { entry } from './uppercase'
 import type { Equal, Expect } from 'type-testing';
 import type { ReadStringFromMemory } from 'ts-type-math';
 

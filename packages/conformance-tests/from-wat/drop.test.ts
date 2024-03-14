@@ -1,6 +1,6 @@
-// import type { entry } from "./drop.actual"
+// import type { entry } from "./drop"
 import type { Expect, Equal } from "type-testing";
-import type { entry } from "./drop.actual"
+import type { entry } from "./drop"
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'
 

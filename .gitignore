@@ -2,5 +2,5 @@ node_modules/
 target/
 *.tsbuildinfo
 packages/playground/evaluate/results*
-packages/playground/doom/doom.actual.ts
+packages/playground/doom/doom.ts
 tsc-output.cpuprofile

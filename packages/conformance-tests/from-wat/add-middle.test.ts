@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './add-middle.actual'
+import type { entry } from './add-middle'
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'

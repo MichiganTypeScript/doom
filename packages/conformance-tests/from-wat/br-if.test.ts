@@ -1,4 +1,4 @@
-import type { entry } from './br-if.actual'
+import type { entry } from './br-if'
 import type { Expect, Equal } from 'type-testing';
 
 import { test, expect } from 'vitest';

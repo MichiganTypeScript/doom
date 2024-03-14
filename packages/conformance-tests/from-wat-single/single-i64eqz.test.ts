@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './single-i64eqz.actual'
+import type { entry } from './single-i64eqz'
 import { t, T, Ops } from '../../ts-type-math/test-cases/comparison-i64'
 
 import { test, expect } from 'vitest';

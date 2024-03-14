@@ -1,4 +1,4 @@
-import type { entry } from "./call.actual"
+import type { entry } from "./call"
 import type { Expect, Equal } from "type-testing";
 
 import { test, expect } from 'vitest';

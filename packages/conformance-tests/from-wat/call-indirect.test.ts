@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './call-indirect.actual'
+import type { entry } from './call-indirect'
 
 import { test, expect } from 'vitest';
 import { getWasm } from '../utils'

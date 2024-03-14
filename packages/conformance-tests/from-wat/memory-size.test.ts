@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from "./memory-size.actual"
+import type { entry } from "./memory-size"
 
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest';

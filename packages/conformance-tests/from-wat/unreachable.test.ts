@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from "./unreachable.actual"
+import type { entry } from "./unreachable"
 
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest';

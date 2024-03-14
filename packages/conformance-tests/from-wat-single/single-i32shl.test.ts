@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './single-i32shl.actual'
+import type { entry } from './single-i32shl'
 import { t, T } from '../../ts-type-math/test-cases/bitwise-shift'
 
 import { test, expect } from 'vitest';

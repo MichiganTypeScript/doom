@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from "./nop.actual"
+import type { entry } from "./nop"
 
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest';

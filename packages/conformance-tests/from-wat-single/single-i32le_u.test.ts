@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './single-i32le_u.actual'
+import type { entry } from './single-i32le_u'
 import { t, T } from '../../ts-type-math/test-cases/comparison'
 
 import { test, expect } from 'vitest';

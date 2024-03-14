@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from "./if-else-nested.actual"
+import type { entry } from "./if-else-nested"
 
 import { getWasm } from '../utils'
 import { expect, test } from 'vitest';

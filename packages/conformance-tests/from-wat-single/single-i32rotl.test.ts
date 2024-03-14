@@ -1,5 +1,5 @@
 import type { Expect, Equal } from 'type-testing';
-import type { entry } from './single-i32rotl.actual'
+import type { entry } from './single-i32rotl'
 import { t, T } from '../../ts-type-math/test-cases/rotate'
 
 import { test, expect } from 'vitest';
