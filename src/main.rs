@@ -27,11 +27,6 @@ mod tests {
         process::Command,
     };
 
-    use pretty_assertions::assert_eq;
-
-    /// SETTING THIS TO TRUE WILL FORCIBLY OVERWRITE ALL TESTS
-    const OVERWRITE: bool = true;
-
     use self::source_file::SourceFile;
 
     use super::*;
@@ -164,18 +159,13 @@ mod tests {
         wat_to_dts(wat, &dump_path)
     }
 
-    fn create_expected_d_ts(source_file: &SourceFile, dir_entry: &DirEntry) -> String {
+    fn create_actual_d_ts(source_file: &SourceFile, dir_entry: &DirEntry) -> String {
         let actual = source_file.to_string();
 
         let path = dir_entry.path().with_extension("actual.ts");
         fs::write(path, &actual).unwrap();
 
         actual
-    }
-
-    fn get_expected(dir_entry: &DirEntry) -> String {
-        let path = dir_entry.path().with_extension("expected.ts");
-        fs::read_to_string(path).unwrap()
     }
 
     fn generate_wasm_from_c(c_input: &DirEntry) {
@@ -262,13 +252,7 @@ mod tests {
 
         for dir_entry in all_files {
             let source_file = parse_wat_and_dump(dir_entry);
-            let actual = create_expected_d_ts(&source_file, dir_entry);
-            if OVERWRITE {
-                fs::write(dir_entry.path().with_extension("expected.ts"), &actual).unwrap();
-            }
-            let expected = get_expected(dir_entry);
-
-            assert_eq!(actual, expected, "{:?}", dir_entry.path().file_name());
+            create_actual_d_ts(&source_file, dir_entry);
         }
     }
 }

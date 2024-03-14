@@ -40,6 +40,5 @@
     // "./packages/conformance-tests/from-wat-single/single-i64*",
     // "./packages/ts-type-math/tests",
     //
-    "./packages/conformance-tests/**/*.expected.ts", // the `*.expected.ts` files are just for test suite verification
   ]
 }
