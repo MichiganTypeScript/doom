@@ -2,6 +2,7 @@ extern crate wast;
 
 mod handle_instructions;
 mod handle_module;
+mod metering;
 mod source_file;
 mod stats;
 mod utils;
@@ -11,12 +12,17 @@ use std::{fs, path::Path};
 use wat_to_dts::wat_to_dts;
 
 fn main() {
-    let current_dir = std::env::current_dir().unwrap();
-    let going_to = Path::new("packages/playground/doom/doom.wat");
-    let wat_path = current_dir.join(going_to);
-    let wat = fs::read_to_string(wat_path).unwrap();
-    let output = wat_to_dts(wat, "packages/playground/doom/doom.dump").to_string();
-    fs::write("packages/playground/doom/doom.ts", output).unwrap();
+    if "".len() > 1 {
+        let current_dir = std::env::current_dir().unwrap();
+        let going_to = Path::new("packages/playground/doom/doom.wat");
+        let wat_path = current_dir.join(going_to);
+        let wat = fs::read_to_string(wat_path).unwrap();
+        let output = wat_to_dts(wat, "packages/playground/doom/doom.dump").to_string();
+        fs::write("packages/playground/doom/doom.ts", output).unwrap();
+        return;
+    }
+
+    let _ = metering::meter();
 }
 
 #[cfg(test)]
