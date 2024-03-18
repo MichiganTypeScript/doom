@@ -369,12 +369,14 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "indexmap 2.1.0",
+ "once_cell",
  "pretty_assertions",
  "regex",
  "wasm-printer",
  "wasmer",
  "wasmer-compiler-cranelift",
  "wasmer-middlewares",
+ "wasmer-types",
  "wast 70.0.0",
 ]
 
