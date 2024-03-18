@@ -6,7 +6,6 @@ mod metering;
 mod source_file;
 mod stats;
 mod utils;
-mod wasmer_middleware;
 mod wat_to_dts;
 
 use std::{fs, path::Path};
@@ -23,13 +22,7 @@ fn main() {
         return;
     }
 
-    match metering::meter() {
-        Ok(_) => {}
-        Err(e) => {
-            eprintln!("Error: {}", e);
-            std::process::exit(1);
-        }
-    };
+    let _ = metering::meter();
 }
 
 #[cfg(test)]
