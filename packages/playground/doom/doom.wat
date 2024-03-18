@@ -17761,7 +17761,7 @@
   (func $DG_DrawFrame (type $t1)
     (local $l0 i32) (local $l1 i32) (local $l2 i32) (local $l3 i32) (local $l4 i32) (local $l5 i32) (local $l6 i32)
     (global.set $__stack_pointer
-      (local.tee $l5
+      (local.tee $l3
         (i32.sub
           (global.get $__stack_pointer)
           (i32.const 16))))
@@ -17787,12 +17787,12 @@
     (local.set $l6
       (i32.const -256))
     (loop $L1
-      (local.set $l4
+      (local.set $l5
         (i32.const 0))
       (if $I2
         (i32.eqz
           (i32.ge_u
-            (local.get $l3)
+            (local.get $l4)
             (i32.load
               (i32.const 106552))))
         (then
@@ -17800,7 +17800,7 @@
             (if $I4
               (i32.eqz
                 (i32.ge_u
-                  (local.get $l4)
+                  (local.get $l5)
                   (i32.load
                     (i32.const 106548))))
               (then
@@ -17953,9 +17953,9 @@
                 (i32.store8
                   (local.get $l0)
                   (local.get $l2))
-                (local.set $l4
+                (local.set $l5
                   (i32.add
-                    (local.get $l4)
+                    (local.get $l5)
                     (i32.const 1)))
                 (local.set $l1
                   (i32.add
@@ -17969,9 +17969,9 @@
           (i32.store8
             (local.get $l0)
             (i32.const 10))
-          (local.set $l3
+          (local.set $l4
             (i32.add
-              (local.get $l3)
+              (local.get $l4)
               (i32.const 1)))
           (local.set $l0
             (i32.add
@@ -17984,27 +17984,43 @@
     (drop
       (call $fputs
         (i32.const 6446)
-        (local.tee $l0
+        (local.tee $l1
           (i32.load
             (i32.const 98324)))))
+    (local.set $l0
+      (i32.add
+        (local.get $l0)
+        (i32.const 3)))
     (if $I6
       (i32.eq
         (call $fputs
           (i32.load
             (i32.const 377964))
-          (local.get $l0))
+          (local.get $l1))
         (i32.const -1))
       (then
         (i32.store
-          (local.get $l5)
+          (local.get $l3)
           (i32.load
             (call $__errno_location)))
         (call $I_Error
           (i32.const 10212)
-          (local.get $l5))))
-    (call $exit
-      (i32.const 0))
-    (unreachable))
+          (local.get $l3))))
+    (drop
+      (call $memset
+        (local.tee $l1
+          (i32.load
+            (i32.const 377964)))
+        (i32.const 0)
+        (i32.add
+          (i32.sub
+            (local.get $l0)
+            (local.get $l1))
+          (i32.const 1))))
+    (global.set $__stack_pointer
+      (i32.add
+        (local.get $l3)
+        (i32.const 16))))
   (func $DG_SleepMs (type $t0) (param $p0 i32)
     (local $l1 i32) (local $l2 i32)
     (global.set $__stack_pointer

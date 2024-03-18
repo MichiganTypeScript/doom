@@ -5,7 +5,6 @@ dictionaries: []
 words:
   - Alloc
   - andarist
-  - cranelift
   - dblass
   - Deque
   - dipset
@@ -30,7 +29,5 @@ words:
   - typeconstraint
   - valtype
   - wabt
-  - wasmer
-  - wasmparser
 ignoreWords: []
 import: []
