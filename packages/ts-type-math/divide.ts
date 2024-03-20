@@ -1,3 +1,4 @@
+import { IsNegativeBinary } from './binary';
 import { LessThanUnsignedBinary } from './comparison';
 import { SubtractBinaryFixed } from "./subtract";
 import { Wasm } from "./wasm";
@@ -18,8 +19,9 @@ import { Wasm } from "./wasm";
 
 // lifted from https://youtu.be/l3fM0XslOS0?t=350
 
+type B = 0 | 1;
 type QShift<Q extends string, D extends string> =
-  Q extends `${0 | 1}${infer tailBits}`
+  Q extends `${B}${infer tailBits}`
   ? D extends `${infer bit}${string}` ? `${tailBits}${bit}` : never
   : never;
 
@@ -32,94 +34,175 @@ type NewQ<Q extends string, D extends string, V extends string> =
     SubtractBinaryFixed<QShift<Q, D>, V>;
 
 type NewD<Q extends string, D extends string, V extends string> =
-  D extends `${string}${infer tail}` // remove first digit to prep for shift left
+  D extends `${B}${infer tailBits}` // remove first digit to prep for shift left
   ? [LessThanUnsignedBinary<QShift<Q, D>, V>] extends [Wasm.I32True]
-    ? `${tail}0`
-    : `${tail}1` // replace shifted digit depending on A-M
+    ? `${tailBits}0`
+    : `${tailBits}1` // replace shifted digit depending on A-M
   : never
 
 /*
-  Divide using Restoring Division Algorithm:
+  Restoring Division Algorithm for Unsigned Binary Numbers:
   
-  The restoring division algorithm is a method to divide two unsigned binary numbers.
+  The restoring division works by repeatedly subtracting the divisor from a portion of the dividend
+  and shifting the partial results until all bits have been processed.
 
-  It involves the following steps:
-  1. Initialize the quotient (Q) to 0 and the remainder (R) to the dividend (D).
-  2. Align the most significant bit (MSB) of the divisor (V) with the MSB of the dividend.
-  3. Perform n iterations (where n is the number of bits in D):
-     a. Shift Q and the MSB of R left by one bit.
-     b. Subtract V from the left-shifted R (this becomes the new R).
-     c. If the subtraction is positive or zero, write a 1 to the least significant bit (LSB) of Q.
-     d. If the subtraction is negative, restore R to the value before the subtraction and write a 0 to the LSB of Q.
-  4. The final value in Q is the quotient, and the final value in R is the remainder.
+  Steps:
+  1. Set the quotient (Q) to 0. The dividend (D) acts as the initial remainder.
+  2. For each bit (from left to right) in the dividend:
+     a. Shift the current remainder left by one bit.
+     b. Subtract the divisor from the shifted remainder.
+     c. If the result is positive:
+        - Set the current bit of the quotient to 1.
+        - The result is the new current remainder.
+     d. If the result is negative:
+        - Set the current bit of the quotient to 0.
+        - Restore the remainder to the value before subtraction.
+  3. Repeat until all bits are processed. The final quotient (Q) is the result of the division, 
+     and the final remainder is the remainder of the division.
 
-  Note: This method is for unsigned binary integers. For signed integers, additional steps are required to handle sign bits.
-
-  Example (binary division of 7 by 3):
-  Dividend (D) = 111 (7 in decimal), Divisor (V) = 011 (3 in decimal)
-  Q = 000, R = 111
-  Iteration 1: Q = 000, R = 100 (after subtraction and shift)
-  Iteration 2: Q = 010, R = 001 (after subtraction and shift, and since R is positive, Q LSB becomes 1)
-  Final: Q = 010 (2 in decimal), R = 001 (1 in decimal)
+  Example: Division of 7 (111) by 3 (011):
+  - Initial quotient (Q) is 0, and the remainder is 7 (111).
+  - Subtract 3 (011) from 7 (111), the result is positive, so the first bit of Q is set to 1.
+  - Continue with the new remainder, shift, subtract, and set bits of Q as described.
+  - Final Q (quotient) will reflect the result of the division, with the remainder being what's left.
 */
 export type _DivideBinaryArbitrary<
-  D extends string, // = dividend
-  V extends string, // = divisor
-  Q extends string,
-  StopAt extends number,
-  debugMode extends boolean = false,
-
-  Count extends 1[] = [],
+  D extends string, // dividend | current remainder
+  V extends string, // divisor
+  Q extends string, // quotient
+  DebugStop extends string = never,
+  ShrinkingD extends string = D,
 > =
-  Count['length'] extends StopAt
-    ? debugMode extends false
+    ShrinkingD extends '' | DebugStop
+    ? [DebugStop] extends [never]
       ? {
-          quotient: NewD<Q, D, V>
-          remainder:
-            NewQ<Q, D, V> extends `1${string}`
-            ? QShift<Q, D> // restore the accumulator because it's negative otherwise
-            : NewQ<Q, D, V>
-        }
+        quotient: D
+        remainder: Q
+      }
       : {
-          V: V,
-          Q: Q,
-          D: D,
-          _QShift: QShift<Q, D>,
-          _QShiftMinusM: SubtractBinaryFixed<QShift<Q, D>, V>,
-          _newQ: NewQ<Q, D, V>,
-          _newD: NewD<Q, D, V>,
-          quotient: NewD<Q, D, V>
-          remainder:
-            NewQ<Q, D, V> extends `1${string}`
-            ? QShift<Q, D> // restore the accumulator because it's negative otherwise
-            : NewQ<Q, D, V>
-        }
-
+        quotient: D
+        remainder: Q,
+        V: V,
+        Q: Q,
+        D: D,
+        _QShift: QShift<Q, D>,
+        _QShiftMinusV: SubtractBinaryFixed<QShift<Q, D>, V>,
+        _newQ: NewQ<Q, D, V>,
+        _newD: NewD<Q, D, V>
+      }
     : [LessThanUnsignedBinary<D, V>] extends [Wasm.I32True]
       ? {
-        quotient: Wasm.I32False,
+        quotient: Q,
         remainder: D,
       }
       : _DivideBinaryArbitrary<
           NewD<Q, D, V>,
           V,
           NewQ<Q, D, V>,
-          StopAt,
-          debugMode,
-          [1, ...Count]
-        >
+          DebugStop,
+          ShrinkingD extends `${B}${infer tailBits}` ? tailBits : ''
+        >;
+
+  type ToPositiveBinary<N> =
+    N extends `1${infer tailBits}` ? `0${tailBits}` : N;
+
+  type ToNegativeBinary<N> =
+    N extends `0${infer tailBits}` ? `1${tailBits}` : N;
+  
+  type ToNegativeQuotient<O extends object> =
+    { [K in keyof O]: K extends 'quotient' ? ToNegativeBinary<O[K]> : O[K] };
+  
+  type ToNegativeRemainder<O extends object> =
+    { [K in keyof O]: K extends 'remainder' ? ToNegativeBinary<O[K]> : O[K] };
+  
+  type ToNegativeQuotientAndRemainder<O extends object> =
+    { [K in keyof O]: K extends 'quotient' | 'remainder' ? ToNegativeBinary<O[K]> : O[K] };
 
 export type DivideUnsignedBinary32<
   dividend extends string,
   divisor extends string
 > =
-  [divisor] extends [Wasm.I32False] ? Wasm.I32False : // if divide by zero return zero
-  [dividend] extends [divisor] ? Wasm.I32True : // if equal return 1
-  [divisor] extends [Wasm.I32True] ? dividend : // if divide by 1 return dividend
+  [divisor] extends [Wasm.I32False] ? { quotient: Wasm.I32False, remainder: Wasm.I32False } : // if divide by zero return zero
+  [dividend] extends [divisor] ? { quotient: Wasm.I32True, remainder: Wasm.I32False } : // if equal return 1
+  [divisor] extends [Wasm.I32True] ? { quotient: dividend, remainder: Wasm.I32False } : // if divide by 1 return dividend
 
   _DivideBinaryArbitrary<
     dividend,
     divisor,
-    Wasm.I32False,
-    31
-  >
+    Wasm.I32False
+  >;
+
+export type DivideSignedBinary32<
+  dividend extends string,
+  divisor extends string
+> =
+  IsNegativeBinary<dividend> extends true
+  ? IsNegativeBinary<divisor> extends true
+    ? ToNegativeRemainder<
+        DivideUnsignedBinary32<
+          ToPositiveBinary<dividend>,
+          ToPositiveBinary<divisor>
+        >
+      >
+    : ToNegativeQuotientAndRemainder<
+        DivideUnsignedBinary32<
+          ToPositiveBinary<dividend>,
+          divisor
+        >
+      >
+  : IsNegativeBinary<divisor> extends true
+    ? ToNegativeQuotient<
+        DivideUnsignedBinary32<
+          dividend,
+          ToPositiveBinary<divisor>
+        >
+      >
+    : DivideUnsignedBinary32<
+        dividend,
+        divisor
+      >;
+
+
+export type DivideUnsignedBinary64<
+  dividend extends string,
+  divisor extends string
+> =
+  [divisor] extends [Wasm.I64False] ? { quotient: Wasm.I64False, remainder: Wasm.I64False } : // if divide by zero return zero
+  [dividend] extends [divisor] ? { quotient: Wasm.I64True, remainder: Wasm.I64False } : // if equal return 1
+  [divisor] extends [Wasm.I64True] ? { quotient: dividend, remainder: Wasm.I64False } : // if divide by 1 return dividend
+
+  _DivideBinaryArbitrary<
+    dividend,
+    divisor,
+    Wasm.I64False
+  >;
+
+export type DivideSignedBinary64<
+  dividend extends string,
+  divisor extends string
+> =
+  IsNegativeBinary<dividend> extends true
+  ? IsNegativeBinary<divisor> extends true
+    ? ToNegativeRemainder<
+        DivideUnsignedBinary64<
+          ToPositiveBinary<dividend>,
+          ToPositiveBinary<divisor>
+        >
+      >
+    : ToNegativeQuotientAndRemainder<
+        DivideUnsignedBinary64<
+          ToPositiveBinary<dividend>,
+          divisor
+        >
+      >
+  : IsNegativeBinary<divisor> extends true
+    ? ToNegativeQuotient<
+        DivideUnsignedBinary64<
+          dividend,
+          ToPositiveBinary<divisor>
+        >
+      >
+    : DivideUnsignedBinary64<
+        dividend,
+        divisor
+      >;

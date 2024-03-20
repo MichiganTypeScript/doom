@@ -1,6 +1,8 @@
 import { Expect, Extends } from "type-testing"
 import { _DivideBinaryArbitrary } from "./divide"
+import { Wasm } from './wasm';
 
+type B = 0 | 1;
 
 // 4 digits
 // 16 union members
@@ -9,12 +11,11 @@ type fallback_4 =  '0000' // Q
 type dividend_4 =  '0111' // D
 type quotient_4 =  '0010' // result
 type remainder_4 = '0001' // result
-type stopAt_4 = 3
 
 type DivideBinary_4<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_4, stopAt_4>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_4>
 
 
 
@@ -24,26 +25,25 @@ type x_4 = DivideBinary_4<dividend_4, divisor_4>
 //   ^?
 type tx_4 = Expect<Extends<x_4, { quotient: quotient_4, remainder: remainder_4 }>>
 
-type s0_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, 0, true>
+type s0_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4>
 //   ^?
-type t0_4 = Expect<Extends<s0_4, { A: fallback_4, Q: dividend_4 }>>
+type t0_4 = Expect<Extends<s0_4, { Q: fallback_4, D: dividend_4 }>>
 
-type s1_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, 1, true>
+type s1_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_4 = Expect<Extends<s1_4, { A: '0000', Q: '1110' }>>
+type t1_4 = Expect<Extends<s1_4, { Q: '0000', D: '1110' }>>
 
-type s2_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, 2, true>
+type s2_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_4 = Expect<Extends<s2_4, { A: '0001', Q: '1100' }>>
+type t2_4 = Expect<Extends<s2_4, { Q: '0001', D: '1100' }>>
 
-type s3_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, 3, true>
+type s3_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_4 = Expect<Extends<s3_4, { A: '0000', Q: '1001' }>>
+type t3_4 = Expect<Extends<s3_4, { Q: '0000', D: '1001' }>>
 
-type s_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, 4, true>
+type s_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_4 = Expect<Extends<s_4, { A: remainder_4, Q: quotient_4 }>>
-
+type t_4 = Expect<Extends<s_4, { Q: remainder_4, D: quotient_4 }>>
 
 // 5 digits
 // 32 union members
@@ -52,42 +52,39 @@ type fallback_5 =  '00000' // Q
 type dividend_5 =  '00111' // D
 type quotient_5 =  '00010' // result
 type remainder_5 = '00001' // result
-type stopAt_5 = 4
 
 type DivideBinary_5<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_5, stopAt_5>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_5>
 
 type x_5 = DivideBinary_5<dividend_5, divisor_5>
 //   ^?
 type tx_5 = Expect<Extends<x_5, { quotient: quotient_5, remainder: remainder_5 }>>
 
-type s0_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, 0, true>
+type s0_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5>
 //   ^?
-type t0_5 = Expect<Extends<s0_5, { A: fallback_5, Q: dividend_5 }>>
+type t0_5 = Expect<Extends<s0_5, { Q: fallback_5, D: dividend_5 }>>
 
-type s1_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, 1, true>
+type s1_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_5 = Expect<Extends<s1_5, { A: '00000', Q: '01110' }>>
+type t1_5 = Expect<Extends<s1_5, { Q: '00000', D: '01110' }>>
 
-type s2_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, 2, true>
+type s2_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_5 = Expect<Extends<s2_5, { A: '00000', Q: '11100' }>>
+type t2_5 = Expect<Extends<s2_5, { Q: '00000', D: '11100' }>>
 
-type s3_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, 3, true>
+type s3_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_5 = Expect<Extends<s3_5, { A: '00001', Q: '11000' }>>
+type t3_5 = Expect<Extends<s3_5, { Q: '00001', D: '11000' }>>
 
-type s4_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, 4, true>
+type s4_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t4_5 = Expect<Extends<s4_5, { A: '00000', Q: '10001' }>>
+type t4_5 = Expect<Extends<s4_5, { Q: '00000', D: '10001' }>>
 
-type s_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, 5, true>
+type s_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_5 = Expect<Extends<s_5, { A: remainder_5, Q: quotient_5 }>>
-
-
+type t_5 = Expect<Extends<s_5, { Q: remainder_5, D: quotient_5 }>>
 
 // 6 digits
 // 64 union members
@@ -96,44 +93,43 @@ type fallback_6 =  '000000' // Q
 type dividend_6 =  '000111' // D
 type quotient_6 =  '000010' // result
 type remainder_6 = '000001' // result
-type stopAt_6 = 5
 
 type DivideBinary_6<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_6, stopAt_6>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_6>
 
 type x_6 = DivideBinary_6<dividend_6, divisor_6>
 //   ^?
 type tx_6 = Expect<Extends<x_6, { quotient: quotient_6, remainder: remainder_6 }>>
 
-type s0_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, 0, true>
+type s0_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6>
 //   ^?
-type t0_6 = Expect<Extends<s0_6, { A: fallback_6, Q: dividend_6 }>>
+type t0_6 = Expect<Extends<s0_6, { Q: fallback_6, D: dividend_6 }>>
 
-type s1_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, 1, true>
+type s1_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_6 = Expect<Extends<s1_6, { A: '000000', Q: '001110' }>>
+type t1_6 = Expect<Extends<s1_6, { Q: '000000', D: '001110' }>>
 
-type s2_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, 2, true>
+type s2_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_6 = Expect<Extends<s2_6, { A: '000000', Q: '011100' }>>
+type t2_6 = Expect<Extends<s2_6, { Q: '000000', D: '011100' }>>
 
-type s3_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, 3, true>
+type s3_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_6 = Expect<Extends<s3_6, { A: '000000', Q: '111000' }>>
+type t3_6 = Expect<Extends<s3_6, { Q: '000000', D: '111000' }>>
 
-type s4_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, 4, true>
+type s4_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t4_6 = Expect<Extends<s4_6, { A: '000001', Q: '110000' }>>
+type t4_6 = Expect<Extends<s4_6, { Q: '000001', D: '110000' }>>
 
-type s5_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, 5, true>
+type s5_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t5_6 = Expect<Extends<s5_6, { A: '000000', Q: '100001' }>>
+type t5_6 = Expect<Extends<s5_6, { Q: '000000', D: '100001' }>>
 
-type s_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, 6, true>
+type s_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_6 = Expect<Extends<s_6, { A: remainder_6, Q: quotient_6 }>>
+type t_6 = Expect<Extends<s_6, { Q: remainder_6, D: quotient_6 }>>
 
 
 
@@ -145,48 +141,47 @@ type fallback_7 =  '0000000' // Q
 type dividend_7 =  '0000111' // D
 type quotient_7 =  '0000010' // result
 type remainder_7 = '0000001' // result
-type stopAt_7 = 6
 
 type DivideBinary_7<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_7, stopAt_7>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_7>
 
 type x_7 = DivideBinary_7<dividend_7, divisor_7>
 //   ^?
 type tx_7 = Expect<Extends<x_7, { quotient: quotient_7, remainder: remainder_7 }>>
 
-type s0_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, 0, true>
+type s0_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7>
 //   ^?
-type t0_7 = Expect<Extends<s0_7, { A: fallback_7, Q: dividend_7 }>>
+type t0_7 = Expect<Extends<s0_7, { Q: fallback_7, D: dividend_7 }>>
 
-type s1_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, 1, true>
+type s1_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_7 = Expect<Extends<s1_7, { A: '0000000', Q: '0001110' }>>
+type t1_7 = Expect<Extends<s1_7, { Q: '0000000', D: '0001110' }>>
 
-type s2_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, 2, true>
+type s2_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_7 = Expect<Extends<s2_7, { A: '0000000', Q: '0011100' }>>
+type t2_7 = Expect<Extends<s2_7, { Q: '0000000', D: '0011100' }>>
 
-type s3_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, 3, true>
+type s3_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_7 = Expect<Extends<s3_7, { A: '0000000', Q: '0111000' }>>
+type t3_7 = Expect<Extends<s3_7, { Q: '0000000', D: '0111000' }>>
 
-type s4_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, 4, true>
+type s4_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t4_7 = Expect<Extends<s4_7, { A: '0000000', Q: '1110000' }>>
+type t4_7 = Expect<Extends<s4_7, { Q: '0000000', D: '1110000' }>>
 
-type s5_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, 5, true>
+type s5_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t5_7 = Expect<Extends<s5_7, { A: '0000001', Q: '1100000' }>>
+type t5_7 = Expect<Extends<s5_7, { Q: '0000001', D: '1100000' }>>
 
-type s6_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, 6, true>
+type s6_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t6_7 = Expect<Extends<s6_7, { A: '0000000', Q: '1000001' }>>
+type t6_7 = Expect<Extends<s6_7, { Q: '0000000', D: '1000001' }>>
 
-type s_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, 7, true>
+type s_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_7 = Expect<Extends<s_7, { A: remainder_7, Q: quotient_7 }>>
+type t_7 = Expect<Extends<s_7, { Q: remainder_7, D: quotient_7 }>>
 
 
 // 8 digits
@@ -196,52 +191,51 @@ type fallback_8 =  '00000000' // Q
 type dividend_8 =  '00000111' // D
 type quotient_8 =  '00000010' // result
 type remainder_8 = '00000001' // result
-type stopAt_8 = 7
 
 type DivideBinary_8<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_8, stopAt_8>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_8>
 
 type x_8 = DivideBinary_8<dividend_8, divisor_8>
 //   ^?
 type tx_8 = Expect<Extends<x_8, { quotient: quotient_8, remainder: remainder_8 }>>
 
-type s0_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 0, true>
+type s0_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8>
 //   ^?
-type t0_8 = Expect<Extends<s0_8, { A: fallback_8, Q: dividend_8 }>>
+type t0_8 = Expect<Extends<s0_8, { Q: fallback_8, D: dividend_8 }>>
 
-type s1_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 1, true>
+type s1_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_8 = Expect<Extends<s1_8, { A: '00000000', Q: '00001110' }>>
+type t1_8 = Expect<Extends<s1_8, { Q: '00000000', D: '00001110' }>>
 
-type s2_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 2, true>
+type s2_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_8 = Expect<Extends<s2_8, { A: '00000000', Q: '00011100' }>>
+type t2_8 = Expect<Extends<s2_8, { Q: '00000000', D: '00011100' }>>
 
-type s3_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 3, true>
+type s3_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_8 = Expect<Extends<s3_8, { A: '00000000', Q: '00111000' }>>
+type t3_8 = Expect<Extends<s3_8, { Q: '00000000', D: '00111000' }>>
 
-type s4_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 4, true>
+type s4_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t4_8 = Expect<Extends<s4_8, { A: '00000000', Q: '01110000' }>>
+type t4_8 = Expect<Extends<s4_8, { Q: '00000000', D: '01110000' }>>
 
-type s5_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 5, true>
+type s5_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t5_8 = Expect<Extends<s5_8, { A: '00000000', Q: '11100000' }>>
+type t5_8 = Expect<Extends<s5_8, { Q: '00000000', D: '11100000' }>>
 
-type s6_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 6, true>
+type s6_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t6_8 = Expect<Extends<s6_8, { A: '00000001', Q: '11000000' }>>
+type t6_8 = Expect<Extends<s6_8, { Q: '00000001', D: '11000000' }>>
 
-type s7_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 7, true>
+type s7_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t7_8 = Expect<Extends<s7_8, { A: '00000000', Q: '10000001' }>>
+type t7_8 = Expect<Extends<s7_8, { Q: '00000000', D: '10000001' }>>
 
-type s_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, 8, true>
+type s_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_8 = Expect<Extends<s_8, { A: remainder_8, Q: quotient_8 }>>
+type t_8 = Expect<Extends<s_8, { Q: remainder_8, D: quotient_8 }>>
 
 // 9 digits
 // 512 union members
@@ -251,12 +245,11 @@ type fallback_9 =  '000000000' // Q
 type dividend_9 =  '000000111' // D
 type quotient_9 =  '000000010' // result
 type remainder_9 = '000000001' // result
-type stopAt_9 = 8
 
 type DivideBinary_9<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_9, stopAt_9>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_9>
 
 type x_9 = DivideBinary_9<dividend_9, divisor_9>
 //   ^?
@@ -271,12 +264,11 @@ type fallback_10 =  '0000000000' // Q
 type dividend_10 =  '0000000111' // D
 type quotient_10 =  '0000000010' // result
 type remainder_10 = '0000000001' // result
-type stopAt_10 = 9
 
 type DivideBinary_10<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_10, stopAt_10>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_10>
 
 
 
@@ -297,12 +289,11 @@ type fallback_11 =  '00000000000' // Q
 type dividend_11 =  '00000000111' // D
 type quotient_11 =  '00000000010' // result
 type remainder_11 = '00000000001' // result
-type stopAt_11 = 10
 
 type DivideBinary_11<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_11, stopAt_11>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_11>
 
 type x_11 = DivideBinary_11<dividend_11, divisor_11>
 //   ^?
@@ -317,12 +308,11 @@ type fallback_12 =  '000000000000' // Q
 type dividend_12 =  '000000000111' // D
 type quotient_12 =  '000000000010' // result
 type remainder_12 = '000000000001' // result
-type stopAt_12 = 11
 
 type DivideBinary_12<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_12, stopAt_12>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_12>
 
 type x_12 = DivideBinary_12<dividend_12, divisor_12>
 //   ^?
@@ -336,12 +326,11 @@ type fallback_13 =  '0000000000000' // Q
 type dividend_13 =  '0000000000111' // D
 type quotient_13 =  '0000000000010' // result
 type remainder_13 = '0000000000001' // result
-type stopAt_13 = 12
 
 type DivideBinary_13<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_13, stopAt_13>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_13>
 
 type x_13 = DivideBinary_13<dividend_13, divisor_13>
 //   ^?
@@ -355,12 +344,11 @@ type fallback_14 =  '00000000000000' // Q
 type dividend_14 =  '00000000000111' // D
 type quotient_14 =  '00000000000010' // result
 type remainder_14 = '00000000000001' // result
-type stopAt_14 = 13
 
 type DivideBinary_14<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_14, stopAt_14>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_14>
 
 type x_14 = DivideBinary_14<dividend_14, divisor_14>
 //   ^?
@@ -369,8 +357,7 @@ type tx_14 = Expect<Extends<x_14, { quotient: quotient_14, remainder: remainder_
 type x = _DivideBinaryArbitrary<
     dividend_14,
     divisor_14,
-    Wasm.I32False,
-    1
+    Wasm.I32False
   >
 
 
@@ -380,12 +367,11 @@ type fallback_15 =  '000000000000000' // Q
 type dividend_15 =  '000000000000111' // D
 type quotient_15 =  '000000000000010' // result
 type remainder_15 = '000000000000001' // result
-type stopAt_15 = 14
 
 type DivideBinary_15<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_15, stopAt_15>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_15>
 
 type x_15 = DivideBinary_15<dividend_15, divisor_15>
 //   ^?
@@ -398,12 +384,11 @@ type fallback_16 =  '0000000000000000' // Q
 type dividend_16 =  '0000000000000111' // D
 type quotient_16 =  '0000000000000010' // result
 type remainder_16 = '0000000000000001' // result
-type stopAt_16 = 15
 
 type DivideBinary_16<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_16, stopAt_16>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_16>
 
 type x_16 = DivideBinary_16<dividend_16, divisor_16>
 //   ^?
@@ -416,12 +401,11 @@ type fallback_17 =  '00000000000000000' // Q
 type dividend_17 =  '00000000000000111' // D
 type quotient_17 =  '00000000000000010' // result
 type remainder_17 = '00000000000000001' // result
-type stopAt_17 = 16
 
 type DivideBinary_17<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_17, stopAt_17>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_17>
 
 type x_17 = DivideBinary_17<dividend_17, divisor_17>
 //   ^?
@@ -434,12 +418,11 @@ type fallback_18 =  '000000000000000000' // Q
 type dividend_18 =  '000000000000000111' // D
 type quotient_18 =  '000000000000000010' // result
 type remainder_18 = '000000000000000001' // result
-type stopAt_18 = 17
 
 type DivideBinary_18<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_18, stopAt_18>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_18>
 
 type x_18 = DivideBinary_18<dividend_18, divisor_18>
 //   ^?
@@ -452,12 +435,11 @@ type fallback_19 =  '0000000000000000000' // Q
 type dividend_19 =  '0000000000000000111' // D
 type quotient_19 =  '0000000000000000010' // result
 type remainder_19 = '0000000000000000001' // result
-type stopAt_19 = 18
 
 type DivideBinary_19<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_19, stopAt_19>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_19>
 
 type x_19 = DivideBinary_19<dividend_19, divisor_19>
 //   ^?
@@ -470,12 +452,11 @@ type fallback_20 =  '00000000000000000000' // Q
 type dividend_20 =  '00000000000000000111' // D
 type quotient_20 =  '00000000000000000010' // result
 type remainder_20 = '00000000000000000001' // result
-type stopAt_20 = 19
 
 type DivideBinary_20<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_20, stopAt_20>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_20>
 
 type x_20 = DivideBinary_20<dividend_20, divisor_20>
 //   ^?
@@ -488,12 +469,11 @@ type fallback_21 =  '000000000000000000000' // Q
 type dividend_21 =  '000000000000000000111' // D
 type quotient_21 =  '000000000000000000010' // result
 type remainder_21 = '000000000000000000001' // result
-type stopAt_21 = 20
 
 type DivideBinary_21<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_21, stopAt_21>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_21>
 
 type x_21 = DivideBinary_21<dividend_21, divisor_21>
 //   ^?
@@ -506,12 +486,11 @@ type fallback_22 =  '0000000000000000000000' // Q
 type dividend_22 =  '0000000000000000000111' // D
 type quotient_22 =  '0000000000000000000010' // result
 type remainder_22 = '0000000000000000000001' // result
-type stopAt_22 = 21
 
 type DivideBinary_22<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_22, stopAt_22>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_22>
 
 type x_22 = DivideBinary_22<dividend_22, divisor_22>
 //   ^?
@@ -524,12 +503,11 @@ type fallback_23 =  '00000000000000000000000' // Q
 type dividend_23 =  '00000000000000000000111' // D
 type quotient_23 =  '00000000000000000000010' // result
 type remainder_23 = '00000000000000000000001' // result
-type stopAt_23 = 22
 
 type DivideBinary_23<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_23, stopAt_23>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_23>
 
 type x_23 = DivideBinary_23<dividend_23, divisor_23>
 //   ^?
@@ -542,12 +520,11 @@ type fallback_24 =  '000000000000000000000000' // Q
 type dividend_24 =  '000000000000000000000111' // D
 type quotient_24 =  '000000000000000000000010' // result
 type remainder_24 = '000000000000000000000001' // result
-type stopAt_24 = 23
 
 type DivideBinary_24<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_24, stopAt_24>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_24>
 
 type x_24 = DivideBinary_24<dividend_24, divisor_24>
 //   ^?
@@ -560,12 +537,11 @@ type fallback_25 =  '0000000000000000000000000' // Q
 type dividend_25 =  '0000000000000000000000111' // D
 type quotient_25 =  '0000000000000000000000010' // result
 type remainder_25 = '0000000000000000000000001' // result
-type stopAt_25 = 24
 
 type DivideBinary_25<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_25, stopAt_25>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_25>
 
 type x_25 = DivideBinary_25<dividend_25, divisor_25>
 //   ^?
@@ -578,12 +554,11 @@ type fallback_26 =  '00000000000000000000000000' // Q
 type dividend_26 =  '00000000000000000000000111' // D
 type quotient_26 =  '00000000000000000000000010' // result
 type remainder_26 = '00000000000000000000000001' // result
-type stopAt_26 = 25
 
 type DivideBinary_26<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_26, stopAt_26>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_26>
 
 type x_26 = DivideBinary_26<dividend_26, divisor_26>
 //   ^?
@@ -596,12 +571,11 @@ type fallback_27 =  '000000000000000000000000000' // Q
 type dividend_27 =  '000000000000000000000000111' // D
 type quotient_27 =  '000000000000000000000000010' // result
 type remainder_27 = '000000000000000000000000001' // result
-type stopAt_27 = 26
 
 type DivideBinary_27<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_27, stopAt_27>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_27>
 
 type x_27 = DivideBinary_27<dividend_27, divisor_27>
 //   ^?
@@ -614,12 +588,11 @@ type fallback_28 =  '0000000000000000000000000000' // Q
 type dividend_28 =  '0000000000000000000000000111' // D
 type quotient_28 =  '0000000000000000000000000010' // result
 type remainder_28 = '0000000000000000000000000001' // result
-type stopAt_28 = 27
 
 type DivideBinary_28<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_28, stopAt_28>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_28>
 
 type x_28 = DivideBinary_28<dividend_28, divisor_28>
 //   ^?
@@ -632,12 +605,11 @@ type fallback_29 =  '00000000000000000000000000000' // Q
 type dividend_29 =  '00000000000000000000000000111' // D
 type quotient_29 =  '00000000000000000000000000010' // result
 type remainder_29 = '00000000000000000000000000001' // result
-type stopAt_29 = 28
 
 type DivideBinary_29<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_29, stopAt_29>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_29>
 
 type x_29 = DivideBinary_29<dividend_29, divisor_29>
 //   ^?
@@ -650,12 +622,11 @@ type fallback_30 =  '000000000000000000000000000000' // Q
 type dividend_30 =  '000000000000000000000000000111' // D
 type quotient_30 =  '000000000000000000000000000010' // result
 type remainder_30 = '000000000000000000000000000001' // result
-type stopAt_30 = 29
 
 type DivideBinary_30<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_30, stopAt_30>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_30>
 
 type x_30 = DivideBinary_30<dividend_30, divisor_30>
 //   ^?
@@ -668,12 +639,11 @@ type fallback_31 =  '0000000000000000000000000000000' // Q
 type dividend_31 =  '0000000000000000000000000000111' // D
 type quotient_31 =  '0000000000000000000000000000010' // result
 type remainder_31 = '0000000000000000000000000000001' // result
-type stopAt_31 = 30
 
 type DivideBinary_31<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_31, stopAt_31>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_31>
 
 type x_31 = DivideBinary_31<dividend_31, divisor_31>
 //   ^?
@@ -686,12 +656,11 @@ type fallback_32 =  '00000000000000000000000000000000' // Q
 type dividend_32 =  '00000000000000000000000000000111' // D
 type quotient_32 =  '00000000000000000000000000000010' // result
 type remainder_32 = '00000000000000000000000000000001' // result
-type stopAt_32 = 31
 
 type DivideBinary_32<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_32, stopAt_32>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_32>
 
 type x_32 = DivideBinary_32<dividend_32, divisor_32>
 //   ^?
@@ -705,12 +674,11 @@ type fallback_33 =  '000000000000000000000000000000000' // Q
 type dividend_33 =  '000000000000000000000000000000111' // D
 type quotient_33 =  '000000000000000000000000000000010' // result
 type remainder_33 = '000000000000000000000000000000001' // result
-type stopAt_33 = 32
 
 type DivideBinary_33<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_33, stopAt_33>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_33>
 
 type x_33 = DivideBinary_33<dividend_33, divisor_33>
 //   ^?
@@ -724,12 +692,11 @@ type fallback_34 =  '0000000000000000000000000000000000' // Q
 type dividend_34 =  '0000000000000000000000000000000111' // D
 type quotient_34 =  '0000000000000000000000000000000010' // result
 type remainder_34 = '0000000000000000000000000000000001' // result
-type stopAt_34 = 33
 
 type DivideBinary_34<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_34, stopAt_34>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_34>
 
 type x_34 = DivideBinary_34<dividend_34, divisor_34>
 //   ^?
@@ -743,12 +710,11 @@ type fallback_35 =  '00000000000000000000000000000000000' // Q
 type dividend_35 =  '00000000000000000000000000000000111' // D
 type quotient_35 =  '00000000000000000000000000000000010' // result
 type remainder_35 = '00000000000000000000000000000000001' // result
-type stopAt_35 = 34
 
 type DivideBinary_35<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_35, stopAt_35>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_35>
 
 type x_35 = DivideBinary_35<dividend_35, divisor_35>
 //   ^?
@@ -762,12 +728,11 @@ type fallback_36 =  '000000000000000000000000000000000000' // Q
 type dividend_36 =  '000000000000000000000000000000000111' // D
 type quotient_36 =  '000000000000000000000000000000000010' // result
 type remainder_36 = '000000000000000000000000000000000001' // result
-type stopAt_36 = 35
 
 type DivideBinary_36<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_36, stopAt_36>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_36>
 
 type x_36 = DivideBinary_36<dividend_36, divisor_36>
 //   ^?
@@ -781,12 +746,11 @@ type fallback_37 =  '0000000000000000000000000000000000000' // Q
 type dividend_37 =  '0000000000000000000000000000000000111' // D
 type quotient_37 =  '0000000000000000000000000000000000010' // result
 type remainder_37 = '0000000000000000000000000000000000001' // result
-type stopAt_37 = 36
 
 type DivideBinary_37<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_37, stopAt_37>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_37>
 
 type x_37 = DivideBinary_37<dividend_37, divisor_37>
 //   ^?
@@ -800,12 +764,11 @@ type fallback_38 =  '00000000000000000000000000000000000000' // Q
 type dividend_38 =  '00000000000000000000000000000000000111' // D
 type quotient_38 =  '00000000000000000000000000000000000010' // result
 type remainder_38 = '00000000000000000000000000000000000001' // result
-type stopAt_38 = 37
 
 type DivideBinary_38<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_38, stopAt_38>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_38>
 
 type x_38 = DivideBinary_38<dividend_38, divisor_38>
 //   ^?
@@ -819,12 +782,11 @@ type fallback_39 =  '000000000000000000000000000000000000000' // Q
 type dividend_39 =  '000000000000000000000000000000000000111' // D
 type quotient_39 =  '000000000000000000000000000000000000010' // result
 type remainder_39 = '000000000000000000000000000000000000001' // result
-type stopAt_39 = 38
 
 type DivideBinary_39<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_39, stopAt_39>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_39>
 
 type x_39 = DivideBinary_39<dividend_39, divisor_39>
 //   ^?
@@ -838,12 +800,11 @@ type fallback_40 =  '0000000000000000000000000000000000000000' // Q
 type dividend_40 =  '0000000000000000000000000000000000000111' // D
 type quotient_40 =  '0000000000000000000000000000000000000010' // result
 type remainder_40 = '0000000000000000000000000000000000000001' // result
-type stopAt_40 = 39
 
 type DivideBinary_40<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_40, stopAt_40>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_40>
 
 type x_40 = DivideBinary_40<dividend_40, divisor_40>
 //   ^?
@@ -857,12 +818,11 @@ type fallback_41 =  '00000000000000000000000000000000000000000' // Q
 type dividend_41 =  '00000000000000000000000000000000000000111' // D
 type quotient_41 =  '00000000000000000000000000000000000000010' // result
 type remainder_41 = '00000000000000000000000000000000000000001' // result
-type stopAt_41 = 40
 
 type DivideBinary_41<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_41, stopAt_41>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_41>
 
 type x_41 = DivideBinary_41<dividend_41, divisor_41>
 //   ^?
@@ -876,12 +836,11 @@ type fallback_42 =  '000000000000000000000000000000000000000000' // Q
 type dividend_42 =  '000000000000000000000000000000000000000111' // D
 type quotient_42 =  '000000000000000000000000000000000000000010' // result
 type remainder_42 = '000000000000000000000000000000000000000001' // result
-type stopAt_42 = 41
 
 type DivideBinary_42<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_42, stopAt_42>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_42>
 
 type x_42 = DivideBinary_42<dividend_42, divisor_42>
 //   ^?
@@ -895,12 +854,11 @@ type fallback_43 =  '0000000000000000000000000000000000000000000' // Q
 type dividend_43 =  '0000000000000000000000000000000000000000111' // D
 type quotient_43 =  '0000000000000000000000000000000000000000010' // result
 type remainder_43 = '0000000000000000000000000000000000000000001' // result
-type stopAt_43 = 42
 
 type DivideBinary_43<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_43, stopAt_43>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_43>
 
 type x_43 = DivideBinary_43<dividend_43, divisor_43>
 //   ^?
@@ -914,12 +872,11 @@ type fallback_44 =  '00000000000000000000000000000000000000000000' // Q
 type dividend_44 =  '00000000000000000000000000000000000000000111' // D
 type quotient_44 =  '00000000000000000000000000000000000000000010' // result
 type remainder_44 = '00000000000000000000000000000000000000000001' // result
-type stopAt_44 = 43
 
 type DivideBinary_44<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_44, stopAt_44>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_44>
 
 type x_44 = DivideBinary_44<dividend_44, divisor_44>
 //   ^?
@@ -933,12 +890,11 @@ type fallback_45 =  '000000000000000000000000000000000000000000000' // Q
 type dividend_45 =  '000000000000000000000000000000000000000000111' // D
 type quotient_45 =  '000000000000000000000000000000000000000000010' // result
 type remainder_45 = '000000000000000000000000000000000000000000001' // result
-type stopAt_45 = 44
 
 type DivideBinary_45<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_45, stopAt_45>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_45>
 
 type x_45 = DivideBinary_45<dividend_45, divisor_45>
 //   ^?
@@ -952,12 +908,11 @@ type fallback_46 =  '0000000000000000000000000000000000000000000000' // Q
 type dividend_46 =  '0000000000000000000000000000000000000000000111' // D
 type quotient_46 =  '0000000000000000000000000000000000000000000010' // result
 type remainder_46 = '0000000000000000000000000000000000000000000001' // result
-type stopAt_46 = 45
 
 type DivideBinary_46<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_46, stopAt_46>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_46>
 
 type x_46 = DivideBinary_46<dividend_46, divisor_46>
 //   ^?
@@ -971,12 +926,11 @@ type fallback_47 =  '00000000000000000000000000000000000000000000000' // Q
 type dividend_47 =  '00000000000000000000000000000000000000000000111' // D
 type quotient_47 =  '00000000000000000000000000000000000000000000010' // result
 type remainder_47 = '00000000000000000000000000000000000000000000001' // result
-type stopAt_47 = 46
 
 type DivideBinary_47<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_47, stopAt_47>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_47>
 
 type x_47 = DivideBinary_47<dividend_47, divisor_47>
 //   ^?
@@ -990,12 +944,11 @@ type fallback_48 =  '000000000000000000000000000000000000000000000000' // Q
 type dividend_48 =  '000000000000000000000000000000000000000000000111' // D
 type quotient_48 =  '000000000000000000000000000000000000000000000010' // result
 type remainder_48 = '000000000000000000000000000000000000000000000001' // result
-type stopAt_48 = 47
 
 type DivideBinary_48<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_48, stopAt_48>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_48>
 
 type x_48 = DivideBinary_48<dividend_48, divisor_48>
 //   ^?
@@ -1009,12 +962,11 @@ type fallback_49 =  '0000000000000000000000000000000000000000000000000' // Q
 type dividend_49 =  '0000000000000000000000000000000000000000000000111' // D
 type quotient_49 =  '0000000000000000000000000000000000000000000000010' // result
 type remainder_49 = '0000000000000000000000000000000000000000000000001' // result
-type stopAt_49 = 48
 
 type DivideBinary_49<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_49, stopAt_49>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_49>
 
 type x_49 = DivideBinary_49<dividend_49, divisor_49>
 //   ^?
@@ -1028,12 +980,11 @@ type fallback_50 =  '00000000000000000000000000000000000000000000000000' // Q
 type dividend_50 =  '00000000000000000000000000000000000000000000000111' // D
 type quotient_50 =  '00000000000000000000000000000000000000000000000010' // result
 type remainder_50 = '00000000000000000000000000000000000000000000000001' // result
-type stopAt_50 = 49
 
 type DivideBinary_50<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_50, stopAt_50>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_50>
 
 type x_50 = DivideBinary_50<dividend_50, divisor_50>
 //   ^?
@@ -1047,12 +998,11 @@ type fallback_51 =  '000000000000000000000000000000000000000000000000000' // Q
 type dividend_51 =  '000000000000000000000000000000000000000000000000111' // D
 type quotient_51 =  '000000000000000000000000000000000000000000000000010' // result
 type remainder_51 = '000000000000000000000000000000000000000000000000001' // result
-type stopAt_51 = 50
 
 type DivideBinary_51<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_51, stopAt_51>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_51>
 
 type x_51 = DivideBinary_51<dividend_51, divisor_51>
 //   ^?
@@ -1066,12 +1016,11 @@ type fallback_52 =  '0000000000000000000000000000000000000000000000000000' // Q
 type dividend_52 =  '0000000000000000000000000000000000000000000000000111' // D
 type quotient_52 =  '0000000000000000000000000000000000000000000000000010' // result
 type remainder_52 = '0000000000000000000000000000000000000000000000000001' // result
-type stopAt_52 = 51
 
 type DivideBinary_52<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_52, stopAt_52>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_52>
 
 type x_52 = DivideBinary_52<dividend_52, divisor_52>
 //   ^?
@@ -1085,12 +1034,11 @@ type fallback_53 =  '00000000000000000000000000000000000000000000000000000' // Q
 type dividend_53 =  '00000000000000000000000000000000000000000000000000111' // D
 type quotient_53 =  '00000000000000000000000000000000000000000000000000010' // result
 type remainder_53 = '00000000000000000000000000000000000000000000000000001' // result
-type stopAt_53 = 52
 
 type DivideBinary_53<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_53, stopAt_53>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_53>
 
 type x_53 = DivideBinary_53<dividend_53, divisor_53>
 //   ^?
@@ -1104,12 +1052,11 @@ type fallback_54 =  '000000000000000000000000000000000000000000000000000000' // 
 type dividend_54 =  '000000000000000000000000000000000000000000000000000111' // D
 type quotient_54 =  '000000000000000000000000000000000000000000000000000010' // result
 type remainder_54 = '000000000000000000000000000000000000000000000000000001' // result
-type stopAt_54 = 53
 
 type DivideBinary_54<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_54, stopAt_54>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_54>
 
 type x_54 = DivideBinary_54<dividend_54, divisor_54>
 //   ^?
@@ -1123,12 +1070,11 @@ type fallback_55 =  '0000000000000000000000000000000000000000000000000000000' //
 type dividend_55 =  '0000000000000000000000000000000000000000000000000000111' // D
 type quotient_55 =  '0000000000000000000000000000000000000000000000000000010' // result
 type remainder_55 = '0000000000000000000000000000000000000000000000000000001' // result
-type stopAt_55 = 54
 
 type DivideBinary_55<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_55, stopAt_55>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_55>
 
 type x_55 = DivideBinary_55<dividend_55, divisor_55>
 //   ^?
@@ -1142,12 +1088,11 @@ type fallback_56 =  '00000000000000000000000000000000000000000000000000000000' /
 type dividend_56 =  '00000000000000000000000000000000000000000000000000000111' // D
 type quotient_56 =  '00000000000000000000000000000000000000000000000000000010' // result
 type remainder_56 = '00000000000000000000000000000000000000000000000000000001' // result
-type stopAt_56 = 55
 
 type DivideBinary_56<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_56, stopAt_56>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_56>
 
 type x_56 = DivideBinary_56<dividend_56, divisor_56>
 //   ^?
@@ -1161,12 +1106,11 @@ type fallback_57 =  '000000000000000000000000000000000000000000000000000000000' 
 type dividend_57 =  '000000000000000000000000000000000000000000000000000000111' // D
 type quotient_57 =  '000000000000000000000000000000000000000000000000000000010' // result
 type remainder_57 = '000000000000000000000000000000000000000000000000000000001' // result
-type stopAt_57 = 56
 
 type DivideBinary_57<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_57, stopAt_57>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_57>
 
 type x_57 = DivideBinary_57<dividend_57, divisor_57>
 //   ^?
@@ -1180,12 +1124,11 @@ type fallback_58 =  '0000000000000000000000000000000000000000000000000000000000'
 type dividend_58 =  '0000000000000000000000000000000000000000000000000000000111' // D
 type quotient_58 =  '0000000000000000000000000000000000000000000000000000000010' // result
 type remainder_58 = '0000000000000000000000000000000000000000000000000000000001' // result
-type stopAt_58 = 57
 
 type DivideBinary_58<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_58, stopAt_58>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_58>
 
 type x_58 = DivideBinary_58<dividend_58, divisor_58>
 //   ^?
@@ -1199,12 +1142,11 @@ type fallback_59 =  '00000000000000000000000000000000000000000000000000000000000
 type dividend_59 =  '00000000000000000000000000000000000000000000000000000000111' // D
 type quotient_59 =  '00000000000000000000000000000000000000000000000000000000010' // result
 type remainder_59 = '00000000000000000000000000000000000000000000000000000000001' // result
-type stopAt_59 = 58
 
 type DivideBinary_59<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_59, stopAt_59>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_59>
 
 type x_59 = DivideBinary_59<dividend_59, divisor_59>
 //   ^?
@@ -1218,12 +1160,11 @@ type fallback_60 =  '00000000000000000000000000000000000000000000000000000000000
 type dividend_60 =  '000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_60 =  '000000000000000000000000000000000000000000000000000000000010' // result
 type remainder_60 = '000000000000000000000000000000000000000000000000000000000001' // result
-type stopAt_60 = 59
 
 type DivideBinary_60<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_60, stopAt_60>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_60>
 
 type x_60 = DivideBinary_60<dividend_60, divisor_60>
 //   ^?
@@ -1237,12 +1178,11 @@ type fallback_61 =  '00000000000000000000000000000000000000000000000000000000000
 type dividend_61 =  '0000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_61 =  '0000000000000000000000000000000000000000000000000000000000010' // result
 type remainder_61 = '0000000000000000000000000000000000000000000000000000000000001' // result
-type stopAt_61 = 60
 
 type DivideBinary_61<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_61, stopAt_61>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_61>
 
 type x_61 = DivideBinary_61<dividend_61, divisor_61>
 //   ^?
@@ -1256,12 +1196,11 @@ type fallback_62 =  '00000000000000000000000000000000000000000000000000000000000
 type dividend_62 =  '00000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_62 =  '00000000000000000000000000000000000000000000000000000000000010' // result
 type remainder_62 = '00000000000000000000000000000000000000000000000000000000000001' // result
-type stopAt_62 = 61
 
 type DivideBinary_62<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_62, stopAt_62>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_62>
 
 type x_62 = DivideBinary_62<dividend_62, divisor_62>
 //   ^?
@@ -1275,12 +1214,11 @@ type fallback_63 =  '00000000000000000000000000000000000000000000000000000000000
 type dividend_63 =  '000000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_63 =  '000000000000000000000000000000000000000000000000000000000000010' // result
 type remainder_63 = '000000000000000000000000000000000000000000000000000000000000001' // result
-type stopAt_63 = 62
 
 type DivideBinary_63<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_63, stopAt_63>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_63>
 
 type x_63 = DivideBinary_63<dividend_63, divisor_63>
 //   ^?
@@ -1294,12 +1232,11 @@ type fallback_64 =  '00000000000000000000000000000000000000000000000000000000000
 type dividend_64 =  '0000000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_64 =  '0000000000000000000000000000000000000000000000000000000000000010' // result
 type remainder_64 = '0000000000000000000000000000000000000000000000000000000000000001' // result
-type stopAt_64 = 63
 
 type DivideBinary_64<
   dividend extends string,
   divisor extends string
-> = _DivideBinaryArbitrary<dividend, divisor, fallback_64, stopAt_64>
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_64>
 
 type x_64 = DivideBinary_64<dividend_64, divisor_64>
 //   ^?
