@@ -66,14 +66,20 @@ export type _DivideBinaryArbitrary<
           _newQ: NewQ<A, Q, M>,
         }
 
-    : _DivideBinaryArbitrary<
-        NewQ<A, Q, M>,
-        M,
-        NewA<A, Q, M>,
-        StopAt,
-        debugMode,
-        [1, ...Count]
-      >
+    : [LessThanUnsignedBinary<Q, M>] extends [Wasm.I32True]
+      ? {
+        quotient: Wasm.I32False,
+        reminder: Q,
+          
+      }
+      :_DivideBinaryArbitrary<
+          NewQ<A, Q, M>,
+          M,
+          NewA<A, Q, M>,
+          StopAt,
+          debugMode,
+          [1, ...Count]
+        >
 
 export type DivideUnsignedBinary32<
   dividend extends string,
