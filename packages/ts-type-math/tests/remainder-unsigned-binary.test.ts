@@ -16,12 +16,12 @@ test.each(t)('division, yo.  check it. (%#)', ({ a, a_binary, b, b_binary, div_u
   expect(actual).toBe(div_u);
 });
 
-type i = 32
-type a = T[i]['a_binary']     // =>
-type b = T[i]['b_binary']     // =>
-type e = T[i]['rem_u_binary'] // =>
-type x1 = DivideUnsignedBinary32<a, b>['remainder']
-type x = x1                   // =>
+type i = 33
+type a = T[i]['a_binary']               // =>
+type b = T[i]['b_binary']               // =>
+type e = T[i]['rem_u_binary']           // =>
+type x1 = DivideUnsignedBinary32<a, b>
+type x = x1['remainder']                // =>
 
 type Case00 = Expect<Equal<DivideUnsignedBinary32<T[ 0]['a_binary'], T[ 0]['b_binary']>['remainder'], T[ 0]['rem_u_binary']>>
 type Case01 = Expect<Equal<DivideUnsignedBinary32<T[ 1]['a_binary'], T[ 1]['b_binary']>['remainder'], T[ 1]['rem_u_binary']>>

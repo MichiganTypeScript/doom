@@ -6,117 +6,115 @@ import { Wasm } from "./wasm";
 /*
   Yes, I need this reference. I'm not good at this stuff.  Truly.
 
-  Dividend(D) / Divisor(V) = Quotient(Q)
+  Dividend / Divisor = Quotient
 
-           Quotient(q)
+           Quotient
           __________
-  Divisor(V) | Dividend(D)
+  Divisor | Dividend
 
-  Dividend(D)
-  --------  =  Quotient(Q)
-  Divisor(V)
+  Dividend
+  --------  =  Quotient
+  Divisor
 */
 
 // lifted from https://youtu.be/l3fM0XslOS0?t=350
 
 type B = 0 | 1;
-type QShift<Q extends string, D extends string> =
-  Q extends `${B}${infer tailBits}`
-  ? D extends `${infer bit}${string}` ? `${tailBits}${bit}` : never
+
+type LeftShiftA<A extends string, Q extends string> =
+  A extends `${B}${infer tailBits}`
+  ? Q extends `${infer bit}${string}`
+    ? `${tailBits}${bit}`
+    : never
   : never;
 
-type NewQ<Q extends string, D extends string, V extends string> =
-  [LessThanUnsignedBinary<QShift<Q, D>, V>] extends [Wasm.I32True]
-  ? // A-M is negative, so restore
-    QShift<Q, D>
-
-  : // A-M is positive, so update
-    SubtractBinaryFixed<QShift<Q, D>, V>;
-
-type NewD<Q extends string, D extends string, V extends string> =
-  D extends `${B}${infer tailBits}` // remove first digit to prep for shift left
-  ? [LessThanUnsignedBinary<QShift<Q, D>, V>] extends [Wasm.I32True]
-    ? `${tailBits}0`
-    : `${tailBits}1` // replace shifted digit depending on A-M
-  : never
+type Next<LeftShiftedA extends string, Q extends string, M extends string> =
+  LessThanUnsignedBinary<LeftShiftedA, M> extends Wasm.I32True
+    ? [ // restore
+      LeftShiftedA,
+      Q extends `${B}${infer tailBits}` ? `${tailBits}0` : never,
+    ]
+    : [ // update
+      SubtractBinaryFixed<LeftShiftedA, M>,
+      Q extends `${B}${infer tailBits}` ? `${tailBits}1` : never,
+    ];
 
 /*
   Restoring Division Algorithm for Unsigned Binary Numbers:
   
-  The restoring division works by repeatedly subtracting the divisor from a portion of the dividend
-  and shifting the partial results until all bits have been processed.
+  The restoring division algorithm divides a binary number (dividend) by another (divisor) and finds the quotient and remainder.
 
   Steps:
-  1. Set the quotient (Q) to 0. The dividend (D) acts as the initial remainder.
-  2. For each bit (from left to right) in the dividend:
-     a. Shift the current remainder left by one bit.
-     b. Subtract the divisor from the shifted remainder.
-     c. If the result is positive:
-        - Set the current bit of the quotient to 1.
-        - The result is the new current remainder.
-     d. If the result is negative:
-        - Set the current bit of the quotient to 0.
-        - Restore the remainder to the value before subtraction.
-  3. Repeat until all bits are processed. The final quotient (Q) is the result of the division, 
-     and the final remainder is the remainder of the division.
+  1. Initialize the accumulator (A) to 0, which will hold the partial remainders.
+  2. The divisor (M) remains constant.
+  3. The dividend is placed in the quotient register (Q).
+  4. Perform the following steps for the number of bits in the dividend:
+     a. Concatenate A and Q and perform a left shift (LS), shifting A and bringing in the next bit from Q.
+     b. Subtract the divisor M from A.
+     c. If the subtraction result is not negative (which means A >= M):
+        - Set the least significant bit of Q to 1 and keep the new A.
+     d. If the subtraction result is negative:
+        - Set the least significant bit of Q to 0 and restore A to its value before the subtraction.
+  5. The process is repeated until all bits in Q have been processed.
+  6. The final content of Q is the quotient and A is the remainder.
 
   Example: Division of 7 (111) by 3 (011):
-  - Initial quotient (Q) is 0, and the remainder is 7 (111).
-  - Subtract 3 (011) from 7 (111), the result is positive, so the first bit of Q is set to 1.
-  - Continue with the new remainder, shift, subtract, and set bits of Q as described.
-  - Final Q (quotient) will reflect the result of the division, with the remainder being what's left.
+  - A starts at 000 and Q starts at 111. The divisor M is 011.
+  - Concatenate A and Q, left-shift, and subtract M from A.
+  - If the result of the subtraction is not negative, write 1 to the LSB of Q; otherwise, write 0 and restore A.
+  - Continue this process until all bits in Q are processed.
+  - The final Q is the quotient and A is the remainder.
 */
 export type _DivideBinaryArbitrary<
-  D extends string, // dividend | current remainder
-  V extends string, // divisor
-  Q extends string, // quotient
+  Q extends string, // dividend
+  M extends string, // divisor
+  A extends string,
   DebugStop extends string = never,
-  ShrinkingD extends string = D,
+  ShrinkingD extends string = Q,
 > =
     ShrinkingD extends '' | DebugStop
     ? [DebugStop] extends [never]
       ? {
-        quotient: D
-        remainder: Q
+        quotient: Q
+        remainder: A
       }
-      : {
-        quotient: D
-        remainder: Q,
-        V: V,
-        Q: Q,
-        D: D,
-        _QShift: QShift<Q, D>,
-        _QShiftMinusV: SubtractBinaryFixed<QShift<Q, D>, V>,
-        _newQ: NewQ<Q, D, V>,
-        _newD: NewD<Q, D, V>
-      }
-    : [LessThanUnsignedBinary<D, V>] extends [Wasm.I32True]
-      ? {
-        quotient: Q,
-        remainder: D,
-      }
-      : _DivideBinaryArbitrary<
-          NewD<Q, D, V>,
-          V,
-          NewQ<Q, D, V>,
+      : Next<LeftShiftA<A, Q>, Q, M> extends [infer NewA extends string, infer NewQ extends string]
+        ? {
+          quotient: Q
+          remainder: A,
+          M: M,
+          A: A,
+          Q: Q,
+          _LeftShiftA: LeftShiftA<A, Q>,
+          _LeftShiftAMinusM: SubtractBinaryFixed<LeftShiftA<A, Q>, M>,
+          _newQ: NewQ,
+          _newD: NewA
+        }
+        : never
+    : Next<LeftShiftA<A, Q>, Q, M> extends [infer NewA extends string, infer NewQ extends string]
+      ? _DivideBinaryArbitrary<
+          NewQ,
+          M,
+          NewA,
           DebugStop,
           ShrinkingD extends `${B}${infer tailBits}` ? tailBits : ''
-        >;
+        >
+      : never;
 
-  type ToPositiveBinary<N> =
-    N extends `1${infer tailBits}` ? `0${tailBits}` : N;
+type ToPositiveBinary<N> =
+  N extends `1${infer tailBits}` ? `0${tailBits}` : N;
 
-  type ToNegativeBinary<N> =
-    N extends `0${infer tailBits}` ? `1${tailBits}` : N;
-  
-  type ToNegativeQuotient<O extends object> =
-    { [K in keyof O]: K extends 'quotient' ? ToNegativeBinary<O[K]> : O[K] };
-  
-  type ToNegativeRemainder<O extends object> =
-    { [K in keyof O]: K extends 'remainder' ? ToNegativeBinary<O[K]> : O[K] };
-  
-  type ToNegativeQuotientAndRemainder<O extends object> =
-    { [K in keyof O]: K extends 'quotient' | 'remainder' ? ToNegativeBinary<O[K]> : O[K] };
+type ToNegativeBinary<N> =
+  N extends `0${infer tailBits}` ? `1${tailBits}` : N;
+
+type ToNegativeQuotient<O extends object> =
+  { [K in keyof O]: K extends 'quotient' ? ToNegativeBinary<O[K]> : O[K] };
+
+type ToNegativeRemainder<O extends object> =
+  { [K in keyof O]: K extends 'remainder' ? ToNegativeBinary<O[K]> : O[K] };
+
+type ToNegativeQuotientAndRemainder<O extends object> =
+  { [K in keyof O]: K extends 'quotient' | 'remainder' ? ToNegativeBinary<O[K]> : O[K] };
 
 export type DivideUnsignedBinary32<
   dividend extends string,

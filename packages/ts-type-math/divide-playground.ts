@@ -6,7 +6,7 @@ type B = 0 | 1;
 
 // 4 digits
 // 16 union members
-type divisor_4 =   '0011' // V
+type divisor_4 =   '0011' // M
 type fallback_4 =  '0000' // Q
 type dividend_4 =  '0111' // D
 type quotient_4 =  '0010' // result
@@ -27,27 +27,27 @@ type tx_4 = Expect<Extends<x_4, { quotient: quotient_4, remainder: remainder_4 }
 
 type s0_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4>
 //   ^?
-type t0_4 = Expect<Extends<s0_4, { Q: fallback_4, D: dividend_4 }>>
+type t0_4 = Expect<Extends<s0_4, { A: fallback_4, Q: dividend_4 }>>
 
 type s1_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_4 = Expect<Extends<s1_4, { Q: '0000', D: '1110' }>>
+type t1_4 = Expect<Extends<s1_4, { A: '0000', Q: '1110' }>>
 
 type s2_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_4 = Expect<Extends<s2_4, { Q: '0001', D: '1100' }>>
+type t2_4 = Expect<Extends<s2_4, { A: '0001', Q: '1100' }>>
 
 type s3_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_4 = Expect<Extends<s3_4, { Q: '0000', D: '1001' }>>
+type t3_4 = Expect<Extends<s3_4, { A: '0000', Q: '1001' }>>
 
 type s_4 = _DivideBinaryArbitrary<dividend_4, divisor_4, fallback_4, dividend_4 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_4 = Expect<Extends<s_4, { Q: remainder_4, D: quotient_4 }>>
+type t_4 = Expect<Extends<s_4, { A: remainder_4, Q: quotient_4 }>>
 
 // 5 digits
 // 32 union members
-type divisor_5 =   '00011' // V
+type divisor_5 =   '00011' // M
 type fallback_5 =  '00000' // Q
 type dividend_5 =  '00111' // D
 type quotient_5 =  '00010' // result
@@ -64,31 +64,31 @@ type tx_5 = Expect<Extends<x_5, { quotient: quotient_5, remainder: remainder_5 }
 
 type s0_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5>
 //   ^?
-type t0_5 = Expect<Extends<s0_5, { Q: fallback_5, D: dividend_5 }>>
+type t0_5 = Expect<Extends<s0_5, { A: fallback_5, Q: dividend_5 }>>
 
 type s1_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_5 = Expect<Extends<s1_5, { Q: '00000', D: '01110' }>>
+type t1_5 = Expect<Extends<s1_5, { A: '00000', Q: '01110' }>>
 
 type s2_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_5 = Expect<Extends<s2_5, { Q: '00000', D: '11100' }>>
+type t2_5 = Expect<Extends<s2_5, { A: '00000', Q: '11100' }>>
 
 type s3_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_5 = Expect<Extends<s3_5, { Q: '00001', D: '11000' }>>
+type t3_5 = Expect<Extends<s3_5, { A: '00001', Q: '11000' }>>
 
 type s4_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t4_5 = Expect<Extends<s4_5, { Q: '00000', D: '10001' }>>
+type t4_5 = Expect<Extends<s4_5, { A: '00000', Q: '10001' }>>
 
 type s_5 = _DivideBinaryArbitrary<dividend_5, divisor_5, fallback_5, dividend_5 extends `${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_5 = Expect<Extends<s_5, { Q: remainder_5, D: quotient_5 }>>
+type t_5 = Expect<Extends<s_5, { A: remainder_5, Q: quotient_5 }>>
 
 // 6 digits
 // 64 union members
-type divisor_6 =   '000011' // V
+type divisor_6 =   '000011' // M
 type fallback_6 =  '000000' // Q
 type dividend_6 =  '000111' // D
 type quotient_6 =  '000010' // result
@@ -105,38 +105,38 @@ type tx_6 = Expect<Extends<x_6, { quotient: quotient_6, remainder: remainder_6 }
 
 type s0_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6>
 //   ^?
-type t0_6 = Expect<Extends<s0_6, { Q: fallback_6, D: dividend_6 }>>
+type t0_6 = Expect<Extends<s0_6, { A: fallback_6, Q: dividend_6 }>>
 
 type s1_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_6 = Expect<Extends<s1_6, { Q: '000000', D: '001110' }>>
+type t1_6 = Expect<Extends<s1_6, { A: '000000', Q: '001110' }>>
 
 type s2_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_6 = Expect<Extends<s2_6, { Q: '000000', D: '011100' }>>
+type t2_6 = Expect<Extends<s2_6, { A: '000000', Q: '011100' }>>
 
 type s3_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_6 = Expect<Extends<s3_6, { Q: '000000', D: '111000' }>>
+type t3_6 = Expect<Extends<s3_6, { A: '000000', Q: '111000' }>>
 
 type s4_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t4_6 = Expect<Extends<s4_6, { Q: '000001', D: '110000' }>>
+type t4_6 = Expect<Extends<s4_6, { A: '000001', Q: '110000' }>>
 
 type s5_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t5_6 = Expect<Extends<s5_6, { Q: '000000', D: '100001' }>>
+type t5_6 = Expect<Extends<s5_6, { A: '000000', Q: '100001' }>>
 
 type s_6 = _DivideBinaryArbitrary<dividend_6, divisor_6, fallback_6, dividend_6 extends `${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_6 = Expect<Extends<s_6, { Q: remainder_6, D: quotient_6 }>>
+type t_6 = Expect<Extends<s_6, { A: remainder_6, Q: quotient_6 }>>
 
 
 
 
 // 7 digits
 // 128 union members
-type divisor_7 =   '0000011' // V
+type divisor_7 =   '0000011' // M
 type fallback_7 =  '0000000' // Q
 type dividend_7 =  '0000111' // D
 type quotient_7 =  '0000010' // result
@@ -153,40 +153,40 @@ type tx_7 = Expect<Extends<x_7, { quotient: quotient_7, remainder: remainder_7 }
 
 type s0_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7>
 //   ^?
-type t0_7 = Expect<Extends<s0_7, { Q: fallback_7, D: dividend_7 }>>
+type t0_7 = Expect<Extends<s0_7, { A: fallback_7, Q: dividend_7 }>>
 
 type s1_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_7 = Expect<Extends<s1_7, { Q: '0000000', D: '0001110' }>>
+type t1_7 = Expect<Extends<s1_7, { A: '0000000', Q: '0001110' }>>
 
 type s2_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_7 = Expect<Extends<s2_7, { Q: '0000000', D: '0011100' }>>
+type t2_7 = Expect<Extends<s2_7, { A: '0000000', Q: '0011100' }>>
 
 type s3_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_7 = Expect<Extends<s3_7, { Q: '0000000', D: '0111000' }>>
+type t3_7 = Expect<Extends<s3_7, { A: '0000000', Q: '0111000' }>>
 
 type s4_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t4_7 = Expect<Extends<s4_7, { Q: '0000000', D: '1110000' }>>
+type t4_7 = Expect<Extends<s4_7, { A: '0000000', Q: '1110000' }>>
 
 type s5_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t5_7 = Expect<Extends<s5_7, { Q: '0000001', D: '1100000' }>>
+type t5_7 = Expect<Extends<s5_7, { A: '0000001', Q: '1100000' }>>
 
 type s6_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t6_7 = Expect<Extends<s6_7, { Q: '0000000', D: '1000001' }>>
+type t6_7 = Expect<Extends<s6_7, { A: '0000000', Q: '1000001' }>>
 
 type s_7 = _DivideBinaryArbitrary<dividend_7, divisor_7, fallback_7, dividend_7 extends `${B}${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_7 = Expect<Extends<s_7, { Q: remainder_7, D: quotient_7 }>>
+type t_7 = Expect<Extends<s_7, { A: remainder_7, Q: quotient_7 }>>
 
 
 // 8 digits
 // 256 union members
-type divisor_8 =   '00000011' // V
+type divisor_8 =   '00000011' // M
 type fallback_8 =  '00000000' // Q
 type dividend_8 =  '00000111' // D
 type quotient_8 =  '00000010' // result
@@ -203,44 +203,44 @@ type tx_8 = Expect<Extends<x_8, { quotient: quotient_8, remainder: remainder_8 }
 
 type s0_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8>
 //   ^?
-type t0_8 = Expect<Extends<s0_8, { Q: fallback_8, D: dividend_8 }>>
+type t0_8 = Expect<Extends<s0_8, { A: fallback_8, Q: dividend_8 }>>
 
 type s1_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${infer T}` ? T : ''>
 //   ^?
-type t1_8 = Expect<Extends<s1_8, { Q: '00000000', D: '00001110' }>>
+type t1_8 = Expect<Extends<s1_8, { A: '00000000', Q: '00001110' }>>
 
 type s2_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t2_8 = Expect<Extends<s2_8, { Q: '00000000', D: '00011100' }>>
+type t2_8 = Expect<Extends<s2_8, { A: '00000000', Q: '00011100' }>>
 
 type s3_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t3_8 = Expect<Extends<s3_8, { Q: '00000000', D: '00111000' }>>
+type t3_8 = Expect<Extends<s3_8, { A: '00000000', Q: '00111000' }>>
 
 type s4_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t4_8 = Expect<Extends<s4_8, { Q: '00000000', D: '01110000' }>>
+type t4_8 = Expect<Extends<s4_8, { A: '00000000', Q: '01110000' }>>
 
 type s5_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t5_8 = Expect<Extends<s5_8, { Q: '00000000', D: '11100000' }>>
+type t5_8 = Expect<Extends<s5_8, { A: '00000000', Q: '11100000' }>>
 
 type s6_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t6_8 = Expect<Extends<s6_8, { Q: '00000001', D: '11000000' }>>
+type t6_8 = Expect<Extends<s6_8, { A: '00000001', Q: '11000000' }>>
 
 type s7_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t7_8 = Expect<Extends<s7_8, { Q: '00000000', D: '10000001' }>>
+type t7_8 = Expect<Extends<s7_8, { A: '00000000', Q: '10000001' }>>
 
 type s_8 = _DivideBinaryArbitrary<dividend_8, divisor_8, fallback_8, dividend_8 extends `${B}${B}${B}${B}${B}${B}${B}${B}${infer T}` ? T : ''>
 //   ^?
-type t_8 = Expect<Extends<s_8, { Q: remainder_8, D: quotient_8 }>>
+type t_8 = Expect<Extends<s_8, { A: remainder_8, Q: quotient_8 }>>
 
 // 9 digits
 // 512 union members
 
-type divisor_9 =   '000000011' // V
+type divisor_9 =   '000000011' // M
 type fallback_9 =  '000000000' // Q
 type dividend_9 =  '000000111' // D
 type quotient_9 =  '000000010' // result
@@ -259,7 +259,7 @@ type tx_9 = Expect<Extends<x_9, { quotient: quotient_9, remainder: remainder_9 }
 // 10 digits
 // 1024 union members
 
-type divisor_10 =   '0000000011' // V
+type divisor_10 =   '0000000011' // M
 type fallback_10 =  '0000000000' // Q
 type dividend_10 =  '0000000111' // D
 type quotient_10 =  '0000000010' // result
@@ -284,7 +284,7 @@ type tx_10 = Expect<Extends<x_10, { quotient: quotient_10, remainder: remainder_
 // 11 digits
 // 2048 union members
 
-type divisor_11 =   '00000000011' // V
+type divisor_11 =   '00000000011' // M
 type fallback_11 =  '00000000000' // Q
 type dividend_11 =  '00000000111' // D
 type quotient_11 =  '00000000010' // result
@@ -303,7 +303,7 @@ type tx_11 = Expect<Extends<x_11, { quotient: quotient_11, remainder: remainder_
 // 12 digits
 // 4096 union members
 
-type divisor_12 =   '000000000011' // V
+type divisor_12 =   '000000000011' // M
 type fallback_12 =  '000000000000' // Q
 type dividend_12 =  '000000000111' // D
 type quotient_12 =  '000000000010' // result
@@ -321,7 +321,7 @@ type tx_12 = Expect<Extends<x_12, { quotient: quotient_12, remainder: remainder_
 
 // 13 digits
 // 8192 union members
-type divisor_13 =   '0000000000011' // V
+type divisor_13 =   '0000000000011' // M
 type fallback_13 =  '0000000000000' // Q
 type dividend_13 =  '0000000000111' // D
 type quotient_13 =  '0000000000010' // result
@@ -339,7 +339,7 @@ type tx_13 = Expect<Extends<x_13, { quotient: quotient_13, remainder: remainder_
 
 // 14 digits
 // 16384 union members
-type divisor_14 =   '00000000000011' // V
+type divisor_14 =   '00000000000011' // M
 type fallback_14 =  '00000000000000' // Q
 type dividend_14 =  '00000000000111' // D
 type quotient_14 =  '00000000000010' // result
@@ -362,7 +362,7 @@ type x = _DivideBinaryArbitrary<
 
 
 // 15 digits
-type divisor_15 =   '000000000000011' // V
+type divisor_15 =   '000000000000011' // M
 type fallback_15 =  '000000000000000' // Q
 type dividend_15 =  '000000000000111' // D
 type quotient_15 =  '000000000000010' // result
@@ -379,7 +379,7 @@ type tx_15 = Expect<Extends<x_15, { quotient: quotient_15, remainder: remainder_
 
 
 // 16 digits
-type divisor_16 =   '0000000000000011' // V
+type divisor_16 =   '0000000000000011' // M
 type fallback_16 =  '0000000000000000' // Q
 type dividend_16 =  '0000000000000111' // D
 type quotient_16 =  '0000000000000010' // result
@@ -396,7 +396,7 @@ type tx_16 = Expect<Extends<x_16, { quotient: quotient_16, remainder: remainder_
 
 
 // 17 digits
-type divisor_17 =   '00000000000000011' // V
+type divisor_17 =   '00000000000000011' // M
 type fallback_17 =  '00000000000000000' // Q
 type dividend_17 =  '00000000000000111' // D
 type quotient_17 =  '00000000000000010' // result
@@ -413,7 +413,7 @@ type tx_17 = Expect<Extends<x_17, { quotient: quotient_17, remainder: remainder_
 
 
 // 18 digits
-type divisor_18 =   '000000000000000011' // V
+type divisor_18 =   '000000000000000011' // M
 type fallback_18 =  '000000000000000000' // Q
 type dividend_18 =  '000000000000000111' // D
 type quotient_18 =  '000000000000000010' // result
@@ -430,7 +430,7 @@ type tx_18 = Expect<Extends<x_18, { quotient: quotient_18, remainder: remainder_
 
 
 // 19 digits
-type divisor_19 =   '0000000000000000011' // V
+type divisor_19 =   '0000000000000000011' // M
 type fallback_19 =  '0000000000000000000' // Q
 type dividend_19 =  '0000000000000000111' // D
 type quotient_19 =  '0000000000000000010' // result
@@ -447,7 +447,7 @@ type tx_19 = Expect<Extends<x_19, { quotient: quotient_19, remainder: remainder_
 
 
 // 20 digits
-type divisor_20 =   '00000000000000000011' // V
+type divisor_20 =   '00000000000000000011' // M
 type fallback_20 =  '00000000000000000000' // Q
 type dividend_20 =  '00000000000000000111' // D
 type quotient_20 =  '00000000000000000010' // result
@@ -464,7 +464,7 @@ type tx_20 = Expect<Extends<x_20, { quotient: quotient_20, remainder: remainder_
 
 
 // 21 digits
-type divisor_21 =   '000000000000000000011' // V
+type divisor_21 =   '000000000000000000011' // M
 type fallback_21 =  '000000000000000000000' // Q
 type dividend_21 =  '000000000000000000111' // D
 type quotient_21 =  '000000000000000000010' // result
@@ -481,7 +481,7 @@ type tx_21 = Expect<Extends<x_21, { quotient: quotient_21, remainder: remainder_
 
 
 // 22 digits
-type divisor_22 =   '0000000000000000000011' // V
+type divisor_22 =   '0000000000000000000011' // M
 type fallback_22 =  '0000000000000000000000' // Q
 type dividend_22 =  '0000000000000000000111' // D
 type quotient_22 =  '0000000000000000000010' // result
@@ -498,7 +498,7 @@ type tx_22 = Expect<Extends<x_22, { quotient: quotient_22, remainder: remainder_
 
 
 // 23 digits
-type divisor_23 =   '00000000000000000000011' // V
+type divisor_23 =   '00000000000000000000011' // M
 type fallback_23 =  '00000000000000000000000' // Q
 type dividend_23 =  '00000000000000000000111' // D
 type quotient_23 =  '00000000000000000000010' // result
@@ -515,7 +515,7 @@ type tx_23 = Expect<Extends<x_23, { quotient: quotient_23, remainder: remainder_
 
 
 // 24 digits
-type divisor_24 =   '000000000000000000000011' // V
+type divisor_24 =   '000000000000000000000011' // M
 type fallback_24 =  '000000000000000000000000' // Q
 type dividend_24 =  '000000000000000000000111' // D
 type quotient_24 =  '000000000000000000000010' // result
@@ -532,7 +532,7 @@ type tx_24 = Expect<Extends<x_24, { quotient: quotient_24, remainder: remainder_
 
 
 // 25 digits
-type divisor_25 =   '0000000000000000000000011' // V
+type divisor_25 =   '0000000000000000000000011' // M
 type fallback_25 =  '0000000000000000000000000' // Q
 type dividend_25 =  '0000000000000000000000111' // D
 type quotient_25 =  '0000000000000000000000010' // result
@@ -549,7 +549,7 @@ type tx_25 = Expect<Extends<x_25, { quotient: quotient_25, remainder: remainder_
 
 
 // 26 digits
-type divisor_26 =   '00000000000000000000000011' // V
+type divisor_26 =   '00000000000000000000000011' // M
 type fallback_26 =  '00000000000000000000000000' // Q
 type dividend_26 =  '00000000000000000000000111' // D
 type quotient_26 =  '00000000000000000000000010' // result
@@ -566,7 +566,7 @@ type tx_26 = Expect<Extends<x_26, { quotient: quotient_26, remainder: remainder_
 
 
 // 27 digits
-type divisor_27 =   '000000000000000000000000011' // V
+type divisor_27 =   '000000000000000000000000011' // M
 type fallback_27 =  '000000000000000000000000000' // Q
 type dividend_27 =  '000000000000000000000000111' // D
 type quotient_27 =  '000000000000000000000000010' // result
@@ -583,7 +583,7 @@ type tx_27 = Expect<Extends<x_27, { quotient: quotient_27, remainder: remainder_
 
 
 // 28 digits
-type divisor_28 =   '0000000000000000000000000011' // V
+type divisor_28 =   '0000000000000000000000000011' // M
 type fallback_28 =  '0000000000000000000000000000' // Q
 type dividend_28 =  '0000000000000000000000000111' // D
 type quotient_28 =  '0000000000000000000000000010' // result
@@ -600,7 +600,7 @@ type tx_28 = Expect<Extends<x_28, { quotient: quotient_28, remainder: remainder_
 
 
 // 29 digits
-type divisor_29 =   '00000000000000000000000000011' // V
+type divisor_29 =   '00000000000000000000000000011' // M
 type fallback_29 =  '00000000000000000000000000000' // Q
 type dividend_29 =  '00000000000000000000000000111' // D
 type quotient_29 =  '00000000000000000000000000010' // result
@@ -617,7 +617,7 @@ type tx_29 = Expect<Extends<x_29, { quotient: quotient_29, remainder: remainder_
 
 
 // 30 digits
-type divisor_30 =   '000000000000000000000000000011' // V
+type divisor_30 =   '000000000000000000000000000011' // M
 type fallback_30 =  '000000000000000000000000000000' // Q
 type dividend_30 =  '000000000000000000000000000111' // D
 type quotient_30 =  '000000000000000000000000000010' // result
@@ -634,7 +634,7 @@ type tx_30 = Expect<Extends<x_30, { quotient: quotient_30, remainder: remainder_
 
 
 // 31 digits
-type divisor_31 =   '0000000000000000000000000000011' // V
+type divisor_31 =   '0000000000000000000000000000011' // M
 type fallback_31 =  '0000000000000000000000000000000' // Q
 type dividend_31 =  '0000000000000000000000000000111' // D
 type quotient_31 =  '0000000000000000000000000000010' // result
@@ -651,7 +651,7 @@ type tx_31 = Expect<Extends<x_31, { quotient: quotient_31, remainder: remainder_
 
 
 // 32 digits
-type divisor_32 =   '00000000000000000000000000000011' // V
+type divisor_32 =   '00000000000000000000000000000011' // M
 type fallback_32 =  '00000000000000000000000000000000' // Q
 type dividend_32 =  '00000000000000000000000000000111' // D
 type quotient_32 =  '00000000000000000000000000000010' // result
@@ -669,7 +669,7 @@ type tx_32 = Expect<Extends<x_32, { quotient: quotient_32, remainder: remainder_
 
 
 // 33 digits
-type divisor_33 =   '000000000000000000000000000000011' // V
+type divisor_33 =   '000000000000000000000000000000011' // M
 type fallback_33 =  '000000000000000000000000000000000' // Q
 type dividend_33 =  '000000000000000000000000000000111' // D
 type quotient_33 =  '000000000000000000000000000000010' // result
@@ -687,7 +687,7 @@ type tx_33 = Expect<Extends<x_33, { quotient: quotient_33, remainder: remainder_
 
 
 // 34 digits
-type divisor_34 =   '0000000000000000000000000000000011' // V
+type divisor_34 =   '0000000000000000000000000000000011' // M
 type fallback_34 =  '0000000000000000000000000000000000' // Q
 type dividend_34 =  '0000000000000000000000000000000111' // D
 type quotient_34 =  '0000000000000000000000000000000010' // result
@@ -705,7 +705,7 @@ type tx_34 = Expect<Extends<x_34, { quotient: quotient_34, remainder: remainder_
 
 
 // 35 digits
-type divisor_35 =   '00000000000000000000000000000000011' // V
+type divisor_35 =   '00000000000000000000000000000000011' // M
 type fallback_35 =  '00000000000000000000000000000000000' // Q
 type dividend_35 =  '00000000000000000000000000000000111' // D
 type quotient_35 =  '00000000000000000000000000000000010' // result
@@ -723,7 +723,7 @@ type tx_35 = Expect<Extends<x_35, { quotient: quotient_35, remainder: remainder_
 
 
 // 36 digits
-type divisor_36 =   '000000000000000000000000000000000011' // V
+type divisor_36 =   '000000000000000000000000000000000011' // M
 type fallback_36 =  '000000000000000000000000000000000000' // Q
 type dividend_36 =  '000000000000000000000000000000000111' // D
 type quotient_36 =  '000000000000000000000000000000000010' // result
@@ -741,7 +741,7 @@ type tx_36 = Expect<Extends<x_36, { quotient: quotient_36, remainder: remainder_
 
 
 // 37 digits
-type divisor_37 =   '0000000000000000000000000000000000011' // V
+type divisor_37 =   '0000000000000000000000000000000000011' // M
 type fallback_37 =  '0000000000000000000000000000000000000' // Q
 type dividend_37 =  '0000000000000000000000000000000000111' // D
 type quotient_37 =  '0000000000000000000000000000000000010' // result
@@ -759,7 +759,7 @@ type tx_37 = Expect<Extends<x_37, { quotient: quotient_37, remainder: remainder_
 
 
 // 38 digits
-type divisor_38 =   '00000000000000000000000000000000000011' // V
+type divisor_38 =   '00000000000000000000000000000000000011' // M
 type fallback_38 =  '00000000000000000000000000000000000000' // Q
 type dividend_38 =  '00000000000000000000000000000000000111' // D
 type quotient_38 =  '00000000000000000000000000000000000010' // result
@@ -777,7 +777,7 @@ type tx_38 = Expect<Extends<x_38, { quotient: quotient_38, remainder: remainder_
 
 
 // 39 digits
-type divisor_39 =   '000000000000000000000000000000000000011' // V
+type divisor_39 =   '000000000000000000000000000000000000011' // M
 type fallback_39 =  '000000000000000000000000000000000000000' // Q
 type dividend_39 =  '000000000000000000000000000000000000111' // D
 type quotient_39 =  '000000000000000000000000000000000000010' // result
@@ -795,7 +795,7 @@ type tx_39 = Expect<Extends<x_39, { quotient: quotient_39, remainder: remainder_
 
 
 // 40 digits
-type divisor_40 =   '0000000000000000000000000000000000000011' // V
+type divisor_40 =   '0000000000000000000000000000000000000011' // M
 type fallback_40 =  '0000000000000000000000000000000000000000' // Q
 type dividend_40 =  '0000000000000000000000000000000000000111' // D
 type quotient_40 =  '0000000000000000000000000000000000000010' // result
@@ -813,7 +813,7 @@ type tx_40 = Expect<Extends<x_40, { quotient: quotient_40, remainder: remainder_
 
 
 // 41 digits
-type divisor_41 =   '00000000000000000000000000000000000000011' // V
+type divisor_41 =   '00000000000000000000000000000000000000011' // M
 type fallback_41 =  '00000000000000000000000000000000000000000' // Q
 type dividend_41 =  '00000000000000000000000000000000000000111' // D
 type quotient_41 =  '00000000000000000000000000000000000000010' // result
@@ -831,7 +831,7 @@ type tx_41 = Expect<Extends<x_41, { quotient: quotient_41, remainder: remainder_
 
 
 // 42 digits
-type divisor_42 =   '000000000000000000000000000000000000000011' // V
+type divisor_42 =   '000000000000000000000000000000000000000011' // M
 type fallback_42 =  '000000000000000000000000000000000000000000' // Q
 type dividend_42 =  '000000000000000000000000000000000000000111' // D
 type quotient_42 =  '000000000000000000000000000000000000000010' // result
@@ -849,7 +849,7 @@ type tx_42 = Expect<Extends<x_42, { quotient: quotient_42, remainder: remainder_
 
 
 // 43 digits
-type divisor_43 =   '0000000000000000000000000000000000000000011' // V
+type divisor_43 =   '0000000000000000000000000000000000000000011' // M
 type fallback_43 =  '0000000000000000000000000000000000000000000' // Q
 type dividend_43 =  '0000000000000000000000000000000000000000111' // D
 type quotient_43 =  '0000000000000000000000000000000000000000010' // result
@@ -867,7 +867,7 @@ type tx_43 = Expect<Extends<x_43, { quotient: quotient_43, remainder: remainder_
 
 
 // 44 digits
-type divisor_44 =   '00000000000000000000000000000000000000000011' // V
+type divisor_44 =   '00000000000000000000000000000000000000000011' // M
 type fallback_44 =  '00000000000000000000000000000000000000000000' // Q
 type dividend_44 =  '00000000000000000000000000000000000000000111' // D
 type quotient_44 =  '00000000000000000000000000000000000000000010' // result
@@ -885,7 +885,7 @@ type tx_44 = Expect<Extends<x_44, { quotient: quotient_44, remainder: remainder_
 
 
 // 45 digits
-type divisor_45 =   '000000000000000000000000000000000000000000011' // V
+type divisor_45 =   '000000000000000000000000000000000000000000011' // M
 type fallback_45 =  '000000000000000000000000000000000000000000000' // Q
 type dividend_45 =  '000000000000000000000000000000000000000000111' // D
 type quotient_45 =  '000000000000000000000000000000000000000000010' // result
@@ -903,7 +903,7 @@ type tx_45 = Expect<Extends<x_45, { quotient: quotient_45, remainder: remainder_
 
 
 // 46 digits
-type divisor_46 =   '0000000000000000000000000000000000000000000011' // V
+type divisor_46 =   '0000000000000000000000000000000000000000000011' // M
 type fallback_46 =  '0000000000000000000000000000000000000000000000' // Q
 type dividend_46 =  '0000000000000000000000000000000000000000000111' // D
 type quotient_46 =  '0000000000000000000000000000000000000000000010' // result
@@ -921,7 +921,7 @@ type tx_46 = Expect<Extends<x_46, { quotient: quotient_46, remainder: remainder_
 
 
 // 47 digits
-type divisor_47 =   '00000000000000000000000000000000000000000000011' // V
+type divisor_47 =   '00000000000000000000000000000000000000000000011' // M
 type fallback_47 =  '00000000000000000000000000000000000000000000000' // Q
 type dividend_47 =  '00000000000000000000000000000000000000000000111' // D
 type quotient_47 =  '00000000000000000000000000000000000000000000010' // result
@@ -939,7 +939,7 @@ type tx_47 = Expect<Extends<x_47, { quotient: quotient_47, remainder: remainder_
 
 
 // 48 digits
-type divisor_48 =   '000000000000000000000000000000000000000000000011' // V
+type divisor_48 =   '000000000000000000000000000000000000000000000011' // M
 type fallback_48 =  '000000000000000000000000000000000000000000000000' // Q
 type dividend_48 =  '000000000000000000000000000000000000000000000111' // D
 type quotient_48 =  '000000000000000000000000000000000000000000000010' // result
@@ -957,7 +957,7 @@ type tx_48 = Expect<Extends<x_48, { quotient: quotient_48, remainder: remainder_
 
 
 // 49 digits
-type divisor_49 =   '0000000000000000000000000000000000000000000000011' // V
+type divisor_49 =   '0000000000000000000000000000000000000000000000011' // M
 type fallback_49 =  '0000000000000000000000000000000000000000000000000' // Q
 type dividend_49 =  '0000000000000000000000000000000000000000000000111' // D
 type quotient_49 =  '0000000000000000000000000000000000000000000000010' // result
@@ -975,7 +975,7 @@ type tx_49 = Expect<Extends<x_49, { quotient: quotient_49, remainder: remainder_
 
 
 // 50 digits
-type divisor_50 =   '00000000000000000000000000000000000000000000000011' // V
+type divisor_50 =   '00000000000000000000000000000000000000000000000011' // M
 type fallback_50 =  '00000000000000000000000000000000000000000000000000' // Q
 type dividend_50 =  '00000000000000000000000000000000000000000000000111' // D
 type quotient_50 =  '00000000000000000000000000000000000000000000000010' // result
@@ -993,7 +993,7 @@ type tx_50 = Expect<Extends<x_50, { quotient: quotient_50, remainder: remainder_
 
 
 // 51 digits
-type divisor_51 =   '000000000000000000000000000000000000000000000000011' // V
+type divisor_51 =   '000000000000000000000000000000000000000000000000011' // M
 type fallback_51 =  '000000000000000000000000000000000000000000000000000' // Q
 type dividend_51 =  '000000000000000000000000000000000000000000000000111' // D
 type quotient_51 =  '000000000000000000000000000000000000000000000000010' // result
@@ -1011,7 +1011,7 @@ type tx_51 = Expect<Extends<x_51, { quotient: quotient_51, remainder: remainder_
 
 
 // 52 digits
-type divisor_52 =   '0000000000000000000000000000000000000000000000000011' // V
+type divisor_52 =   '0000000000000000000000000000000000000000000000000011' // M
 type fallback_52 =  '0000000000000000000000000000000000000000000000000000' // Q
 type dividend_52 =  '0000000000000000000000000000000000000000000000000111' // D
 type quotient_52 =  '0000000000000000000000000000000000000000000000000010' // result
@@ -1029,7 +1029,7 @@ type tx_52 = Expect<Extends<x_52, { quotient: quotient_52, remainder: remainder_
 
 
 // 53 digits
-type divisor_53 =   '00000000000000000000000000000000000000000000000000011' // V
+type divisor_53 =   '00000000000000000000000000000000000000000000000000011' // M
 type fallback_53 =  '00000000000000000000000000000000000000000000000000000' // Q
 type dividend_53 =  '00000000000000000000000000000000000000000000000000111' // D
 type quotient_53 =  '00000000000000000000000000000000000000000000000000010' // result
@@ -1047,7 +1047,7 @@ type tx_53 = Expect<Extends<x_53, { quotient: quotient_53, remainder: remainder_
 
 
 // 54 digits
-type divisor_54 =   '000000000000000000000000000000000000000000000000000011' // V
+type divisor_54 =   '000000000000000000000000000000000000000000000000000011' // M
 type fallback_54 =  '000000000000000000000000000000000000000000000000000000' // Q
 type dividend_54 =  '000000000000000000000000000000000000000000000000000111' // D
 type quotient_54 =  '000000000000000000000000000000000000000000000000000010' // result
@@ -1065,7 +1065,7 @@ type tx_54 = Expect<Extends<x_54, { quotient: quotient_54, remainder: remainder_
 
 
 // 55 digits
-type divisor_55 =   '0000000000000000000000000000000000000000000000000000011' // V
+type divisor_55 =   '0000000000000000000000000000000000000000000000000000011' // M
 type fallback_55 =  '0000000000000000000000000000000000000000000000000000000' // Q
 type dividend_55 =  '0000000000000000000000000000000000000000000000000000111' // D
 type quotient_55 =  '0000000000000000000000000000000000000000000000000000010' // result
@@ -1083,7 +1083,7 @@ type tx_55 = Expect<Extends<x_55, { quotient: quotient_55, remainder: remainder_
 
 
 // 56 digits
-type divisor_56 =   '00000000000000000000000000000000000000000000000000000011' // V
+type divisor_56 =   '00000000000000000000000000000000000000000000000000000011' // M
 type fallback_56 =  '00000000000000000000000000000000000000000000000000000000' // Q
 type dividend_56 =  '00000000000000000000000000000000000000000000000000000111' // D
 type quotient_56 =  '00000000000000000000000000000000000000000000000000000010' // result
@@ -1101,7 +1101,7 @@ type tx_56 = Expect<Extends<x_56, { quotient: quotient_56, remainder: remainder_
 
 
 // 57 digits
-type divisor_57 =   '000000000000000000000000000000000000000000000000000000011' // V
+type divisor_57 =   '000000000000000000000000000000000000000000000000000000011' // M
 type fallback_57 =  '000000000000000000000000000000000000000000000000000000000' // Q
 type dividend_57 =  '000000000000000000000000000000000000000000000000000000111' // D
 type quotient_57 =  '000000000000000000000000000000000000000000000000000000010' // result
@@ -1119,7 +1119,7 @@ type tx_57 = Expect<Extends<x_57, { quotient: quotient_57, remainder: remainder_
 
 
 // 58 digits
-type divisor_58 =   '0000000000000000000000000000000000000000000000000000000011' // V
+type divisor_58 =   '0000000000000000000000000000000000000000000000000000000011' // M
 type fallback_58 =  '0000000000000000000000000000000000000000000000000000000000' // Q
 type dividend_58 =  '0000000000000000000000000000000000000000000000000000000111' // D
 type quotient_58 =  '0000000000000000000000000000000000000000000000000000000010' // result
@@ -1137,7 +1137,7 @@ type tx_58 = Expect<Extends<x_58, { quotient: quotient_58, remainder: remainder_
 
 
 // 59 digits
-type divisor_59 =   '00000000000000000000000000000000000000000000000000000000011' // V
+type divisor_59 =   '00000000000000000000000000000000000000000000000000000000011' // M
 type fallback_59 =  '00000000000000000000000000000000000000000000000000000000000' // Q
 type dividend_59 =  '00000000000000000000000000000000000000000000000000000000111' // D
 type quotient_59 =  '00000000000000000000000000000000000000000000000000000000010' // result
@@ -1155,7 +1155,7 @@ type tx_59 = Expect<Extends<x_59, { quotient: quotient_59, remainder: remainder_
 
 
 // 60 digits
-type divisor_60 =   '000000000000000000000000000000000000000000000000000000000011' // V
+type divisor_60 =   '000000000000000000000000000000000000000000000000000000000011' // M
 type fallback_60 =  '000000000000000000000000000000000000000000000000000000000000' // Q
 type dividend_60 =  '000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_60 =  '000000000000000000000000000000000000000000000000000000000010' // result
@@ -1173,7 +1173,7 @@ type tx_60 = Expect<Extends<x_60, { quotient: quotient_60, remainder: remainder_
 
 
 // 61 digits
-type divisor_61 =   '0000000000000000000000000000000000000000000000000000000000011' // V
+type divisor_61 =   '0000000000000000000000000000000000000000000000000000000000011' // M
 type fallback_61 =  '0000000000000000000000000000000000000000000000000000000000000' // Q
 type dividend_61 =  '0000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_61 =  '0000000000000000000000000000000000000000000000000000000000010' // result
@@ -1191,7 +1191,7 @@ type tx_61 = Expect<Extends<x_61, { quotient: quotient_61, remainder: remainder_
 
 
 // 62 digits
-type divisor_62 =   '00000000000000000000000000000000000000000000000000000000000011' // V
+type divisor_62 =   '00000000000000000000000000000000000000000000000000000000000011' // M
 type fallback_62 =  '00000000000000000000000000000000000000000000000000000000000000' // Q
 type dividend_62 =  '00000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_62 =  '00000000000000000000000000000000000000000000000000000000000010' // result
@@ -1209,7 +1209,7 @@ type tx_62 = Expect<Extends<x_62, { quotient: quotient_62, remainder: remainder_
 
 
 // 63 digits
-type divisor_63 =   '000000000000000000000000000000000000000000000000000000000000011' // V
+type divisor_63 =   '000000000000000000000000000000000000000000000000000000000000011' // M
 type fallback_63 =  '000000000000000000000000000000000000000000000000000000000000000' // Q
 type dividend_63 =  '000000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_63 =  '000000000000000000000000000000000000000000000000000000000000010' // result
@@ -1227,7 +1227,7 @@ type tx_63 = Expect<Extends<x_63, { quotient: quotient_63, remainder: remainder_
 
 
 // 64 digits
-type divisor_64 =   '0000000000000000000000000000000000000000000000000000000000000011' // V
+type divisor_64 =   '0000000000000000000000000000000000000000000000000000000000000011' // M
 type fallback_64 =  '0000000000000000000000000000000000000000000000000000000000000000' // Q
 type dividend_64 =  '0000000000000000000000000000000000000000000000000000000000000111' // D
 type quotient_64 =  '0000000000000000000000000000000000000000000000000000000000000010' // result
