@@ -1,4 +1,4 @@
-import { IsNegativeBinary } from './binary';
+import { IsNegativeBinary, TwosComplementFlip } from './binary';
 import { LessThanUnsignedBinary } from './comparison';
 import { SubtractBinaryFixed } from "./subtract";
 import { Wasm } from "./wasm";
@@ -102,10 +102,10 @@ export type _DivideBinaryArbitrary<
       : never;
 
 type ToPositiveBinary<N> =
-  N extends `1${infer tailBits}` ? `0${tailBits}` : N;
+  N extends `1${string}` ? TwosComplementFlip<N> : N;
 
 type ToNegativeBinary<N> =
-  N extends `0${infer tailBits}` ? `1${tailBits}` : N;
+  N extends `0${string}` ? TwosComplementFlip<N> : N;
 
 type ToNegativeQuotient<O extends object> =
   { [K in keyof O]: K extends 'quotient' ? ToNegativeBinary<O[K]> : O[K] };
