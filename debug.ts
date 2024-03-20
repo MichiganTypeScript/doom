@@ -44,7 +44,7 @@ function visit(node: ts.Node) {
     // Only work with variable statements for this example
     if (ts.isTypeAliasDeclaration(node)) {
         switch (node.name.text) {
-            case 'x_13': { 
+            case 'x_14': { 
                 console.log(`Inspecting TypeAlias '${node.name.text}':`);
                 performance.mark('getTypeAtLocation1');
                 const type = checker.getTypeAtLocation(node);

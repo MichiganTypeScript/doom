@@ -18,6 +18,11 @@ import { Wasm } from "./wasm";
 
 // lifted from https://youtu.be/l3fM0XslOS0?t=350
 
+type AShift<A extends string, Q extends string> =
+  A extends `${string}${infer tail}`
+  ? Q extends `${infer bit}${string}` ? `${tail}${bit}` : never
+  : never;
+
 export type _DivideBinaryArbitrary<
   Q extends string, // = dividend
   M extends string, // = divisor
@@ -27,22 +32,17 @@ export type _DivideBinaryArbitrary<
 
   Count extends 1[] = [],
 
-  _AShift extends string =
-    A extends `${string}${infer tail}`
-    ? Q extends `${infer bit}${string}` ? `${tail}${bit}` : never
-    : never,
-
   _newA extends string =
-    LessThanUnsignedBinary<_AShift, M> extends Wasm.I32True
+    [LessThanUnsignedBinary<AShift<A, Q>, M>] extends [Wasm.I32True]
     ? // A-M is negative, so restore
-      _AShift
+      AShift<A, Q>
 
     : // A-M is positive, so update
-      SubtractBinaryFixed<_AShift, M>,
+      SubtractBinaryFixed<AShift<A, Q>, M>,
 
   _newQ extends string =
     Q extends `${string}${infer tail}` // remove first digit to prep for shift left
-    ? LessThanUnsignedBinary<_AShift, M> extends Wasm.I32True
+    ? [LessThanUnsignedBinary<AShift<A, Q>, M>] extends [Wasm.I32True]
       ? `${tail}0`
       : `${tail}1` // replace shifted digit depending on A-M
     : never
@@ -54,15 +54,15 @@ export type _DivideBinaryArbitrary<
           quotient: _newQ
           remainder:
             _newA extends `1${string}`
-            ? _AShift // restore the accumulator because it's negative otherwise
+            ? AShift<A, Q> // restore the accumulator because it's negative otherwise
             : _newA
         }
       : {
           M: M,
           A: A,
           Q: Q,
-          _AShift: _AShift,
-          _AShiftMinusM: SubtractBinaryFixed<_AShift, M>,
+          _AShift: AShift<A, Q>,
+          _AShiftMinusM: SubtractBinaryFixed<AShift<A, Q>, M>,
           _newA: _newA,
           _newQ: _newQ,
         }
