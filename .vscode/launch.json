@@ -40,5 +40,19 @@
       ],
       "cwd": "${workspaceFolder}"
     },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Debug TS with ESM",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--loader",
+        "ts-node/esm",
+        "--experimental-specifier-resolution=node",
+        "${workspaceFolder}/debug.ts"
+      ],
+      "cwd": "${workspaceFolder}",
+      "internalConsoleOptions": "openOnSessionStart"
+    }
   ]
 }
