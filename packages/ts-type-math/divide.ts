@@ -98,10 +98,9 @@ export type _DivideBinaryArbitrary<
     : [LessThanUnsignedBinary<D, V>] extends [Wasm.I32True]
       ? {
         quotient: Wasm.I32False,
-        reminder: D,
-          
+        remainder: D,
       }
-      :_DivideBinaryArbitrary<
+      : _DivideBinaryArbitrary<
           NewD<Q, D, V>,
           V,
           NewQ<Q, D, V>,
@@ -123,4 +122,4 @@ export type DivideUnsignedBinary32<
     divisor,
     Wasm.I32False,
     31
-  >['quotient']
+  >
