@@ -80,7 +80,7 @@ export type _DivideBinaryArbitrary<
     : _DivideBinaryArbitrary<
         _newQ,
         M,
-      _newA,
+        _newA,
         StopAt,
         debugMode,
         [1, ...Count]
