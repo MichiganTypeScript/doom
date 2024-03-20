@@ -536,58 +536,58 @@ type x_23 = DivideBinary_23<dividend_23, divisor_23>
 type tx_23 = Expect<Extends<x_23, { quotient: quotient_23, remainder: remainder_23 }>>
 
 
-// // 24 digits
-// type divisor_24 =   '000000000000000000000011' // M
-// type fallback_24 =  '000000000000000000000000' // A
-// type dividend_24 =  '000000000000000000000111' // Q
-// type quotient_24 =  '000000000000000000000010' // result
-// type remainder_24 = '000000000000000000000001' // result
-// type stopAt_24 = 23
+// 24 digits
+type divisor_24 =   '000000000000000000000011' // M
+type fallback_24 =  '000000000000000000000000' // A
+type dividend_24 =  '000000000000000000000111' // Q
+type quotient_24 =  '000000000000000000000010' // result
+type remainder_24 = '000000000000000000000001' // result
+type stopAt_24 = 23
 
-// type DivideBinary_24<
-//   dividend extends string,
-//   divisor extends string
-// > = _DivideBinaryArbitrary<dividend, divisor, fallback_24, stopAt_24>
+type DivideBinary_24<
+  dividend extends string,
+  divisor extends string
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_24, stopAt_24>
 
-// type x_24 = DivideBinary_24<dividend_24, divisor_24>
-// //   ^?
-// type tx_24 = Expect<Extends<x_24, { quotient: quotient_24, remainder: remainder_24 }>>
-
-
-// // 25 digits
-// type divisor_25 =   '0000000000000000000000011' // M
-// type fallback_25 =  '0000000000000000000000000' // A
-// type dividend_25 =  '0000000000000000000000111' // Q
-// type quotient_25 =  '0000000000000000000000010' // result
-// type remainder_25 = '0000000000000000000000001' // result
-// type stopAt_25 = 24
-
-// type DivideBinary_25<
-//   dividend extends string,
-//   divisor extends string
-// > = _DivideBinaryArbitrary<dividend, divisor, fallback_25, stopAt_25>
-
-// type x_25 = DivideBinary_25<dividend_25, divisor_25>
-// //   ^?
-// type tx_25 = Expect<Extends<x_25, { quotient: quotient_25, remainder: remainder_25 }>>
+type x_24 = DivideBinary_24<dividend_24, divisor_24>
+//   ^?
+type tx_24 = Expect<Extends<x_24, { quotient: quotient_24, remainder: remainder_24 }>>
 
 
-// // 26 digits
-// type divisor_26 =   '00000000000000000000000011' // M
-// type fallback_26 =  '00000000000000000000000000' // A
-// type dividend_26 =  '00000000000000000000000111' // Q
-// type quotient_26 =  '00000000000000000000000010' // result
-// type remainder_26 = '00000000000000000000000001' // result
-// type stopAt_26 = 25
+// 25 digits
+type divisor_25 =   '0000000000000000000000011' // M
+type fallback_25 =  '0000000000000000000000000' // A
+type dividend_25 =  '0000000000000000000000111' // Q
+type quotient_25 =  '0000000000000000000000010' // result
+type remainder_25 = '0000000000000000000000001' // result
+type stopAt_25 = 24
 
-// type DivideBinary_26<
-//   dividend extends string,
-//   divisor extends string
-// > = _DivideBinaryArbitrary<dividend, divisor, fallback_26, stopAt_26>
+type DivideBinary_25<
+  dividend extends string,
+  divisor extends string
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_25, stopAt_25>
 
-// type x_26 = DivideBinary_26<dividend_26, divisor_26>
-// //   ^?
-// type tx_26 = Expect<Extends<x_26, { quotient: quotient_26, remainder: remainder_26 }>>
+type x_25 = DivideBinary_25<dividend_25, divisor_25>
+//   ^?
+type tx_25 = Expect<Extends<x_25, { quotient: quotient_25, remainder: remainder_25 }>>
+
+
+// 26 digits
+type divisor_26 =   '00000000000000000000000011' // M
+type fallback_26 =  '00000000000000000000000000' // A
+type dividend_26 =  '00000000000000000000000111' // Q
+type quotient_26 =  '00000000000000000000000010' // result
+type remainder_26 = '00000000000000000000000001' // result
+type stopAt_26 = 25
+
+type DivideBinary_26<
+  dividend extends string,
+  divisor extends string
+> = _DivideBinaryArbitrary<dividend, divisor, fallback_26, stopAt_26>
+
+type x_26 = DivideBinary_26<dividend_26, divisor_26>
+//   ^?
+type tx_26 = Expect<Extends<x_26, { quotient: quotient_26, remainder: remainder_26 }>>
 
 
 // // 27 digits

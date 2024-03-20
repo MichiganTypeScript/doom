@@ -23,6 +23,21 @@ type AShift<A extends string, Q extends string> =
   ? Q extends `${infer bit}${string}` ? `${tail}${bit}` : never
   : never;
 
+type NewA<A extends string, Q extends string, M extends string> =
+  [LessThanUnsignedBinary<AShift<A, Q>, M>] extends [Wasm.I32True]
+  ? // A-M is negative, so restore
+    AShift<A, Q>
+
+  : // A-M is positive, so update
+    SubtractBinaryFixed<AShift<A, Q>, M>;
+
+type NewQ<A extends string, Q extends string, M extends string> =
+  Q extends `${string}${infer tail}` // remove first digit to prep for shift left
+  ? [LessThanUnsignedBinary<AShift<A, Q>, M>] extends [Wasm.I32True]
+    ? `${tail}0`
+    : `${tail}1` // replace shifted digit depending on A-M
+  : never
+
 export type _DivideBinaryArbitrary<
   Q extends string, // = dividend
   M extends string, // = divisor
@@ -31,31 +46,15 @@ export type _DivideBinaryArbitrary<
   debugMode extends boolean = false,
 
   Count extends 1[] = [],
-
-  _newA extends string =
-    [LessThanUnsignedBinary<AShift<A, Q>, M>] extends [Wasm.I32True]
-    ? // A-M is negative, so restore
-      AShift<A, Q>
-
-    : // A-M is positive, so update
-      SubtractBinaryFixed<AShift<A, Q>, M>,
-
-  _newQ extends string =
-    Q extends `${string}${infer tail}` // remove first digit to prep for shift left
-    ? [LessThanUnsignedBinary<AShift<A, Q>, M>] extends [Wasm.I32True]
-      ? `${tail}0`
-      : `${tail}1` // replace shifted digit depending on A-M
-    : never
-
 > =
   Count['length'] extends StopAt
     ? debugMode extends false
       ? {
-          quotient: _newQ
+          quotient: NewQ<A, Q, M>
           remainder:
-            _newA extends `1${string}`
+            NewA<A, Q, M> extends `1${string}`
             ? AShift<A, Q> // restore the accumulator because it's negative otherwise
-            : _newA
+            : NewA<A, Q, M>
         }
       : {
           M: M,
@@ -63,14 +62,14 @@ export type _DivideBinaryArbitrary<
           Q: Q,
           _AShift: AShift<A, Q>,
           _AShiftMinusM: SubtractBinaryFixed<AShift<A, Q>, M>,
-          _newA: _newA,
-          _newQ: _newQ,
+          _newA: NewA<A, Q, M>,
+          _newQ: NewQ<A, Q, M>,
         }
 
     : _DivideBinaryArbitrary<
-        _newQ,
+        NewQ<A, Q, M>,
         M,
-        _newA,
+        NewA<A, Q, M>,
         StopAt,
         debugMode,
         [1, ...Count]
