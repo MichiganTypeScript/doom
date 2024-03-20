@@ -70,9 +70,9 @@ export type _DivideBinaryArbitrary<
   M extends string, // divisor
   A extends string,
   DebugStop extends string = never,
-  ShrinkingD extends string = Q,
+  ShrinkingQ extends string = Q,
 > =
-    ShrinkingD extends '' | DebugStop
+    ShrinkingQ extends '' | DebugStop
     ? [DebugStop] extends [never]
       ? {
         quotient: Q
@@ -97,7 +97,7 @@ export type _DivideBinaryArbitrary<
           M,
           NewA,
           DebugStop,
-          ShrinkingD extends `${B}${infer tailBits}` ? tailBits : ''
+          ShrinkingQ extends `${B}${infer tailBits}` ? tailBits : ''
         >
       : never;
 
