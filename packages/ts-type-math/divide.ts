@@ -1,3 +1,4 @@
+import { LessThanUnsignedBinary } from './comparison';
 import { SubtractBinaryFixed } from "./subtract";
 import { Wasm } from "./wasm";
 
@@ -27,34 +28,23 @@ export type _DivideBinaryArbitrary<
   Count extends 1[] = [],
 
   _AShift extends string =
-    `${
-      A extends `${string}${infer tail}` ? tail : never
-    }${
-      // effectively shifting Q once into A
-      Q extends `${infer bit}${string}` ? bit : never
-    }`,
-
-  _AShiftMinusM extends string =
-    SubtractBinaryFixed<
-      _AShift,
-      M
-    >,
+    A extends `${string}${infer tail}`
+    ? Q extends `${infer bit}${string}` ? `${tail}${bit}` : never
+    : never,
 
   _newA extends string =
-    _AShiftMinusM extends `1${string}`
+    LessThanUnsignedBinary<_AShift, M> extends Wasm.I32True
     ? // A-M is negative, so restore
       _AShift
 
     : // A-M is positive, so update
-      _AShiftMinusM,
+      SubtractBinaryFixed<_AShift, M>,
 
   _newQ extends string =
     Q extends `${string}${infer tail}` // remove first digit to prep for shift left
-    ? `${
-        tail
-      }${
-        _AShiftMinusM extends `1${string}` ? '0' : '1' // replace shifted digit depending on A-M
-      }`
+    ? LessThanUnsignedBinary<_AShift, M> extends Wasm.I32True
+      ? `${tail}0`
+      : `${tail}1` // replace shifted digit depending on A-M
     : never
 
 > =
@@ -72,7 +62,7 @@ export type _DivideBinaryArbitrary<
           A: A,
           Q: Q,
           _AShift: _AShift,
-          _AShiftMinusM: _AShiftMinusM,
+          _AShiftMinusM: SubtractBinaryFixed<_AShift, M>,
           _newA: _newA,
           _newQ: _newQ,
         }
