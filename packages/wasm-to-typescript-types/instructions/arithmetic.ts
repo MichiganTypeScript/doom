@@ -143,15 +143,15 @@ export type Divide<
   ? State.Stack.set<
       [
         ...remaining,
-        // instruction['type'] extends 'i32'
-        //   ? instruction['signed'] extends true
-        //     ? Wasm.I32DivS<a, b>
-        //     : Wasm.I32DivU<a, b>
-        //   : instruction['type'] extends 'i64'
-        //     ? instruction['signed'] extends true
-        //       ? Wasm.I64DivS<a, b>
-        //       : Wasm.I64DivU<a, b>
-        //     : never
+        instruction['type'] extends 'i32'
+          ? instruction['signed'] extends true
+            ? Wasm.I32DivS<a, b>
+            : Wasm.I32DivU<a, b>
+          : instruction['type'] extends 'i64'
+            ? instruction['signed'] extends true
+              ? Wasm.I64DivS<a, b>
+              : Wasm.I64DivU<a, b>
+            : never
       ],
 
       state
@@ -171,15 +171,15 @@ export type Remainder<
   ? State.Stack.set<
       [
         ...remaining,
-        // instruction['type'] extends 'i32'
-        //   ? instruction['signed'] extends true
-        //     ? Wasm.I32RemS<a, b>
-        //     : Wasm.I32RemU<a, b>
-        //   : instruction['type'] extends 'i64'
-        //     ? instruction['signed'] extends true
-        //       ? Wasm.I64RemS<a, b>
-        //       : Wasm.I64RemU<a, b>
-        //     : never // should not be reachable
+        instruction['type'] extends 'i32'
+          ? instruction['signed'] extends true
+            ? Wasm.I32RemS<a, b>
+            : Wasm.I32RemU<a, b>
+          : instruction['type'] extends 'i64'
+            ? instruction['signed'] extends true
+              ? Wasm.I64RemS<a, b>
+              : Wasm.I64RemU<a, b>
+            : never
       ],
 
       state
