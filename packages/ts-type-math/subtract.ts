@@ -17,18 +17,14 @@ export type I32SubtractBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  Ensure.I32<
-    SubtractBinaryFixed<a, b>
-  >
+  SubtractBinaryFixed<a, b>
 >
 
 export type I64SubtractBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  Ensure.I64<
-    SubtractBinaryFixed<a, b>
-  >
+  SubtractBinaryFixed<a, b>
 >
 
 

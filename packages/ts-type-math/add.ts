@@ -169,18 +169,14 @@ export type I32AddBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  Ensure.I32<
-    AddBinaryFixed<a, b>
-  >
+  AddBinaryFixed<a, b>
 >
 
 export type I64AddBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  Ensure.I64<
-    AddBinaryFixed<a, b>
-  >
+  AddBinaryFixed<a, b>
 >
 
 export type I32AddDecimal<
