@@ -1,6 +1,5 @@
 import { AddBinaryFixed } from "./add";
 import { ToDecimalSigned, TwosComplementFlip } from "./binary";
-import { IsPositiveSignedBinary } from "./comparison";
 import { Ensure } from "./ensure";
 import { WasmValue } from "./wasm";
 import type { Satisfies } from './utils'
@@ -9,27 +8,10 @@ import type { Satisfies } from './utils'
 export type SubtractBinaryFixed<
   a extends WasmValue, // minuend
   b extends WasmValue  // subtrahend
-> =  Satisfies<WasmValue,
-  IsPositiveSignedBinary<a> extends true
-
-  ? // +a
-    IsPositiveSignedBinary<b> extends true
-
-    ? // +a +b
-      AddBinaryFixed<a, TwosComplementFlip<b>>
-
-    : // +a -b
-      AddBinaryFixed<a, TwosComplementFlip<b>>
-
-  : // -a
-    IsPositiveSignedBinary<b> extends true
-
-    ? // -a +b
-      AddBinaryFixed<a, TwosComplementFlip<b>>
-
-    : // -a -b
-      AddBinaryFixed<a, TwosComplementFlip<b>>
-  >
+> = Satisfies<WasmValue,
+  // to subtract, you add a negative.  sorta makes sense when you say it out loud
+  AddBinaryFixed<a, TwosComplementFlip<b>>
+>
 
 export type I32SubtractBinary<
   a extends WasmValue,
