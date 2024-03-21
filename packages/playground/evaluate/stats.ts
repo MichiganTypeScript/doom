@@ -3,6 +3,7 @@ import { join } from 'path'
 import ts from 'typescript';
 import { mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { incrementBy, shouldTakeABreath, statsDirectory, statsJsonPath, statsPath } from './config';
+import { get } from 'http';
 
 const stackSize = (depth = 1): number => {
   try {
@@ -99,6 +100,7 @@ export const getProgramStats = (program: ts.Program) => ({
 
 export const runStats = ({
   programStats,
+  instructions,
   typeStringLength,
   activeInstruction,
   tGetTypeAtLocation,
@@ -107,6 +109,7 @@ export const runStats = ({
   time,
 }: {
   programStats: ReturnType<typeof getProgramStats>,
+  instructions: number,
   typeStringLength: number,
   activeInstruction: string,
   tGetTypeAtLocation: number,
@@ -123,6 +126,8 @@ export const runStats = ({
   shortStats({
     count: current,
     getTypeAtLocation: tGetTypeAtLocation,
+    instructions,
+    totalTime: time.total,
     instantiations: stats.instantiations,
     typeStringLength,
     activeInstruction,
@@ -296,47 +301,45 @@ export const writeProgramStats = async (programTime: number) => {
   console.log(`wrote program stats to ${statsPath}`);
 }
 
+export const printColumn = (
+  name: string,
+  columnWidth: number,
+  value: number,
+) => {
+  const valueRounded = Math.round(value);
+  const filler = ' '.repeat(Math.max(0, columnWidth - valueRounded.toString().length));
+
+  return [
+    `| ${name}${filler}`,
+    valueRounded, // you see.. when you console.log a number it shows it in orange.  so we're going through some extra trouble to keep it that way
+  ]
+}
+
 export const shortStats = ({
   count,
   getTypeAtLocation,
+  instructions,
+  totalTime,
   instantiations,
   typeStringLength,
   activeInstruction,
 }: {
   count: number,
   getTypeAtLocation: number,
+  instructions: number,
+  totalTime: number,
   instantiations: number,
   typeStringLength: number,
   activeInstruction: string,
 }) => {
-  // you see.. when you console.log a number it shows it in orange.  so we're going through some extra trouble to keep it that way
-  const countRounded = Math.round(count)
-  const countFiller = ' '.repeat(Math.max(0, 6 - countRounded.toString().length));
-
-  const gTALRounded = Math.round(getTypeAtLocation);
-  const gTALFiller = ' '.repeat(Math.max(0, 7 - gTALRounded.toString().length));
-  
-  const instRounded = Math.round(instantiations);
-  const instFiller = ' '.repeat(Math.max(0, 10 - instRounded.toString().length));
-  
-  const throughputRounded = Math.round(instantiations / getTypeAtLocation);
-  const throughputFiller = ' '.repeat(Math.max(0, 7 - throughputRounded.toString().length));
-  
-  const lenRounded = Math.round(typeStringLength);
-  const lenFiller = ' '.repeat(Math.max(0, 7 - lenRounded.toString().length));
-  
   console.log(
-    `| count${countFiller}`,
-    countRounded,
-    `| time (ms)${gTALFiller}`,
-    gTALRounded,
-    `| instantiations${instFiller}`,
-    instRounded,
-    `| instan/ms${throughputFiller}`,
-    throughputRounded,
-    `| length${lenFiller}`,
-    lenRounded,
-    `| ${isPerfBenchmarking ? activeInstruction : ''}`,
+    ...printColumn('count', 6, count),
+    ...printColumn('time (ms)', 7, getTypeAtLocation),
+    ...printColumn('wasm/sec', 5, instructions / (totalTime / 1000)),
+    ...printColumn('instantiations', 10, instantiations),
+    ...printColumn('instan/ms', 7, instantiations / getTypeAtLocation),
+    ...printColumn('length', 10, typeStringLength),
+    `|${isPerfBenchmarking ? ` ${activeInstruction} |` : ''}`,
   );
 }
 

@@ -242,6 +242,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
 
   runStats({
     programStats,
+    instructions: incrementBy,
     typeStringLength,
     activeInstruction,
     tGetTypeAtLocation,
