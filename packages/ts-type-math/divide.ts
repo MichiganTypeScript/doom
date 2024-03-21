@@ -21,22 +21,23 @@ import { Wasm } from "./wasm";
 
 type B = 0 | 1;
 
-type LeftShiftA<A extends string, Q extends string> =
-  A extends `${B}${infer tailBits}`
-  ? Q extends `${infer bit}${string}`
-    ? `${tailBits}${bit}`
-    : never
+type FirstBit<Binary extends string> =
+  Binary extends `${infer Bit}${string}` ? Bit : never;
+
+type LeftShift<Binary extends string, Bit extends string> =
+  Binary extends `${B}${infer tailBits}`
+  ? `${tailBits}${Bit}`
   : never;
 
 type Next<LeftShiftedA extends string, Q extends string, M extends string> =
   LessThanUnsignedBinary<LeftShiftedA, M> extends Wasm.I32True
     ? [ // restore
       LeftShiftedA,
-      Q extends `${B}${infer tailBits}` ? `${tailBits}0` : never,
+      LeftShift<Q, '0'>,
     ]
     : [ // update
       SubtractBinaryFixed<LeftShiftedA, M>,
-      Q extends `${B}${infer tailBits}` ? `${tailBits}1` : never,
+      LeftShift<Q, '1'>,
     ];
 
 /*
@@ -78,20 +79,20 @@ export type _DivideBinaryArbitrary<
         quotient: Q
         remainder: A
       }
-      : Next<LeftShiftA<A, Q>, Q, M> extends [infer NewA extends string, infer NewQ extends string]
+      : Next<LeftShift<A, FirstBit<Q>>, Q, M> extends [infer NewA extends string, infer NewQ extends string]
         ? {
           quotient: Q
           remainder: A,
           M: M,
           A: A,
           Q: Q,
-          _LeftShiftA: LeftShiftA<A, Q>,
-          _LeftShiftAMinusM: SubtractBinaryFixed<LeftShiftA<A, Q>, M>,
+          _LeftShiftedA: LeftShift<A, FirstBit<Q>>,
+          _LeftShiftedAMinusM: SubtractBinaryFixed<LeftShift<A, FirstBit<Q>>, M>,
           _newQ: NewQ,
           _newD: NewA
         }
         : never
-    : Next<LeftShiftA<A, Q>, Q, M> extends [infer NewA extends string, infer NewQ extends string]
+    : Next<LeftShift<A, FirstBit<Q>>, Q, M> extends [infer NewA extends string, infer NewQ extends string]
       ? _DivideBinaryArbitrary<
           NewQ,
           M,
