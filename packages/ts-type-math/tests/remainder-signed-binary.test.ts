@@ -4,24 +4,24 @@ import { expect, test } from 'vitest';
 import { twosComplementToNumber, numberToTwosComplement, arithmetic } from "../test-utils";
 import { DivideSignedBinary32 } from "../divide";
 
-test.each(t)('division, yo.  check it. (%#)', ({ a, a_binary, b, b_binary, div_u, rem_s_binary }) => {
+test.each(t)('(%#)', ({ a, a_binary, b, b_binary, rem_s, rem_s_binary }) => {
   expect(a_binary).toEqual(numberToTwosComplement(a));
   expect(a).toEqual(twosComplementToNumber(a_binary));
   expect(b_binary).toEqual(numberToTwosComplement(b));
   expect(b).toEqual(twosComplementToNumber(b_binary));
-  expect(rem_s_binary).toEqual(numberToTwosComplement(div_u));
-  expect(div_u).toEqual(twosComplementToNumber(rem_s_binary));
+  expect(rem_s_binary).toEqual(numberToTwosComplement(rem_s));
+  expect(rem_s).toEqual(twosComplementToNumber(rem_s_binary));
 
-  const actual = arithmetic.div_u(a, b)
-  expect(actual).toBe(div_u);
+  const actual = arithmetic.rem_s(a, b)
+  expect(actual).toBe(rem_s);
 });
 
 type i = 32
-type a = T[i]['a_binary']               // =>
-type b = T[i]['b_binary']               // =>
-type e = T[i]['rem_s_binary']           // =>
+type a = T[i]['a_binary']     // =>
+type b = T[i]['b_binary']     // =>
 type x1 = DivideSignedBinary32<a, b>
-type x = x1['remainder']                // =>
+type e = T[i]['rem_s_binary'] // =>
+type x = x1['remainder']      // =>
 
 type Case00 = Expect<Equal<DivideSignedBinary32<T[ 0]['a_binary'], T[ 0]['b_binary']>['remainder'], T[ 0]['rem_s_binary']>>
 type Case01 = Expect<Equal<DivideSignedBinary32<T[ 1]['a_binary'], T[ 1]['b_binary']>['remainder'], T[ 1]['rem_s_binary']>>

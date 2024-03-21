@@ -4,7 +4,7 @@ import { expect, test } from 'vitest';
 import { twosComplementToNumber, numberToTwosComplement, arithmetic } from "../test-utils";
 import { DivideSignedBinary32 } from "../divide";
 
-test.each(t)('division, yo.  check it. (%#)', ({ a, a_binary, b, b_binary, div_u, div_s_binary }) => {
+test.each(t)('(%#)', ({ a, a_binary, b, b_binary, div_u, div_s_binary }) => {
   expect(a_binary).toEqual(numberToTwosComplement(a));
   expect(a).toEqual(twosComplementToNumber(a_binary));
   expect(b_binary).toEqual(numberToTwosComplement(b));
