@@ -4,16 +4,16 @@ import { expect, test } from 'vitest';
 import { twosComplementToNumber, numberToTwosComplement, arithmetic } from "../test-utils";
 import { DivideSignedBinary32 } from "../divide";
 
-test.each(t)('(%#)', ({ a, a_binary, b, b_binary, div_u, div_s_binary }) => {
+test.each(t)('(%#)', ({ a, a_binary, b, b_binary, div_s, div_s_binary }) => {
   expect(a_binary).toEqual(numberToTwosComplement(a));
   expect(a).toEqual(twosComplementToNumber(a_binary));
   expect(b_binary).toEqual(numberToTwosComplement(b));
   expect(b).toEqual(twosComplementToNumber(b_binary));
-  expect(div_s_binary).toEqual(numberToTwosComplement(div_u));
-  expect(div_u).toEqual(twosComplementToNumber(div_s_binary));
+  expect(div_s_binary).toEqual(numberToTwosComplement(div_s));
+  expect(div_s).toEqual(twosComplementToNumber(div_s_binary));
 
-  const actual = arithmetic.div_u(a, b)
-  expect(actual).toBe(div_u);
+  const actual = arithmetic.div_s(a, b)
+  expect(actual).toBe(div_s);
 });
 
 type i = 33
