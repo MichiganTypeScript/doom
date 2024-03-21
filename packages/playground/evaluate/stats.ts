@@ -196,7 +196,7 @@ const programStats = async ({
   let totals = {
     ...getTotal(['time', 'getTypeAtLocation'], runs),
     ...getTotal(['time', 'typeToString'], runs),
-    ...getTotal(['time', 'totalTime'], runs),
+    ...getTotal(['time', 'total'], runs),
     ...getTotal(['stats', 'instantiations'], runs),
     ...getTotal(['stats', 'types'], runs),
     ...getTotal(['stats', 'symbols'], runs),
@@ -332,7 +332,7 @@ export const shortStats = ({
     gTALRounded,
     `| instantiations${instFiller}`,
     instRounded,
-    `| inst/ms${throughputFiller}`,
+    `| instan/ms${throughputFiller}`,
     throughputRounded,
     `| length${lenFiller}`,
     lenRounded,

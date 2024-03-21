@@ -3,7 +3,7 @@ import tsvfs from '@typescript/vfs';
 import ts from 'typescript';
 import { writeFile, readFile } from 'fs/promises'
 import { statSync, mkdirSync, readdirSync, unlinkSync } from 'fs'
-import { Rome, Distribution } from '@biomejs/js-api';
+import { Rome, Distribution, Diagnostic } from '@biomejs/js-api';
 import { clearStats, encourage, getProgramStats, runStats, writeProgramStats } from './stats';
 import {
   bootstrapFilePath,
@@ -214,12 +214,16 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   }
 
   const startFormatter = performance.now();
-  const {
-    content: formattedFile,
-    diagnostics: formatterDiagnositcs
-  } = rome.formatContent(unformattedFile, {
-    filePath: evaluationFilePath,
-  });
+  let formattedFile = unformattedFile;
+  let formatterDiagnositcs: Diagnostic[] = [];
+  if (!process.argv.includes('--skip-formatter')) {
+    ({
+      content: formattedFile,
+      diagnostics: formatterDiagnositcs
+    } = rome.formatContent(unformattedFile, {
+      filePath: evaluationFilePath,
+    }));
+  }
   const endFormatter = performance.now();
 
   if (formatterDiagnositcs.length) {
@@ -253,7 +257,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
       typeToString: endTypeString - startTypeString,
       formatter: endFormatter - startFormatter,
       writeResults: endWriteResults - startWriteResults,
-      total: endWriteResults - startCreateFSBackedSystem,
+      total: endWriteResults - startGetProgram,
     },
   });
 

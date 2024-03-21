@@ -32,7 +32,7 @@
     "./packages/playground/conway-stateless/*", // this can always be off because the file has no dependencies
     "./packages/playground/conway-stateful/*", // this can always be off because the file has no dependencies
     "./packages/playground/evaluate/results/results-*",
-    "./packages/playground/evaluate/playground.ts",
+    // "./packages/playground/evaluate/playground.ts",
     //
     // "./packages/conformance-tests/from-c/*",
     // "./packages/conformance-tests/from-wat/*",
