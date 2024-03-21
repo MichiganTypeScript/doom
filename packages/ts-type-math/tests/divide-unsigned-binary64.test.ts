@@ -16,12 +16,12 @@ test.each(t)('(%#)', ({ a, a_binary64, b, b_binary64, div_u, div_u_binary64 }) =
   expect(actual).toBe(div_u);
 });
 
-type i = 3
+type i = 33
 type a = T[i]['a_binary64']     // =>
 type b = T[i]['b_binary64']     // =>
 type x1 = DivideSignedBinary64<a, b>
 type e = T[i]['div_u_binary64'] // =>
-type x = x1['quotient']        // =>
+type x = x1['quotient']         // =>
 
 type Case00  = Expect<Equal<DivideSignedBinary64<T[  0]['a_binary64'], T[  0]['b_binary64']>['quotient'], T[  0]['div_u_binary64']>>
 type Case01  = Expect<Equal<DivideSignedBinary64<T[  1]['a_binary64'], T[  1]['b_binary64']>['quotient'], T[  1]['div_u_binary64']>>
