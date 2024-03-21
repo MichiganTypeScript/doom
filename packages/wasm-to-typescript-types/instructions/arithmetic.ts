@@ -137,8 +137,8 @@ export type Divide<
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
     ...infer remaining extends WasmValue[],
-    infer b extends WasmValue,
     infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
@@ -165,8 +165,8 @@ export type Remainder<
 > = Satisfies<ProgramState,
   State.Stack.get<state> extends [
     ...infer remaining extends WasmValue[],
-    infer b extends WasmValue,
     infer a extends WasmValue,
+    infer b extends WasmValue,
   ]
   ? State.Stack.set<
       [
