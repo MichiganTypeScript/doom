@@ -107,14 +107,8 @@ type ToPositiveBinary<N> =
 type ToNegativeBinary<N> =
   N extends `0${string}` ? TwosComplementFlip<N> : N;
 
-type ToNegativeQuotient<O extends object> =
-  { [K in keyof O]: K extends 'quotient' ? ToNegativeBinary<O[K]> : O[K] };
-
-type ToNegativeRemainder<O extends object> =
-  { [K in keyof O]: K extends 'remainder' ? ToNegativeBinary<O[K]> : O[K] };
-
-type ToNegativeQuotientAndRemainder<O extends object> =
-  { [K in keyof O]: K extends 'quotient' | 'remainder' ? ToNegativeBinary<O[K]> : O[K] };
+type ToNegativeProperties<O extends object, P extends keyof O> =
+  { [K in keyof O]: K extends P ? ToNegativeBinary<O[K]> : O[K] };
 
 export type DivideUnsignedBinary32<
   dividend extends string,
@@ -136,24 +130,24 @@ export type DivideSignedBinary32<
 > =
   IsNegativeBinary<dividend> extends true
   ? IsNegativeBinary<divisor> extends true
-    ? ToNegativeRemainder<
+    ? ToNegativeProperties<
         DivideUnsignedBinary32<
           ToPositiveBinary<dividend>,
           ToPositiveBinary<divisor>
-        >
+        >, 'remainder'
       >
-    : ToNegativeQuotientAndRemainder<
+    : ToNegativeProperties<
         DivideUnsignedBinary32<
           ToPositiveBinary<dividend>,
           divisor
-        >
+        >, 'quotient' | 'remainder'
       >
   : IsNegativeBinary<divisor> extends true
-    ? ToNegativeQuotient<
+    ? ToNegativeProperties<
         DivideUnsignedBinary32<
           dividend,
           ToPositiveBinary<divisor>
-        >
+        >, 'quotient'
       >
     : DivideUnsignedBinary32<
         dividend,
@@ -181,24 +175,24 @@ export type DivideSignedBinary64<
 > =
   IsNegativeBinary<dividend> extends true
   ? IsNegativeBinary<divisor> extends true
-    ? ToNegativeRemainder<
+    ? ToNegativeProperties<
         DivideUnsignedBinary64<
           ToPositiveBinary<dividend>,
           ToPositiveBinary<divisor>
-        >
+        >, 'remainder'
       >
-    : ToNegativeQuotientAndRemainder<
+    : ToNegativeProperties<
         DivideUnsignedBinary64<
           ToPositiveBinary<dividend>,
           divisor
-        >
+        >, 'quotient' | 'remainder'
       >
   : IsNegativeBinary<divisor> extends true
-    ? ToNegativeQuotient<
+    ? ToNegativeProperties<
         DivideUnsignedBinary64<
           dividend,
           ToPositiveBinary<divisor>
-        >
+        >, 'quotient'
       >
     : DivideUnsignedBinary64<
         dividend,
