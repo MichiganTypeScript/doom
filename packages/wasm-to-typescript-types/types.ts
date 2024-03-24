@@ -67,7 +67,7 @@ export type ProgramState = {
   memory: MemoryByAddress;
 
   /** used for dynamic dispatch: maps directly to funcs */
-  indirect: string[];
+  indirect: MemoryAddress[];
 
   memorySize: WasmValue;
 

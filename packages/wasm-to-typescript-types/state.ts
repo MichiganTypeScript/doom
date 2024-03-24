@@ -8,12 +8,17 @@ import type {
   GlobalsById,
   LocalsById,
   MemoryAddress,
-  MemoryByAddress,
   Param,
   ProgramState,
 } from "./types"
 import * as TypeMath from "ts-type-math";
 import { WasmValue, WasmType, Convert, Wasm, evaluate, Satisfies } from 'ts-type-math';
+
+/** update Source with Additional */
+type Patch<Source, Additional> = evaluate<
+  & Omit<Source, keyof Additional>
+  & Additional
+>;
 
 export namespace State {
   export type error<
@@ -318,9 +323,9 @@ export namespace State {
             instructions: state['instructions'];
 
             activeLocals:
-              evaluate<
-                & Omit<get<state>, id>
-                & { [k in id]: value }
+              Patch<
+                get<state>,
+                { [k in id]: value }
               >;
 
             activeFuncId: state['activeFuncId'];
@@ -372,9 +377,9 @@ export namespace State {
           state extends ProgramState
         > = Satisfies<ProgramState,
           set<
-            evaluate<
-              & Omit<get<state>, id>
-              & { [k in id]: instructions }
+            Patch<
+              get<state>,
+              { [k in id]: instructions }
             >,
             state
           >
@@ -441,9 +446,9 @@ export namespace State {
         activeBranches: state['activeBranches'];
 
         globals:
-          evaluate<
-            & Omit<get<state>, keyof globals>
-            & globals
+          Patch<
+            get<state>,
+            globals
           >;
 
         memory: state['memory'];
@@ -474,10 +479,7 @@ export namespace State {
       ? CollectBytes<
           I32AddBinary<address, Wasm.I32True>,
           tail,
-          evaluate<
-            & _Acc
-            & { [k in address]: head }
-          >
+          _Acc & { [k in address]: head } // note: this doesn't need Patch because we are building it up from scratch
         >
       : _Acc
     >
@@ -504,9 +506,9 @@ export namespace State {
         globals: state['globals'];
 
         memory:
-          evaluate<
-            & Omit<get<state>, keyof _update>
-            & _update
+          Patch<
+            get<state>,
+            _update
           >;
 
         indirect: state['indirect'];
