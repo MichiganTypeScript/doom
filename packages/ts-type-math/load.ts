@@ -2,13 +2,9 @@ import { AddBinaryFixed } from "./add";
 import { WasmValue, Wasm } from "./wasm";
 import type { Satisfies } from './utils'
 
-export namespace Load {
-  /**
-   * in WebAssembly, linear memory is "zeroed out" when the program initializes, which means it's actually totally fine to read memory beyond what's been written.
-   * all that happens is you get zero bytes.  check out the single-i32store8.wat for a simple example.
-   */
-  type ZeroedByte = '00000000';
+type FalseByte = '00000000';
 
+export namespace Load {
   /**
    * this function will use a fallback if the resulting value is equal to any or unknown
    * 
@@ -24,7 +20,7 @@ export namespace Load {
 
     _b0 extends string = memory[address]
   > =
-    `${IsUnknownOrAnyFallback<_b0, ZeroedByte>}`
+    `${IsUnknownOrAnyFallback<_b0, FalseByte>}`
   
   export type Read2Bytes<
       /** memory object to read from */
@@ -38,9 +34,9 @@ export namespace Load {
       _b0 extends string = memory[address],
     > =
       `${
-        IsUnknownOrAnyFallback<_b1, ZeroedByte>
+        IsUnknownOrAnyFallback<_b1, FalseByte>
       }${
-        IsUnknownOrAnyFallback<_b0, ZeroedByte>
+        IsUnknownOrAnyFallback<_b0, FalseByte>
       }`
   
   export type Read4Bytes<
@@ -56,13 +52,13 @@ export namespace Load {
     _b0 extends string = memory[address],
   > =
     `${
-      IsUnknownOrAnyFallback<_b3, ZeroedByte>
+      IsUnknownOrAnyFallback<_b3, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b2, ZeroedByte>
+      IsUnknownOrAnyFallback<_b2, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b1, ZeroedByte>
+      IsUnknownOrAnyFallback<_b1, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b0, ZeroedByte>
+      IsUnknownOrAnyFallback<_b0, FalseByte>
     }`
   
   export type Read8Bytes<
@@ -82,21 +78,21 @@ export namespace Load {
     _b0 extends string = memory[address],
   > =
     `${
-      IsUnknownOrAnyFallback<_b7, ZeroedByte>
+      IsUnknownOrAnyFallback<_b7, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b6, ZeroedByte>
+      IsUnknownOrAnyFallback<_b6, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b5, ZeroedByte>
+      IsUnknownOrAnyFallback<_b5, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b4, ZeroedByte>
+      IsUnknownOrAnyFallback<_b4, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b3, ZeroedByte>
+      IsUnknownOrAnyFallback<_b3, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b2, ZeroedByte>
+      IsUnknownOrAnyFallback<_b2, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b1, ZeroedByte>
+      IsUnknownOrAnyFallback<_b1, FalseByte>
     }${
-      IsUnknownOrAnyFallback<_b0, ZeroedByte>
+      IsUnknownOrAnyFallback<_b0, FalseByte>
     }`
 
 

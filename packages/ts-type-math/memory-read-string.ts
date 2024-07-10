@@ -3,16 +3,13 @@ import type { Convert } from "./conversion"
 import { Wasm, WasmValue } from "./wasm";
 import type { Satisfies } from './utils'
 
-export type NullTerminatorBinary = "00000000";
-
 export type ReadUntilNullTerminator<
   memory extends Record<WasmValue, Wasm.Byte>,
 
   address extends WasmValue,
 > =
-  memory[address] extends NullTerminatorBinary
-  ? ''
-  : `${
+  address extends keyof memory // POTENTIAL_OPTIMIZATION: `unknown extends memory[address]`
+  ? `${
       memory[address] extends U8Binary
       ? Convert.U8Binary.ToAscii<memory[address]>
       : ''
@@ -22,6 +19,7 @@ export type ReadUntilNullTerminator<
         Wasm.I32Add<Wasm.I32True, address>
       >
     }`
+  : '' // we've reached the end of the string (presumably)
 
 export type ReadStringFromMemory<
   state extends {
@@ -34,5 +32,6 @@ export type ReadStringFromMemory<
   ReadUntilNullTerminator<
     state['memory'],
     state['stack'][0] // the pointer to the string in memory
+    // Wasm.I32Add<Wasm.I32True, state['stack'][0]> // the pointer to the string in memory
   >
 >

@@ -25,6 +25,11 @@ export type WasmValue = string;
 export namespace Wasm {
   /** 8 bits string (in binary) */
   export type Byte = string;
+  /**
+   * in WebAssembly, linear memory is "zeroed out" when the program initializes, which means it's actually totally fine to read memory beyond what's been written.
+   * all that happens is you get zero bytes.  check out the single-i32store8.wat for a simple example.
+   */
+  export type I8False = '00000000';
   export type I32True  = '00000000000000000000000000000001'
   export type I32False = '00000000000000000000000000000000'
   export type I64True  = '0000000000000000000000000000000000000000000000000000000000000001'

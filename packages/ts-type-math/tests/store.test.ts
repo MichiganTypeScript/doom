@@ -12,7 +12,7 @@ type atobtoa = U8BinaryToAscii<AsciiToU8Binary<"from ascii to binary and back">>
 //   ^?
 
 type p1024 = '00000000000000000000010000000000';
-type memory = StoreString<p1024, "Let's hope this works..\u0000">;
+type memory = StoreString<p1024, "Let's hope this works..">;
 type read = ReadStringFromMemory<{ memory: memory, stack: [p1024] }>;
 
 type encode = [
@@ -39,7 +39,6 @@ type encode = [
   Expect<Equal<memory['00000000000000000000010000010100'], '01110011'>>,
   Expect<Equal<memory['00000000000000000000010000010101'], '00101110'>>,
   Expect<Equal<memory['00000000000000000000010000010110'], '00101110'>>,
-  Expect<Equal<memory['00000000000000000000010000010111'], '00000000'>>,
 
   Expect<Equal<read, "Let's hope this works..">>,
 ]

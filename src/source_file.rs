@@ -71,6 +71,7 @@ impl ToString for SourceFile {
                     current_index += 1;
                     result
                 })
+                .filter(|line| !line.contains(": '00000000'"))
                 .collect::<Vec<String>>()
                 .join("\n");
 
