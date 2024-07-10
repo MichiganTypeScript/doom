@@ -8,7 +8,7 @@ type $entry = Satisfies<Func, {
     locals: [];
     instructions: [
       { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Extend', signed: false },
+      { kind: 'Extend', signed: false, from: 32 },
     ];
 }>
 

@@ -121,6 +121,18 @@ fn handle_module_field_memory(source: &SourceFile, memory: &Memory) {
                 source.set_memory(size, max);
             }
         },
+        MemoryKind::Import { ty, .. } => match ty {
+            MemoryType::B32 { limits, shared: _ } => {
+                let size = limits.min;
+                let max = limits.max.unwrap_or(size).into();
+                source.set_memory(size.into(), max);
+            }
+            MemoryType::B64 { limits, shared: _ } => {
+                let size = limits.min;
+                let max = limits.max.unwrap_or(size);
+                source.set_memory(size, max);
+            }
+        },
         _ => {
             panic!("only Normal MemoryKind supported");
         }

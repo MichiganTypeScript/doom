@@ -8,17 +8,52 @@ mod stats;
 mod utils;
 mod wat_to_dts;
 
-use std::{fs, path::Path};
+use std::{
+    fs::{self, DirEntry},
+    path::{Path, PathBuf},
+    process::Command,
+};
 use wat_to_dts::wat_to_dts;
 
+pub fn generate_wat_from_wasm(dir_entry: &DirEntry) {
+    let wasm_input = dir_entry.path().with_extension("wasm");
+
+    // println!("generating wat from wasm: {:?}", &wasm_input);
+
+    // convert the .wat file to a .wasm file (also validates the .wat)
+    let output = Command::new("wasm2wat")
+        .arg(&wasm_input)
+        .arg("--enable-code-metadata")
+        .arg("--inline-exports")
+        .arg("--inline-imports")
+        .arg("--disable-reference-types")
+        .arg("--generate-names")
+        .arg("--fold-exprs")
+        .args(["--output", &wasm_input.with_extension("wat").to_string_lossy()]) // output target
+        .output()
+        .expect("failed to execute wat2wasm");
+
+    if !output.status.success() {
+        // Print the standard error output
+        let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
+        println!("emcc failed for {:?}: {}", wasm_input.file_name(), stderr);
+        panic!("emcc failed");
+    }
+}
+
 fn main() {
-    if "".len() > 1 {
+    if "f".len() == 1 {
         let current_dir = std::env::current_dir().unwrap();
-        let going_to = Path::new("packages/playground/doom/doom.wat");
-        let wat_path = current_dir.join(going_to);
+        let doom_dir = "packages/playground/doom-helion/";
+        // let d = read_dir(doom_dir).unwrap().flatten().next().unwrap();
+        // generate_wat_from_wasm(&d);
+        let wat_file = Path::new(&doom_dir).join("doom.wat");
+        let wat_path = current_dir.join(wat_file);
         let wat = fs::read_to_string(wat_path).unwrap();
-        let output = wat_to_dts(wat, "packages/playground/doom/doom.dump").to_string();
-        fs::write("packages/playground/doom/doom.ts", output).unwrap();
+        let output = wat_to_dts(wat, PathBuf::from(doom_dir).join("doom.dump").to_str().unwrap()).to_string();
+        fs::write(PathBuf::from(doom_dir).join("doom.ts"), output).unwrap();
+        println!("I did the needful, boss.");
+        return;
     }
     match metering::meter() {
         Ok(_) => {}
@@ -192,32 +227,6 @@ mod tests {
             // Print the standard error output
             let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
             println!("emcc failed for {:?}: {}", c_input.path().file_name(), stderr);
-            panic!("emcc failed");
-        }
-    }
-
-    fn generate_wat_from_wasm(c_input: &DirEntry) {
-        let wasm_input = c_input.path().with_extension("wasm");
-
-        // println!("generating wat from wasm: {:?}", &wasm_input);
-
-        // convert the .wat file to a .wasm file (also validates the .wat)
-        let output = Command::new("wasm2wat")
-            .arg(&wasm_input)
-            .arg("--enable-code-metadata")
-            .arg("--inline-exports")
-            .arg("--inline-imports")
-            .arg("--disable-reference-types")
-            .arg("--generate-names")
-            .arg("--fold-exprs")
-            .args(["--output", &wasm_input.with_extension("wat").to_string_lossy()]) // output target
-            .output()
-            .expect("failed to execute wat2wasm");
-
-        if !output.status.success() {
-            // Print the standard error output
-            let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
-            println!("emcc failed for {:?}: {}", wasm_input.file_name(), stderr);
             panic!("emcc failed");
         }
     }

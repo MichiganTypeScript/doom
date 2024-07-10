@@ -84,7 +84,7 @@ export type Add<
       ],
       state
     >
-  :  State.error<"stack exhausted", instruction, state>
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type Subtract<

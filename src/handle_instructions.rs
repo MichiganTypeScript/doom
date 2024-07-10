@@ -222,11 +222,20 @@ fn handle_instruction(
         Instruction::I32WrapI64 => {
             vec![(*indent, format!("{{ kind: 'Wrap' }},"))]
         }
+        Instruction::I32Extend8S => {
+            vec![(*indent, format!("{{ kind: 'Extend', signed: true, from: 8 }},"))]
+        }
+        Instruction::I32Extend16S => {
+            vec![(*indent, format!("{{ kind: 'Extend', signed: true, from: 16 }},"))]
+        }
         Instruction::I64ExtendI32S => {
-            vec![(*indent, format!("{{ kind: 'Extend', signed: true }},"))]
+            vec![(*indent, format!("{{ kind: 'Extend', signed: true, from: 32 }},"))]
         }
         Instruction::I64ExtendI32U => {
-            vec![(*indent, format!("{{ kind: 'Extend', signed: false }},"))]
+            vec![(*indent, format!("{{ kind: 'Extend', signed: false, from: 32 }},"))]
+        }
+        Instruction::I64Extend32S => {
+            vec![(*indent, format!("{{ kind: 'ExtendSign', from: 32 }},"))]
         }
         Instruction::F32ReinterpretI32 | Instruction::I32ReinterpretF32 | Instruction::F64ReinterpretI64 | Instruction::I64ReinterpretF64 => {
             vec![(*indent, format!("{{ kind: 'Reinterpret' }},"))]
@@ -382,7 +391,9 @@ fn handle_instruction(
         /**************
          * Memory Instructions
          **************/
-        // Grow
+        Instruction::MemoryGrow(_) => {
+            vec![(*indent, format!("{{ kind: 'MemoryGrow' }},"))]
+        }
         Instruction::MemorySize(_) => {
             vec![(*indent, format!("{{ kind: 'MemorySize' }},"))]
         }
