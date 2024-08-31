@@ -350,8 +350,6 @@ const clearResults = () => {
     return;
   }
 
-  clearStats();
-
   // delete the results directory and recreate it
   try {
     statSync(resultsDirectory);
@@ -365,6 +363,8 @@ const clearResults = () => {
       mkdirSync(resultsDirectory);
     }
   }
+
+  clearStats();
 }
 
 const rome = await Rome.create({

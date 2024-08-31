@@ -7,8 +7,10 @@ export const targetTypeAlias = 'Evaluate';
 export const incrementBy = 50;
 export const readStringFromMemory = true;
 
-/** controls how often the program prints to file.  set to 0 for it to always print */
-export const comeUpForAirEvery = 500;
+/**
+ * controls how often the program prints to file.
+ * set to 0 for it to always print
+ */
 
 export const initialConditions = {
   current: 0,

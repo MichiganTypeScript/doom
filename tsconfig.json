@@ -31,7 +31,8 @@
     "./packages/playground/add/*",
     "./packages/playground/conway-stateless/*", // this can always be off because the file has no dependencies
     "./packages/playground/conway-stateful/*", // this can always be off because the file has no dependencies
-    "./packages/playground/evaluate/results/results-*",
+    "./packages/playground/evaluate/results/result*",
+    "./packages/playground/evaluate/results/bootstrap*",
     "./packages/playground/evaluate/playground.ts",
     //
     // "./packages/conformance-tests/from-c/*",

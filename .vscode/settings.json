@@ -12,5 +12,6 @@
   "zenMode.showTabs": "none",
   "files.associations": {
     "doom dot ts": "plaintext"
-  }
+  },
+  "biome.enabled": false,
 }
