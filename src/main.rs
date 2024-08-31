@@ -63,9 +63,9 @@ pub fn should_run(dir_entry: &DirEntry) -> bool {
     true
 }
 
-pub fn ensure_version(cmd: &str, expected: &str) {
+pub fn ensure_version(cmd: &str, arg: &str, expected: &str) {
     let output = Command::new(cmd)
-        .arg("--version")
+        .arg(arg)
         .output()
         .unwrap_or_else(|_| panic!("failed to execute version command for {}", &cmd));
     let actual = std::str::from_utf8(&output.stdout).unwrap_or_else(|_| panic!("Error decoding stdout"));
@@ -79,7 +79,7 @@ pub fn generate_wat_from_wasm(dir_entry: &DirEntry) {
     // println!("generating wat from wasm: {:?}", &wasm_input);
 
     let cmd = "wasm2wat";
-    ensure_version(cmd, "1.0.32");
+    ensure_version(cmd, "--version", "1.0.34");
 
     // convert the .wat file to a .wasm file (also validates the .wat)
     let output = Command::new(cmd)
@@ -165,7 +165,7 @@ pub fn generate_wasm_from_wat(wat_input: &DirEntry) {
     // println!("generating wasm from wat: {:?}", &wat_input.path());
 
     let cmd = "wat2wasm";
-    ensure_version(cmd, "1.0.32");
+    ensure_version(cmd, "--version", "1.0.34");
 
     // convert the .wat file to a .wasm file (also validates the .wat)
     let output = Command::new(cmd)
@@ -201,7 +201,9 @@ pub fn generate_wasm_from_c(c_input: &DirEntry) {
     // println!("generating wasm from c: {:?}", &c_input.path());
 
     let cmd = "emcc";
-    ensure_version(cmd, "3.1.6");
+    ensure_version(cmd, "-v", "3.1.6");
+    // ensure_version(cmd, "-v", "clang version 14.0.6-1");
+    ensure_version(cmd, "-v", "Target: wasm-unknown-emscripten");
 
     // convert the .wat file to a .wasm file (also validates the .wat)
     let output = Command::new(cmd)
@@ -249,30 +251,37 @@ fn main() {
 mod tests {
     use super::*;
 
+    /// Here's how this works.
+    ///
+    /// We can take two inputs:
+    /// - one is a .wat file from the `test/from-wat` directory
+    /// - the other is a .c file from the `test/from-c` directory.
+    ///
+    /// If it starts as a C file, we generate a .wat from that.
+    ///
+    /// In both cases we generate `.wasm` files.
+    ///
+    /// The `.dump` file is a debug representation of the `.wat` file's parsed contents.
+    ///
+    /// We then generate a `.ts` file from our program.
+    ///
+    /// #### from-wat
+    /// 1. read .wat
+    /// 2. generate and write .wasm from .wat with `wat2wasm`
+    ///
+    /// #### from-c
+    /// 1. read .c files
+    /// 2. generate and write .wasm from the .c files with `emcc` (which uses `clang`)
+    /// 3. generate and write .wat with `wasm2wat`
+    ///
+    /// #### point of convergence
+    /// 1. parse .wat and write .dump
+    /// 2. generate and write .ts file
+    ///
+    /// #### runtime tests
+    /// runtime tests are done from JavaScript, so they need to be run with `pnpm test` in a separate step
     #[test]
     fn run_conformance_tests() {
-        /*
-
-        Here's how this works.  We can take two inputs.  One is a .wat file from the `test/from-wat` directory, and the other is a .c file from the `test/from-c` directory.  If it starts as a C file, we generate a .wat from that.  In both cases we generate `.wasm` files.  The `.dump` file is a debug representation of the `.wat` file's parsed contents.  We then generate a `.ts` file from our program.
-
-        ## from-wat
-            1. read .wat
-            2. generate and write .wasm from .wat with wat2wasm
-
-        ## from-c
-            1. read .c
-            2. generate and write .wasm from the .c with emcc
-            3. generate and write .wat with wasm2wat
-
-        ## point of convergence
-            - parse .wat and write .dump
-            - generate and write .ts file
-
-        ## runtime tests
-            runtime tests are done from javascript, so they need to be run with `pnpm test` in a separate step
-
-        */
-
         let from_wat = get_wat_files();
         from_wat.iter().for_each(generate_wasm_from_wat);
 
