@@ -9,19 +9,80 @@ mod utils;
 mod wat_to_dts;
 
 use std::{
+    ffi::OsStr,
     fs::{self, DirEntry},
     path::{Path, PathBuf},
     process::Command,
 };
+
+use self::source_file::SourceFile;
 use wat_to_dts::wat_to_dts;
+
+pub fn skip_list() -> Vec<&'static str> {
+    vec![
+        // "conway", //
+    ]
+}
+
+pub fn focus_list() -> Vec<&'static str> {
+    vec![
+        // "add-middle", //
+                      // "if-else-nested",
+                      // "if-else",
+    ]
+}
+
+/// skip the file if anything in the skip list matches the given file name
+pub fn should_skip(file_name: &str) -> bool {
+    skip_list().iter().any(|&skip| file_name == skip)
+}
+
+/// the file is focused if anything in the focus list matches the given file name
+pub fn is_focused(file_name: &str) -> bool {
+    focus_list().iter().any(|&focus| file_name == focus)
+}
+
+/// this function consults skip_list and focus_list to determine if a test should be run
+pub fn should_run(dir_entry: &DirEntry) -> bool {
+    let path = dir_entry.path().with_extension("");
+    let file_name = path.file_name().and_then(OsStr::to_str).expect("invalid file name");
+
+    // focusing takes precedence over skipping
+    if is_focused(file_name) {
+        return true;
+    }
+
+    if !focus_list().is_empty() {
+        return false;
+    }
+
+    if should_skip(file_name) {
+        return false;
+    }
+
+    true
+}
+
+pub fn ensure_version(cmd: &str, expected: &str) {
+    let output = Command::new(cmd)
+        .arg("--version")
+        .output()
+        .unwrap_or_else(|_| panic!("failed to execute version command for {}", &cmd));
+    let actual = std::str::from_utf8(&output.stdout).unwrap_or_else(|_| panic!("Error decoding stdout"));
+    let error = format!("expected {} to be version {}, got {}", cmd, expected, actual);
+    assert!(actual.contains(expected), "{error}");
+}
 
 pub fn generate_wat_from_wasm(dir_entry: &DirEntry) {
     let wasm_input = dir_entry.path().with_extension("wasm");
 
     // println!("generating wat from wasm: {:?}", &wasm_input);
 
+    let cmd = "wasm2wat";
+    ensure_version(cmd, "1.0.32");
+
     // convert the .wat file to a .wasm file (also validates the .wat)
-    let output = Command::new("wasm2wat")
+    let output = Command::new(cmd)
         .arg(&wasm_input)
         .arg("--enable-code-metadata")
         .arg("--inline-exports")
@@ -31,13 +92,133 @@ pub fn generate_wat_from_wasm(dir_entry: &DirEntry) {
         .arg("--fold-exprs")
         .args(["--output", &wasm_input.with_extension("wat").to_string_lossy()]) // output target
         .output()
-        .expect("failed to execute wat2wasm");
+        .unwrap_or_else(|_| panic!("failed to execute {}", cmd));
 
     if !output.status.success() {
         // Print the standard error output
         let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
-        println!("emcc failed for {:?}: {}", wasm_input.file_name(), stderr);
-        panic!("emcc failed");
+        println!("{cmd} failed for {:?}: {}", wasm_input.file_name(), stderr);
+        panic!("{cmd} failed");
+    }
+}
+
+pub fn get_wat_files() -> Vec<DirEntry> {
+    let from_wat = fs::read_dir("./packages/conformance-tests/from-wat/").unwrap().flatten();
+    let single_wat = fs::read_dir("./packages/conformance-tests/from-wat-single/").unwrap().flatten();
+
+    let files = from_wat.chain(single_wat);
+
+    files
+        .filter_map(|dir_entry| {
+            let path = dir_entry.path();
+            // dbg!(&path);
+
+            if !path.is_file() {
+                return None;
+            }
+
+            if path.extension().and_then(OsStr::to_str) != Some("wat") {
+                return None;
+            }
+
+            if !should_run(&dir_entry) {
+                // println!("skipping: {:?}", dir_entry.path());
+                return None;
+            }
+
+            Some(dir_entry)
+        })
+        .collect()
+}
+
+pub fn get_c_files() -> Vec<DirEntry> {
+    fs::read_dir("./packages/conformance-tests/from-c/")
+        .unwrap()
+        .flatten()
+        .filter_map(|dir_entry| {
+            let path = dir_entry.path();
+            // dbg!(&path);
+
+            if !path.is_file() {
+                return None;
+            }
+
+            if path.extension().and_then(OsStr::to_str) != Some("c") {
+                return None;
+            }
+
+            if path.file_name().unwrap().to_str().unwrap().contains(".test.c") {
+                return None;
+            }
+
+            if !should_run(&dir_entry) {
+                // println!("skipping: {:?}", dir_entry.path());
+                return None;
+            }
+
+            Some(dir_entry)
+        })
+        .collect()
+}
+
+pub fn generate_wasm_from_wat(wat_input: &DirEntry) {
+    // println!("generating wasm from wat: {:?}", &wat_input.path());
+
+    let cmd = "wat2wasm";
+    ensure_version(cmd, "1.0.32");
+
+    // convert the .wat file to a .wasm file (also validates the .wat)
+    let output = Command::new(cmd)
+        .arg(&wat_input.path())
+        .args(["--output", &wat_input.path().with_extension("wasm").to_string_lossy()])
+        .output()
+        .unwrap_or_else(|_| panic!("failed to execute {}", cmd));
+
+    if !output.status.success() {
+        // Print the standard error output
+        let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
+        println!("{cmd} failed for {:?}: {}", wat_input.path().file_name(), stderr);
+        panic!("{cmd} failed");
+    }
+}
+
+pub fn parse_wat_and_dump(dir_entry: &DirEntry) -> SourceFile {
+    let wat_file = dir_entry.path().with_extension("wat");
+    // println!("parsing wat and dumping: {:?}", &wat_file);
+
+    let wat = fs::read_to_string(wat_file).unwrap();
+    let dump_path = dir_entry.path().with_extension("dump").to_str().unwrap().to_owned();
+
+    wat_to_dts(wat, &dump_path)
+}
+
+pub fn create_ts(source_file: &SourceFile, dir_entry: &DirEntry) {
+    let path = dir_entry.path().with_extension("ts");
+    fs::write(path, source_file.to_string()).unwrap();
+}
+
+pub fn generate_wasm_from_c(c_input: &DirEntry) {
+    // println!("generating wasm from c: {:?}", &c_input.path());
+
+    let cmd = "emcc";
+    ensure_version(cmd, "3.1.6");
+
+    // convert the .wat file to a .wasm file (also validates the .wat)
+    let output = Command::new(cmd)
+        .arg(&c_input.path())
+        .args(["-o", &c_input.path().with_extension("wasm").to_string_lossy()]) // output target
+        .arg("-g") // preserve debug information
+        .arg("-O0") // no optimizations
+        .args(["-s", "STANDALONE_WASM"]) // setting
+        .arg("--no-entry") // no entry point (we disregard the main function and use the `entry` function instead)
+        .output()
+        .unwrap_or_else(|_| panic!("failed to execute {}", cmd));
+
+    if !output.status.success() {
+        // Print the standard error output
+        let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
+        println!("{cmd} failed for {:?}: {}", c_input.path().file_name(), stderr);
+        panic!("{cmd} failed");
     }
 }
 
@@ -66,170 +247,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use std::{
-        ffi::OsStr,
-        fs::{self, DirEntry},
-        process::Command,
-    };
-
-    use self::source_file::SourceFile;
-
     use super::*;
-
-    fn skip_list() -> Vec<&'static str> {
-        vec![
-            // "conway", //
-        ]
-    }
-
-    fn focus_list() -> Vec<&'static str> {
-        vec![
-            // "add-middle", //
-                          // "if-else-nested",
-                          // "if-else",
-        ]
-    }
-
-    /// skip the file if anything in the skip list matches the given file name
-    fn should_skip(file_name: &str) -> bool {
-        skip_list().iter().any(|&skip| file_name == skip)
-    }
-
-    /// the file is focused if anything in the focus list matches the given file name
-    fn is_focused(file_name: &str) -> bool {
-        focus_list().iter().any(|&focus| file_name == focus)
-    }
-
-    /// this function consults skip_list and focus_list to determine if a test should be run
-    fn should_run(dir_entry: &DirEntry) -> bool {
-        let path = dir_entry.path().with_extension("");
-        let file_name = path.file_name().and_then(OsStr::to_str).expect("invalid file name");
-
-        // focusing takes precedence over skipping
-        if is_focused(file_name) {
-            return true;
-        }
-
-        if !focus_list().is_empty() {
-            return false;
-        }
-
-        if should_skip(file_name) {
-            return false;
-        }
-
-        true
-    }
-
-    fn get_wat_files() -> Vec<DirEntry> {
-        let from_wat = fs::read_dir("./packages/conformance-tests/from-wat/").unwrap().flatten();
-        let single_wat = fs::read_dir("./packages/conformance-tests/from-wat-single/").unwrap().flatten();
-
-        let files = from_wat.chain(single_wat);
-
-        files
-            .filter_map(|dir_entry| {
-                let path = dir_entry.path();
-                // dbg!(&path);
-
-                if !path.is_file() {
-                    return None;
-                }
-
-                if path.extension().and_then(OsStr::to_str) != Some("wat") {
-                    return None;
-                }
-
-                if !should_run(&dir_entry) {
-                    // println!("skipping: {:?}", dir_entry.path());
-                    return None;
-                }
-
-                Some(dir_entry)
-            })
-            .collect()
-    }
-
-    fn get_c_files() -> Vec<DirEntry> {
-        fs::read_dir("./packages/conformance-tests/from-c/")
-            .unwrap()
-            .flatten()
-            .filter_map(|dir_entry| {
-                let path = dir_entry.path();
-                // dbg!(&path);
-
-                if !path.is_file() {
-                    return None;
-                }
-
-                if path.extension().and_then(OsStr::to_str) != Some("c") {
-                    return None;
-                }
-
-                if !should_run(&dir_entry) {
-                    // println!("skipping: {:?}", dir_entry.path());
-                    return None;
-                }
-
-                Some(dir_entry)
-            })
-            .collect()
-    }
-
-    fn generate_wasm_from_wat(wat_input: &DirEntry) {
-        // println!("generating wasm from wat: {:?}", &wat_input.path());
-
-        // convert the .wat file to a .wasm file (also validates the .wat)
-        let output = Command::new("wat2wasm")
-            .arg(&wat_input.path())
-            .args(["--output", &wat_input.path().with_extension("wasm").to_string_lossy()])
-            .output()
-            .expect("failed to execute wat2wasm");
-
-        if !output.status.success() {
-            // Print the standard error output
-            let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
-            println!("wat2wasm failed for {:?}: {}", wat_input.path().file_name(), stderr);
-            panic!("wat2wasm failed");
-        }
-    }
-
-    fn parse_wat_and_dump(dir_entry: &DirEntry) -> SourceFile {
-        let wat_file = dir_entry.path().with_extension("wat");
-        // println!("parsing wat and dumping: {:?}", &wat_file);
-
-        let wat = fs::read_to_string(wat_file).unwrap();
-        let dump_path = dir_entry.path().with_extension("dump").to_str().unwrap().to_owned();
-
-        wat_to_dts(wat, &dump_path)
-    }
-
-    fn create_ts(source_file: &SourceFile, dir_entry: &DirEntry) {
-        let path = dir_entry.path().with_extension("ts");
-        fs::write(path, source_file.to_string()).unwrap();
-    }
-
-    fn generate_wasm_from_c(c_input: &DirEntry) {
-        // println!("generating wasm from c: {:?}", &c_input.path());
-
-        // convert the .wat file to a .wasm file (also validates the .wat)
-        let output = Command::new("emcc")
-            .arg(&c_input.path())
-            .args(["-o", &c_input.path().with_extension("wasm").to_string_lossy()]) // output target
-            .arg("-g") // preserve debug information
-            .arg("-O0") // no optimizations
-            .args(["-s", "STANDALONE_WASM"]) // setting
-            .arg("--no-entry") // no entry point (we disregard the main function and use the `entry` function instead)
-            .output()
-            .expect("failed to execute wat2wasm");
-
-        if !output.status.success() {
-            // Print the standard error output
-            let stderr = std::str::from_utf8(&output.stderr).unwrap_or("Error decoding stderr");
-            println!("emcc failed for {:?}: {}", c_input.path().file_name(), stderr);
-            panic!("emcc failed");
-        }
-    }
 
     #[test]
     fn run_conformance_tests() {

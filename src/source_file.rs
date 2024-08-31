@@ -52,6 +52,7 @@ impl fmt::Debug for SourceFile {
     }
 }
 
+#[allow(clippy::to_string_trait_impl)]
 impl ToString for SourceFile {
     fn to_string(&self) -> String {
         let mut data_types = String::from("");
