@@ -51,7 +51,7 @@ test(name, async () => {
   expect(await entry(3)).toStrictEqual(e3);
 });
 
-// type x = entry<[0], true>;
+type x = entry<[0], true, 8>;
 //   ^?
 
 type testCases = [

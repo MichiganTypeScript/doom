@@ -480,9 +480,7 @@ export namespace State {
       ? CollectBytes<
           I32AddBinary<address, Wasm.I32True>,
           tail,
-          head extends '00000000'
-          ? _Acc // skip insertion of false bytes
-          : _Acc & { [k in address]: head } // note: this doesn't need Patch because we are building it up from scratch
+          _Acc & { [k in address]: head } // note: this doesn't need Patch because we are building it up from scratch
         >
       : _Acc
     >

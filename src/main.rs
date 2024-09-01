@@ -68,12 +68,17 @@ pub fn ensure_version(cmd: &str, arg: &str, expected: &str) {
         .arg(arg)
         .output()
         .unwrap_or_else(|_| panic!("failed to execute version command for {}", &cmd));
-    let actual = std::str::from_utf8(&output.stdout).unwrap_or_else(|_| panic!("Error decoding stdout"));
+    // log output should be on stderr
+    let mut actual = std::str::from_utf8(&output.stderr).unwrap_or_else(|_| panic!("Error decoding stderr"));
+    if actual.is_empty() {
+        // however some tools write to stdout instead, usually by web developers that don't know better
+        actual = std::str::from_utf8(&output.stdout).unwrap_or_else(|_| panic!("Error decoding stdout"));
+    }
     let error = format!("expected {} to be version {}, got {}", cmd, expected, actual);
     assert!(actual.contains(expected), "{error}");
 }
 
-pub fn generate_wat_from_wasm(dir_entry: &DirEntry) {
+pub fn generate_wasm2wat(dir_entry: &DirEntry) {
     let wasm_input = dir_entry.path().with_extension("wasm");
 
     // println!("generating wat from wasm: {:?}", &wasm_input);
@@ -161,7 +166,7 @@ pub fn get_c_files() -> Vec<DirEntry> {
         .collect()
 }
 
-pub fn generate_wasm_from_wat(wat_input: &DirEntry) {
+pub fn generate_wat2wasm(wat_input: &DirEntry) {
     // println!("generating wasm from wat: {:?}", &wat_input.path());
 
     let cmd = "wat2wasm";
@@ -197,22 +202,27 @@ pub fn create_ts(source_file: &SourceFile, dir_entry: &DirEntry) {
     fs::write(path, source_file.to_string()).unwrap();
 }
 
-pub fn generate_wasm_from_c(c_input: &DirEntry) {
+pub fn generate_c2wasm(c_input: &DirEntry) {
     // println!("generating wasm from c: {:?}", &c_input.path());
 
-    let cmd = "emcc";
-    ensure_version(cmd, "-v", "3.1.6");
-    // ensure_version(cmd, "-v", "clang version 14.0.6-1");
-    ensure_version(cmd, "-v", "Target: wasm-unknown-emscripten");
+    let cmd = "clang-18";
+    ensure_version(cmd, "-v", "18.1.8");
 
     // convert the .wat file to a .wasm file (also validates the .wat)
     let output = Command::new(cmd)
-        .arg(&c_input.path())
+        .arg(&c_input.path()) // input
         .args(["-o", &c_input.path().with_extension("wasm").to_string_lossy()]) // output target
-        .arg("-g") // preserve debug information
-        .arg("-O0") // no optimizations
-        .args(["-s", "STANDALONE_WASM"]) // setting
-        .arg("--no-entry") // no entry point (we disregard the main function and use the `entry` function instead)
+        .args(["-target", "wasm32"]) // target wasm32
+        .arg("-nostdlib") // no standard library
+        .arg("-ffreestanding") // compliation takes place in a freestanding environment
+        .arg("-nostdinc") // no standard library
+        // .arg("-g") // preserve debug information
+        .arg("-m32")
+        .arg("-Os")
+        .arg("-Wall")
+        .arg("-Wl,--no-entry,--export-all") // no entry point, export all functions
+        .arg("-Wl,--error-limit=0") // no error limit
+        .arg("-ggdb3") // debug information
         .output()
         .unwrap_or_else(|_| panic!("failed to execute {}", cmd));
 
@@ -283,11 +293,11 @@ mod tests {
     #[test]
     fn run_conformance_tests() {
         let from_wat = get_wat_files();
-        from_wat.iter().for_each(generate_wasm_from_wat);
+        from_wat.iter().for_each(generate_wat2wasm);
 
         let from_c = get_c_files();
-        from_c.iter().for_each(generate_wasm_from_c);
-        from_c.iter().for_each(generate_wat_from_wasm);
+        from_c.iter().for_each(generate_c2wasm);
+        from_c.iter().for_each(generate_wasm2wat);
 
         let all_files: Vec<_> = from_wat.iter().chain(from_c.iter()).collect();
 

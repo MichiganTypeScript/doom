@@ -1,6 +1,6 @@
-import type { ProgramState } from "../types"
+import type { LocalsById, ProgramState } from "../types"
 import type { State } from '../state'
-import type { WasmValue, Satisfies } from "ts-type-math"
+import type { WasmValue, Satisfies, Wasm, Load } from "ts-type-math"
 
 export type ILocalGet = {
   kind: "LocalGet"
@@ -68,10 +68,13 @@ export type HandleVariableInstructions<
 
 export type LocalGet<
   instruction extends ILocalGet,
-  state extends ProgramState
+  state extends ProgramState,
 > = Satisfies<ProgramState,
   State.Stack.push<
-    State.ExecutionContexts.Active.Locals.get<state>[instruction['id']],
+    Load.IsUnknownOrAnyFallback< // the behavior of wasm 
+      State.ExecutionContexts.Active.Locals.get<state>[instruction['id']],
+      Wasm.I32False // TODO(bug): we need to know the type of the local
+    >,
     state
   >
 >
@@ -117,7 +120,7 @@ export type GlobalGet<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.push<
-    State.Globals.get<state>[instruction['id']],
+    State.Globals.get<state>[instruction['id']], // webassaembly mandates that globals are always initialized
     state
   >
 >

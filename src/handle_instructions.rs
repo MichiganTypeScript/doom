@@ -564,9 +564,7 @@ fn handle_instruction(
         Instruction::End(_) => {
             let this_context = context.pop();
 
-            let pop = if this_context == Some("If") {
-                (*indent, format!("];"))
-            } else if this_context == Some("Else") || this_context == Some("Block") || this_context == Some("Loop") {
+            let pop = if this_context == Some("If") || this_context == Some("Else") || this_context == Some("Block") || this_context == Some("Loop") {
                 (*indent - 1, format!("];"))
             } else {
                 panic!("unexpected context {:#?}", this_context);

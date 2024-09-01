@@ -4,6 +4,8 @@
 
 update typescript patch for truncation limit
 
+store the type of locals so LocalGet has a properly sized fallback
+
 ## Implementation improvements
 
 look into an MSB->LSB addition operation.  will be a huge savings.

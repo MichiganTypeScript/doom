@@ -1,5 +1,3 @@
-#include <emscripten.h>
-
 #define true 1
 #define false 0
 
@@ -68,7 +66,6 @@ char* displayGrid(Grid grid, int rows, int columns) {
     return gridString;
 }
 
-EMSCRIPTEN_KEEPALIVE
 char* entry(int iterations) {
     Grid grid;
 
@@ -97,8 +94,4 @@ char* entry(int iterations) {
     }
 
     return displayGrid(grid, 9, 9);
-}
-
-int main() {
-    return 0;
 }

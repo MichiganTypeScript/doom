@@ -10,7 +10,7 @@ export namespace Load {
    * 
    * specifically, this is useful for when you're reading from memory and you want to use a fallback value if the memory is uninitialized.
    */
-  type IsUnknownOrAnyFallback<T, Fallback> = unknown extends T ? Fallback : T
+  export type IsUnknownOrAnyFallback<T, Fallback> = unknown extends T ? Fallback : T
 
   export type Read1Byte<
     /** memory object to read from */

@@ -17,7 +17,13 @@ Module {
                     name: None,
                     def: Func(
                         FunctionType {
-                            params: [],
+                            params: [
+                                (
+                                    None,
+                                    None,
+                                    I32,
+                                ),
+                            ],
                             results: [
                                 I32,
                             ],
@@ -30,7 +36,7 @@ Module {
             Type(
                 Type {
                     span: Span {
-                        offset: 44,
+                        offset: 56,
                     },
                     id: Some(
                         "t1",
@@ -38,33 +44,6 @@ Module {
                     name: None,
                     def: Func(
                         FunctionType {
-                            params: [
-                                (
-                                    None,
-                                    None,
-                                    I32,
-                                ),
-                            ],
-                            results: [
-                                I32,
-                            ],
-                        },
-                    ),
-                    parent: None,
-                    final_type: None,
-                },
-            ),
-            Type(
-                Type {
-                    span: Span {
-                        offset: 89,
-                    },
-                    id: Some(
-                        "t2",
-                    ),
-                    name: None,
-                    def: Func(
-                        FunctionType {
                             params: [],
                             results: [],
                         },
@@ -73,441 +52,25 @@ Module {
                     final_type: None,
                 },
             ),
-            Type(
-                Type {
-                    span: Span {
-                        offset: 109,
-                    },
-                    id: Some(
-                        "t3",
-                    ),
-                    name: None,
-                    def: Func(
-                        FunctionType {
-                            params: [
-                                (
-                                    None,
-                                    None,
-                                    I32,
-                                ),
-                            ],
-                            results: [],
-                        },
-                    ),
-                    parent: None,
-                    final_type: None,
-                },
-            ),
             Func(
                 Func {
                     span: Span {
-                        offset: 141,
+                        offset: 76,
                     },
                     id: Some(
                         "__wasm_call_ctors",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "__wasm_call_ctors",
+                        ],
                     },
                     kind: Inline {
                         locals: [],
                         expression: Expression {
                             instrs: [
-                                Call(
-                                    Id(
-                                        "emscripten_stack_init",
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t2",
-                            ),
-                        ),
-                        inline: None,
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 214,
-                    },
-                    id: Some(
-                        "entry",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "entry",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [
-                            Local {
-                                id: Some(
-                                    "l1",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l2",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l3",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l4",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l5",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l6",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l7",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l8",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l9",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l10",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l11",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l12",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l13",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l14",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                        ],
-                        expression: Expression {
-                            instrs: [
-                                GlobalGet(
-                                    Id(
-                                        "__stack_pointer",
-                                    ),
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l1",
-                                    ),
-                                ),
-                                I32Const(
-                                    16,
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l2",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l1",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l2",
-                                    ),
-                                ),
-                                I32Sub,
-                                LocalSet(
-                                    Id(
-                                        "l3",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l3",
-                                    ),
-                                ),
-                                GlobalSet(
-                                    Id(
-                                        "__stack_pointer",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l3",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "p0",
-                                    ),
-                                ),
-                                I32Store8(
-                                    MemArg {
-                                        align: 1,
-                                        offset: 15,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 768,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l3",
-                                    ),
-                                ),
-                                I32Load8u(
-                                    MemArg {
-                                        align: 1,
-                                        offset: 15,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 861,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l4",
-                                    ),
-                                ),
-                                I32Const(
-                                    24,
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l5",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l4",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l5",
-                                    ),
-                                ),
-                                I32Shl,
-                                LocalSet(
-                                    Id(
-                                        "l6",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l6",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l5",
-                                    ),
-                                ),
-                                I32ShrS,
-                                LocalSet(
-                                    Id(
-                                        "l7",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l7",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "toupper",
-                                    ),
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l8",
-                                    ),
-                                ),
-                                I32Const(
-                                    0,
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l9",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l9",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l8",
-                                    ),
-                                ),
-                                I32Store8(
-                                    MemArg {
-                                        align: 1,
-                                        offset: 1024,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 1230,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                I32Const(
-                                    0,
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l10",
-                                    ),
-                                ),
-                                I32Const(
-                                    0,
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l11",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l11",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l10",
-                                    ),
-                                ),
-                                I32Store8(
-                                    MemArg {
-                                        align: 1,
-                                        offset: 1025,
-                                        memory: Num(
-                                            0,
-                                            Span {
-                                                offset: 1385,
-                                            },
-                                        ),
-                                    },
-                                ),
-                                I32Const(
-                                    1024,
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l12",
-                                    ),
-                                ),
-                                I32Const(
-                                    16,
-                                ),
-                                LocalSet(
-                                    Id(
-                                        "l13",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l3",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l13",
-                                    ),
-                                ),
-                                I32Add,
-                                LocalSet(
-                                    Id(
-                                        "l14",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l14",
-                                    ),
-                                ),
-                                GlobalSet(
-                                    Id(
-                                        "__stack_pointer",
-                                    ),
-                                ),
-                                LocalGet(
-                                    Id(
-                                        "l12",
-                                    ),
-                                ),
-                                Return,
+                                Nop,
                             ],
                         },
                     },
@@ -517,81 +80,6 @@ Module {
                                 "t1",
                             ),
                         ),
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "p0",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                ],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 1714,
-                    },
-                    id: Some(
-                        "_initialize",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "_initialize",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                Block(
-                                    BlockType {
-                                        label: Some(
-                                            "B0",
-                                        ),
-                                        label_name: None,
-                                        ty: TypeUse {
-                                            index: None,
-                                            inline: None,
-                                        },
-                                    },
-                                ),
-                                I32Const(
-                                    1,
-                                ),
-                                I32Eqz,
-                                BrIf(
-                                    Id(
-                                        "B0",
-                                    ),
-                                ),
-                                Call(
-                                    Id(
-                                        "__wasm_call_ctors",
-                                    ),
-                                ),
-                                End(
-                                    None,
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t2",
-                            ),
-                        ),
                         inline: None,
                     },
                 },
@@ -599,71 +87,16 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 1878,
-                    },
-                    id: Some(
-                        "islower",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                LocalGet(
-                                    Id(
-                                        "p0",
-                                    ),
-                                ),
-                                I32Const(
-                                    -97,
-                                ),
-                                I32Add,
-                                I32Const(
-                                    26,
-                                ),
-                                I32LtU,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t1",
-                            ),
-                        ),
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "p0",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                ],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 2036,
+                        offset: 154,
                     },
                     id: Some(
                         "toupper",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "toupper",
+                        ],
                     },
                     kind: Inline {
                         locals: [],
@@ -675,9 +108,9 @@ Module {
                                     ),
                                 ),
                                 I32Const(
-                                    95,
+                                    32,
                                 ),
-                                I32And,
+                                I32Sub,
                                 LocalGet(
                                     Id(
                                         "p0",
@@ -688,11 +121,14 @@ Module {
                                         "p0",
                                     ),
                                 ),
-                                Call(
-                                    Id(
-                                        "islower",
-                                    ),
+                                I32Const(
+                                    97,
                                 ),
+                                I32Sub,
+                                I32Const(
+                                    26,
+                                ),
+                                I32LtU,
                                 Select(
                                     SelectTypes {
                                         tys: None,
@@ -704,63 +140,20 @@ Module {
                     ty: TypeUse {
                         index: Some(
                             Id(
-                                "t1",
-                            ),
-                        ),
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "p0",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                ],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 2238,
-                    },
-                    id: Some(
-                        "stackSave",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "stackSave",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                GlobalGet(
-                                    Id(
-                                        "__stack_pointer",
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
                                 "t0",
                             ),
                         ),
                         inline: Some(
                             FunctionType {
-                                params: [],
+                                params: [
+                                    (
+                                        Some(
+                                            "p0",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
                                 results: [
                                     I32,
                                 ],
@@ -772,93 +165,36 @@ Module {
             Func(
                 Func {
                     span: Span {
-                        offset: 2337,
+                        offset: 438,
                     },
                     id: Some(
-                        "stackRestore",
+                        "entry",
                     ),
                     name: None,
                     exports: InlineExport {
                         names: [
-                            "stackRestore",
+                            "entry",
                         ],
                     },
                     kind: Inline {
                         locals: [],
                         expression: Expression {
                             instrs: [
+                                I32Const(
+                                    1024,
+                                ),
                                 LocalGet(
                                     Id(
                                         "p0",
                                     ),
                                 ),
-                                GlobalSet(
+                                I32Const(
+                                    32,
+                                ),
+                                I32Sub,
+                                LocalGet(
                                     Id(
-                                        "__stack_pointer",
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t3",
-                            ),
-                        ),
-                        inline: Some(
-                            FunctionType {
-                                params: [
-                                    (
-                                        Some(
-                                            "p0",
-                                        ),
-                                        None,
-                                        I32,
-                                    ),
-                                ],
-                                results: [],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 2467,
-                    },
-                    id: Some(
-                        "stackAlloc",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "stackAlloc",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [
-                            Local {
-                                id: Some(
-                                    "l1",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                            Local {
-                                id: Some(
-                                    "l2",
-                                ),
-                                name: None,
-                                ty: I32,
-                            },
-                        ],
-                        expression: Expression {
-                            instrs: [
-                                GlobalGet(
-                                    Id(
-                                        "__stack_pointer",
+                                        "p0",
                                     ),
                                 ),
                                 LocalGet(
@@ -866,25 +202,51 @@ Module {
                                         "p0",
                                     ),
                                 ),
+                                I32Const(
+                                    97,
+                                ),
                                 I32Sub,
                                 I32Const(
-                                    -16,
+                                    26,
                                 ),
-                                I32And,
-                                LocalTee(
-                                    Id(
-                                        "l1",
-                                    ),
+                                I32LtU,
+                                Select(
+                                    SelectTypes {
+                                        tys: None,
+                                    },
                                 ),
-                                GlobalSet(
-                                    Id(
-                                        "__stack_pointer",
-                                    ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 522,
+                                            },
+                                        ),
+                                    },
                                 ),
-                                LocalGet(
-                                    Id(
-                                        "l1",
-                                    ),
+                                I32Const(
+                                    1025,
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 789,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                I32Const(
+                                    1024,
                                 ),
                             ],
                         },
@@ -892,7 +254,7 @@ Module {
                     ty: TypeUse {
                         index: Some(
                             Id(
-                                "t1",
+                                "t0",
                             ),
                         ),
                         inline: Some(
@@ -911,275 +273,13 @@ Module {
                                 ],
                             },
                         ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 2796,
-                    },
-                    id: Some(
-                        "emscripten_stack_init",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "emscripten_stack_init",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                I32Const(
-                                    5243920,
-                                ),
-                                GlobalSet(
-                                    Id(
-                                        "__stack_base",
-                                    ),
-                                ),
-                                I32Const(
-                                    1032,
-                                ),
-                                I32Const(
-                                    15,
-                                ),
-                                I32Add,
-                                I32Const(
-                                    -16,
-                                ),
-                                I32And,
-                                GlobalSet(
-                                    Id(
-                                        "__stack_end",
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t2",
-                            ),
-                        ),
-                        inline: None,
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 3069,
-                    },
-                    id: Some(
-                        "emscripten_stack_get_free",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "emscripten_stack_get_free",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                GlobalGet(
-                                    Id(
-                                        "__stack_pointer",
-                                    ),
-                                ),
-                                GlobalGet(
-                                    Id(
-                                        "__stack_end",
-                                    ),
-                                ),
-                                I32Sub,
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t0",
-                            ),
-                        ),
-                        inline: Some(
-                            FunctionType {
-                                params: [],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 3248,
-                    },
-                    id: Some(
-                        "emscripten_stack_get_base",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "emscripten_stack_get_base",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                GlobalGet(
-                                    Id(
-                                        "__stack_base",
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t0",
-                            ),
-                        ),
-                        inline: Some(
-                            FunctionType {
-                                params: [],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 3376,
-                    },
-                    id: Some(
-                        "emscripten_stack_get_end",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "emscripten_stack_get_end",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                GlobalGet(
-                                    Id(
-                                        "__stack_end",
-                                    ),
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t0",
-                            ),
-                        ),
-                        inline: Some(
-                            FunctionType {
-                                params: [],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Func(
-                Func {
-                    span: Span {
-                        offset: 3501,
-                    },
-                    id: Some(
-                        "__errno_location",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "__errno_location",
-                        ],
-                    },
-                    kind: Inline {
-                        locals: [],
-                        expression: Expression {
-                            instrs: [
-                                I32Const(
-                                    1028,
-                                ),
-                            ],
-                        },
-                    },
-                    ty: TypeUse {
-                        index: Some(
-                            Id(
-                                "t0",
-                            ),
-                        ),
-                        inline: Some(
-                            FunctionType {
-                                params: [],
-                                results: [
-                                    I32,
-                                ],
-                            },
-                        ),
-                    },
-                },
-            ),
-            Table(
-                Table {
-                    span: Span {
-                        offset: 3601,
-                    },
-                    id: Some(
-                        "__indirect_function_table",
-                    ),
-                    name: None,
-                    exports: InlineExport {
-                        names: [
-                            "__indirect_function_table",
-                        ],
-                    },
-                    kind: Normal {
-                        ty: TableType {
-                            limits: Limits {
-                                min: 2,
-                                max: Some(
-                                    2,
-                                ),
-                            },
-                            elem: RefType {
-                                nullable: true,
-                                heap: Func,
-                            },
-                        },
-                        init_expr: None,
                     },
                 },
             ),
             Memory(
                 Memory {
                     span: Span {
-                        offset: 3687,
+                        offset: 859,
                     },
                     id: Some(
                         "memory",
@@ -1193,10 +293,8 @@ Module {
                     kind: Normal(
                         B32 {
                             limits: Limits {
-                                min: 256,
-                                max: Some(
-                                    256,
-                                ),
+                                min: 2,
+                                max: None,
                             },
                             shared: false,
                         },
@@ -1206,24 +304,26 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 3732,
+                        offset: 898,
                     },
                     id: Some(
-                        "__stack_pointer",
+                        "__dso_handle",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "__dso_handle",
+                        ],
                     },
                     ty: GlobalType {
                         ty: I32,
-                        mutable: true,
+                        mutable: false,
                     },
                     kind: Inline(
                         Expression {
                             instrs: [
                                 I32Const(
-                                    5243920,
+                                    1024,
                                 ),
                             ],
                         },
@@ -1233,18 +333,194 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 3790,
+                        offset: 968,
                     },
                     id: Some(
-                        "__stack_end",
+                        "__data_end",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "__data_end",
+                        ],
                     },
                     ty: GlobalType {
                         ty: I32,
-                        mutable: true,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1026,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 1034,
+                    },
+                    id: Some(
+                        "__stack_low",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__stack_low",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1040,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 1102,
+                    },
+                    id: Some(
+                        "__stack_high",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__stack_high",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    66576,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 1173,
+                    },
+                    id: Some(
+                        "__global_base",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__global_base",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1024,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 1245,
+                    },
+                    id: Some(
+                        "__heap_base",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__heap_base",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    66576,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 1314,
+                    },
+                    id: Some(
+                        "__heap_end",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__heap_end",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    131072,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 1382,
+                    },
+                    id: Some(
+                        "__memory_base",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__memory_base",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
                     },
                     kind: Inline(
                         Expression {
@@ -1260,60 +536,29 @@ Module {
             Global(
                 Global {
                     span: Span {
-                        offset: 3838,
+                        offset: 1451,
                     },
                     id: Some(
-                        "__stack_base",
+                        "__table_base",
                     ),
                     name: None,
                     exports: InlineExport {
-                        names: [],
+                        names: [
+                            "__table_base",
+                        ],
                     },
                     ty: GlobalType {
                         ty: I32,
-                        mutable: true,
+                        mutable: false,
                     },
                     kind: Inline(
                         Expression {
-                            instrs: [
-                                I32Const(
-                                    0,
-                                ),
-                            ],
-                        },
-                    ),
-                },
-            ),
-            Elem(
-                Elem {
-                    span: Span {
-                        offset: 3887,
-                    },
-                    id: Some(
-                        "e0",
-                    ),
-                    name: None,
-                    kind: Active {
-                        table: Num(
-                            0,
-                            Span {
-                                offset: 3887,
-                            },
-                        ),
-                        offset: Expression {
                             instrs: [
                                 I32Const(
                                     1,
                                 ),
                             ],
                         },
-                    },
-                    payload: Indices(
-                        [
-                            Id(
-                                "__wasm_call_ctors",
-                            ),
-                        ],
                     ),
                 },
             ),
@@ -1325,25 +570,11 @@ Module {
 
 
 {
-    "LocalGet": 26,
-    "I32Const": 17,
-    "LocalSet": 14,
-    "GlobalGet": 7,
-    "GlobalSet": 6,
-    "Call": 4,
-    "I32Sub": 3,
-    "I32Store8": 3,
-    "I32Add": 3,
-    "I32And": 3,
-    "I32Load8u": 1,
-    "I32Shl": 1,
-    "I32ShrS": 1,
-    "Return": 1,
-    "Block": 1,
-    "I32Eqz": 1,
-    "BrIf": 1,
-    "End": 1,
-    "I32LtU": 1,
-    "Select": 1,
-    "LocalTee": 1,
+    "I32Const": 10,
+    "LocalGet": 6,
+    "I32Sub": 4,
+    "I32LtU": 2,
+    "Select": 2,
+    "I32Store8": 2,
+    "Nop": 1,
 }

@@ -11,6 +11,7 @@ export const readStringFromMemory = true;
  * controls how often the program prints to file.
  * set to 0 for it to always print
  */
+export const comeUpForAirEvery = 500;
 
 export const initialConditions = {
   current: 0,

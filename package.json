@@ -31,8 +31,7 @@
     "tsx": "^4.7.0",
     "type-testing": "^0.2.0",
     "typescript": "5.3.3",
-    "vitest": "^1.2.1",
-    "wabt": "^1.0.32"
+    "vitest": "^1.2.1"
   },
   "pnpm": {
     "patchedDependencies": {

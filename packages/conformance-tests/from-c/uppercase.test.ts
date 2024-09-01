@@ -25,11 +25,12 @@ type memory = result['memory']    // =>
 type end = result['memory'][p1024]// =>
 
 type Greeting = ReadStringFromMemory<entry<[97], true>>;
+//   ^?
 
 type testCases = [
   Expect<Equal<pointer, p1024>>,
 
   Expect<Equal<memory[p1024], end>>,
 
-  Expect<Equal<Greeting, "A">>,
+  Expect<Equal<Greeting, "A\0">>,
 ]

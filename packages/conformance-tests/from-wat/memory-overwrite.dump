@@ -1,0 +1,158 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Memory(
+                Memory {
+                    span: Span {
+                        offset: 51,
+                    },
+                    id: Some(
+                        "memory",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "memory",
+                        ],
+                    },
+                    kind: Normal(
+                        B32 {
+                            limits: Limits {
+                                min: 1,
+                                max: None,
+                            },
+                            shared: false,
+                        },
+                    ),
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 91,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "value",
+                                    ),
+                                ),
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 403,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 567,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                I32Const(
+                                    3,
+                                ),
+                                I32Mul,
+                                I32Store(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 837,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                I32Const(
+                                    1024,
+                                ),
+                                I32Load(
+                                    MemArg {
+                                        align: 4,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 1024,
+                                            },
+                                        ),
+                                    },
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "value",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "I32Const": 5,
+    "I32Store": 2,
+    "I32Load": 2,
+    "LocalGet": 1,
+    "I32Mul": 1,
+}

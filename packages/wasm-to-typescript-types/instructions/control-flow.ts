@@ -57,7 +57,7 @@ export type IIf = {
   kind: "If"
 
   then: Instruction[]
-  else: Instruction[]
+  else?: Instruction[]
 }
 
 export type ILoop = {
@@ -366,15 +366,21 @@ export type If<
 
     ? // false branch
       // pop the false branch instructions
-      State.Instructions.concat<
-        instruction['else'],
-
+      instruction['else'] extends Instruction[]
+      ? State.Instructions.concat<
+          instruction['else'],
+          // pop the condition (we're done with it now)
+          State.Stack.set<
+            remaining,
+            state
+          >
+        >
+      :
         // pop the condition (we're done with it now)
         State.Stack.set<
           remaining,
           state
         >
-      >
 
     : // true branch
       // pop the false branch instructions
