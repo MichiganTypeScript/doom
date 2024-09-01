@@ -12,9 +12,9 @@ type sl=s['length']// =>
 
 type c=e['count']// =>
 
-type al=a['activeLocals']  // =>
-type af=a['activeFuncId']  // =>
-type ab=a['activeBranches']// =>
+type al=e['activeLocals']  // =>
+type af=e['activeFuncId']  // =>
+type ab=e['activeBranches']// =>
 
 type ec=e['executionContexts']
 type c0f=ec[0]['funcId']  // =>

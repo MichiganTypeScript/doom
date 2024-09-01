@@ -2,8 +2,8 @@ import { writeFile, readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import ts from 'typescript';
 import { mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
-import { incrementBy, shouldTakeABreath, statsDirectory, statsJsonPath, statsPath } from './config';
-import { get } from 'http';
+import { InitialConditions, incrementBy, initialConditions, statsDirectory, statsJsonPath, statsPath } from './config';
+import { Metering, MeteringDefinite } from './metering';
 
 const stackSize = (depth = 1): number => {
   try {
@@ -45,6 +45,7 @@ interface RunStats {
   filesCount: number;
   typeStringLength: number;
   activeInstruction: string;
+  digits: InitialConditions['digits'];
 }
 type SimpleTotals = {
   sum: number;
@@ -103,19 +104,17 @@ export const runStats = ({
   instructions,
   typeStringLength,
   activeInstruction,
-  tGetTypeAtLocation,
   current,
   writeToDisk,
-  time,
+  metering,
 }: {
   programStats: ReturnType<typeof getProgramStats>,
   instructions: number,
   typeStringLength: number,
   activeInstruction: string,
-  tGetTypeAtLocation: number,
   current: number,
   writeToDisk: boolean,
-  time: Record<string, number>,
+  metering: MeteringDefinite,
 }) => {
   const stats = {
     ...programStats,
@@ -125,16 +124,16 @@ export const runStats = ({
 
   shortStats({
     count: current,
-    getTypeAtLocation: tGetTypeAtLocation,
+    getTypeAtLocation: metering.getTypeAtLocation,
     instructions,
-    totalTime: time.total,
+    totalTime: metering.total,
     instantiations: stats.instantiations,
     typeStringLength,
     activeInstruction,
   });
 
   if (writeToDisk) {
-    writeResultsStats(current, time, stats)
+    writeResultsStats(current, metering, stats)
   }
 };
 
@@ -333,7 +332,7 @@ export const shortStats = ({
   activeInstruction: string,
 }) => {
   console.log(
-    ...printColumn('count', 6, count),
+    ...printColumn('count', initialConditions.digits, count),
     ...printColumn('time (ms)', 7, getTypeAtLocation),
     ...printColumn('wasm/sec', 5, instructions / (totalTime / 1000)),
     ...printColumn('instantiations', 10, instantiations),
@@ -364,6 +363,7 @@ export const encourage = () => {
     "I always trusted code more than people anyway.",
     "To excessive and possibly infinite depth and beyond!", // credit: DBlass
     "10 bucks says what comes next starts with \"RangeError: Maximum call stack size exceeded at `instantiateTypes`\"",
+    "just another few months and this thing will finally work.. right?",
   ]
   
   console.log(phrases[Math.floor(Math.random() * phrases.length)]);

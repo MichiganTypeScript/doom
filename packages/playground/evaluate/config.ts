@@ -13,10 +13,25 @@ export const readStringFromMemory = true;
  */
 export const comeUpForAirEvery = 500;
 
-export const initialConditions = {
-  current: 0,
-  stopAt: 1_000_000,
+export interface InitialConditions {
+  /**
+   * the current instruction to start from.
+   * if greater than 0 it will automatically not clear prior results
+   */
+  startAt: 0 | number;
+
+  /** if `Infinity`, the fun never stops.  otherwise it will forcibly halt at a the specified instructions count */
+  stopAt: number;
+
+  /** the number of digits in the filenames and types.  so a value of 4 will yield "0001", "0002", etc. */
+  digits: number;
 }
+
+export const initialConditions = {
+  startAt: 0,
+  stopAt: Infinity, // 1_000_000,
+  digits: 8,
+} satisfies InitialConditions;
 
 export const simpleTypeMode = process.argv.includes('--simple');
 
@@ -33,7 +48,7 @@ export const bootstrapFilePath = join(resultsDirectory, 'bootstrap.ts');
 export const statsDirectory = join(resultsDirectory, 'stats');
 export const statsPath = join(statsDirectory, 'program-stats.json');
 
-export const formatCurrent = (current: number) => String(current).padStart(6, '0');
+export const formatCurrent = (current: number) => String(current).padStart(initialConditions.digits, '0');
 export const createResultFilePath = (current: number) => join(resultsDirectory, `results-${formatCurrent(current)}.ts`)
 export const statsJsonPath = (current: number) => join(statsDirectory, `stats-${formatCurrent(current)}.json`);
 export const shouldTakeABreath = (timeSpentUnderwater: number, current: number) => current === 0 || timeSpentUnderwater >= comeUpForAirEvery;

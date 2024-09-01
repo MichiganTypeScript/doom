@@ -480,6 +480,7 @@ export namespace State {
       ? CollectBytes<
           I32AddBinary<address, Wasm.I32True>,
           tail,
+          // POTENTIAL OPTIMIZATION: if we are setting head for the first time we can just skip it entirely
           _Acc & { [k in address]: head } // note: this doesn't need Patch because we are building it up from scratch
         >
       : _Acc
