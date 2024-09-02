@@ -1,6 +1,7 @@
 // this is a micro metering library
 
 const metrics = [
+  'createFile',
   'getProgram',
   'getSourceFile',
   'getTypeAlias',
@@ -9,7 +10,7 @@ const metrics = [
   'typeToString',
   'formatter',
   'writeResults',
-  'total'
+  'total',
 ] as const;
 
 export type Metric = typeof metrics[number];
@@ -66,15 +67,3 @@ const totals = metrics.reduce((acc, metric) => ({
   ...acc,
   [metric]: 0,
 }), {} as MeteringDefinite);
-
-export const printTotals = () => {
-  console.log(
-    Object.fromEntries(
-      Object.entries(totals).map(([metric, value]) => ([
-        metric,
-        // truncate all the values in totals to 3 decimal points
-        Number(value.toFixed(3))
-      ]))
-    )
-  );
-}

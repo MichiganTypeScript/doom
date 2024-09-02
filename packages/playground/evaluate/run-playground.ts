@@ -4,7 +4,7 @@ import ts from 'typescript';
 import { writeFile, readFile } from 'fs/promises'
 import { statSync, mkdirSync, readdirSync, unlinkSync } from 'fs'
 import { Rome, Distribution, Diagnostic } from '@biomejs/js-api';
-import { clearStats, encourage, getProgramStats, runStats, writeProgramStats } from './stats';
+import { clearStats, encourage, runStats, logFinalStats, isBenchmarkingIndividualInstructions } from './stats';
 import {
   bootstrapFilePath,
   createResultFilePath,
@@ -22,12 +22,16 @@ import {
   targetTypeAlias,
   tsconfigFilePath,
 } from './config';
-import { finalizeMeter, meter, printTotals, resetMeter } from './metering';
+import { finalizeMeter, meter, resetMeter } from './metering';
 
 // POTENTIAL OPTIMIZATION write files in a separate thread
 // POTENTIAL OPTIMIZATION use a worker thread to do the formatting
 
-const getActiveInstruction = (file: string, current: number) => {
+const getActiveInstruction = (file: string, current: number, incrementBy: number) => {
+  if (incrementBy === 1) {
+    return null;
+  }
+  
   const match = file.match(/kind: "([a-zA-Z0-9]*)"/m);
   if (!match) {
     if (current === 0) {
@@ -71,7 +75,6 @@ interface ProgramRun {
   
   current: number;
   stopAt: number;
-  incrementBy: number;
 
   /** where to look for an `Evaluate` type */
   evaluationFilePath: string;
@@ -126,23 +129,23 @@ const createEnv = () => tsvfs.createVirtualTypeScriptEnvironment(
   options
 )
 
-
 const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   let { current, env, timeSpentUnderwater } = programRun;
   const {
     bootstrap,
     stopAt,
-    incrementBy,
     evaluationFilePath,
     evaluationSourceCode,
     resultFilePath,
     justPrint,
   } = programRun;
 
-  env.createFile(evaluationFilePath, evaluationSourceCode);
-
   resetMeter();
   meter('total').start();
+
+  meter('createFile').start();
+  env.createFile(evaluationFilePath, evaluationSourceCode);
+  meter('createFile').stop();
 
   meter('getProgram').start();
   const program = env?.languageService.getProgram()!
@@ -151,9 +154,6 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   meter('getSourceFile').start();
   const targetSourceFile = program.getSourceFile(evaluationFilePath)!;
   meter('getSourceFile').stop();
-
-  const targetText = targetSourceFile.text;
-  const activeInstruction = getActiveInstruction(targetText, current);
 
   meter('getTypeAlias').start();
   let typeAlias: ts.TypeAliasDeclaration;
@@ -219,9 +219,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     playgroundResult,
   ].join('\n\n');
 
-  // WARNING: if you move this to after `reportErrors` (which calls ts.preEmitDiagnostics), it will report wildly larger numbers
-  const programStats = getProgramStats(program);
-
+  // WARNING: if calculate ts.Program stats after `reportErrors` (which calls ts.preEmitDiagnostics), it will report wildly larger numbers
   // this DRAMATICALLY slows down the program, but it's useful for debugging
   if (process.argv.includes('--report-ts-diagnostics')) {
     reportErrors(program);
@@ -254,23 +252,24 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
 
   meter('total').stop();
 
-  runStats({
-    programStats,
-    instructions: incrementBy,
-    typeStringLength: typeString.length,
-    activeInstruction,
-    current,
-    writeToDisk: shouldTakeABreath(timeSpentUnderwater, current),
+  const targetText = targetSourceFile.text;
+  const activeInstruction = isBenchmarkingIndividualInstructions ? getActiveInstruction(targetText, current, incrementBy) : null;
+  await runStats({
+    program,
+    metadata: {
+      typeStringLength: typeString.length,
+      activeInstruction,
+      instructions: bootstrap ? 0 : incrementBy,
+      current,
+    },
     metering: finalizeMeter(),
   });
 
   if (isComplete) {
-    printTotals();
     return await isolatedProgram({
       bootstrap,
       current,
       stopAt: current,
-      incrementBy,
       evaluationFilePath: writeFilePath,
       evaluationSourceCode: formattedFile,
       resultFilePath: null,
@@ -296,7 +295,6 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     bootstrap,
     current: nextCurrent,
     stopAt,
-    incrementBy,
     evaluationFilePath: writeFilePath,
     evaluationSourceCode: formattedFile,
     resultFilePath: createResultFilePath(nextCurrent),
@@ -339,7 +337,6 @@ const finalizeProgram = async (
     bootstrap: false,
     current: 0,
     stopAt: 0,
-    incrementBy,
     evaluationFilePath: finalResultPath,
     evaluationSourceCode: file,
     resultFilePath: null,
@@ -391,7 +388,6 @@ const bootstrap = async () => {
     bootstrap: true,
     current: initialConditions.startAt,
     stopAt: initialConditions.startAt,
-    incrementBy,
     evaluationFilePath: playgroundFilePath,
     evaluationSourceCode: playgroundSource,
     resultFilePath: bootstrapFilePath,
@@ -415,7 +411,6 @@ const mainLoop = async ({
     bootstrap: false,
     current: initialConditions.startAt + incrementBy,
     stopAt: initialConditions.stopAt,
-    incrementBy,
     evaluationFilePath: bootstrapFilePath,
     evaluationSourceCode: evaluationSourceCode!,
     resultFilePath: createResultFilePath(incrementBy),
@@ -435,15 +430,20 @@ const mainLoop = async ({
 const runProgram = async () => {
   encourage();
   clearResults();
+
   const startProgram = performance.now();
   await mainLoop(await bootstrap());
   const endProgram = performance.now();
   const programTime = endProgram - startProgram;
-  await writeProgramStats(programTime);
+
+  await logFinalStats(programTime);
 }
 
+// if you're just developing the stats summary mechanism,
+// this flag will allow you to run the stats summary
+// without actually having to run the program
 if (process.argv.includes('--stats-only')) {
-  await writeProgramStats(0);
+  await logFinalStats(0);
   process.exit(0);
 }
 
