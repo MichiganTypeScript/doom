@@ -55,6 +55,11 @@ type $entry = Satisfies<Func, {
     ];
 }>
 
+export type funcs = {
+  $switch_like: $switch_like;
+  $entry: $entry;
+}
+
 export type entry<
   arguments extends [number],
   debugMode extends boolean = false,
@@ -62,10 +67,7 @@ export type entry<
 > = bootstrap<
   {
     arguments: arguments;
-    funcs: {
-      $switch_like: $switch_like;
-      $entry: $entry;
-    };
+    funcs: funcs;
     globals: {};
     memory: {};
     memorySize: '00000000000000000000000000000000';

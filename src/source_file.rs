@@ -110,13 +110,15 @@ impl ToString for SourceFile {
             .collect::<Vec<_>>()
             .join("\n");
 
-        let funcs = self
+        let funcs_data = self
             .types
             .borrow()
             .iter()
-            .map(|(name, _)| format!("      {name}: {name};"))
+            .map(|(name, _)| format!("  {name}: {name};"))
             .collect::<Vec<_>>()
             .join("\n");
+
+        let funcs = format!("export type funcs = {{\n{funcs_data}\n}}\n");
 
         let mut globals = self
             .globals
@@ -146,9 +148,7 @@ impl ToString for SourceFile {
 > = bootstrap<
   {{
     arguments: arguments;
-    funcs: {{
-{funcs}
-    }};
+    funcs: funcs;
     globals: {{{globals}}};
     memory:{memory};
     memorySize: '{memory_size_binary}';
@@ -159,7 +159,13 @@ impl ToString for SourceFile {
 >"
         );
 
-        format!("{imports}\n{types}\n{entry}\n{data_types}")
+        format!("{imports}\n{types}\n{funcs}\n{entry}\n{data_types}")
+    }
+}
+
+impl Default for SourceFile {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

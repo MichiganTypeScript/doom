@@ -485,6 +485,14 @@ type $entry = Satisfies<Func, {
     ];
 }>
 
+export type funcs = {
+  $__wasm_call_ctors: $__wasm_call_ctors;
+  $countAliveNeighbors: $countAliveNeighbors;
+  $updateGrid: $updateGrid;
+  $displayGrid: $displayGrid;
+  $entry: $entry;
+}
+
 export type entry<
   arguments extends [number],
   debugMode extends boolean = false,
@@ -492,13 +500,7 @@ export type entry<
 > = bootstrap<
   {
     arguments: arguments;
-    funcs: {
-      $__wasm_call_ctors: $__wasm_call_ctors;
-      $countAliveNeighbors: $countAliveNeighbors;
-      $updateGrid: $updateGrid;
-      $displayGrid: $displayGrid;
-      $entry: $entry;
-    };
+    funcs: funcs;
     globals: {
       $g0: '00000000000000010000010011000000';
       $__dso_handle: '00000000000000000000010000000000';

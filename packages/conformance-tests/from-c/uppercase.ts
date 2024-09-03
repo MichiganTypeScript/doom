@@ -57,6 +57,12 @@ type $entry = Satisfies<Func, {
     ];
 }>
 
+export type funcs = {
+  $__wasm_call_ctors: $__wasm_call_ctors;
+  $toupper: $toupper;
+  $entry: $entry;
+}
+
 export type entry<
   arguments extends [number],
   debugMode extends boolean = false,
@@ -64,11 +70,7 @@ export type entry<
 > = bootstrap<
   {
     arguments: arguments;
-    funcs: {
-      $__wasm_call_ctors: $__wasm_call_ctors;
-      $toupper: $toupper;
-      $entry: $entry;
-    };
+    funcs: funcs;
     globals: {
       $__dso_handle: '00000000000000000000010000000000';
       $__data_end: '00000000000000000000010000000010';

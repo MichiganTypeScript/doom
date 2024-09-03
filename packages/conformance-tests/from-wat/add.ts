@@ -26,6 +26,11 @@ type $entry = Satisfies<Func, {
     ];
 }>
 
+export type funcs = {
+  $add: $add;
+  $entry: $entry;
+}
+
 export type entry<
   arguments extends [number, number],
   debugMode extends boolean = false,
@@ -33,10 +38,7 @@ export type entry<
 > = bootstrap<
   {
     arguments: arguments;
-    funcs: {
-      $add: $add;
-      $entry: $entry;
-    };
+    funcs: funcs;
     globals: {};
     memory: {};
     memorySize: '00000000000000000000000000000000';

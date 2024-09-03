@@ -65,6 +65,12 @@ type $emscripten_stack_init = Satisfies<Func, {
     ];
 }>
 
+export type funcs = {
+  $__wasm_call_ctors: $__wasm_call_ctors;
+  $entry: $entry;
+  $emscripten_stack_init: $emscripten_stack_init;
+}
+
 export type entry<
   arguments extends [number, number],
   debugMode extends boolean = false,
@@ -72,11 +78,7 @@ export type entry<
 > = bootstrap<
   {
     arguments: arguments;
-    funcs: {
-      $__wasm_call_ctors: $__wasm_call_ctors;
-      $entry: $entry;
-      $emscripten_stack_init: $emscripten_stack_init;
-    };
+    funcs: funcs;
     globals: {
       $__stack_pointer: '00000000010100000000010000010000';
       $__stack_end: '00000000000000000000000000000000';

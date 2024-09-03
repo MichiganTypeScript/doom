@@ -35,6 +35,12 @@ type $entry = Satisfies<Func, {
     ];
 }>
 
+export type funcs = {
+  $setGlobal: $setGlobal;
+  $getGlobal: $getGlobal;
+  $entry: $entry;
+}
+
 export type entry<
   arguments extends [],
   debugMode extends boolean = false,
@@ -42,11 +48,7 @@ export type entry<
 > = bootstrap<
   {
     arguments: arguments;
-    funcs: {
-      $setGlobal: $setGlobal;
-      $getGlobal: $getGlobal;
-      $entry: $entry;
-    };
+    funcs: funcs;
     globals: {
       $myGlobal: '00000000000000000000000000000000';
     };
