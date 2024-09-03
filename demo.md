@@ -43,8 +43,8 @@
 ## Back to Conway
 
 - [playground entrypoint](./packages/playground/evaluate/playground.ts)
-- [first result](./packages/playground/evaluate/results/results-000000.ts)
-- [last result](./packages/playground/evaluate/results/results-187800.ts)
+- [first result](./packages/playground/evaluate/results/result-000000.ts)
+- [last result](./packages/playground/evaluate/results/result-187800.ts)
 - [program finish](./packages/playground/evaluate/results/results.ts)
 - Stats
   - [individual run stats](./packages/playground/evaluate/results/stats/stats-041000.json)

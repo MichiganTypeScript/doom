@@ -2,7 +2,7 @@ import { writeFile, readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import ts, { Program } from 'typescript';
 import { mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
-import {  incrementBy, initialConditions, statsDirectory, statsJsonPath, statsPath } from './config';
+import {  STATS_PREFIX, csvPath, incrementBy, initialConditions, statsDirectory, statsJsonPath, statsPath } from './config';
 import { MeteringDefinite } from './metering';
 
 const stackSize = (depth = 1): number => {
@@ -45,7 +45,7 @@ type SimpleTotals = {
   max: number;
   avg: number;
   stdev: number;
-  values: number[];
+  median: number;
 }
 
 interface Totals extends SimpleTotals {
@@ -55,11 +55,16 @@ interface Totals extends SimpleTotals {
   avgPerInstruction: number;
 }
 
-type ByInstructionStats = Record<string, {
+type ByInstructionStats = {
   instantiations: SimpleTotals;
   time: SimpleTotals;
   instantiationsPerMs: number;
-}>
+}
+
+type ByInstructionReduction = {
+  stats: ByInstructionStats,
+  values: { instantiations: number[], time: number[] }
+}
 
 type ProgramTotals = Record<keyof RunInfo, Record<string, Totals>>;
 
@@ -67,7 +72,7 @@ interface ProgramStats {
   programTime: number;
   stackSize: number;
   totals: ProgramTotals;
-  byInstruction?: ByInstructionStats;
+  byInstruction?: Record<string, ByInstructionReduction>;
   summary?: Record<string, number>;
 }
 
@@ -131,15 +136,18 @@ export const runStats = async ({
   );
 };
 
+const round = (value: number) => Math.round((value + Number.EPSILON) * 100) / 100;
+
 const getTotals = (runs: Runs) => {
-  const result = {} as ProgramTotals;
+  const totals = {} as ProgramTotals;
+  const csv = {} as CSV;
 
   const [runId, runInfo] = Object.entries(runs)[0] as unknown as [keyof Runs, RunInfo];
   Object.entries(runInfo).forEach((entry) => {
     const [groupId, group] = (entry as [keyof RunInfo, RunInfo[keyof RunInfo]]);
     
-    result[groupId as keyof RunInfo] = {} as ProgramTotals[keyof RunInfo];
-    
+    totals[groupId as keyof RunInfo] = {} as ProgramTotals[keyof RunInfo];
+
     Object.entries(group).forEach((stat) => {
       const [statId, statValue] = stat as [keyof RunInfo[keyof RunInfo], RunInfo[keyof RunInfo][keyof RunInfo[keyof RunInfo]]];
       if (typeof statValue !== 'number') {
@@ -151,44 +159,34 @@ const getTotals = (runs: Runs) => {
       */
 
       const values = Object.values(runs).map(run => run[groupId][statId]) as number[];
+      csv[`${groupId}.${statId}`] = values;
+
       const sum = values.reduce((acc, b) => acc + b, 0);
       const min = values.reduce((acc, b) => Math.min(acc, b), Infinity);
       const max = values.reduce((acc, b) => Math.max(acc, b), -Infinity);
+      const median = values.sort((a, b) => a - b)[Math.floor(values.length / 2)];
       const avg = sum / values.length;
       const stdev = getStdev(values);
 
-      const unrounded: Omit<Totals, 'values'> = {
-        sum,
-        sumPerInstruction: sum / incrementBy,
-        min,
-        minPerInstruction: min / incrementBy,
-        max,
-        maxPerInstruction: max / incrementBy,
-        avg,
-        avgPerInstruction: avg / incrementBy,
-        stdev,
+      totals[groupId][statId] = {
+        sum: round(sum),
+        sumPerInstruction: round(sum / incrementBy),
+        min: round(min),
+        minPerInstruction: round(min / incrementBy),
+        max: round(max),
+        maxPerInstruction: round(max / incrementBy),
+        avg: round(avg),
+        avgPerInstruction: round(avg / incrementBy),
+        median: round(median),
+        stdev: round(stdev),
       };
-
-      const rounded = Object.fromEntries(
-        Object.entries(unrounded).map(([key, value]) => [
-          key,
-          Math.round((value + Number.EPSILON) * 100) / 100
-        ])
-      );
-
-      const totals = {
-        ...rounded,
-        values,
-      } as Totals;
-
-      result[groupId][statId] = totals;
     });
   });
 
-  return result;
+  return { totals, csv };
 }
 
-const byInstruction = (runs: Runs) => {
+const byInstruction = (runs: Runs): Pick<ProgramStats, 'byInstruction' | 'summary'> => {
   if (!isBenchmarkingIndividualInstructions) {
     return {};
   }
@@ -203,60 +201,75 @@ const byInstruction = (runs: Runs) => {
     const { getTypeAtLocation } = run.metering;
     if (!Object.hasOwn(acc, activeInstruction)) {
       acc[activeInstruction] = {
-        instantiations: {
-          sum: 0,
-          min: Infinity,
-          max: -Infinity,
-          avg: 0,
-          stdev: 0,
-          values: [],
+        stats: {
+          instantiations: {
+            sum: 0,
+            min: Infinity,
+            max: -Infinity,
+            avg: 0,
+            stdev: 0,
+            median: 0,
+          },
+          time: {
+            sum: 0,
+            min: Infinity,
+            max: -Infinity,
+            avg: 0,
+            stdev: 0,
+            median: 0,
+          },
+          instantiationsPerMs: 0,
         },
-        time: {
-          sum: 0,
-          min: Infinity,
-          max: -Infinity,
-          avg: 0,
-          stdev: 0,
-          values: [],
+        values: {
+          instantiations: [],
+          time: [],
         },
-        instantiationsPerMs: 0,
       }
     }
 
     const current = acc[activeInstruction];
 
-    const insts = {
-      sum: current.instantiations.sum + instantiations,
-      min: Math.min(current.instantiations.min, instantiations),
-      max: Math.max(current.instantiations.max, instantiations),
-      avg: (current.instantiations.sum  + instantiations ) / [...current.instantiations.values, instantiations].length,
-      stdev: getStdev([...current.instantiations.values, instantiations]),
-      values: [...current.instantiations.values, instantiations],
-    };
-
-    const time = {
-      sum: current.time.sum + getTypeAtLocation,
-      min: Math.min(current.time.min, getTypeAtLocation),
-      max: Math.max(current.time.max, getTypeAtLocation),
-      avg: (current.time.sum + getTypeAtLocation) /  [...current.time.values, getTypeAtLocation].length,
-      stdev: getStdev([...current.time.values, getTypeAtLocation]),
-      values: [...current.time.values, getTypeAtLocation],
+    const values = {
+      instantiations: [...current.values.instantiations, instantiations],
+      time: [...current.values.time, getTypeAtLocation],
     }
+
+    const timeAvg = (current.stats.time.sum + getTypeAtLocation) / values.time.length;
 
     return {
-      ...acc,
-      [activeInstruction]: {
-        instantiations: insts,
-        time,
-        instantiationsPerMs: Math.round(time.avg),
+      stats: {
+        ...acc.stats,
+        [activeInstruction]: {
+          instantiations: {
+            sum: current.stats.instantiations.sum + instantiations,
+            min: Math.min(current.stats.instantiations.min, instantiations),
+            max: Math.max(current.stats.instantiations.max, instantiations),
+            avg: (current.stats.instantiations.sum  + instantiations ) / [...values.instantiations, instantiations].length,
+            stdev: getStdev([...values.instantiations, instantiations]),
+            median: values.instantiations.sort((a, b) => a - b)[Math.floor(values.instantiations.length / 2)],
+          },
+          time: {
+            sum: current.stats.time.sum + getTypeAtLocation,
+            min: Math.min(current.stats.time.min, getTypeAtLocation),
+            max: Math.max(current.stats.time.max, getTypeAtLocation),
+            avg: timeAvg,
+            stdev: getStdev([...values.time, getTypeAtLocation]),
+            median: values.time.sort((a, b) => a - b)[Math.floor(values.time.length / 2)],
+          },
+          instantiationsPerMs: Math.round(values.instantiations.length / timeAvg),
+        }
+      },
+      values: {
+        ...acc.values,
+        [activeInstruction]: values
       }
     }
-  }, {} as ByInstructionStats);
+  }, {} as Record<string, ByInstructionReduction>);
 
   const summary =
     Object.fromEntries(
       Object.entries(byInstruction!)
-        .map(([ins, v]) => [ins, v.instantiationsPerMs] as const)
+        .map(([ins, v]) => [ins, v.stats.instantiationsPerMs] as const)
         .sort((a, b) => a[1] - b[1])
         .reverse()
     )
@@ -267,12 +280,14 @@ const byInstruction = (runs: Runs) => {
   }
 }
 
+type CSV = Record<string, number[]>;
+
 const calculateTotals = async (
   programTime: ProgramStats['programTime']
-): Promise<ProgramStats> => {
+): Promise<{ programStats: ProgramStats, csv: CSV }> => {
   let runs: Runs = {};
   for (const file of await readdir(statsDirectory)) {
-    if (!file.startsWith('stats-') || !file.endsWith(".json")) {
+    if (!file.startsWith(STATS_PREFIX) || !file.endsWith(".json")) {
       // console.log('skipping', file)
       continue;
     }
@@ -283,17 +298,30 @@ const calculateTotals = async (
     runs[count] = parsed;
   }
 
+  const { totals, csv } = getTotals(runs);
+
   return {
-    programTime,
-    stackSize: stackSize(),
-    totals: getTotals(runs),
-    // ...byInstruction(runs), // TODO I broke this.  oops.
+    programStats: {
+      programTime,
+      stackSize: stackSize(),
+      totals,
+      ...byInstruction(runs),
+    },
+    csv,
   }
 }
 
+export const serializeCSV = (csv: CSV) => {
+  const header = Object.keys(csv).join(',');
+  const values = Object.values(csv);
+  const body = values[0].map((_, i) => values.map(row => row[i]).join('\t')).join('\n');
+  return `${header}\n${body}`;
+}
+
 export const logFinalStats = async (programTime: number) => {
-  const programStats = await calculateTotals(programTime);
+  const { programStats, csv } = await calculateTotals(programTime);
   await writeFile(statsPath, JSON.stringify(programStats, null, 2), 'utf-8');
+  await writeFile(csvPath, serializeCSV(csv), 'utf-8');
 
   console.log(
     "total time (ms)",
@@ -332,6 +360,7 @@ export const shortStats = ({
   metering: {
     total: totalTime,
     getTypeAtLocation,
+    getProgram,
   }
 }: {
   stats: TSProgramStats,
@@ -345,6 +374,7 @@ export const shortStats = ({
     ...printColumn('instantiations', 10, instantiations),
     ...printColumn('instan/ms', 7, instantiations / getTypeAtLocation),
     ...printColumn('length', 10, typeStringLength),
+    ...printColumn('getProgram', 4, getProgram),
     `|${activeInstruction ? ` ${activeInstruction} |` : ''}`,
   );
 }
@@ -363,6 +393,7 @@ export const encourage = () => {
     "To excessive and possibly infinite depth and beyond!", // credit: DBlass
     "10 bucks says what comes next starts with \"RangeError: Maximum call stack size exceeded at `instantiateTypes`\"",
     "just another few months and this thing will finally work.. right?",
+    "What if I told you everything you know about recursion is a lie?",
   ]
   
   console.log(phrases[Math.floor(Math.random() * phrases.length)]);

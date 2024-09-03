@@ -48,13 +48,15 @@ const getActiveInstruction = (file: string, current: number, incrementBy: number
  * e.g. if the string ` instructions: [` is detected, replace it with `\ninstructions: [`
  */
 const preBreakFile = (text: string) => (
-  text
-    .replace(/ instructions: \[/g, '\ninstructions: [')
-    .replace(/ activeLocals: \{/g, '\nactiveLocals: {')
-    .replace(/ activeBranches: \{/g, '\nactiveBranches: {')
-    .replace(/ memory: \{/g, '\nmemory: {')
-    .replace(/ executionContexts: \[/g, '\nmemory: [')
-    .replace(/ funcs: \{/g, '\nfuncs: {')
+  [
+    'stack',
+    'instructions',
+    'activeLocals',
+    'activeBranches',
+    'globals',
+    'memory',
+    'executionContexts',
+  ].reduce((acc, value) => acc.replace(` ${value[0]}: `, `\n${value[1]}: `), text)
 );
 
 const reportErrors = (program: ts.Program) => {
@@ -116,14 +118,12 @@ const programIsComplete = ({ stopAt, current, bootstrap }: ProgramRun) => {
   return false
 }
 
-const system = tsvfs.createFSBackedSystem(
-  libFiles,
-  projectRoot,
-  ts
-)
-
 const createEnv = () => tsvfs.createVirtualTypeScriptEnvironment(
-  system,
+  tsvfs.createFSBackedSystem(
+    libFiles,
+    projectRoot,
+    ts
+  ),
   [globalDefinitions],
   ts,
   options
@@ -207,13 +207,14 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   }
 
   const formattedCurrent = formatCurrent(current);
-  const programImport = `import { executeInstruction } from '../../../wasm-to-typescript-types/program'\n`
+  const programImport = `import { executeInstruction } from '../../../wasm-to-typescript-types/program'`
   const typeName = `PlaygroundResult_${formattedCurrent}`;
   let playgroundResult = `export type ${typeName} = ${typeString}`;
   const nextStopAt = current + incrementBy;
   const evaluate = preBreakFile(`export type ${targetTypeAlias} = executeInstruction<${typeName}, true, ${nextStopAt}>`)
 
-  const unformattedFile = [
+  let formattedFile = [
+    funcImportLine,
     programImport,
     evaluate,
     playgroundResult,
@@ -226,19 +227,18 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   }
 
   meter('formatter').start();
-  let formattedFile = unformattedFile;
   let formatterDiagnositcs: Diagnostic[] = [];
   if (!process.argv.includes('--skip-formatter')) {
     ({
       content: formattedFile,
       diagnostics: formatterDiagnositcs
-    } = rome.formatContent(unformattedFile, {
+    } = rome.formatContent(formattedFile, {
       filePath: evaluationFilePath,
     }));
   }
   meter('formatter').stop();
 
-  if (formatterDiagnositcs.length) {
+  if (formatterDiagnositcs.length > 0) {
     throw new Error(`diagnostics from formatter ${formatterDiagnositcs}`);
   }
 
@@ -380,9 +380,24 @@ rome.applyConfiguration({
   }
 })
 
+let funcImportLine: string | null = null;
+
+const validateFuncsImportLine = (source: string) => {
+  funcImportLine = source.split('\n')[0].replace(/from "/, 'from "../../../');
+
+  if (funcImportLine === '' || !funcImportLine.includes("{ funcs }")) {
+    throw new Error("didn't find a funcs import line in the playground file");
+  }
+  
+  if (funcImportLine === null) {
+    throw new Error("so it's shitty, I'll give you that much, but there's an optimization in play whereby you need to make sure that the first line of the playground file matches the `funcs` import for the type you're asking for.  It gets transformed later into something fairly critical for performance (basically removing all static assets).");
+  }
+}
+
 /** Bootstrap the program */
 const bootstrap = async () => {
   const playgroundSource = await readFile(playgroundFilePath, 'utf-8');
+  validateFuncsImportLine(playgroundSource);
 
   const { evaluationSourceCode, env } = await isolatedProgram({
     bootstrap: true,

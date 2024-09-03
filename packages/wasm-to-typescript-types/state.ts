@@ -510,7 +510,7 @@ export namespace State {
         memory:
           Patch<
             get<state>,
-            _update
+            _update // POTENTIAL OPTIMIZATION: we don't need to set bytes that are `00000000` _UNLESS_ there's already a value there.
           >;
 
         indirect: state['indirect'];

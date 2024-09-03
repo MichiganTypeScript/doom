@@ -47,8 +47,11 @@ export const finalResultPath = join(resultsDirectory, 'results.ts');
 export const bootstrapFilePath = join(resultsDirectory, 'bootstrap.ts');
 export const statsDirectory = join(resultsDirectory, 'stats');
 export const statsPath = join(statsDirectory, 'program-stats.json');
+export const csvPath = join(statsDirectory, 'program-stats.csv');
 
 export const formatCurrent = (current: number) => String(current).padStart(initialConditions.digits, '0');
-export const createResultFilePath = (current: number) => join(resultsDirectory, `results-${formatCurrent(current)}.ts`)
-export const statsJsonPath = (current: number) => join(statsDirectory, `stats-${formatCurrent(current)}.json`);
+export const RESULT_PREFIX = 'result-';
+export const createResultFilePath = (current: number) => join(resultsDirectory, `${RESULT_PREFIX}${formatCurrent(current)}.ts`)
+export const STATS_PREFIX = 'stats-';
+export const statsJsonPath = (current: number) => join(statsDirectory, `${STATS_PREFIX}${formatCurrent(current)}.json`);
 export const shouldTakeABreath = (timeSpentUnderwater: number, current: number) => current === 0 || timeSpentUnderwater >= comeUpForAirEvery;
