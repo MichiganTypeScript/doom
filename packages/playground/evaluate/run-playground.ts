@@ -56,7 +56,7 @@ const preBreakFile = (text: string) => (
     'globals',
     'memory',
     'executionContexts',
-  ].reduce((acc, value) => acc.replace(` ${value[0]}: `, `\n${value[1]}: `), text)
+  ].reduce((acc, value) => acc.replace(` ${value}: `, `\n${value}: `), text)
 );
 
 const reportErrors = (program: ts.Program) => {
@@ -88,20 +88,12 @@ interface ProgramRun {
 
   justPrint?: boolean;
 
-  env: tsvfs.VirtualTypeScriptEnvironment;
-
   /** the program can "take a breath" (meaning, dump everything to disk and start a new env) in order to avoid out-of-memory and call-stack-exceeded errors */
   timeSpentUnderwater: number;
+
+  cleanup: () => void;
 }
 
-const configFile = ts.readConfigFile(tsconfigFilePath, ts.sys.readFile)
-const { options } = ts.parseJsonConfigFileContent(
-  configFile.config,
-  ts.sys,
-  dirname(tsconfigFilePath)
-);
-
-const libFiles = tsvfs.createDefaultMapFromNodeModules(options);
 
 const programIsComplete = ({ stopAt, current, bootstrap }: ProgramRun) => {
   // we don't want to stop if we're in the bootstrap phase
@@ -118,19 +110,33 @@ const programIsComplete = ({ stopAt, current, bootstrap }: ProgramRun) => {
   return false
 }
 
-const createEnv = () => tsvfs.createVirtualTypeScriptEnvironment(
-  tsvfs.createFSBackedSystem(
+const createEnv = () => {
+  const configFile = ts.readConfigFile(tsconfigFilePath, ts.sys.readFile)
+  const { options } = ts.parseJsonConfigFileContent(
+    configFile.config,
+    ts.sys,
+    dirname(tsconfigFilePath)
+  );
+  
+  const libFiles = tsvfs.createDefaultMapFromNodeModules(options);
+  const system = tsvfs.createFSBackedSystem(
     libFiles,
     projectRoot,
     ts
-  ),
-  [globalDefinitions],
-  ts,
-  options
-)
+  );
+
+  return tsvfs.createVirtualTypeScriptEnvironment(
+    system,
+    [globalDefinitions],
+    ts,
+    options
+  )
+}
+
+const env = createEnv();
 
 const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
-  let { current, env, timeSpentUnderwater } = programRun;
+  let { current, timeSpentUnderwater, cleanup } = programRun;
   const {
     bootstrap,
     stopAt,
@@ -206,12 +212,13 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     }
   }
 
+  meter('formatter').start();
   const formattedCurrent = formatCurrent(current);
   const programImport = `import { executeInstruction } from '../../../wasm-to-typescript-types/program'`
   const typeName = `PlaygroundResult_${formattedCurrent}`;
-  let playgroundResult = `export type ${typeName} = ${typeString}`;
+  let playgroundResult = preBreakFile(`export type ${typeName} = ${typeString}`);
   const nextStopAt = current + incrementBy;
-  const evaluate = preBreakFile(`export type ${targetTypeAlias} = executeInstruction<${typeName}, true, ${nextStopAt}>`)
+  const evaluate = `export type ${targetTypeAlias} = executeInstruction<${typeName}, true, ${nextStopAt}>`
 
   let formattedFile = [
     funcImportLine,
@@ -226,7 +233,6 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     reportErrors(program);
   }
 
-  meter('formatter').start();
   let formatterDiagnositcs: Diagnostic[] = [];
   if (!process.argv.includes('--skip-formatter')) {
     ({
@@ -265,6 +271,14 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     metering: finalizeMeter(),
   });
 
+  cleanup();
+  cleanup = () => {
+    // a word to the wise (or, in my case, very unwise): if you don't clean up the files, you'll effectively grow memory forever.
+    // that, in itself, isn't so bad, but what _also_ happens is that the program slows down to a crawl.
+    // calls to `.getProgram` go from taking 20ms to taking 10 seconds, perhaps understandably because the program gets so damn big.
+    env.deleteFile(evaluationFilePath)
+  };
+
   if (isComplete) {
     return await isolatedProgram({
       bootstrap,
@@ -273,8 +287,8 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
       evaluationFilePath: writeFilePath,
       evaluationSourceCode: formattedFile,
       resultFilePath: null,
-      env,
       timeSpentUnderwater,
+      cleanup,
     })
   }
 
@@ -286,7 +300,6 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   if (shouldTakeABreath(timeSpentUnderwater, current)) {
     timeSpentUnderwater = 0; // reset the counter
     await writeFile(evaluationFilePath, evaluationSourceCode, 'utf-8');
-    env = createEnv();
   }
 
   timeSpentUnderwater += incrementBy;
@@ -298,8 +311,8 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     evaluationFilePath: writeFilePath,
     evaluationSourceCode: formattedFile,
     resultFilePath: createResultFilePath(nextCurrent),
-    env,
     timeSpentUnderwater,
+    cleanup,
   };
 }
 
@@ -341,8 +354,8 @@ const finalizeProgram = async (
     evaluationSourceCode: file,
     resultFilePath: null,
     justPrint: true,
-    env: createEnv(),
     timeSpentUnderwater: 0,
+    cleanup: () => {},
   });
 }
 
@@ -399,15 +412,15 @@ const bootstrap = async () => {
   const playgroundSource = await readFile(playgroundFilePath, 'utf-8');
   validateFuncsImportLine(playgroundSource);
 
-  const { evaluationSourceCode, env } = await isolatedProgram({
+  const { evaluationSourceCode } = await isolatedProgram({
     bootstrap: true,
     current: initialConditions.startAt,
     stopAt: initialConditions.startAt,
     evaluationFilePath: playgroundFilePath,
     evaluationSourceCode: playgroundSource,
     resultFilePath: bootstrapFilePath,
-    env: createEnv(),
     timeSpentUnderwater: 0,
+    cleanup: () => {},
   });
 
   await writeFile(bootstrapFilePath, evaluationSourceCode, 'utf-8');
@@ -416,11 +429,9 @@ const bootstrap = async () => {
 }
 
 const mainLoop = async ({
-  evaluationSourceCode,
-  env
+  evaluationSourceCode
 }: {
   evaluationSourceCode: string,
-  env: tsvfs.VirtualTypeScriptEnvironment
 }) => {
   let runConfig: ProgramRun = {
     bootstrap: false,
@@ -429,8 +440,8 @@ const mainLoop = async ({
     evaluationFilePath: bootstrapFilePath,
     evaluationSourceCode: evaluationSourceCode!,
     resultFilePath: createResultFilePath(incrementBy),
-    env,
     timeSpentUnderwater: 0,
+    cleanup: () => {},
   };
 
   while (true) {

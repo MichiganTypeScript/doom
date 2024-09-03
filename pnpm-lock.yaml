@@ -35,8 +35,8 @@ importers:
         specifier: ^20.11.5
         version: 20.11.5
       '@typescript/vfs':
-        specifier: ^1.5.0
-        version: 1.5.0
+        specifier: ^1.6.0
+        version: 1.6.0(typescript@5.3.3(patch_hash=bnl77azyknnedqohsc3d4mfkne))
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
@@ -331,8 +331,10 @@ packages:
   '@types/node@20.11.5':
     resolution: {integrity: sha512-g557vgQjUUfN76MZAN/dt1z3dzcUsimuysco0KeluHgrPdJXkP/XdAURgyO2W9fZWHRtRBiVKzKn8vyOAwlG+w==}
 
-  '@typescript/vfs@1.5.0':
-    resolution: {integrity: sha512-AJS307bPgbsZZ9ggCT3wwpg3VbTKMFNHfaY/uF0ahSkYYrPF2dSSKDNIDIQAHm9qJqbLvCsSJH7yN4Vs/CsMMg==}
+  '@typescript/vfs@1.6.0':
+    resolution: {integrity: sha512-hvJUjNVeBMp77qPINuUvYXj4FyWeeMMKZkxEATEU3hqBAQ7qdTBCUFT7Sp0Zu0faeEtFf+ldXxMEDr/bk73ISg==}
+    peerDependencies:
+      typescript: '*'
 
   '@vitest/expect@1.2.1':
     resolution: {integrity: sha512-/bqGXcHfyKgFWYwIgFr1QYDaR9e64pRKxgBNWNXPefPFRhgm+K3+a/dS0cUGEreWngets3dlr8w8SBRw2fCfFQ==}
@@ -850,9 +852,10 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@typescript/vfs@1.5.0':
+  '@typescript/vfs@1.6.0(typescript@5.3.3(patch_hash=bnl77azyknnedqohsc3d4mfkne))':
     dependencies:
       debug: 4.3.4
+      typescript: 5.3.3(patch_hash=bnl77azyknnedqohsc3d4mfkne)
     transitivePeerDependencies:
       - supports-color
 

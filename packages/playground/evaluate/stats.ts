@@ -164,7 +164,7 @@ const getTotals = (runs: Runs) => {
       const sum = values.reduce((acc, b) => acc + b, 0);
       const min = values.reduce((acc, b) => Math.min(acc, b), Infinity);
       const max = values.reduce((acc, b) => Math.max(acc, b), -Infinity);
-      const median = values.sort((a, b) => a - b)[Math.floor(values.length / 2)];
+      const median = [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)];
       const avg = sum / values.length;
       const stdev = getStdev(values);
 
@@ -246,7 +246,7 @@ const byInstruction = (runs: Runs): Pick<ProgramStats, 'byInstruction' | 'summar
             max: Math.max(current.stats.instantiations.max, instantiations),
             avg: (current.stats.instantiations.sum  + instantiations ) / [...values.instantiations, instantiations].length,
             stdev: getStdev([...values.instantiations, instantiations]),
-            median: values.instantiations.sort((a, b) => a - b)[Math.floor(values.instantiations.length / 2)],
+            median: [...values.instantiations].sort((a, b) => a - b)[Math.floor(values.instantiations.length / 2)],
           },
           time: {
             sum: current.stats.time.sum + getTypeAtLocation,
@@ -254,7 +254,7 @@ const byInstruction = (runs: Runs): Pick<ProgramStats, 'byInstruction' | 'summar
             max: Math.max(current.stats.time.max, getTypeAtLocation),
             avg: timeAvg,
             stdev: getStdev([...values.time, getTypeAtLocation]),
-            median: values.time.sort((a, b) => a - b)[Math.floor(values.time.length / 2)],
+            median: [...values.time].sort((a, b) => a - b)[Math.floor(values.time.length / 2)],
           },
           instantiationsPerMs: Math.round(values.instantiations.length / timeAvg),
         }
@@ -312,7 +312,7 @@ const calculateTotals = async (
 }
 
 export const serializeCSV = (csv: CSV) => {
-  const header = Object.keys(csv).join(',');
+  const header = Object.keys(csv).join('\t');
   const values = Object.values(csv);
   const body = values[0].map((_, i) => values.map(row => row[i]).join('\t')).join('\n');
   return `${header}\n${body}`;

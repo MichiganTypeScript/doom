@@ -25,7 +25,7 @@
     "@biomejs/wasm-nodejs": "^1.5.3",
     "@biomejs/wasm-web": "^1.5.3",
     "@types/node": "^20.11.5",
-    "@typescript/vfs": "^1.5.0",
+    "@typescript/vfs": "^1.6.0",
     "lz-string": "^1.5.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.0",
