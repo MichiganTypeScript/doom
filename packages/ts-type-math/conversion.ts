@@ -420,6 +420,7 @@ export namespace Catalog {
     "11111111": 255,
   }
 
+  // POTENTIAL OPTIMIZATION: store these instead of strings
   export type U8DecimalToU8Binary = {
     0: "00000000",
     1: "00000001",
