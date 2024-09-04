@@ -32,5 +32,5 @@ type testCases = [
 
   Expect<Equal<memory[p1024], end>>,
 
-  Expect<Equal<Greeting, "A\0">>,
+  Expect<Equal<Greeting, "A">>,
 ]

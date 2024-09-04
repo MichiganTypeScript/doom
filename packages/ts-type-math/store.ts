@@ -4,6 +4,7 @@ import type { Convert } from "./conversion"
 import type { SplitToBytes } from "./split"
 import type { WasmValue, Wasm } from "./wasm"
 import type { evaluate, Satisfies } from './utils'
+import { MemoryAddress, MemoryByAddress } from "../wasm-to-typescript-types/types";
 
 export type AsciiToU8Decimal<T extends string> =
   T extends `${infer Char extends Ascii}${infer Rest}`
@@ -60,6 +61,34 @@ export type StoreString<
   // >
 >
 
+
+/** super optimized */
+export type BytePatch<
+  Source extends Record<MemoryAddress, Wasm.Byte>,
+  Update extends Record<MemoryAddress, Wasm.Byte>
+> = Satisfies<MemoryByAddress, evaluate<{
+  [k in (keyof Source | keyof Update) as
+
+    k extends keyof Update
+
+      ? Update[k] extends Wasm.I8False
+    
+        // we don't need to set it if it's false
+        ? never
+
+        // we want to keep it because it's new non-false data
+        : k
+
+      // it's just regular old data from the Source
+      : k
+  ]:
+    k extends keyof Update
+    ? Update[k] // prioritize Update
+    : k extends keyof Source
+      ? Source[k]
+      : never // unreachable
+}>>;
+
 export namespace Store {
   export type I32<
     a extends WasmValue
@@ -70,7 +99,7 @@ export namespace Store {
   // QUESTION: I need to get the _last_ 8 characters of a string.  is it better to do this or to use `SplitToBytes`?
   export type GetLSB<
     a extends WasmValue
-  > = Satisfies<[Wasm.Byte],
+  > = Satisfies<Wasm.Byte[],
     ReverseString8Segments<a> extends `${infer b00}${infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer Tail}`
     ? [`${b07}${b06}${b05}${b04}${b03}${b02}${b01}${b00}`]
     : never

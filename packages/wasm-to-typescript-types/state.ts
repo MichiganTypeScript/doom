@@ -1,6 +1,5 @@
 import { I32AddBinary } from "../ts-type-math/add";
 import type { Instruction } from "./instructions/instructions"
-import { Load } from "./instructions/memory";
 import type {
   BranchesById,
   ExecutionContext,
@@ -14,11 +13,12 @@ import type {
 } from "./types"
 import * as TypeMath from "ts-type-math";
 import { WasmValue, WasmType, Convert, Wasm, evaluate, Satisfies } from 'ts-type-math';
+import { BytePatch } from "../ts-type-math/store";
 
-/** update Source with Additional */
-type Patch<Source, Additional> = evaluate<
-  & Omit<Source, keyof Additional>
-  & Additional
+/** update Source with Update */
+type Patch<Source, Update> = evaluate<
+  & Omit<Source, keyof Update>
+  & Update
 >;
 
 export namespace State {
@@ -508,9 +508,9 @@ export namespace State {
         globals: state['globals'];
 
         memory:
-          Patch<
+          BytePatch<
             get<state>,
-            _update // POTENTIAL OPTIMIZATION: we don't need to set bytes that are `00000000` _UNLESS_ there's already a value there.
+            _update
           >;
 
         indirect: state['indirect'];

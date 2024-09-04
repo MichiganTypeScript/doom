@@ -1,5 +1,5 @@
 import type { Expect, Equal } from "type-testing";
-import type { AsciiToU8Binary, AsciiToU8Decimal, Store, StoreString, U8BinaryToAscii, U8DecimalToAscii } from "../store";
+import type { AsciiToU8Binary, AsciiToU8Decimal, BytePatch, Store, StoreString, U8BinaryToAscii, U8DecimalToAscii } from "../store";
 import { test } from 'vitest';
 import { ReadStringFromMemory } from "../memory-read-string";
 
@@ -72,3 +72,28 @@ type lsb = [
   Expect<Equal<Store.GetLSB<numbers[3]>, ['00000011']>>,
   Expect<Equal<Store.GetLSB<numbers[4]>, ['00001000']>>,
 ]
+
+
+type S = {
+  "00000000000000000000000000000000": "00101110"; // keeping because it hasn't changed
+  "00000000000000000000000000000001": "00101110"; // removing because the update is false
+  //TODO "00000000000000000000000000000010": "00000000"; // removing because it shouldn't be here anyway
+
+  "00000000000000000000000100000011": "00000001"; // keeping because it's random other data
+}
+
+type U = {
+  "00000000000000000000000000000000": "00101110"; // no change because it matches the input
+  "00000000000000000000000000000001": "00000000"; // remove from the input
+//"00000000000000000000000000000010" // not present
+  "00000000000000000000000000000011": "00000000"; // skipping because it's false
+  "00000000000000000000000000000100": "00000001"; // appending because it's not false
+}
+
+type X = BytePatch<S, U>; // =>
+
+type t = Expect<Equal<X, {
+  "00000000000000000000000000000000": "00101110";
+  "00000000000000000000000100000011": "00000001";
+  "00000000000000000000000000000100": "00000001";
+}>>;
