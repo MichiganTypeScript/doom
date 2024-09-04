@@ -1,6 +1,7 @@
 
-import { dirname, join } from "path";
+import { dirname, join, resolve as pathResolve } from "path";
 import { fileURLToPath } from "url";
+import { Worker } from "worker_threads";
 
 /** this is the magic type alias that the script is looking for in the evaluationFilePath */
 export const targetTypeAlias = 'Evaluate';
@@ -55,3 +56,12 @@ export const createResultFilePath = (current: number) => join(resultsDirectory, 
 export const STATS_PREFIX = 'stats-';
 export const statsJsonPath = (current: number) => join(statsDirectory, `${STATS_PREFIX}${formatCurrent(current)}.json`);
 export const shouldTakeABreath = (timeSpentUnderwater: number, current: number) => current === 0 || timeSpentUnderwater >= comeUpForAirEvery;
+
+export const worker = new Worker("./evaluate/worker.mjs");
+worker.setMaxListeners(10);
+
+export const fsWorker = {
+  writeFile: (filePath: string, data: string) => {
+    worker.postMessage({ type: 'writeFile', filePath, data });
+  }
+};

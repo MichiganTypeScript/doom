@@ -1,8 +1,8 @@
-import { writeFile, readdir, readFile } from 'fs/promises'
+import { readdir, readFile } from 'fs/promises'
 import { join } from 'path'
-import ts, { Program } from 'typescript';
+import ts from 'typescript';
 import { mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
-import {  STATS_PREFIX, csvPath, incrementBy, initialConditions, statsDirectory, statsJsonPath, statsPath } from './config';
+import {  STATS_PREFIX, csvPath, fsWorker, incrementBy, initialConditions, statsDirectory, statsJsonPath, statsPath } from './config';
 import { MeteringDefinite } from './metering';
 
 const stackSize = (depth = 1): number => {
@@ -129,10 +129,9 @@ export const runStats = async ({
     metering,
   });
 
-  await writeFile(
+  await fsWorker.writeFile(
     statsJsonPath(metadata.current),
-    JSON.stringify({ metering, stats, metadata }, null, 2),
-    'utf-8'
+    JSON.stringify({ metering, stats, metadata }, null, 2)
   );
 };
 
@@ -320,8 +319,8 @@ export const serializeCSV = (csv: CSV) => {
 
 export const logFinalStats = async (programTime: number) => {
   const { programStats, csv } = await calculateTotals(programTime);
-  await writeFile(statsPath, JSON.stringify(programStats, null, 2), 'utf-8');
-  await writeFile(csvPath, serializeCSV(csv), 'utf-8');
+  await fsWorker.writeFile(statsPath, JSON.stringify(programStats, null, 2));
+  await fsWorker.writeFile(csvPath, serializeCSV(csv));
 
   console.log(
     "total time (ms)",

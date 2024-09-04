@@ -1,7 +1,7 @@
 import { dirname, join } from 'path';
 import tsvfs from '@typescript/vfs';
 import ts from 'typescript';
-import { writeFile, readFile } from 'fs/promises'
+import { readFile } from 'fs/promises'
 import { statSync, mkdirSync, readdirSync, unlinkSync } from 'fs'
 import { Rome, Distribution, Diagnostic } from '@biomejs/js-api';
 import { clearStats, encourage, runStats, logFinalStats, isBenchmarkingIndividualInstructions } from './stats';
@@ -10,6 +10,7 @@ import {
   createResultFilePath,
   finalResultPath,
   formatCurrent,
+  fsWorker,
   globalDefinitions,
   incrementBy,
   initialConditions,
@@ -21,6 +22,7 @@ import {
   simpleTypeMode,
   targetTypeAlias,
   tsconfigFilePath,
+  worker,
 } from './config';
 import { finalizeMeter, meter, resetMeter } from './metering';
 
@@ -252,7 +254,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   const isComplete = typeString.includes('instructions: [];');
   const writeFilePath = isComplete ? createResultFilePath(current) : resultFilePath;
   if (isComplete) {
-    await writeFile(writeFilePath, formattedFile, 'utf-8');
+    await fsWorker.writeFile(writeFilePath, formattedFile);
   }
   meter('writeResults').stop();
 
@@ -299,7 +301,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
 
   if (shouldTakeABreath(timeSpentUnderwater, current)) {
     timeSpentUnderwater = 0; // reset the counter
-    await writeFile(evaluationFilePath, evaluationSourceCode, 'utf-8');
+    await fsWorker.writeFile(evaluationFilePath, evaluationSourceCode);
   }
 
   timeSpentUnderwater += incrementBy;
@@ -342,7 +344,7 @@ const finalizeProgram = async (
   '// > we owe a lot to the TypeScript team for making this possible and being such a great team.',
   '',
   ].join('\n');
-  await writeFile(finalResultPath, file, 'utf-8');
+  await fsWorker.writeFile(finalResultPath, file);
 
   console.log(); // get another newline
 
@@ -423,7 +425,7 @@ const bootstrap = async () => {
     cleanup: () => {},
   });
 
-  await writeFile(bootstrapFilePath, evaluationSourceCode, 'utf-8');
+  await fsWorker.writeFile(bootstrapFilePath, evaluationSourceCode);
 
   return { evaluationSourceCode, env };
 }
@@ -463,6 +465,7 @@ const runProgram = async () => {
   const programTime = endProgram - startProgram;
 
   await logFinalStats(programTime);
+  await worker.terminate();
 }
 
 // if you're just developing the stats summary mechanism,
