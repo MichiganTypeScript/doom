@@ -77,7 +77,7 @@ type lsb = [
 type S = {
   "00000000000000000000000000000000": "00101110"; // keeping because it hasn't changed
   "00000000000000000000000000000001": "00101110"; // removing because the update is false
-  //TODO "00000000000000000000000000000010": "00000000"; // removing because it shouldn't be here anyway
+  //TODO(optional) "00000000000000000000000000000010": "00000000"; // removing because it shouldn't be here anyway
 
   "00000000000000000000000100000011": "00000001"; // keeping because it's random other data
 }
@@ -93,7 +93,7 @@ type U = {
 type X = BytePatch<S, U>; // =>
 
 type t = Expect<Equal<X, {
-  "00000000000000000000000000000000": "00101110";
-  "00000000000000000000000100000011": "00000001";
-  "00000000000000000000000000000100": "00000001";
+  "00000000000000000000000000000000": "00101110"; // we keep this value because it's the same in both
+  "00000000000000000000000000000100": "00000001"; // we keep this value because it's old (and not false) in the updater
+  "00000000000000000000000100000011": "00000001"; // we keep this value because it's new (and not false) in the source
 }>>;
