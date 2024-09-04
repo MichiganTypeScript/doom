@@ -61,33 +61,42 @@ export type StoreString<
   // >
 >
 
+type Merge<O> = {[K in keyof O]: O[K]}
 
 /** super optimized */
 export type BytePatch<
   Source extends Record<MemoryAddress, Wasm.Byte>,
-  Update extends Record<MemoryAddress, Wasm.Byte>
-> = Satisfies<MemoryByAddress, evaluate<{
-  [k in (keyof Source | keyof Update) as
+  Update extends Record<MemoryAddress, Wasm.Byte>,
+  Merged extends Record<MemoryAddress, Wasm.Byte> = Merge<Source & Update>,
+  OmitKeys extends keyof Update = Set<keyof Update> extends Set<infer K extends keyof Update> ? Update[K] extends Wasm.I8False ? K : never : never,
+> = 
+  Satisfies<MemoryByAddress,
+    evaluate<
+      {
+       [k in keyof Merged as k extends OmitKeys ? never : k
+      //  [k in (keyof Source | keyof Update) as
+      //  k extends keyof Update
 
-    k extends keyof Update
+      //     ? Update[k] extends Wasm.I8False
+        
+      //       // we don't need to set it if it's false
+      //       ? never
 
-      ? Update[k] extends Wasm.I8False
-    
-        // we don't need to set it if it's false
-        ? never
+      //       // we want to keep it because it's new non-false data
+      //       : k
 
-        // we want to keep it because it's new non-false data
-        : k
-
-      // it's just regular old data from the Source
-      : k
-  ]:
-    k extends keyof Update
-    ? Update[k] // prioritize Update
-    : k extends keyof Source
-      ? Source[k]
-      : never // unreachable
-}>>;
+      //     // it's just regular old data from the Source
+      //     : k
+      ]:
+      Merged[k]
+        // k extends keyof Update
+        // ? Update[k] // prioritize Update
+        // : k extends keyof Source
+        //   ? Source[k]
+        //   : never // unreachable
+      } 
+    >
+  >;
 
 export namespace Store {
   export type I32<
