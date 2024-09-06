@@ -86,6 +86,8 @@ export type StringAddFixedReversed<
   : // out of digits.  fuck the carry.
     ''
 
+type TrimPadding<Padding extends string> = Padding extends `${any}${infer Rest}` ? `${Rest}` : never;
+
 export type StringAddFixed<
   A extends string,
   B extends string,
@@ -93,13 +95,13 @@ export type StringAddFixed<
   Padding extends string = A extends A63 ? A63 : A extends A31 ? A31 : A extends A15 ? A15 : A7,
   Result extends string = '',
 > =
-  [A, B, Carry] extends [`${Padding}1${any}`, `${Padding}1${any}`, 1]
-    ? (Padding extends '' ? `1${Result}` : StringAddFixed<A, B, 1, Padding extends `${any}${infer Rest}` ? Rest : '', `1${Result}`>)
-  : [A, B, Carry] extends [`${Padding}1${any}`, `${Padding}1${any}`, 0] | [`${Padding}1${any}`, `${Padding}0${any}`, 1] | [`${Padding}0${any}`, `${Padding}1${any}`, 1]
-    ? (Padding extends '' ? `0${Result}` : StringAddFixed<A, B, 1, Padding extends `${any}${infer Rest}` ? Rest : '', `0${Result}`>)
-  : [A, B, Carry] extends [`${Padding}1${any}`, `${Padding}0${any}`, 0] | [`${Padding}0${any}`, `${Padding}1${any}`, 0] | [`${Padding}0${any}`, `${Padding}0${any}`, 1]
-    ? (Padding extends '' ? `1${Result}` : StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? Rest : '', `1${Result}`>)
-  : (Padding extends '' ? `0${Result}` : StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? Rest : '', `0${Result}`>)
+  [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
+    ? Padding extends '' ? `${A1}${B1}${Carry}` extends '111' | '100' | '010' | '001' ? `1${Result}` : `0${Result}`
+    : `${A1}${B1}${Carry}` extends '111' ? StringAddFixed<A, B, 1, `1${Result}`, TrimPadding<Padding>>
+    : `${A1}${B1}${Carry}` extends '110' | '101' | '011' ? StringAddFixed<A, B, 1, `0${Result}`, TrimPadding<Padding>>
+    : `${A1}${B1}${Carry}` extends '100' | '010' | '001' ? StringAddFixed<A, B, 0, `1${Result}`, TrimPadding<Padding>>
+    : StringAddFixed<A, B, 0, `0${Result}`, TrimPadding<Padding>>
+  : never
   
 export type AddBinaryFixed<
     A extends string,
