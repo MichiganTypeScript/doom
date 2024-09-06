@@ -92,39 +92,57 @@ export type StringAddFixed<
   Carry extends 0 | 1 = 0,
   Padding extends string = A extends A63 ? A63 : A extends A31 ? A31 : A extends A15 ? A15 : A7,
 > =
-  Padding extends ''
-    ? [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
+  Padding extends '' // ignore carrying here (overflow)
+  ? A extends `${infer A1}${any}`
+    ? B extends `${infer B1}${any}`
       ? `${A1}${B1}${Carry}` extends infer Pattern extends string
-        ? Pattern extends '111' | '100' | '010' | '001' ? '1' : '0'                          // ignore carrying here (overflow)
-      : never
-    : never
-  : [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
-    ? `${A1}${B1}${Carry}` extends infer Pattern extends string
-      ? StringAddFixed<A, B, Pattern extends '111' | '110' | '101' | '011' ? 1 : 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
-        ? Pattern extends '111' | '100' | '010' | '001' ? `${S}1` : `${S}0`
-      : never
-    : never
-  // A or B is shorter than Padding
-  : StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
+        ? Pattern extends '111' | '100' | '010' | '001'
+          ? '1'
+          : '0'
+        : never
+      // B is ''
+      : A1
+    // A is ''
+    : B extends `${infer B1}${any}` ? B1 : ''
+  : A extends `${infer A1}${any}`
+    ? B extends `${infer B1}${any}`
+      ? `${A1}${B1}${Carry}` extends infer Pattern extends string
+        ? StringAddFixed<A, B, Pattern extends '111' | '110' | '101' | '011' ? 1 : 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
+          ? Pattern extends '111' | '100' | '010' | '001'
+            ? `${S}1`
+            : `${S}0`
+          : never
+        : never
+      // B is shorter than Padding
+      : StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
+        ? `${S}${A1}`
+        : never
+    // A is shorter than Padding
+    : B extends `${infer B1}${any}`
+        ? StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
+          ? `${S}${B1}`
+          : never
+    // A and B are shorter than Padding
+    : StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
       ? `${S}0`
-    : never 
+      : never 
   
 export type AddBinaryFixed<
     A extends string,
     B extends string,
-> = Satisfies<string, StringAddFixed<A, B>>
-// > = Satisfies<string,
-//   // we reverse the strings so we can add them from right to left
-//   // there's no simply way in TypeScript to pick a character off the end of a string
-//   // this is a huge performance bottleneck (in terms of recursions)
-//   ReverseString8Segments<
-//     StringAddFixedReversed<
-//       ReverseString8Segments<A>,
-//       ReverseString8Segments<B>,
-//       []
-//     >
-//   >
-// >
+// > = Satisfies<string, StringAddFixed<A, B>>
+> = Satisfies<string,
+  // we reverse the strings so we can add them from right to left
+  // there's no simply way in TypeScript to pick a character off the end of a string
+  // this is a huge performance bottleneck (in terms of recursions)
+  ReverseString8Segments<
+    StringAddFixedReversed<
+      ReverseString8Segments<A>,
+      ReverseString8Segments<B>,
+      []
+    >
+  >
+>
 
 /** This function's purpose in life is to avoid needing to calculate C twice */
 type AppendCalculationArbitraryReversed<
