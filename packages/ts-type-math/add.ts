@@ -4,6 +4,7 @@ import type { Satisfies } from './utils'
 
 type Counter = 1[];
 
+
 type DigitToCounter<T extends string> =
   T extends '0'
   ? []
@@ -166,7 +167,7 @@ export type I32AddBinary<
   a extends WasmValue,
   b extends WasmValue
 > = Satisfies<WasmValue,
-  AddBinaryFixed<a, b>
+  Add32<a, b>
 >
 
 export type I64AddBinary<
@@ -183,6 +184,141 @@ export type I32AddDecimal<
   Add<a, b>
 >
 
+type L32 = '00000000000000000000000000000001'
+type R32 = '10000000000000000000000000000001'
+type E32 = '00000000000000000000000000000010'
+
+type A8 = `${any}${any}${any}${any}${any}${any}${any}${any}`
+type A32 = `${A8}${A8}${A8}${A8}`
+
+type RightToLeft<
+  L extends string,
+  R extends string,
+  Padding extends string = RemoveOnePadding<A32>,
+  _Acc extends string = ''
+> =
+  [L, R] extends [`${Padding}${infer C1}${any}`, `${Padding}${infer C2}${any}`]
+  ? RightToLeft<
+      L,
+      R,
+      Padding extends `${any}${infer Rest}`
+        ? Rest
+        : never,
+      `${C1}-${C2},${_Acc}`
+    >
+  : [L, R] extends [`${infer C1}${any}`, `${infer C2}${any}`]
+    ? `${C1}-${C2},${_Acc}`
+    : never
+
+type R = RightToLeft<L32, R32>
+
+type E = RightToLeft<L8, R8, RemoveOnePadding<A8>>
+
+type L8 = 'abcdefgh'
+type R8 = 'ijklmnop'
+
+type RemoveOnePadding<L extends string> =
+  L extends `${any}${infer Rest}`
+  ? Rest
+  : never
+
+type X = RemoveOnePadding<A8>
+//   ^?
+
+type RightToLeft_8<
+  L extends string,
+  R extends string,
+  Padding extends string = RemoveOnePadding<A8>,
+> =
+  [L, R] extends [`${Padding}${infer C1}${any}`, `${Padding}${infer C2}${any}`]
+  ? { C1: C1, C2: C2, L: L, R: R, Padding: Padding}
+  : // handle the base case of recursion, which in this case actually referrs to the left two most digits
+    [L, R] extends [`${infer C1}${any}`, `${infer C2}${any}`]
+    ? { C1: C1, C2: C2, L: L, R: R, Padding: Padding}
+    : never
+
+type R8_0 = RightToLeft_8<L8, R8>;
+//   ^?
+
+type R8_1 = RightToLeft_8<R8_0['L'], R8_0['R'], RemoveOnePadding<R8_0['Padding']>>;
+//   ^?
+
+type R8_2 = RightToLeft_8<R8_1['L'], R8_1['R'], RemoveOnePadding<R8_1['Padding']>>;
+//   ^?
+
+type R8_3 = RightToLeft_8<R8_2['L'], R8_2['R'], RemoveOnePadding<R8_2['Padding']>>;
+//   ^?
+
+type R8_4 = RightToLeft_8<R8_3['L'], R8_3['R'], RemoveOnePadding<R8_3['Padding']>>;
+//   ^?
+
+type R8_5 = RightToLeft_8<R8_4['L'], R8_4['R'], RemoveOnePadding<R8_4['Padding']>>;
+//   ^?
+
+type R8_6 = RightToLeft_8<R8_5['L'], R8_5['R'], RemoveOnePadding<R8_5['Padding']>>;
+//   ^?
+
+type R8_7 = RightToLeft_8<R8_6['L'], R8_6['R'], RemoveOnePadding<R8_6['Padding']>>;
+//   ^?
+
+type AddLookup = {
+  ['0']: {
+    ['0']: {
+      ['0']: { result: '0', carry: '0' },
+      ['1']: { result: '1', carry: '0' },
+    },
+    ['1']: {
+      ['0']: { result: '0', carry: '0' },
+      ['1']: { result: '0', carry: '1' },
+    },
+  },
+  ['1']: {
+    ['0']: {
+      ['0']: { result: '1', carry: '0' },
+      ['1']: { result: '0', carry: '1' },
+    },
+    ['1']: {
+      ['0']: { result: '0', carry: '1' },
+      ['1']: { result: '1', carry: '1' },
+    },
+  },
+}
+
+type Bit = "0" | "1"
+
+export type Add32<
+  L extends string,
+  R extends string,
+  Padding extends string = RemoveOnePadding<A32>,
+  _Carry extends Bit = '0',
+  _Acc extends string = ''
+> =
+  [L, R] extends [`${Padding}${infer C1 extends Bit}${any}`, `${Padding}${infer C2 extends Bit}${any}`]
+  ? AddLookup[C1][C2][_Carry] extends infer Result extends { carry: Bit, result: Bit }
+    ? Add32<
+        L,
+        R,
+        Padding extends `${any}${infer Rest}`
+          ? Rest
+          : never,
+        Result['carry'],
+        `${Result['result']}${_Acc}`
+      >
+    : never
+  : [L, R] extends [`${infer C1 extends Bit}${any}`, `${infer C2 extends Bit}${any}`]
+    ? AddLookup[C1][C2][_Carry] extends infer Result extends { carry: Bit, result: Bit }
+      ? Result['carry'] extends '1'
+
+        // here is where you control the overflow behavior
+        ? `1${Result['result']}${_Acc}` // in this case, this implementation is adding another digit
+        : `${Result['result']}${_Acc}`
+      : never
+    : never
+
+type A = Add32<L32, R32>
+//   ^?
+type Z = E32;
+//   ^?
 
 /*
 
