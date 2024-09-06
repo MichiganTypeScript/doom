@@ -57,8 +57,7 @@ export type _MultiplyBinary<
 > =
   b extends `${infer b0}0` | `${infer b1}1`
   ? b0 extends `${any}` ? _MultiplyBinary<a, b0, `${_Place}0`, _Acc>
-    : b1 extends `${any}` ? _MultiplyBinary<a, b1, `${_Place}0`, StringAddArbitrary<`${a}${_Place}`, _Acc>>
-    : never
+    : _MultiplyBinary<a, b1, `${_Place}0`, StringAddArbitrary<`${a}${_Place}`, _Acc>>
   : _Acc
   // revB extends `${infer digit}${infer tail}`
   // ? digit extends "0"

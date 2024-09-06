@@ -89,8 +89,7 @@ export type StringAddFixed<
   AB extends `${infer A0}0,${infer B0}0` | `${infer A1}1,${infer B1}0` | `${infer A1}0,${infer B1}1` | `${infer A2}1,${infer B2}1`
     ? A0 extends `${any}` ? StringAddFixed<A0, B0, 0> extends infer S extends string ? `${S}${Carry extends 1 ? 1 : 0}` : never
     : A1 extends `${any}` ? StringAddFixed<A1, B1, Carry> extends infer S extends string ? `${S}${Carry extends 1 ? 0 : 1}` : never
-    : A2 extends `${any}` ? StringAddFixed<A2, B2, 1> extends infer S extends string ? `${S}${Carry}` : never
-    : never
+    : StringAddFixed<A2, B2, 1> extends infer S extends string ? `${S}${Carry}` : never
     : `${A}${B}`
   
 export type AddBinaryFixed<
@@ -201,8 +200,7 @@ export type StringAddArbitrary<
   AB extends `${infer A0}0,${infer B0}0` | `${infer A1}1,${infer B1}0` | `${infer A1}0,${infer B1}1` | `${infer A2}1,${infer B2}1`
     ? A0 extends `${any}` ? StringAddFixed<A0, B0, 0> extends infer S extends string ? `${S}${Carry extends 1 ? 1 : 0}` : never
     : A1 extends `${any}` ? StringAddFixed<A1, B1, Carry> extends infer S extends string ? `${S}${Carry extends 1 ? 0 : 1}` : never
-    : A2 extends `${any}` ? StringAddFixed<A2, B2, 1> extends infer S extends string ? `${S}${Carry}` : never
-    : never
+    : StringAddFixed<A2, B2, 1> extends infer S extends string ? `${S}${Carry}` : never
     : `${A}${B}`
 
 export type I32AddBinary<
