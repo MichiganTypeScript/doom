@@ -91,7 +91,7 @@ export type StringAddFixed<
     : A1 extends `${any}` ? StringAddFixed<A1, B1, Carry> extends infer S extends string ? `${S}${Carry extends 1 ? 0 : 1}` : never
     : A2 extends `${any}` ? StringAddFixed<A2, B2, 1> extends infer S extends string ? `${S}${Carry}` : never
     : never
-  : ''
+  : `${A}${B}`
   
 export type AddBinaryFixed<
     A extends string,
