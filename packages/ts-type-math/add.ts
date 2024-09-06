@@ -92,8 +92,8 @@ export type StringAddFixed<
   A extends string,
   B extends string,
   Carry extends 0 | 1 = 0,
-  Padding extends string = A extends A63 ? A63 : A extends A31 ? A31 : A extends A15 ? A15 : A7,
   Result extends string = '',
+  Padding extends string = A extends A63 ? A63 : A extends A31 ? A31 : A extends A15 ? A15 : A7,
 > =
   [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
     ? `${A1}${B1}${Carry}` extends infer Pattern
