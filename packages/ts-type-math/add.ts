@@ -1,5 +1,3 @@
-import { ReverseString8Segments } from "./binary";
-import { Ensure } from "./ensure";
 import { Add } from "./hotscript-fork/numbers/impl/addition";
 import { WasmValue } from "./wasm";
 import type { Satisfies } from './utils'
@@ -80,22 +78,21 @@ export type StringAddFixedReversed<
   : // out of digits.  fuck the carry.
     ''
 
+export type StringAddFixed<
+  A extends string,
+  B extends string,
+  Carry extends 0 | 1 = 0,
+  Padding extends string = `${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}`,
+> =
+  [A, B, Carry] extends [`${Padding}1${any}`, `${Padding}1${any}`, 1] ? (Padding extends '' ? '1' : `${StringAddFixed<A, B, 1, Padding extends `${any}${infer Rest}` ? Rest : ''>}1`)
+  : [A, B, Carry] extends [`${Padding}1${any}`, `${Padding}1${any}`, 0] | [`${Padding}1${any}`, `${Padding}0${any}`, 1] | [`${Padding}0${any}`, `${Padding}1${any}`, 1] ? (Padding extends '' ? '0' : `${StringAddFixed<A, B, 1, Padding extends `${any}${infer Rest}` ? Rest : ''>}0`)
+  : [A, B, Carry] extends [`${Padding}1${any}`, `${Padding}0${any}`, 0] | [`${Padding}0${any}`, `${Padding}1${any}`, 0] | [`${Padding}0${any}`, `${Padding}0${any}`, 1] ? (Padding extends '' ? '1' : `${StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? Rest : ''>}1`)
+  : (Padding extends '' ? '0' : `${StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? Rest : ''>}0`)
 
 export type AddBinaryFixed<
   A extends string,
   B extends string,
-> = Satisfies<string,
-  // we reverse the strings so we can add them from right to left
-  // there's no simply way in TypeScript to pick a character off the end of a string
-  // this is a huge performance bottleneck (in terms of recursions)
-  ReverseString8Segments<
-    StringAddFixedReversed<
-      ReverseString8Segments<A>,
-      ReverseString8Segments<B>,
-      []
-    >
-  >
->
+> = Satisfies<string, StringAddFixed<A, B, 0>>
 
 /** This function's purpose in life is to avoid needing to calculate C twice */
 type AppendCalculationArbitraryReversed<
