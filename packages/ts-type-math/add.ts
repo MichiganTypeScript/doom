@@ -86,29 +86,33 @@ export type StringAddFixedReversed<
   : // out of digits.  fuck the carry.
     ''
 
-type TrimPadding<Padding extends string> = Padding extends `${any}${infer Rest}` ? `${Rest}` : '';
-
 export type StringAddFixed<
   A extends string,
   B extends string,
   Carry extends 0 | 1 = 0,
-  Result extends string = '',
   Padding extends string = A extends A63 ? A63 : A extends A31 ? A31 : A extends A15 ? A15 : A7,
 > =
-  [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
-    ? `${A1}${B1}${Carry}` extends infer Pattern
-      ? Padding extends '' ? Pattern extends '111' | '100' | '010' | '001' ? `1${Result}` : `0${Result}`    // ignore carrying here (overflow)
-      : Pattern extends '111' ? StringAddFixed<A, B, 1, `1${Result}`, TrimPadding<Padding>>                 // 1 + carry 1
-      : Pattern extends '110' | '101' | '011' ? StringAddFixed<A, B, 1, `0${Result}`, TrimPadding<Padding>> // 0 + carry 1
-      : Pattern extends '100' | '010' | '001' ? StringAddFixed<A, B, 0, `1${Result}`, TrimPadding<Padding>> // 1 + carry 0
-      : StringAddFixed<A, B, 0, `0${Result}`, TrimPadding<Padding>>                                         // 0 + carry 0
+  Padding extends ''
+    ? [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
+      ? `${A1}${B1}${Carry}` extends infer Pattern extends string
+        ? Pattern extends '111' | '100' | '010' | '001' ? '1' : '0'                          // ignore carrying here (overflow)
+      : never
     : never
-  : never
+  : [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
+    ? `${A1}${B1}${Carry}` extends infer Pattern extends string
+      ? StringAddFixed<A, B, Pattern extends '111' | '110' | '101' | '011' ? 1 : 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
+        ? Pattern extends '111' | '100' | '010' | '001' ? `${S}1` : `${S}0`
+      : never
+    : never
+  // A or B is shorter than Padding
+  : StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
+      ? `${S}0`
+    : never 
   
 export type AddBinaryFixed<
     A extends string,
     B extends string,
-> = Satisfies<string, StringAddFixed<A, B, 0>>
+> = Satisfies<string, StringAddFixed<A, B>>
 // > = Satisfies<string,
 //   // we reverse the strings so we can add them from right to left
 //   // there's no simply way in TypeScript to pick a character off the end of a string
