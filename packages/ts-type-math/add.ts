@@ -96,11 +96,13 @@ export type StringAddFixed<
   Result extends string = '',
 > =
   [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
-    ? Padding extends '' ? `${A1}${B1}${Carry}` extends '111' | '100' | '010' | '001' ? `1${Result}` : `0${Result}`
-    : `${A1}${B1}${Carry}` extends '111' ? StringAddFixed<A, B, 1, `1${Result}`, TrimPadding<Padding>>
-    : `${A1}${B1}${Carry}` extends '110' | '101' | '011' ? StringAddFixed<A, B, 1, `0${Result}`, TrimPadding<Padding>>
-    : `${A1}${B1}${Carry}` extends '100' | '010' | '001' ? StringAddFixed<A, B, 0, `1${Result}`, TrimPadding<Padding>>
-    : StringAddFixed<A, B, 0, `0${Result}`, TrimPadding<Padding>>
+    ? `${A1}${B1}${Carry}` extends infer Pattern
+      ? Padding extends '' ? Pattern extends '111' | '100' | '010' | '001' ? `1${Result}` : `0${Result}`    // ignore carrying here (overflow)
+      : Pattern extends '111' ? StringAddFixed<A, B, 1, `1${Result}`, TrimPadding<Padding>>                 // 1 + carry 1
+      : Pattern extends '110' | '101' | '011' ? StringAddFixed<A, B, 1, `0${Result}`, TrimPadding<Padding>> // 0 + carry 1
+      : Pattern extends '100' | '010' | '001' ? StringAddFixed<A, B, 0, `1${Result}`, TrimPadding<Padding>> // 1 + carry 0
+      : StringAddFixed<A, B, 0, `0${Result}`, TrimPadding<Padding>>                                         // 0 + carry 0
+    : never
   : never
   
 export type AddBinaryFixed<
