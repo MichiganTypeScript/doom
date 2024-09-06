@@ -7,7 +7,7 @@ import type { Satisfies } from './utils'
 /** NOTE! this is unclamped!  that means if you subtract two negative numbers you could get an overflow! */
 export type SubtractBinaryFixed<
   a extends WasmValue, // minuend
-  b extends WasmValue  // subtrahend
+  b extends WasmValue,  // subtrahend
 > = Satisfies<WasmValue,
   // to subtract, you add a negative.  sorta makes sense when you say it out loud
   AddBinaryFixed<a, TwosComplementFlip<b>>
