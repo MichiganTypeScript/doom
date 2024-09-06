@@ -1,4 +1,4 @@
-import { StringAddArbitraryReversed } from "./add";
+import { StringAddArbitrary } from "./add";
 import { ReverseString8Segments, ReverseStringTheWorstWayPossible } from "./binary";
 import { Ensure } from "./ensure";
 import { Wasm, WasmValue } from "./wasm";
@@ -17,8 +17,10 @@ export type I32MultiplyBinary<
   b extends Wasm.I32True ? a :
   Ensure.I32<
     _MultiplyBinary<
-      ReverseString8Segments<a>,
-      ReverseString8Segments<b>,
+      a,
+      b,
+      // ReverseString8Segments<a>,
+      // ReverseString8Segments<b>,
       '',
       ''
     >
@@ -35,8 +37,10 @@ export type I64MultiplyBinary<
   b extends Wasm.I64True ? a :
   Ensure.I64<
     _MultiplyBinary<
-      ReverseString8Segments<a>,
-      ReverseString8Segments<b>,
+      a,
+      b,
+      // ReverseString8Segments<a>,
+      // ReverseString8Segments<b>,
       '',
       ''
     >
@@ -45,32 +49,38 @@ export type I64MultiplyBinary<
 
 export type _MultiplyBinary<
   a extends string,
-  revB extends string,
+  // revB extends string,
+  b extends string,
 
   _Place extends string,
   _Acc extends string
 > =
-  revB extends `${infer digit}${infer tail}`
-  ? digit extends "0"
-    ? // there's no point in doing any "work", so we can just move on to the next digit
-      _MultiplyBinary<
-        a,
-        tail,
-        `0${_Place}`,
-        _Acc
-      >
+  b extends `${infer b0}0` | `${infer b1}1`
+  ? b0 extends `${any}` ? _MultiplyBinary<a, b0, `${_Place}0`, _Acc>
+    : b1 extends `${any}` ? _MultiplyBinary<a, b1, `${_Place}0`, StringAddArbitrary<`${a}${_Place}`, _Acc>>
+    : never
+  : _Acc
+  // revB extends `${infer digit}${infer tail}`
+  // ? digit extends "0"
+  //   ? // there's no point in doing any "work", so we can just move on to the next digit
+  //     _MultiplyBinary<
+  //       a,
+  //       tail,
+  //       `0${_Place}`,
+  //       _Acc
+  //     >
 
-    : // we have a digit to multiply
-      _MultiplyBinary<
-        a,
-        tail,
-        `0${_Place}`,
+  //   : // we have a digit to multiply
+  //     _MultiplyBinary<
+  //       a,
+  //       tail,
+  //       `0${_Place}`,
 
-        StringAddArbitraryReversed<
-          `${_Place}${a}`,
-          _Acc,
-          []
-        >
-      >
+  //       StringAddArbitrary<
+  //         `${_Place}${a}`,
+  //         _Acc,
+  //         []
+  //       >
+  //     >
 
-  : ReverseStringTheWorstWayPossible<_Acc>
+  // : ReverseStringTheWorstWayPossible<_Acc>
