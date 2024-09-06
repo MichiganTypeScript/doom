@@ -86,7 +86,7 @@ export type StringAddFixedReversed<
   : // out of digits.  fuck the carry.
     ''
 
-type TrimPadding<Padding extends string> = Padding extends `${any}${infer Rest}` ? `${Rest}` : never;
+type TrimPadding<Padding extends string> = Padding extends `${any}${infer Rest}` ? `${Rest}` : '';
 
 export type StringAddFixed<
   A extends string,
