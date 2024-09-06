@@ -79,35 +79,17 @@ export type StringAddFixedReversed<
 
   : // out of digits.  fuck the carry.
     ''
-
-  type A10 = `${any}${any}${any}${any}${any}${any}${any}${any}${any}${any}`;
-  type A63 = `${A10}${A10}${A10}${A10}${A10}${A10}${any}${any}${any}`;
-  type A31 = `${A10}${A10}${A10}${any}`;
-  type A15 = `${A10}${any}${any}${any}${any}${any}`;
-  type A7 = `${any}${any}${any}${any}${any}${any}${any}`;
   
 export type StringAddFixed<
-    A extends string,
-    B extends string,
-    Carry extends 0 | 1 = 0,
-    Padding extends string = A extends A63 ? A63 : A extends A31 ? A31 : A extends A15 ? A15 : A7,
-  > =
-    Padding extends ''
-      ? [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
-        ? `${A1}${B1}${Carry}` extends infer Pattern extends string
-          ? Pattern extends '111' | '100' | '010' | '001' ? '1' : '0'                          // ignore carrying here (overflow)
-        : never
-      : never
-    : [A, B] extends [`${Padding}${infer A1}${any}`, `${Padding}${infer B1}${any}`]
-      ? `${A1}${B1}${Carry}` extends infer Pattern extends string
-        ? StringAddFixed<A, B, Pattern extends '111' | '110' | '101' | '011' ? 1 : 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
-          ? Pattern extends '111' | '100' | '010' | '001' ? `${S}1` : `${S}0`
-        : never
-      : never
-    // A or B is shorter than Padding
-    : StringAddFixed<A, B, 0, Padding extends `${any}${infer Rest}` ? `${Rest}` : ''> extends infer S extends string
-        ? `${S}0`
-      : never 
+  A extends string,
+  B extends string,
+  Carry extends 0 | 1 = 0,
+  AB extends string = `${A},${B}`,
+> =
+  AB extends `${infer A1}0,${infer B1}0` ? StringAddFixed<A1, B1, 0> extends infer S extends string ? `${S}${Carry extends 1 ? 1 : 0}` : never
+    : AB extends `${infer A1}1,${infer B1}0` | `${infer A1}0,${infer B1}1` ? StringAddFixed<A1, B1, Carry> extends infer S extends string ? `${S}${Carry extends 1 ? 0 : 1}` : never
+    : AB extends `${infer A1}1,${infer B1}1` ? StringAddFixed<A1, B1, 1> extends infer S extends string ? `${S}${Carry}` : never
+    : ''
   
 export type AddBinaryFixed<
     A extends string,
