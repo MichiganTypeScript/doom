@@ -508,7 +508,7 @@ export namespace State {
         globals: state['globals'];
 
         memory:
-          BytePatch<
+          Patch<
             get<state>,
             _update
           >;
