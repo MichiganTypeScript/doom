@@ -459,16 +459,21 @@ export type I64ClzBinary64<
   >
 >
 
-type A = `${any}`;
-type A2 = `${A}${A}`;
-type A4 = `${A2}${A2}`;
-type A8 = `${A4}${A4}`;
-type A16 = `${A8}${A8}`;
-type A32 = `${A16}${A16}`;
-type A64 = `${A32}${A32}`;
+export type A = `${any}`;
+export type A2 = `${A}${A}`;
+export type A4 = `${A2}${A2}`;
+export type A8 = `${A4}${A4}`;
+export type A16 = `${A8}${A8}`;
+export type A32 = `${A16}${A16}`;
+export type A64 = `${A32}${A32}`;
 type Has33Chars<S extends string> = S extends `${A32}${A}` ? true : false;
 type Has17Chars<S extends string> = S extends `${A16}${A}` ? true : false;
 type Has9Chars<S extends string> = S extends `${A8}${A}` ? true : false;
+
+export type TrimBinaryLen<S extends string, Len extends string>
+  = S extends `${Len}${A}${A}` ? S extends `${any}${infer Rest}` ? EnsureBinaryLen<Rest, Len> : never
+  : S extends `${Len}${A}` ? S
+  : never
 
 export type EnsureBinaryLen<S extends string, Len extends string>
   = S extends `${Len}${A}${A}` ? S extends `${any}${infer Rest}` ? EnsureBinaryLen<Rest, Len> : never
