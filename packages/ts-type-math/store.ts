@@ -1,4 +1,5 @@
-import { Pad, ReverseString8Segments, SignBit } from "./binary";
+// import { Pad, ReverseString8Segments, SignBit } from "./binary";
+import { Pad, SignBit } from "./binary";
 import type { Ascii, U8Binary, U8Decimal } from "./conversion"
 import type { Convert } from "./conversion"
 import type { SplitToBytes } from "./split"
@@ -71,9 +72,12 @@ export namespace Store {
   export type GetLSB<
     a extends WasmValue
   > = Satisfies<[Wasm.Byte],
-    ReverseString8Segments<a> extends `${infer b00}${infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer Tail}`
-    ? [`${b07}${b06}${b05}${b04}${b03}${b02}${b01}${b00}`]
-    : never
+    // ReverseString8Segments<a> extends `${infer b00}${infer b01}${infer b02}${infer b03}${infer b04}${infer b05}${infer b06}${infer b07}${infer Tail}`
+    //   ? [`${b07}${b06}${b05}${b04}${b03}${b02}${b01}${b00}`]
+    //   : never
+    a extends `${infer Lead}${0|1}${0|1}${0|1}${0|1}${0|1}${0|1}${0|1}${0|1}`
+      ? [a extends `${Lead}${infer Tail}` ? Tail : never]
+      : never
   >
 
   export type GoodLuckBro<
@@ -86,28 +90,44 @@ export namespace Store {
   >
 
   type _GetLast<
-    rev extends string,
+    // rev extends string,
+    S extends string,
     count extends number,
     _Acc extends string = '',
     _Count extends 1[] = []
   > = Satisfies<string,
     count extends _Count['length']
     ? _Acc
-    : rev extends `${infer Head}${infer Tail}`
-      ? _GetLast<
-          Tail,
+    : S extends `${infer Lead0}0` | `${infer Lead1}1`
+      ? Lead0 extends `${any}`
+        ? _GetLast<
+          Lead0,
           count,
-          `${Head}${_Acc}`, // we add on the start because it's already been reversed and we don't want to have to bother reversing it again
+          `0${_Acc}`,
           [..._Count, 1] // increment the counter
-        >
+          >
+        : _GetLast<
+          Lead1,
+          count,
+          `1${_Acc}`,
+          [..._Count, 1] // increment the counter
+          >
+    // : rev extends `${infer Head}${infer Tail}`
+    //   ? _GetLast<
+    //       Tail,
+    //       count,
+    //       `${Head}${_Acc}`, // we add on the start because it's already been reversed and we don't want to have to bother reversing it again
+    //       [..._Count, 1] // increment the counter
+    //     >
       : never // this will only happen if the requested count is greater than the number of characters in the string and the string has been exhausted
-  >
 
+  >
   export type GetLast<
     a extends string,
     count extends number,
   > = Satisfies<string,
-    _GetLast<ReverseString8Segments<a>, count>
+    // _GetLast<ReverseString8Segments<a>, count>
+    _GetLast<a, count>
   >
 
   export type SignedFill<
