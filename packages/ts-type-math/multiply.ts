@@ -1,6 +1,6 @@
 // import { StringAddArbitraryReversed } from "./add";
 import { StringAddArbitrary } from "./add";
-import { ReverseString8Segments, ReverseStringTheWorstWayPossible } from "./binary";
+// import { ReverseString8Segments, ReverseStringTheWorstWayPossible } from "./binary";
 import { Ensure } from "./ensure";
 import { Wasm, WasmValue } from "./wasm";
 import type { Satisfies } from './utils'
