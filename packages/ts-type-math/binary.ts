@@ -1,4 +1,5 @@
-import { AddBinaryFixed, StringAddFixedReversed } from "./add";
+// import { AddBinaryFixed, StringAddFixedReversed } from "./add";
+import { StringAddFixed } from "./add";
 import { BitwiseNotBinary } from "./bitwise";
 import type { DivTSBigInt, DivTSNumbers, Mod, ModBigInt } from "./hotscript-fork/numbers/impl/division";
 import type { Length } from "./hotscript-fork/strings/impl/length";
@@ -365,15 +366,16 @@ export type SignBit<
 
 export type TwosComplementFlip<
   T extends string
-> = ReverseString8Segments<
-  StringAddFixedReversed<
-    ReverseString8Segments<
-      BitwiseNotBinary<T>
-    >,
-    "1000000000000000000000000000000000000000000000000000000000000000", // pre-reversed 1
-    []
-  >
->
+> = StringAddFixed<BitwiseNotBinary<T>, '0000000000000000000000000000000000000000000000000000000000000001'>
+// > = ReverseString8Segments<
+//   StringAddFixedReversed<
+//     ReverseString8Segments<
+//       BitwiseNotBinary<T>
+//     >,
+//     "1000000000000000000000000000000000000000000000000000000000000000", // pre-reversed 1
+//     []
+//   >
+// >
 
 // this takes a positive TsNumber nad makes it negative
 export type WithNegativeSign<
@@ -456,3 +458,31 @@ export type I64ClzBinary64<
     >
   >
 >
+
+type A = `${any}`;
+type A2 = `${A}${A}`;
+type A4 = `${A2}${A2}`;
+type A8 = `${A4}${A4}`;
+type A16 = `${A8}${A8}`;
+type A32 = `${A16}${A16}`;
+type A64 = `${A32}${A32}`;
+type Has33Chars<S extends string> = S extends `${A32}${A}` ? true : false;
+type Has17Chars<S extends string> = S extends `${A16}${A}` ? true : false;
+type Has9Chars<S extends string> = S extends `${A8}${A}` ? true : false;
+
+export type EnsureBinaryLen<S extends string, Len extends string>
+  = S extends `${Len}${A}${A}` ? S extends `${any}${infer Rest}` ? EnsureBinaryLen<Rest, Len> : never
+  : S extends `${Len}${A}` ? S
+  : EnsureBinaryLen<`0000000${S}`, Len>
+
+export type NormalizeBinaryLen<A extends string>
+  = true extends Has33Chars<A> ? EnsureBinaryLen<A, A64>
+  : true extends Has17Chars<A> ? EnsureBinaryLen<A, A32>
+  : true extends Has9Chars<A> ? EnsureBinaryLen<A, A16>
+  : EnsureBinaryLen<A, A8>
+
+export type NormalizeBinaryPairLen<A extends string, B extends string>
+  = true extends Has33Chars<A | B> ? {A: EnsureBinaryLen<A, A64>, B: EnsureBinaryLen<B, A64>}
+  : true extends Has17Chars<A | B> ? {A: EnsureBinaryLen<A, A32>, B: EnsureBinaryLen<B, A32>}
+  : true extends Has9Chars<A | B> ? {A: EnsureBinaryLen<A, A16>, B: EnsureBinaryLen<B, A16>}
+  : {A: EnsureBinaryLen<A, A8>, B: EnsureBinaryLen<B, A8>}

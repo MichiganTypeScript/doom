@@ -1,4 +1,4 @@
-import { ReverseString8Segments } from "./binary";
+// import { ReverseString8Segments } from "./binary";
 import { Ensure } from "./ensure";
 import { Add } from "./hotscript-fork/numbers/impl/addition";
 import { WasmValue } from "./wasm";
@@ -90,9 +90,7 @@ export type StringAddFixed<
     ? A0 extends `${any}` ? StringAddFixed<A0, B0, 0> extends infer S extends string ? `${S}${Carry extends 1 ? 1 : 0}` : never
     : A1 extends `${any}` ? StringAddFixed<A1, B1, Carry> extends infer S extends string ? `${S}${Carry extends 1 ? 0 : 1}` : never
     : StringAddFixed<A2, B2, 1> extends infer S extends string ? `${S}${Carry}` : never
-    : `${A}${B}` extends '' ? ''
-    : Carry extends 0 ? `${A}${B}`
-    : StringAddFixed<`${A}${B}`, '1'>
+    : ''
   
 export type AddBinaryFixed<
     A extends string,
@@ -203,7 +201,7 @@ export type StringAddArbitrary<
     ? A0 extends `${any}` ? StringAddArbitrary<A0, B0, 0> extends infer S extends string ? `${S}${Carry extends 1 ? 1 : 0}` : never
     : A1 extends `${any}` ? StringAddArbitrary<A1, B1, Carry> extends infer S extends string ? `${S}${Carry extends 1 ? 0 : 1}` : never
     : StringAddArbitrary<A2, B2, 1> extends infer S extends string ? `${S}${Carry}` : never
-    : `${A}${B}` extends '' ? ''
+    : `${A}${B}` extends '' ? Carry extends 0 ? '' : '1'
     : Carry extends 0 ? `${A}${B}`
     : StringAddArbitrary<`${A}${B}`, '1'>
 
