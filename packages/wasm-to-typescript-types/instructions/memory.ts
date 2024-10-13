@@ -7,6 +7,10 @@ export type IMemorySize = {
   kind: "MemorySize"
 }
 
+export type IMemoryGrow = {
+  kind: "MemoryGrow"
+}
+
 export type ILoad = {
   kind: "Load"
   offset: WasmValue
@@ -21,6 +25,7 @@ export type IStore = {
 
 export type MemoryInstruction =
   | IMemorySize
+  | IMemoryGrow
   | ILoad
   | IStore
 
@@ -30,6 +35,9 @@ export type HandleMemoryInstructions<
 > = Satisfies<ProgramState,
   instruction extends IMemorySize
   ? MemorySize<instruction, state>
+
+  : instruction extends IMemoryGrow
+  ? MemoryGrow<instruction, state>
 
   : instruction extends ILoad
   ? Load<instruction, state>
@@ -48,6 +56,13 @@ export type MemorySize<
     state['memorySize'],
     state
   >
+>
+
+export type MemoryGrow<
+  instruction extends IMemoryGrow, // unused
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  state // noop
 >
 
 export type Load<

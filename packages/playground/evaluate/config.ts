@@ -5,14 +5,14 @@ import { Worker } from "worker_threads";
 
 /** this is the magic type alias that the script is looking for in the evaluationFilePath */
 export const targetTypeAlias = 'Evaluate';
-export const incrementBy = 50;
+export const incrementBy = 100;
 export const readStringFromMemory = true;
 
 /**
  * controls how often the program prints to file.
  * set to 0 for it to always print
  */
-export const comeUpForAirEvery = 1_000;
+export const comeUpForAirEvery = 100;
 
 export interface InitialConditions {
   /**

@@ -1,5 +1,10 @@
 # TODO List
 
+## STUPIDLY CRITICAL
+
+- need to rename $main to $entry via Rust (or maybe not?)
+- need to figure out why entry requires arguments [0, 0]
+
 ## Important
 
 update typescript patch for truncation limit

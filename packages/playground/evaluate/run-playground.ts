@@ -260,12 +260,13 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
 
   meter('total').stop();
 
+  const typeStringLength = typeString.length;
   const targetText = targetSourceFile.text;
   const activeInstruction = isBenchmarkingIndividualInstructions ? getActiveInstruction(targetText, current, incrementBy) : null;
   await runStats({
     program,
     metadata: {
-      typeStringLength: typeString.length,
+      typeStringLength,
       activeInstruction,
       instructions: bootstrap ? 0 : incrementBy,
       current,
@@ -294,9 +295,14 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
     })
   }
 
-  const foundErrors = formattedFile.includes('never');
+  const foundNever = formattedFile.includes('never');
+  const foundAnyArray = formattedFile.includes('any[]');
+  const foundErrors = foundNever || foundAnyArray;
   if (foundErrors) {
-    throw new Error(`stopped because errors found in the file (search ${writeFilePath} for "never")`);
+    throw new Error(`stopped because errors found in the file (search ${writeFilePath} for "${foundNever ? 'never' : 'any[]'}")`);
+  }
+  if (Number.isNaN(current)) {
+    throw new Error(`stopped because current is NaN`);
   }
 
   if (shouldTakeABreath(timeSpentUnderwater, current)) {
@@ -398,7 +404,7 @@ rome.applyConfiguration({
 let funcImportLine: string | null = null;
 
 const validateFuncsImportLine = (source: string) => {
-  funcImportLine = source.split('\n')[0].replace(/from "/, 'from "../../../');
+  funcImportLine = source.split('\n')[0].replace(/from "/, 'from "../');
 
   if (funcImportLine === '' || !funcImportLine.includes("{ funcs }")) {
     throw new Error("didn't find a funcs import line in the playground file");

@@ -13,6 +13,7 @@ use std::{
     fs::{self, DirEntry},
     path::{Path, PathBuf},
     process::Command,
+    thread,
 };
 
 use self::source_file::SourceFile;
@@ -236,16 +237,27 @@ pub fn generate_c2wasm(c_input: &DirEntry) {
 
 fn main() {
     if "f".len() == 1 {
-        let current_dir = std::env::current_dir().unwrap();
-        let doom_dir = "packages/playground/doom-helion/";
-        // let d = read_dir(doom_dir).unwrap().flatten().next().unwrap();
-        // generate_wat_from_wasm(&d);
-        let wat_file = Path::new(&doom_dir).join("doom.wat");
-        let wat_path = current_dir.join(wat_file);
-        let wat = fs::read_to_string(wat_path).unwrap();
-        let output = wat_to_dts(wat, PathBuf::from(doom_dir).join("doom.dump").to_str().unwrap()).to_string();
-        fs::write(PathBuf::from(doom_dir).join("doom.ts"), output).unwrap();
-        println!("I did the needful, boss.");
+        // LOL we have to raise the stack size in Rust to compile this shit.
+        let stack_size = 16 * 1024 * 1024; // 16 MB stack
+        let builder = thread::Builder::new().stack_size(stack_size);
+
+        let handle = builder
+            .spawn(|| {
+                let current_dir = std::env::current_dir().unwrap();
+                let doom_dir = "packages/playground/doom/";
+                // let d = read_dir(doom_dir).unwrap().flatten().next().unwrap();
+                // generate_wat_from_wasm(&d);
+                let wat_file = Path::new(&doom_dir).join("doom.wat");
+                let wat_path = current_dir.join(wat_file);
+                let wat = fs::read_to_string(wat_path).unwrap();
+
+                let output = wat_to_dts(wat, PathBuf::from(doom_dir).join("doom.dump").to_str().unwrap()).to_string();
+                fs::write(PathBuf::from(doom_dir).join("doom.ts"), output).unwrap();
+                println!("I did the needful, boss.");
+            })
+            .expect("Thread creation failed");
+        handle.join().expect("Thread join failed");
+
         return;
     }
     match metering::meter() {
