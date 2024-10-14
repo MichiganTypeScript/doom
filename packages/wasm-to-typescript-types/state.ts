@@ -3,12 +3,14 @@ import type { Instruction } from "./instructions/instructions"
 import { Load } from "./instructions/memory";
 import type {
   BranchesById,
+  CollectAt,
   ExecutionContext,
   Func,
   FuncsById,
   GlobalsById,
   LocalsById,
   MemoryAddress,
+  MemoryByAddress,
   Param,
   ProgramState,
 } from "./types"
@@ -88,6 +90,7 @@ export namespace State {
         activeBranches: state['activeBranches'];
         globals: state['globals'];
         memory: state['memory'];
+        garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
         memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
@@ -114,6 +117,7 @@ export namespace State {
         activeBranches: state['activeBranches'];
         globals: state['globals'];
         memory: state['memory'];
+        garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
         memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
@@ -215,6 +219,7 @@ export namespace State {
         activeBranches: state['activeBranches'];
         globals: state['globals'];
         memory: state['memory'];
+        garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
         memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
@@ -256,6 +261,7 @@ export namespace State {
 
         globals: state['globals'];
         memory: state['memory'];
+        garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
         memorySize: state['memorySize'];
 
@@ -294,6 +300,7 @@ export namespace State {
 
           globals: state['globals'];
           memory: state['memory'];
+          garbageCollection: state['garbageCollection'];
           indirect: state['indirect'];
           memorySize: state['memorySize'];
           
@@ -334,6 +341,7 @@ export namespace State {
 
             globals: state['globals'];
             memory: state['memory'];
+            garbageCollection: state['garbageCollection'];
             indirect: state['indirect'];
             memorySize: state['memorySize'];
             executionContexts: state['executionContexts'];
@@ -365,6 +373,7 @@ export namespace State {
 
             globals: state['globals'];
             memory: state['memory'];
+            garbageCollection: state['garbageCollection'];
             indirect: state['indirect'];
             memorySize: state['memorySize'];
             executionContexts: state['executionContexts'];
@@ -453,6 +462,7 @@ export namespace State {
           >;
 
         memory: state['memory'];
+        garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
         memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
@@ -463,8 +473,8 @@ export namespace State {
 
   export namespace Memory {
     export type get<
-      state extends ProgramState
-    > = 
+      state extends ProgramState,
+    > =
       state['memory']
 
     type CollectBytes<
@@ -497,6 +507,7 @@ export namespace State {
           bytes
         >
     > = Satisfies<ProgramState,
+      // State.debug<[_update], {
       {
         count: state['count'];
         result: state['result'];
@@ -508,16 +519,79 @@ export namespace State {
         globals: state['globals'];
 
         memory:
-          Patch<  // TODO: make BytePatch work here
+          Patch<
             get<state>,
             _update
           >;
 
+        garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
         memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
       }
+      // >
+    >
+  }
+
+  export namespace GarbageCollection {
+    export type get<
+      state extends ProgramState
+    > = Satisfies<number,
+      state['garbageCollection']
+    >
+
+    export type increment<
+      state extends ProgramState
+    > = Satisfies<ProgramState,
+      {
+        count: state['count'];
+        result: state['result'];
+        stack: state['stack'];
+        instructions: state['instructions'];
+        activeLocals: state['activeLocals'];
+        activeFuncId: state['activeFuncId'];
+        activeBranches: state['activeBranches'];
+        globals: state['globals'];
+        memory: state['memory'];
+
+        garbageCollection: TypeMath.Add<state['garbageCollection'], 1>;
+
+        indirect: state['indirect'];
+        memorySize: state['memorySize'];
+        executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+
+      }
+    >
+
+    export type collect<
+      state extends ProgramState,
+
+      // increment first, then check for collection
+      _next extends ProgramState = increment<state>
+    > = Satisfies<ProgramState,
+      _next['garbageCollection'] extends CollectAt
+      ? {
+          count: state['count'];
+          result: state['result'];
+          stack: state['stack'];
+          instructions: state['instructions'];
+          activeLocals: state['activeLocals'];
+          activeFuncId: state['activeFuncId'];
+          activeBranches: state['activeBranches'];
+          globals: state['globals'];
+
+          memory: TypeMath.GarbageCollect<state['memory']>; // garbage collection enabled
+          // memory: state['memory']; // garbage collection disabled
+          garbageCollection: 0;
+
+          indirect: state['indirect'];
+          memorySize: state['memorySize'];
+          executionContexts: state['executionContexts'];
+          funcs: state['funcs'];
+        }
+      : _next
     >
   }
 
@@ -570,6 +644,7 @@ export namespace State {
         activeBranches: state['activeBranches'];
         globals: state['globals'];
         memory: state['memory'];
+        garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
         memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];

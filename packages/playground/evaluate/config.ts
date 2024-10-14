@@ -1,4 +1,3 @@
-
 import { dirname, join, resolve as pathResolve } from "path";
 import { fileURLToPath } from "url";
 import { Worker } from "worker_threads";

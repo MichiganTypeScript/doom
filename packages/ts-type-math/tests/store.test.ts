@@ -76,14 +76,13 @@ type lsb = [
 // ----------------------------------------------
 // BytePatch
 
-type S = {
+type S0 = {
   "00000000000000000000000000000000": "00101110"; // will keep because it hasn't changed
   "00000000000000000000000000000001": "11111111"; // will be removed because the update for this address is false
   "00000000000000000000000000000111": "00000001"; // will be modified by the update
   "11111111111111111111111100000011": "00000001"; // will keep because it's random other data only present in the source
 }
-
-type U = {
+type U0 = {
   "00000000000000000000000000000000": "00101110"; // will not change because it matches the source
   "00000000000000000000000000000001": "00000000"; // will clear the source value
   "00000000000000000000000000000011": "00000000"; // will never be set in the first place
@@ -91,13 +90,24 @@ type U = {
   "00000000000000000000000000000101": "00000000"; // will skip because it's false
   "00000000000000000000000000000111": "00000010"; // will modify the source value
 }
-
-type X = BytePatch<S, U>; // =>
-
-type t = Expect<Equal<X, {
+type expected0 = {
   "00000000000000000000000000000000": "00101110"; // source and update match
 //"00000000000000000000000000000001": // the update cleared this value
   "00000000000000000000000000000100": "01010101"; // newly added by the update
   "00000000000000000000000000000111": "00000010"; // modified by the update
   "11111111111111111111111100000011": "00000001"; // the random other data only present in the source
-}>>;
+}
+type actual0 = BytePatch<S0, U0>; // =>
+type t0 = Expect<Equal<actual0, expected0>>;
+
+type S1 = {
+  "00000000000000000000010000000000": "01000001";
+}
+type U1 = {
+  "00000000000000000000010000000001": "00000000";
+}
+type expected1 = {
+  "00000000000000000000010000000000": "01000001";
+}
+type actual1 = BytePatch<S1, U1>
+type t1 = Expect<Equal<actual1, expected1>>

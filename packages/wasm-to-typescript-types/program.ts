@@ -58,6 +58,7 @@ export type bootstrap<
 
       globals: input['globals'];
       memory: evaluate<input['memory']>; // copy readonly memory into memory registers
+      garbageCollection: 0;
       indirect: input['indirect'];
       memorySize: input['memorySize'];
       executionContexts: [];
@@ -85,10 +86,9 @@ export type executeInstruction<
     ? state
     : executeInstruction<
         selectInstruction<
-
-          // increment the instruction counter
-          State.Count.increment<state>,
-
+          State.GarbageCollection.collect<
+            State.Count.increment<state>
+          >,
           remainingInstructions,
           instruction
         >,

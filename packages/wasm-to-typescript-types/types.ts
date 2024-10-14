@@ -26,6 +26,11 @@ export type BranchesById = Record<BranchId, Instruction[]>;
 
 export type FuncsById = Record<string, Func>;
 
+export type GarbageCollection = number;
+
+/** do a memory sweep every 1 kibibyte */
+export type CollectAt = 1024;
+
 export type StorageBits = 8 | 16 | 32 | 64;
 
 export type ExecutionContext = {
@@ -65,6 +70,9 @@ export type ProgramState = {
 
   /** the linear memory of the program */
   memory: MemoryByAddress;
+
+  /** records interval for GarbageCollection */
+  garbageCollection: GarbageCollection;
 
   /** used for dynamic dispatch: maps directly to funcs */
   indirect: MemoryAddress[];
