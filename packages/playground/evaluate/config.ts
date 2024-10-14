@@ -5,7 +5,7 @@ import { Worker } from "worker_threads";
 
 /** this is the magic type alias that the script is looking for in the evaluationFilePath */
 export const targetTypeAlias = 'Evaluate';
-export const incrementBy = 100;
+export const incrementBy = 50;
 export const readStringFromMemory = true;
 
 /**
