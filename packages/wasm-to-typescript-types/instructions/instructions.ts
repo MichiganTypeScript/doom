@@ -9,7 +9,7 @@ import type { HandleFloatingPointInstructions, FloatingPointInstruction } from "
 import type { HandleMemoryInstructions, MemoryInstruction } from "./memory"
 import type { HandleSyntheticInstructions, SyntheticInstruction } from "./synthetic"
 import type { HandleVariableInstructions, VariableInstruction } from "./variable"
-import type { HandleConversionInstructions, ConversionInstruction } from "./converstion"
+import type { HandleConversionInstructions, ConversionInstruction } from "./conversion"
 
 export type Instruction =
   | ConstInstruction

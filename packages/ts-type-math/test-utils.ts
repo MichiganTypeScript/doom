@@ -160,8 +160,14 @@ export const arithmeticBigInt = {
 }
 
 export const wasmConversion = {
-  extend_i32_u: (a: number) => twosComplementToBigInt(`${'0'.repeat(32)}${numberToTwosComplement(a)}`),
-  extend_i32_s: (a: number) => {
+  i32extend16_s: (a: number) => {
+    const last16 = numberToTwosComplement(a).slice(16);
+    const signBit = last16[0];
+    const fill = signBit.repeat(16);
+    return twosComplementToNumber(`${fill}${last16}`);
+  },
+  i64extend_i32_u: (a: number) => twosComplementToBigInt(`${'0'.repeat(32)}${numberToTwosComplement(a)}`),
+  i64extend_i32_s: (a: number) => {
     const aTwos = numberToTwosComplement(a);
     return twosComplementToBigInt(`${aTwos[0].repeat(32)}${aTwos}`)
   },
