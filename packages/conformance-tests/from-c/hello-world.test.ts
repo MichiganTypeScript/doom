@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import { getWasmMemory } from '../utils'
 import type { entry } from './hello-world'
 import type { Equal, Expect } from 'type-testing';
-import type { ReadStringFromMemory, ReadUntilNullTerminator } from 'ts-type-math';
+import type { ReadStringFromMemory } from 'ts-type-math';
 
 const greeting = `Greetings humans, I am Ziltoid... the omniscient.
 I have come far from across the Omniverse.

@@ -99,5 +99,5 @@ export type executeInstruction<
   // program execution is complete.  yay.
   // this is the base case of the main loop's recursion
   : debugMode extends true
-    ? evaluate<state> // can't finish,because reading from memory requires access to the whole thing
+    ? evaluate<state> // can't finish, because reading from memory requires access to the whole thing
     : State.Result.finish<state>

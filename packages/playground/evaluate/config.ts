@@ -12,7 +12,7 @@ export const readStringFromMemory = true;
  * controls how often the program prints to file.
  * set to 0 for it to always print
  */
-export const comeUpForAirEvery = 100;
+export const comeUpForAirEvery = 1000;
 
 export interface InitialConditions {
   /**

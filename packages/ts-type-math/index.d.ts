@@ -6,7 +6,7 @@ export type { Equal, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual,
 export type { Mul as Multiply } from './hotscript-fork/numbers/impl/multiply'
 export type { Negate } from './hotscript-fork/numbers/impl/negate'
 export type { Sub as Subtract } from './hotscript-fork/numbers/impl/substraction'
-export type { StoreString, Store } from './store'
+export type { StoreString, Store, BytePatch } from './store'
 export type { ReadStringFromMemory, ReadUntilNullTerminator } from './memory-read-string'
 export type { Pad } from './binary'
 export type { Load } from './load'

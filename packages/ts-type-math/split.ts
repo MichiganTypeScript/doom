@@ -3,15 +3,19 @@ import { Ensure } from "./ensure"
 import { WasmValue } from "./wasm"
 import type { Satisfies } from './utils'
 
-/** this algorithm ABSO-FUCKING-LUTELY requires the string to be some multiple of 8 in length.  Don't fuck it up. */
+
+/**
+ * this algorithm ABSO-FUCKING-LUTELY requires the string to be some multiple of 8 in length.
+ * Don't fuck it up.
+ */
 export type SplitToBytes<
   T extends string,
 
-  Acc extends string[] = []
+  _Acc extends string[] = []
 > = Satisfies<string[],
   T extends `${infer b1}${infer b2}${infer b3}${infer b4}${infer b5}${infer b6}${infer b7}${infer b8}${infer Tail}`
-  ? SplitToBytes<Tail, [...Acc, `${b1}${b2}${b3}${b4}${b5}${b6}${b7}${b8}`]>
-  : Acc
+  ? SplitToBytes<Tail, [..._Acc, `${b1}${b2}${b3}${b4}${b5}${b6}${b7}${b8}`]>
+  : _Acc
 >
 
 export namespace Clamp {
