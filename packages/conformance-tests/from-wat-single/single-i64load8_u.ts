@@ -9,9 +9,9 @@ type $entry = Satisfies<Func, {
     instructions: [
       { kind: 'Const'; value: '00000000000000000000000000000000' },
       { kind: 'LocalGet'; id: '$value' },
-      { kind: 'Store'; subkind: 'I64Store'; offset: '00000000000000000000000000000000' },
+      { kind: 'Store'; subkind: 'I64Store' },
       { kind: 'Const'; value: '00000000000000000000000000000000' },
-      { kind: 'Load'; subkind: 'I64Load8u'; offset: '00000000000000000000000000000000' },
+      { kind: 'Load'; subkind: 'I64Load8u' },
     ];
 }>
 

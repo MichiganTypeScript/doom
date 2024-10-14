@@ -13,13 +13,13 @@ export type IMemoryGrow = {
 
 export type ILoad = {
   kind: "Load"
-  offset: WasmValue
+  offset?: WasmValue
   subkind: string
 }
 
 export type IStore = {
   kind: "Store"
-  offset: WasmValue
+  offset?: WasmValue
   subkind: string
 }
 
@@ -106,7 +106,9 @@ type I32Load<
 > = Satisfies<WasmValue,
   TypeMath.Load.Read4Bytes<
     state['memory'],
-    Wasm.I32Add<address, instruction['offset']>
+    instruction['offset'] extends WasmValue
+      ? Wasm.I32Add<address, instruction['offset']>
+      : address
   >
 >
 
@@ -118,7 +120,9 @@ type I32Load8U<
   Pad.StartWith24Zeros<
     TypeMath.Load.Read1Byte<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >
   >
 >
@@ -131,7 +135,9 @@ type I32Load8S<
   Storage.SignedFill<
     TypeMath.Load.Read1Byte<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >,
     24
   >
@@ -145,7 +151,9 @@ type I32Load16U<
   Pad.StartWith16Zeros<
     TypeMath.Load.Read2Bytes<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >
   >
 >
@@ -158,7 +166,9 @@ type I32Load16S<
   Storage.SignedFill<
     TypeMath.Load.Read2Bytes<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >,
     16
   >
@@ -171,7 +181,9 @@ type I64Load<
 > = Satisfies<WasmValue,
   TypeMath.Load.Read8Bytes<
     state['memory'],
-    Wasm.I32Add<address, instruction['offset']>
+    instruction['offset'] extends WasmValue
+      ? Wasm.I32Add<address, instruction['offset']>
+      : address
   >
 >
 
@@ -183,7 +195,9 @@ type I64Load8U<
   Pad.StartWith56Zeros<
     TypeMath.Load.Read1Byte<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >
   >
 >
@@ -196,7 +210,9 @@ type I64Load8S<
   Storage.SignedFill<
     TypeMath.Load.Read1Byte<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >,
     56
   >
@@ -210,7 +226,9 @@ type I64Load16U<
   Pad.StartWith48Zeros<
     TypeMath.Load.Read2Bytes<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >
   >
 >
@@ -223,7 +241,9 @@ type I64Load16S<
   Storage.SignedFill<
     TypeMath.Load.Read2Bytes<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >,
     48
   >
@@ -237,7 +257,9 @@ type I64Load32U<
   Pad.StartWith32Zeros<
     TypeMath.Load.Read4Bytes<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >
   >
 >
@@ -250,7 +272,9 @@ type I64Load32S<
   Storage.SignedFill<
     TypeMath.Load.Read4Bytes<
       state['memory'],
-      Wasm.I32Add<address, instruction['offset']>
+      instruction['offset'] extends WasmValue
+        ? Wasm.I32Add<address, instruction['offset']>
+        : address
     >,
     32
   >
@@ -288,7 +312,9 @@ type StoreAll<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Memory.insert<
-    Wasm.I32Add<address, instruction['offset']>,
+    instruction['offset'] extends WasmValue
+      ? Wasm.I32Add<address, instruction['offset']>
+      : address,
     TypeMath.SplitToBytes<value>,
     state
   >
@@ -301,7 +327,9 @@ type Store8<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Memory.insert<
-    Wasm.I32Add<address, instruction['offset']>,
+    instruction['offset'] extends WasmValue
+      ? Wasm.I32Add<address, instruction['offset']>
+      : address,
     TypeMath.Store.GetLSB<value>,
     state
   >
@@ -314,7 +342,9 @@ type Store16<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Memory.insert<
-    Wasm.I32Add<address, instruction['offset']>,
+    instruction['offset'] extends WasmValue
+      ? Wasm.I32Add<address, instruction['offset']>
+      : address,
     TypeMath.Store.GoodLuckBro<value, 16>,
     state
   >
@@ -327,7 +357,9 @@ type Store32<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Memory.insert<
-    Wasm.I32Add<address, instruction['offset']>,
+    instruction['offset'] extends WasmValue
+      ? Wasm.I32Add<address, instruction['offset']>
+      : address,
     TypeMath.Store.GoodLuckBro<value, 32>,
     state
   >

@@ -10,14 +10,14 @@ type $entry = Satisfies<Func, {
       { kind: 'Const'; value: '00000000000000000000010000000000' },
       { kind: 'Const'; value: '00000000000000000000010000000000' },
       { kind: 'LocalGet'; id: '$value' },
-      { kind: 'Store'; subkind: 'I32Store'; offset: '00000000000000000000000000000000' },
+      { kind: 'Store'; subkind: 'I32Store' },
       { kind: 'Const'; value: '00000000000000000000010000000000' },
-      { kind: 'Load'; subkind: 'I32Load'; offset: '00000000000000000000000000000000' },
+      { kind: 'Load'; subkind: 'I32Load' },
       { kind: 'Const'; value: '00000000000000000000000000000011' },
       { kind: 'Multiply', type: 'i32' },
-      { kind: 'Store'; subkind: 'I32Store'; offset: '00000000000000000000000000000000' },
+      { kind: 'Store'; subkind: 'I32Store' },
       { kind: 'Const'; value: '00000000000000000000010000000000' },
-      { kind: 'Load'; subkind: 'I32Load'; offset: '00000000000000000000000000000000' },
+      { kind: 'Load'; subkind: 'I32Load' },
     ];
 }>
 

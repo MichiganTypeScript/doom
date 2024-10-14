@@ -15,6 +15,14 @@ pub fn handle_instructions(func: &Func, instrs: &mut VecDeque<&Instruction>, ind
     result
 }
 
+fn format_offset(offset: u64) -> String {
+    if offset == 0 {
+        return "".to_string();
+    }
+
+    format!("; offset: '{:032b}'", offset)
+}
+
 #[allow(clippy::useless_format)]
 fn handle_instruction(
     func: &Func,
@@ -399,109 +407,99 @@ fn handle_instruction(
         }
 
         Instruction::I32Load(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I32Load'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I32Load'{offset} }},"))]
         }
         Instruction::I32Load8s(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I32Load8s'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I32Load8s'{offset} }},"))]
         }
         Instruction::I32Load8u(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I32Load8u'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I32Load8u'{offset} }},"))]
         }
         Instruction::I32Load16s(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Load'; subkind: 'I32Load16s'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I32Load16s'{offset} }},"))]
         }
         Instruction::I32Load16u(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Load'; subkind: 'I32Load16u'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I32Load16u'{offset} }},"))]
         }
 
         Instruction::I64Load8s(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load8s'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load8s'{offset} }},"))]
         }
         Instruction::I64Load8u(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load8u'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load8u'{offset} }},"))]
         }
         Instruction::I64Load16s(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Load'; subkind: 'I64Load16s'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load16s'{offset} }},"))]
         }
         Instruction::I64Load16u(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Load'; subkind: 'I64Load16u'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load16u'{offset} }},"))]
         }
         Instruction::I64Load32s(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Load'; subkind: 'I64Load32s'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load32s'{offset} }},"))]
         }
         Instruction::I64Load32u(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Load'; subkind: 'I64Load32u'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load32u'{offset} }},"))]
         }
 
         Instruction::F32Load(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'F32Load'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'F32Load'{offset} }},"))]
         }
         Instruction::F64Load(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'F64Load'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'F64Load'{offset} }},"))]
         }
         Instruction::I64Load(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Load'; subkind: 'I64Load'{offset} }},"))]
         }
 
         Instruction::I32Store(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I32Store'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I32Store'{offset} }},"))]
         }
         Instruction::I64Store(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I64Store'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I64Store'{offset} }},"))]
         }
         Instruction::F32Store(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'F32Store'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'F32Store'{offset} }},"))]
         }
         Instruction::F64Store(mem_arg) => {
-            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'F64Store'; offset: '{:032b}' }},", mem_arg.offset))]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'F64Store'{offset} }},"))]
         }
         Instruction::I32Store8(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Store'; subkind: 'I32Store8'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I32Store8'{offset} }},"))]
         }
         Instruction::I32Store16(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Store'; subkind: 'I32Store16'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I32Store16'{offset} }},"))]
         }
         Instruction::I64Store8(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Store'; subkind: 'I64Store8'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I64Store8'{offset} }},"))]
         }
         Instruction::I64Store16(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Store'; subkind: 'I64Store16'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I64Store16'{offset} }},"))]
         }
         Instruction::I64Store32(mem_arg) => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Store'; subkind: 'I64Store32'; offset: '{:032b}' }},", mem_arg.offset),
-            )]
+            let offset = format_offset(mem_arg.offset);
+            vec![(*indent, format!("{{ kind: 'Store'; subkind: 'I64Store32'{offset} }},"))]
         }
 
         /**************

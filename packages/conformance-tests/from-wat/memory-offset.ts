@@ -11,7 +11,7 @@ type $foo = Satisfies<Func, {
       { kind: 'LocalSet'; id: '$start' },
       { kind: 'LocalGet'; id: '$start' },
       { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Store'; subkind: 'I32Store'; offset: '00000000000000000000000000000000' },
+      { kind: 'Store'; subkind: 'I32Store' },
       { kind: 'LocalGet'; id: '$start' },
       { kind: 'LocalGet'; id: '$b' },
       { kind: 'Store'; subkind: 'I32Store'; offset: '00000000000000000000000000000100' },
@@ -23,7 +23,7 @@ type $foo = Satisfies<Func, {
       { kind: 'LocalGet'; id: '$start' },
       { kind: 'Load'; subkind: 'I32Load'; offset: '00000000000000000000000000000100' },
       { kind: 'LocalGet'; id: '$start' },
-      { kind: 'Load'; subkind: 'I32Load'; offset: '00000000000000000000000000000000' },
+      { kind: 'Load'; subkind: 'I32Load' },
       { kind: 'Subtract', type: 'i32' },
       { kind: 'Add', type: 'i32' },
     ];

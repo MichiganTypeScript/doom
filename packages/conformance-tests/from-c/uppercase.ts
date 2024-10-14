@@ -49,10 +49,10 @@ type $entry = Satisfies<Func, {
       { kind: 'Const'; value: '00000000000000000000000000011010' },
       { kind: 'LessThan', signed: false, type: 'i32' },
       { kind: 'Select' },
-      { kind: 'Store'; subkind: 'I32Store8'; offset: '00000000000000000000000000000000' },
+      { kind: 'Store'; subkind: 'I32Store8' },
       { kind: 'Const'; value: '00000000000000000000010000000001' },
       { kind: 'Const'; value: '00000000000000000000000000000000' },
-      { kind: 'Store'; subkind: 'I32Store8'; offset: '00000000000000000000000000000000' },
+      { kind: 'Store'; subkind: 'I32Store8' },
       { kind: 'Const'; value: '00000000000000000000010000000000' },
     ];
 }>
