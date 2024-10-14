@@ -69,7 +69,7 @@ export type Load<
   instruction extends ILoad,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer address extends WasmValue
   ]
@@ -105,7 +105,7 @@ type I32Load<
   address extends WasmValue
 > = Satisfies<WasmValue,
   TypeMath.Load.Read4Bytes<
-    State.Memory.get<state>,
+    state['memory'],
     Wasm.I32Add<address, instruction['offset']>
   >
 >
@@ -117,7 +117,7 @@ type I32Load8U<
 > = Satisfies<WasmValue,
   Pad.StartWith24Zeros<
     TypeMath.Load.Read1Byte<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >
   >
@@ -130,7 +130,7 @@ type I32Load8S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read1Byte<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >,
     24
@@ -144,7 +144,7 @@ type I32Load16U<
 > = Satisfies<WasmValue,
   Pad.StartWith16Zeros<
     TypeMath.Load.Read2Bytes<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >
   >
@@ -157,7 +157,7 @@ type I32Load16S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read2Bytes<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >,
     16
@@ -170,7 +170,7 @@ type I64Load<
   address extends WasmValue
 > = Satisfies<WasmValue,
   TypeMath.Load.Read8Bytes<
-    State.Memory.get<state>,
+    state['memory'],
     Wasm.I32Add<address, instruction['offset']>
   >
 >
@@ -182,7 +182,7 @@ type I64Load8U<
 > = Satisfies<WasmValue,
   Pad.StartWith56Zeros<
     TypeMath.Load.Read1Byte<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >
   >
@@ -195,7 +195,7 @@ type I64Load8S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read1Byte<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >,
     56
@@ -209,7 +209,7 @@ type I64Load16U<
 > = Satisfies<WasmValue,
   Pad.StartWith48Zeros<
     TypeMath.Load.Read2Bytes<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >
   >
@@ -222,7 +222,7 @@ type I64Load16S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read2Bytes<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >,
     48
@@ -236,7 +236,7 @@ type I64Load32U<
 > = Satisfies<WasmValue,
   Pad.StartWith32Zeros<
     TypeMath.Load.Read4Bytes<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >
   >
@@ -249,7 +249,7 @@ type I64Load32S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read4Bytes<
-      State.Memory.get<state>,
+      state['memory'],
       Wasm.I32Add<address, instruction['offset']>
     >,
     32
@@ -260,7 +260,7 @@ export type Store<
   instruction extends IStore,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer address extends MemoryAddress,
     infer value extends WasmValue,

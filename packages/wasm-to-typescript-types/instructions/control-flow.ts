@@ -161,7 +161,7 @@ export type Block<
     // first cache existing instructions (as they are at this moment) in the execution context for when we break to this block later
     State.ExecutionContexts.Active.Branches.insert<
       instruction['id'],
-      State.Instructions.get<state>,
+      state['instructions'],
 
       state
     >
@@ -173,7 +173,7 @@ export type Branch<
   state extends ProgramState,
 > = Satisfies<ProgramState,
   State.Instructions.set<
-    State.ExecutionContexts.Active.Branches.get<state>[instruction['id']],
+    state['activeBranches'][instruction['id']],
 
     state
   >
@@ -183,7 +183,7 @@ export type BranchIf<
   instruction extends IBranchIf,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer condition extends WasmValue,
   ]
@@ -200,7 +200,7 @@ export type BranchIf<
     // true branch
     // true indicates we _want_ to branch back.  so we do!
     : State.Instructions.set<
-        State.ExecutionContexts.Active.Branches.get<state>[instruction['id']],
+        state['activeBranches'][instruction['id']],
 
         State.Stack.set<
           remaining,
@@ -215,7 +215,7 @@ export type BranchTable<
   instruction extends IBranchTable,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer index extends WasmValue,
   ]
@@ -226,7 +226,7 @@ export type BranchTable<
     // match found
     ?
       State.Instructions.set<
-        State.ExecutionContexts.Active.Branches.get<state>[instruction['branches'][index]],
+        state['activeBranches'][instruction['branches'][index]],
 
         State.Stack.set<
           remaining,
@@ -236,7 +236,7 @@ export type BranchTable<
 
     // no match found fallback to the default
     : State.Instructions.set<
-        State.ExecutionContexts.Active.Branches.get<state>[instruction['default']],
+        state['activeBranches'][instruction['default']],
 
         State.Stack.set<
           remaining,
@@ -256,7 +256,7 @@ type PopulateParams<
     ...infer remainingParams extends Param[],
     infer param extends Param,
   ]
-  ? State.Stack.get<state> extends [
+  ? state['stack'] extends [
       ...infer remainingStack extends WasmValue[],
       infer pop extends WasmValue,
     ]
@@ -285,7 +285,7 @@ export type Call<
   instruction extends ICall,
   state extends ProgramState,
 
-  _func extends Func = State.Funcs.get<state>[instruction['id']],
+  _func extends Func = state['funcs'][instruction['id']],
   _funcId extends string = instruction['id']
 > = Satisfies<ProgramState,
   // add the instructions from this func onto the stack
@@ -317,7 +317,7 @@ export type CallIndirect<
   instruction extends ICallIndirect,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remainder extends WasmValue[],
     infer index extends WasmValue, // it's sorta hard to tell because there are no MDN docs to go from on this but it does seem like the argument that comes before is in fact the index.  if instead the params come before... we'll just have to look up the count and pop accordingly.
   ]
@@ -341,7 +341,7 @@ export type Drop<
   instruction extends IDrop, // unused
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer drop extends WasmValue, // dropped instruction
   ]
@@ -357,7 +357,7 @@ export type If<
   instruction extends IIf,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer condition extends WasmValue,
   ]
@@ -408,14 +408,14 @@ export type Loop<
       id: instruction['id'],
 
       // store the instructions _for this loop_ in the endLoop instruction in case we wanna revisit again later
-      instructions: State.Instructions.get<state>,
+      instructions: state['instructions'],
     }
   ]
 > = Satisfies<ProgramState,
 // State.debug<
 //   [
 //     'anything I want',
-//     State.ExecutionContexts.Active.Branches.get<state>,
+//     state['activeBranches'],
 //   ],
 
   // cache this loop's following instructions for when we (more than likely) Branch to it later
@@ -461,7 +461,7 @@ export type Return<
 
       // pop instructions until we reach a matching `EndFunction` instruction
       State.Instructions.popUntil<
-        { kind: 'EndFunction', id: State.ExecutionContexts.Active.FuncId.get<state> },
+        { kind: 'EndFunction', id: state['activeFuncId'] },
         state
       >
     >
@@ -493,7 +493,7 @@ export type Select<
   instruction extends ISelect, // unused
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer b extends WasmValue,
     infer a extends WasmValue,

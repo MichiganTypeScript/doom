@@ -73,7 +73,7 @@ export type executeInstruction<
   debugMode extends boolean = false,
   stopAt extends number = number,
 > =
-  State.Instructions.get<state> extends [
+  state['instructions'] extends [
     infer instruction extends Instruction,
     ...infer remainingInstructions extends Instruction[]
   ]
@@ -82,7 +82,7 @@ export type executeInstruction<
   ? instruction extends IHalt
     ? state
 
-    : stopAt extends State.Count.get<state>
+    : stopAt extends state['count']
     ? state
     : executeInstruction<
         selectInstruction<

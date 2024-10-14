@@ -93,7 +93,7 @@ export type EqualsZero<
   instruction extends IEqualsZero,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
   ]
@@ -115,7 +115,7 @@ export type Equals<
   instruction extends IEquals,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer b extends WasmValue,
     infer a extends WasmValue,
@@ -138,7 +138,7 @@ export type NotEqual<
   instruction extends INotEqual,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer b extends WasmValue,
     infer a extends WasmValue,
@@ -161,7 +161,7 @@ export type GreaterThan<
   instruction extends IGreaterThan,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,
@@ -189,7 +189,7 @@ export type LessThan<
   instruction extends ILessThan,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,
@@ -216,7 +216,7 @@ export type GreaterThanOrEqual<
   instruction extends IGreaterThanOrEqual,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,
@@ -244,7 +244,7 @@ export type LessThanOrEqual<
   instruction extends ILessThanOrEqual,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,

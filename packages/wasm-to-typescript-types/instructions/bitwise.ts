@@ -117,7 +117,7 @@ type And<
   instruction extends IAnd,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer b extends WasmValue,
     infer a extends WasmValue,
@@ -138,7 +138,7 @@ type Or<
   instruction extends IOr,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer b extends WasmValue,
     infer a extends WasmValue,
@@ -160,7 +160,7 @@ type Xor<
   instruction extends IXor,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer b extends WasmValue,
     infer a extends WasmValue,
@@ -182,7 +182,7 @@ type ShiftLeft<
   instruction extends IShiftLeft,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,
@@ -204,7 +204,7 @@ type ShiftRight<
   instruction extends IShiftRight,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,
@@ -231,7 +231,7 @@ type RotateLeft<
   instruction extends IRotateLeft,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,
@@ -260,7 +260,7 @@ type CountLeadingZeros<
   instruction extends ICountLeadingZeros,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
   ]

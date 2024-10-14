@@ -69,7 +69,7 @@ export type Warp<
   instruction extends IWrap,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
   ]
@@ -87,7 +87,7 @@ export type Extend<
   instruction extends IExtend,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
   ]
@@ -127,7 +127,7 @@ export type CountLeadingZeros<
   instruction extends ICountLeadingZeros,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
   ]

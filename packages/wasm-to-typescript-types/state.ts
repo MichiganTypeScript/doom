@@ -33,7 +33,7 @@ export namespace State {
     State.Instructions.unshift<
       {
         kind: 'Halt',
-        reason: `ERROR(${State.Count.get<state>}): ${reason}`,
+        reason: `ERROR(${state['count']}): ${reason}`,
         instruction: instruction
       },
       state
@@ -70,12 +70,6 @@ export namespace State {
   >
 
   export namespace Count {
-    export type get<
-      state extends ProgramState,
-    > = Satisfies<number,
-      state['count']
-    >
-
     export type increment<
       state extends ProgramState
     > = Satisfies<ProgramState,
@@ -125,12 +119,6 @@ export namespace State {
       }
     >
 
-    export type get<
-      state extends ProgramState
-    > = Satisfies<Instruction[],
-      state['instructions']
-    >
-
     export type concat<
       instructions extends Instruction[],
       state extends ProgramState
@@ -148,7 +136,7 @@ export namespace State {
       instruction extends Instruction,
       state extends ProgramState
     > = Satisfies<ProgramState,
-      get<state> extends [
+      state['instructions'] extends [
         infer discarded extends Instruction,
         ...infer remaining extends Instruction[],
       ]
@@ -197,12 +185,6 @@ export namespace State {
 
   /** Helpers for Stack manipulation */
   export namespace Stack {
-    export type get<
-      state extends ProgramState
-    > = Satisfies<WasmValue[],
-      state['stack']
-    >
-    
     export type set<
       stack extends WasmValue[],
       state extends ProgramState
@@ -233,7 +215,7 @@ export namespace State {
     > = Satisfies<ProgramState,
       set<
         [
-          ...get<state>,
+          ...state['stack'],
           value
         ],
         state
@@ -313,12 +295,6 @@ export namespace State {
 
     export namespace Active {
       export namespace Locals {
-        export type get<
-          state extends ProgramState
-        > = Satisfies<LocalsById,
-          state['activeLocals']
-        >
-
         export type insert<
           id extends string,
           value extends WasmValue,
@@ -332,7 +308,7 @@ export namespace State {
 
             activeLocals:
               Patch<
-                get<state>,
+                state['activeLocals'],
                 { [k in id]: value }
               >;
 
@@ -351,12 +327,6 @@ export namespace State {
       }
 
       export namespace Branches {
-        export type get<
-          state extends ProgramState
-        > = Satisfies<BranchesById,
-          state['activeBranches']
-        >
-
         export type set<
           branches extends BranchesById,
           state extends ProgramState
@@ -388,42 +358,28 @@ export namespace State {
         > = Satisfies<ProgramState,
           set<
             Patch<
-              get<state>,
+              state['activeBranches'],
               { [k in id]: instructions }
             >,
             state
           >
         >
       }
-
-      export namespace FuncId {
-        export type get<
-          state extends ProgramState
-        > = Satisfies<string,
-          state['activeFuncId']
-        >
-      }
     }
   }
 
   export namespace Funcs {
-    export type get<
-      state extends ProgramState
-    > = Satisfies<FuncsById,
-      state['funcs']
-    >
-
     export type getById<
-      id extends keyof get<state>,
+      id extends keyof state['funcs'],
       state extends ProgramState
     > = Satisfies<Func,
-      get<state>[id]
+      state['funcs'][id]
     >
 
     /** when you call a function, you have to pop the stack some number of times depending on how many parameters and returns there are */
     export type countCallPops<
       state extends ProgramState,
-      funcId extends keyof get<state>
+      funcId extends keyof state['funcs']
     > = Satisfies<number,
       getById<funcId, state> extends {
         params: infer params extends Param[];
@@ -436,12 +392,6 @@ export namespace State {
 
   /** Helpers for Globals manipulation */
   export namespace Globals {
-    export type get<
-      state extends ProgramState
-    > = Satisfies<GlobalsById,
-      state['globals']
-    >
-    
     export type insert<
       globals extends GlobalsById,
       state extends ProgramState
@@ -457,7 +407,7 @@ export namespace State {
 
         globals:
           Patch<
-            get<state>,
+            state['globals'],
             globals
           >;
 
@@ -472,11 +422,6 @@ export namespace State {
   }
 
   export namespace Memory {
-    export type get<
-      state extends ProgramState,
-    > =
-      state['memory']
-
     type CollectBytes<
       address extends WasmValue,
       bytes extends Wasm.Byte[],
@@ -520,7 +465,7 @@ export namespace State {
 
         memory:
           Patch<
-            get<state>,
+            state['memory'],
             _update
           >;
 
@@ -535,12 +480,6 @@ export namespace State {
   }
 
   export namespace GarbageCollection {
-    export type get<
-      state extends ProgramState
-    > = Satisfies<number,
-      state['garbageCollection']
-    >
-
     export type increment<
       state extends ProgramState
     > = Satisfies<ProgramState,
@@ -597,17 +536,11 @@ export namespace State {
 
   /** Helpers for indirect function lookups */
   export namespace Indirect {
-    export type get<
-      state extends ProgramState
-    > = Satisfies<string[],
-      state['indirect']
-    >
-
     export type getByIndex<
       state extends ProgramState,
       index extends WasmValue
     > = Satisfies<string,
-      get<state>[Convert.WasmValue.ToTSNumber<index, 'i32'>]
+      state['indirect'][Convert.WasmValue.ToTSNumber<index, 'i32'>]
     >
   }
 
@@ -616,12 +549,6 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<WasmType | null,
       state['funcs']['$entry']['result']
-    >
-
-    export type get<
-      state extends ProgramState
-    > = Satisfies<number | bigint | null,
-      state['result']
     >
 
     export type set<
@@ -633,8 +560,8 @@ export namespace State {
         result:
           getWasmType<state> extends infer result
           ? result extends 'i32' | 'f32' | 'f64'
-            ? Convert.WasmValue.ToTSNumber<State.Stack.get<state>[0], result>
-            : Convert.WasmValue.ToTSBigInt<State.Stack.get<state>[0]>
+            ? Convert.WasmValue.ToTSNumber<state['stack'][0], result>
+            : Convert.WasmValue.ToTSBigInt<state['stack'][0]>
           : never // this suggests there's a missing $entry function
 
         stack: state['stack'];
@@ -655,9 +582,7 @@ export namespace State {
     export type finish<
       state extends ProgramState
     > = Satisfies<number | bigint | null,
-      get<
-        set<state>
+        set<state>['result']
       >
-    >
   }
 }

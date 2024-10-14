@@ -70,7 +70,7 @@ export type Add<
   instruction extends IAdd,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer b extends WasmValue,
     infer a extends WasmValue,
@@ -91,7 +91,7 @@ export type Subtract<
   instruction extends ISubtract,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,
@@ -113,7 +113,7 @@ export type Multiply<
   instruction extends IMultiply,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer b extends WasmValue,
     infer a extends WasmValue,
@@ -135,7 +135,7 @@ export type Divide<
   instruction extends IDivide,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,
@@ -163,7 +163,7 @@ export type Remainder<
   instruction extends IRemainder,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
     infer b extends WasmValue,

@@ -71,8 +71,8 @@ export type LocalGet<
   state extends ProgramState,
 > = Satisfies<ProgramState,
   State.Stack.push<
-    Load.IsUnknownOrAnyFallback< // the behavior of wasm 
-      State.ExecutionContexts.Active.Locals.get<state>[instruction['id']],
+    Load.IsUnknownOrAnyFallback< // the behavior of wasm
+      state['activeLocals'][instruction['id']],
       Wasm.I32False // TODO(bug): we need to know the type of the local
     >,
     state
@@ -83,7 +83,7 @@ export type LocalSet<
   instruction extends ILocalSet,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer value extends WasmValue,
   ]
@@ -103,7 +103,7 @@ export type LocalTee<
   instruction extends ILocalTee,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer entry extends WasmValue
   ]
@@ -120,7 +120,7 @@ export type GlobalGet<
   state extends ProgramState
 > = Satisfies<ProgramState,
   State.Stack.push<
-    State.Globals.get<state>[instruction['id']], // webassaembly mandates that globals are always initialized
+    state['globals'][instruction['id']], // webassaembly mandates that globals are always initialized
     state
   >
 >
@@ -129,7 +129,7 @@ export type GlobalSet<
   instruction extends IGlobalSet,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Stack.get<state> extends [
+  state['stack'] extends [
     ...infer remaining extends WasmValue[],
     infer a extends WasmValue,
   ]
