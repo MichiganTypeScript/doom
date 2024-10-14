@@ -7,12 +7,14 @@ import { Worker } from "worker_threads";
 export const targetTypeAlias = 'Evaluate';
 export const incrementBy = 50;
 export const readStringFromMemory = true;
+/** turns off logging and formatting */
+export const productionMode = true;
 
 /**
  * controls how often the program prints to file.
  * set to 0 for it to always print
  */
-export const comeUpForAirEvery = 1000;
+export const comeUpForAirEvery = 50;
 
 export interface InitialConditions {
   /**

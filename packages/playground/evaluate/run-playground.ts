@@ -23,10 +23,10 @@ import {
   targetTypeAlias,
   tsconfigFilePath,
   worker,
+  productionMode,
 } from './config';
 import { finalizeMeter, meter, resetMeter } from './metering';
 
-// POTENTIAL OPTIMIZATION write files in a separate thread
 // POTENTIAL OPTIMIZATION use a worker thread to do the formatting
 
 const getActiveInstruction = (file: string, current: number, incrementBy: number) => {
@@ -236,7 +236,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   }
 
   let formatterDiagnositcs: Diagnostic[] = [];
-  if (!process.argv.includes('--skip-formatter')) {
+  if (!productionMode) {
     ({
       content: formattedFile,
       diagnostics: formatterDiagnositcs
@@ -260,19 +260,24 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
 
   meter('total').stop();
 
-  const typeStringLength = typeString.length;
-  const targetText = targetSourceFile.text;
-  const activeInstruction = isBenchmarkingIndividualInstructions ? getActiveInstruction(targetText, current, incrementBy) : null;
-  await runStats({
-    program,
-    metadata: {
-      typeStringLength,
-      activeInstruction,
-      instructions: bootstrap ? 0 : incrementBy,
-      current,
-    },
-    metering: finalizeMeter(),
-  });
+  if (productionMode) {
+    console.log({ current });
+  } else {
+    const typeStringLength = typeString.length;
+    const targetText = targetSourceFile.text;
+    const activeInstruction = isBenchmarkingIndividualInstructions ? getActiveInstruction(targetText, current, incrementBy) : null;
+    await runStats({
+      program,
+      metadata: {
+        typeStringLength,
+        activeInstruction,
+        instructions: bootstrap ? 0 : incrementBy,
+        current,
+      },
+      metering: finalizeMeter(),
+    });
+  }
+
 
   cleanup();
   cleanup = () => {

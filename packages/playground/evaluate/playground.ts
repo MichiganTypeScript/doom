@@ -1,5 +1,5 @@
-import type { funcs } from "../../conformance-tests/from-c/conway"
-import type { entry } from "../../conformance-tests/from-c/conway"
-type e0000 = entry<[2], true, 0>
+import type { funcs } from "../doom/doom"
+import type { entry } from "../doom/doom"
+type e0000 = entry<[0, 0], true, 0>
 
 export type Evaluate = e0000 // =>

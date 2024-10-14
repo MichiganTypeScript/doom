@@ -2,7 +2,7 @@ import { readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import ts from 'typescript';
 import { mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
-import {  STATS_PREFIX, csvPath, fsWorker, incrementBy, initialConditions, statsDirectory, statsJsonPath, statsPath } from './config';
+import {  STATS_PREFIX, csvPath, fsWorker, incrementBy, initialConditions, productionMode, statsDirectory, statsJsonPath, statsPath } from './config';
 import { MeteringDefinite } from './metering';
 
 const stackSize = (depth = 1): number => {
@@ -318,6 +318,10 @@ export const serializeCSV = (csv: CSV) => {
 }
 
 export const logFinalStats = async (programTime: number) => {
+  if (productionMode) {
+    return;
+  }
+
   const { programStats, csv } = await calculateTotals(programTime);
   await fsWorker.writeFile(statsPath, JSON.stringify(programStats, null, 2));
   await fsWorker.writeFile(csvPath, serializeCSV(csv));

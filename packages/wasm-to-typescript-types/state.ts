@@ -508,7 +508,7 @@ export namespace State {
         globals: state['globals'];
 
         memory:
-          TypeMath.BytePatch<
+          Patch<  // TODO: make BytePatch work here
             get<state>,
             _update
           >;
