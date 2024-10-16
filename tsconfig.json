@@ -9,6 +9,7 @@
     "strict": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
+    "skipLibCheck": true, // needed because of some stupid problem with vitest
     "paths": {
       "wasm-to-typescript-types": [
         "./packages/wasm-to-typescript-types/index.d.ts",
