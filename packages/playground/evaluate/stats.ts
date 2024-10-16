@@ -1,22 +1,34 @@
-import { readdir, readFile } from 'fs/promises'
-import { join } from 'path'
-import ts from 'typescript';
-import { mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
-import {  STATS_PREFIX, csvPath, fsWorker, incrementBy, initialConditions, productionMode, statsDirectory, statsJsonPath, statsPath } from './config';
-import { MeteringDefinite } from './metering';
+import { readdir, readFile } from "fs/promises";
+import { join } from "path";
+import ts from "typescript";
+import { mkdirSync, readdirSync, statSync, unlinkSync } from "fs";
+import {
+  STATS_PREFIX,
+  csvPath,
+  fsWorker,
+  incrementBy,
+  initialConditions,
+  productionMode,
+  shouldLogStats,
+  statsDirectory,
+  statsJsonPath,
+  statsPath,
+} from "./config";
+import { MeteringDefinite } from "./metering";
 
 const stackSize = (depth = 1): number => {
   try {
-      return stackSize(depth + 1);
+    return stackSize(depth + 1);
   } catch (e) {
-      return depth;
+    return depth;
   }
-}
+};
 
 /**
  * There is a mode of operation where the program will run one instruction at a time, so we can benchmark individual instructions.
  */
-export const isBenchmarkingIndividualInstructions = (incrementBy as number) === 1;
+export const isBenchmarkingIndividualInstructions =
+  (incrementBy as number) === 1;
 
 export const clearStats = () => {
   try {
@@ -26,18 +38,20 @@ export const clearStats = () => {
       unlinkSync(join(statsDirectory, file));
     }
   } catch (e) {
-    if ((e as unknown as any).code === 'ENOENT') {
+    if ((e as unknown as any).code === "ENOENT") {
       // if the directory doesn't exist, create it
       mkdirSync(statsDirectory);
     }
   }
-}
+};
 
 const getStdev = (array: number[]) => {
-  const n = array.length
-  const mean = array.reduce((a, b) => a + b) / n
-  return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
-}
+  const n = array.length;
+  const mean = array.reduce((a, b) => a + b) / n;
+  return Math.sqrt(
+    array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n,
+  );
+};
 
 type SimpleTotals = {
   sum: number;
@@ -46,7 +60,7 @@ type SimpleTotals = {
   avg: number;
   stdev: number;
   median: number;
-}
+};
 
 interface Totals extends SimpleTotals {
   sumPerInstruction: number;
@@ -59,12 +73,19 @@ type ByInstructionStats = {
   instantiations: SimpleTotals;
   time: SimpleTotals;
   instantiationsPerMs: number;
-}
+};
 
-type ByInstructionReduction = {
-  stats: ByInstructionStats,
-  values: { instantiations: number[], time: number[] }
-}
+type InstructionName = string;
+
+type Reduction = {
+  stats: ByInstructionStats;
+  values: {
+    instantiations: number[];
+    time: number[];
+  };
+};
+
+type ReductionByInstruction = Record<InstructionName, Reduction>;
 
 type ProgramTotals = Record<keyof RunInfo, Record<string, Totals>>;
 
@@ -72,7 +93,7 @@ interface ProgramStats {
   programTime: number;
   stackSize: number;
   totals: ProgramTotals;
-  byInstruction?: Record<string, ByInstructionReduction>;
+  byInstruction?: ReductionByInstruction;
   summary?: Record<string, number>;
 }
 
@@ -83,10 +104,6 @@ interface RunInfo {
   metering: MeteringDefinite;
   metadata: RunMetadata;
 }
-
-export const getProgramFiles = (program: ts.Program) => (
-  JSON.stringify(program.getSourceFiles().map(file => file.fileName), null, 2)
-)
 
 interface TSProgramStats {
   instantiations: number;
@@ -104,52 +121,60 @@ export const getProgramStats = (program: ts.Program): TSProgramStats => ({
   identifiers: program.getIdentifierCount(),
   files: program.getSourceFiles().length,
   cache: program.getRelationCacheSizes(),
-})
+});
 
 type RunMetadata = {
   typeStringLength: number;
   activeInstruction: string | null;
   instructions: number;
   current: number;
-}
+};
 
 export const runStats = async ({
   program,
   metadata,
   metering,
 }: {
-  program: ts.Program,
-  metadata: RunMetadata,
-  metering: MeteringDefinite,
+  program: ts.Program;
+  metadata: RunMetadata;
+  metering: MeteringDefinite;
 }) => {
-  const stats = getProgramStats(program);
+  const stats = getProgramStats(program); // Note: this is the reason we can't move stats generation to a worker thread - we'd have to serialize the program object
   shortStats({
     stats,
     metadata,
     metering,
   });
 
-  await fsWorker.writeFile(
+  fsWorker.writeFile(
     statsJsonPath(metadata.current),
-    JSON.stringify({ metering, stats, metadata }, null, 2)
+    JSON.stringify({ metering, stats, metadata }),
+    { format: true },
   );
 };
 
-const round = (value: number) => Math.round((value + Number.EPSILON) * 100) / 100;
+const round = (value: number) =>
+  Math.round((value + Number.EPSILON) * 100) / 100;
 
 const getTotals = (runs: Runs) => {
   const totals = {} as ProgramTotals;
   const csv = {} as CSV;
 
-  const [runId, runInfo] = Object.entries(runs)[0] as unknown as [keyof Runs, RunInfo];
+  const [runId, runInfo] = Object.entries(runs)[0] as unknown as [
+    keyof Runs,
+    RunInfo,
+  ];
   Object.entries(runInfo).forEach((entry) => {
-    const [groupId, group] = (entry as [keyof RunInfo, RunInfo[keyof RunInfo]]);
-    
+    const [groupId, group] = entry as [keyof RunInfo, RunInfo[keyof RunInfo]];
+
     totals[groupId as keyof RunInfo] = {} as ProgramTotals[keyof RunInfo];
 
     Object.entries(group).forEach((stat) => {
-      const [statId, statValue] = stat as [keyof RunInfo[keyof RunInfo], RunInfo[keyof RunInfo][keyof RunInfo[keyof RunInfo]]];
-      if (typeof statValue !== 'number') {
+      const [statId, statValue] = stat as [
+        keyof RunInfo[keyof RunInfo],
+        RunInfo[keyof RunInfo][keyof RunInfo[keyof RunInfo]],
+      ];
+      if (typeof statValue !== "number") {
         return;
       }
 
@@ -157,13 +182,17 @@ const getTotals = (runs: Runs) => {
         Up to this point, we've essentially just been getting a path to all available statistics in such a way that doesn't require us to remember to add those statistics to this list in the future if more are ever added or removed
       */
 
-      const values = Object.values(runs).map(run => run[groupId][statId]) as number[];
+      const values = Object.values(runs).map(
+        (run) => run[groupId][statId],
+      ) as number[];
       csv[`${groupId}.${statId}`] = values;
 
       const sum = values.reduce((acc, b) => acc + b, 0);
       const min = values.reduce((acc, b) => Math.min(acc, b), Infinity);
       const max = values.reduce((acc, b) => Math.max(acc, b), -Infinity);
-      const median = [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)];
+      const median = [...values].sort((a, b) => a - b)[
+        Math.floor(values.length / 2)
+      ];
       const avg = sum / values.length;
       const stdev = getStdev(values);
 
@@ -183,9 +212,11 @@ const getTotals = (runs: Runs) => {
   });
 
   return { totals, csv };
-}
+};
 
-const byInstruction = (runs: Runs): Pick<ProgramStats, 'byInstruction' | 'summary'> => {
+const byInstruction = (
+  runs: Runs,
+): Pick<ProgramStats, "byInstruction" | "summary"> => {
   if (!isBenchmarkingIndividualInstructions) {
     return {};
   }
@@ -193,13 +224,16 @@ const byInstruction = (runs: Runs): Pick<ProgramStats, 'byInstruction' | 'summar
   const byInstruction = Object.values(runs).reduce((acc, run) => {
     const { activeInstruction } = run.metadata;
     if (typeof activeInstruction !== "string") {
-      throw new Error("activeInstruction must be a string by this point in the program because isPerfBenchmarking is true");
+      throw new Error(
+        "activeInstruction must be a string by this point in the program because isPerfBenchmarking is true",
+      );
     }
 
     const { instantiations } = run.stats;
     const { getTypeAtLocation } = run.metering;
+    let current = acc[activeInstruction];
     if (!Object.hasOwn(acc, activeInstruction)) {
-      acc[activeInstruction] = {
+      current = {
         stats: {
           instantiations: {
             sum: 0,
@@ -223,29 +257,32 @@ const byInstruction = (runs: Runs): Pick<ProgramStats, 'byInstruction' | 'summar
           instantiations: [],
           time: [],
         },
-      }
+      };
     }
 
-    const current = acc[activeInstruction];
-
-    const values = {
+    const values: Reduction["values"] = {
       instantiations: [...current.values.instantiations, instantiations],
       time: [...current.values.time, getTypeAtLocation],
-    }
+    };
 
-    const timeAvg = (current.stats.time.sum + getTypeAtLocation) / values.time.length;
+    const timeAvg =
+      (current.stats.time.sum + getTypeAtLocation) / values.time.length;
 
-    return {
-      stats: {
-        ...acc.stats,
-        [activeInstruction]: {
+    const result: ReductionByInstruction = {
+      ...acc,
+      [activeInstruction]: {
+        stats: {
           instantiations: {
             sum: current.stats.instantiations.sum + instantiations,
             min: Math.min(current.stats.instantiations.min, instantiations),
             max: Math.max(current.stats.instantiations.max, instantiations),
-            avg: (current.stats.instantiations.sum  + instantiations ) / [...values.instantiations, instantiations].length,
+            avg:
+              (current.stats.instantiations.sum + instantiations) /
+              [...values.instantiations, instantiations].length,
             stdev: getStdev([...values.instantiations, instantiations]),
-            median: [...values.instantiations].sort((a, b) => a - b)[Math.floor(values.instantiations.length / 2)],
+            median: [...values.instantiations].sort((a, b) => a - b)[
+              Math.floor(values.instantiations.length / 2)
+            ],
           },
           time: {
             sum: current.stats.time.sum + getTypeAtLocation,
@@ -253,37 +290,39 @@ const byInstruction = (runs: Runs): Pick<ProgramStats, 'byInstruction' | 'summar
             max: Math.max(current.stats.time.max, getTypeAtLocation),
             avg: timeAvg,
             stdev: getStdev([...values.time, getTypeAtLocation]),
-            median: [...values.time].sort((a, b) => a - b)[Math.floor(values.time.length / 2)],
+            median: [...values.time].sort((a, b) => a - b)[
+              Math.floor(values.time.length / 2)
+            ],
           },
-          instantiationsPerMs: Math.round(values.instantiations.length / timeAvg),
-        }
+          instantiationsPerMs: Math.round(
+            values.instantiations.length / timeAvg,
+          ),
+        },
+        values,
       },
-      values: {
-        ...acc.values,
-        [activeInstruction]: values
-      }
-    }
-  }, {} as Record<string, ByInstructionReduction>);
+    };
 
-  const summary =
-    Object.fromEntries(
-      Object.entries(byInstruction!)
-        .map(([ins, v]) => [ins, v.stats.instantiationsPerMs] as const)
-        .sort((a, b) => a[1] - b[1])
-        .reverse()
-    )
+    return result;
+  }, {} as ReductionByInstruction);
+
+  const summary = Object.fromEntries(
+    Object.entries(byInstruction)
+      .map(([ins, v]) => [ins, v.stats.instantiationsPerMs] as const)
+      .sort((a, b) => a[1] - b[1])
+      .reverse(),
+  );
 
   return {
     summary,
     byInstruction,
-  }
-}
+  };
+};
 
 type CSV = Record<string, number[]>;
 
 const calculateTotals = async (
-  programTime: ProgramStats['programTime']
-): Promise<{ programStats: ProgramStats, csv: CSV }> => {
+  programTime: ProgramStats["programTime"],
+): Promise<{ programStats: ProgramStats; csv: CSV }> => {
   let runs: Runs = {};
   for (const file of await readdir(statsDirectory)) {
     if (!file.startsWith(STATS_PREFIX) || !file.endsWith(".json")) {
@@ -291,7 +330,7 @@ const calculateTotals = async (
       continue;
     }
 
-    const contents = await readFile(join(statsDirectory, file), 'utf-8');
+    const contents = await readFile(join(statsDirectory, file), "utf-8");
     const parsed = JSON.parse(contents);
     const count = Number(file.match(/\d+/)?.[0]);
     runs[count] = parsed;
@@ -307,34 +346,37 @@ const calculateTotals = async (
       ...byInstruction(runs),
     },
     csv,
-  }
-}
+  };
+};
 
 export const serializeCSV = (csv: CSV) => {
-  const header = Object.keys(csv).join('\t');
+  const header = Object.keys(csv).join("\t");
   const values = Object.values(csv);
-  const body = values[0].map((_, i) => values.map(row => row[i]).join('\t')).join('\n');
+  const body = values[0]
+    .map((_, i) => values.map((row) => row[i]).join("\t"))
+    .join("\n");
   return `${header}\n${body}`;
-}
+};
 
 export const logFinalStats = async (programTime: number) => {
   if (productionMode) {
     return;
   }
 
-  const { programStats, csv } = await calculateTotals(programTime);
-  await fsWorker.writeFile(statsPath, JSON.stringify(programStats, null, 2));
-  await fsWorker.writeFile(csvPath, serializeCSV(csv));
+  console.log("total time (ms)", Math.round(programTime));
 
-  console.log(
-    "total time (ms)",
-    Math.round(programTime),
-    " | total instantiations ",
-    programStats.totals.stats.instantiations.sum
-  );
-
-  console.log(`wrote program stats to ${statsPath}`);
-}
+  if (shouldLogStats) {
+    const { programStats, csv } = await calculateTotals(programTime);
+    console.log(
+      "total instantiations ",
+      programStats.totals.stats.instantiations.sum,
+    );
+    fsWorker.writeFile(statsPath, JSON.stringify(programStats), {
+      format: true,
+    });
+    fsWorker.writeFile(csvPath, serializeCSV(csv), { format: true });
+  }
+};
 
 export const printColumn = (
   name: string,
@@ -342,45 +384,41 @@ export const printColumn = (
   value: number,
 ) => {
   const valueRounded = Math.round(value);
-  const filler = ' '.repeat(Math.max(0, columnWidth - valueRounded.toString().length));
+  const filler = " ".repeat(
+    Math.max(0, columnWidth - valueRounded.toString().length),
+  );
 
   return [
     `| ${name}${filler}`,
     valueRounded, // you see.. when you console.log a number it shows it in orange.  so we're going through some extra trouble to keep it that way
-  ]
-}
+  ];
+};
 
 export const shortStats = ({
-  stats: {
-    instantiations,
-  },
+  stats: { instantiations },
   metadata: {
     typeStringLength,
     activeInstruction,
     current: count,
     instructions,
   },
-  metering: {
-    total: totalTime,
-    getTypeAtLocation,
-    getProgram,
-  }
+  metering: { total: totalTime, getTypeAtLocation, getProgram },
 }: {
-  stats: TSProgramStats,
-  metadata: RunMetadata,
-  metering: MeteringDefinite,
+  stats: TSProgramStats;
+  metadata: RunMetadata;
+  metering: MeteringDefinite;
 }) => {
   console.log(
-    ...printColumn('count', initialConditions.digits, count),
-    ...printColumn('time (ms)', 7, getTypeAtLocation),
-    ...printColumn('wasm/sec', 5, instructions / (totalTime / 1000)),
-    ...printColumn('instantiations', 10, instantiations),
-    ...printColumn('instan/ms', 7, instantiations / getTypeAtLocation),
-    ...printColumn('length', 10, typeStringLength),
-    ...printColumn('getProgram', 4, getProgram),
-    `|${activeInstruction ? ` ${activeInstruction} |` : ''}`,
+    ...printColumn("count", initialConditions.digits, count),
+    ...printColumn("time (ms)", 7, getTypeAtLocation),
+    ...printColumn("wasm/sec", 5, instructions / (totalTime / 1000)),
+    ...printColumn("instantiations", 10, instantiations),
+    ...printColumn("instan/ms", 7, instantiations / getTypeAtLocation),
+    ...printColumn("length", 10, typeStringLength),
+    ...printColumn("getProgram", 4, getProgram),
+    `|${activeInstruction ? ` ${activeInstruction} |` : ""}`,
   );
-}
+};
 
 export const encourage = () => {
   const phrases = [
@@ -394,11 +432,11 @@ export const encourage = () => {
     "Are you tryna create a union that's too complex to represent.. again?",
     "I always trusted code more than people anyway.",
     "To excessive and possibly infinite depth and beyond!", // credit: DBlass
-    "10 bucks says what comes next starts with \"RangeError: Maximum call stack size exceeded at `instantiateTypes`\"",
+    '10 bucks says what comes next starts with "RangeError: Maximum call stack size exceeded at `instantiateTypes`"',
     "just another few months and this thing will finally work.. right?",
     "What if I told you everything you know about recursion is a lie?",
-  ]
-  
+  ];
+
   console.log(phrases[Math.floor(Math.random() * phrases.length)]);
   console.log();
-}
+};

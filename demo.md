@@ -42,7 +42,7 @@
 
 ## Back to Conway
 
-- [playground entrypoint](./packages/playground/evaluate/playground.ts)
+- [evaluation entrypoint](./packages/playground/evaluate/start.ts)
 - [first result](./packages/playground/evaluate/results/result-000000.ts)
 - [last result](./packages/playground/evaluate/results/result-187800.ts)
 - [program finish](./packages/playground/evaluate/results/results.ts)

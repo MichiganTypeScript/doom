@@ -1,19 +1,22 @@
-import { dirname, join, resolve as pathResolve } from "path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "url";
-import { Worker } from "worker_threads";
+import { Worker } from "node:worker_threads";
 
 /** this is the magic type alias that the script is looking for in the evaluationFilePath */
-export const targetTypeAlias = 'Evaluate';
-export const incrementBy = 1;
+export const resultTypeName = 'Result';
+export const nextResultTypeName = `Next${resultTypeName}`;
+export const stringResultTypeName = `String${resultTypeName}`;
+export const incrementBy = 100;
 export const readStringFromMemory = true;
 /** turns off logging and formatting */
 export const productionMode = false;
+export const shouldLogStats = false;
 
 /**
  * controls how often the program prints to file.
  * set to 0 for it to always print
  */
-export const comeUpForAirEvery = 0;
+export const comeUpForAirEvery = 5;
 
 export interface InitialConditions {
   /**
@@ -44,8 +47,8 @@ export const projectRoot = join(__dirname, '../../../');
 export const globalDefinitions = join(__dirname, '../../../global.d.ts');
 export const tsconfigFilePath = join(projectRoot, './tsconfig.json');
 export const resultsDirectory = join(__dirname, 'results');
-export const playgroundFilePath = join(__dirname, 'playground.ts');
-export const finalResultPath = join(resultsDirectory, 'results.ts');
+export const startFilePath = join(__dirname, 'start.ts');
+export const finalResultPath = join(resultsDirectory, 'result.ts');
 export const errorFilePath = join(resultsDirectory, 'error.ts');
 export const bootstrapFilePath = join(resultsDirectory, 'bootstrap.ts');
 export const statsDirectory = join(resultsDirectory, 'stats');
@@ -60,10 +63,10 @@ export const statsJsonPath = (current: number) => join(statsDirectory, `${STATS_
 export const shouldTakeABreath = (timeSpentUnderwater: number, current: number) => current === 0 || timeSpentUnderwater >= comeUpForAirEvery;
 
 export const worker = new Worker("./evaluate/worker.mjs");
-worker.setMaxListeners(10);
+worker.setMaxListeners(100);
 
 export const fsWorker = {
-  writeFile: (filePath: string, data: string) => {
-    worker.postMessage({ type: 'writeFile', filePath, data });
-  }
+  writeFile: (filePath: string, data: string, options: { format: boolean }) => {
+      worker.postMessage({ type: 'writeFile', filePath, data, options });
+  },
 };
