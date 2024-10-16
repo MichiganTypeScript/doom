@@ -1,0 +1,504 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Type(
+                Type {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "t0",
+                    ),
+                    name: None,
+                    def: Func(
+                        FunctionType {
+                            params: [],
+                            results: [
+                                I32,
+                            ],
+                        },
+                    ),
+                    parent: None,
+                    final_type: None,
+                },
+            ),
+            Type(
+                Type {
+                    span: Span {
+                        offset: 44,
+                    },
+                    id: Some(
+                        "t1",
+                    ),
+                    name: None,
+                    def: Func(
+                        FunctionType {
+                            params: [],
+                            results: [],
+                        },
+                    ),
+                    parent: None,
+                    final_type: None,
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 64,
+                    },
+                    id: Some(
+                        "__wasm_call_ctors",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__wasm_call_ctors",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                Nop,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: Some(
+                            Id(
+                                "t1",
+                            ),
+                        ),
+                        inline: None,
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 142,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    1024,
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: Some(
+                            Id(
+                                "t0",
+                            ),
+                        ),
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 220,
+                    },
+                    id: Some(
+                        "entrySize",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entrySize",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    4,
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: Some(
+                            Id(
+                                "t0",
+                            ),
+                        ),
+                        inline: Some(
+                            FunctionType {
+                                params: [],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Memory(
+                Memory {
+                    span: Span {
+                        offset: 303,
+                    },
+                    id: Some(
+                        "memory",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "memory",
+                        ],
+                    },
+                    kind: Normal(
+                        B32 {
+                            limits: Limits {
+                                min: 2,
+                                max: None,
+                            },
+                            shared: false,
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 342,
+                    },
+                    id: Some(
+                        "__dso_handle",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__dso_handle",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1024,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 412,
+                    },
+                    id: Some(
+                        "__data_end",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__data_end",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1040,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 478,
+                    },
+                    id: Some(
+                        "__stack_low",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__stack_low",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1040,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 546,
+                    },
+                    id: Some(
+                        "__stack_high",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__stack_high",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    66576,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 617,
+                    },
+                    id: Some(
+                        "__global_base",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__global_base",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1024,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 689,
+                    },
+                    id: Some(
+                        "__heap_base",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__heap_base",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    66576,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 758,
+                    },
+                    id: Some(
+                        "__heap_end",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__heap_end",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    131072,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 826,
+                    },
+                    id: Some(
+                        "__memory_base",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__memory_base",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    0,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Global(
+                Global {
+                    span: Span {
+                        offset: 895,
+                    },
+                    id: Some(
+                        "__table_base",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "__table_base",
+                        ],
+                    },
+                    ty: GlobalType {
+                        ty: I32,
+                        mutable: false,
+                    },
+                    kind: Inline(
+                        Expression {
+                            instrs: [
+                                I32Const(
+                                    1,
+                                ),
+                            ],
+                        },
+                    ),
+                },
+            ),
+            Data(
+                Data {
+                    span: Span {
+                        offset: 962,
+                    },
+                    id: Some(
+                        "d0",
+                    ),
+                    name: None,
+                    kind: Active {
+                        memory: Num(
+                            0,
+                            Span {
+                                offset: 962,
+                            },
+                        ),
+                        offset: Expression {
+                            instrs: [
+                                I32Const(
+                                    1024,
+                                ),
+                            ],
+                        },
+                    },
+                    data: [
+                        String(
+                            [
+                                4,
+                                0,
+                                0,
+                                0,
+                                5,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                6,
+                            ],
+                        ),
+                    ],
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "I32Const": 2,
+    "Nop": 1,
+}

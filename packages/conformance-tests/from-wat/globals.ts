@@ -4,35 +4,35 @@ type $setGlobal = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: never;
-    locals: [];
-    instructions: [
-      { kind: 'Const'; value: '00000000000000000000000000101010' },
-      { kind: 'GlobalSet'; id: '$myGlobal' },
-    ];
+  resultTypes: [];
+  locals: [];
+  instructions: [
+    { kind: 'Const'; value: '00000000000000000000000000101010' },
+    { kind: 'GlobalSet'; id: '$myGlobal' },
+  ];
 }>
 
 type $getGlobal = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'GlobalGet'; id: '$myGlobal' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'GlobalGet'; id: '$myGlobal' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Call'; id: '$setGlobal' },
-      { kind: 'Call'; id: '$getGlobal' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Call'; id: '$setGlobal' },
+    { kind: 'Call'; id: '$getGlobal' },
+  ];
 }>
 
 export type funcs = {

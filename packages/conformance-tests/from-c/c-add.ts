@@ -4,24 +4,24 @@ type $__wasm_call_ctors = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: null;
-    locals: [];
-    instructions: [
-      { kind: 'Nop'; ziltoid: 'theOmniscient' },
-    ];
+  resultTypes: [];
+  locals: [];
+  instructions: [
+    { kind: 'Nop'; ziltoid: 'theOmniscient' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$p0', '$p1'];
   paramsTypes: ['i32', 'i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'LocalGet'; id: '$p1' },
-      { kind: 'Add', type: 'i32' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$p0' },
+    { kind: 'LocalGet'; id: '$p1' },
+    { kind: 'Add', type: 'i32' },
+  ];
 }>
 
 export type funcs = {

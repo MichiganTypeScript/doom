@@ -646,7 +646,7 @@ pub fn handle_func(func: &Func) -> String {
                 .collect::<Vec<String>>()
                 .join(", ");
 
-            let indent = &mut 3;
+            let indent = &mut 2;
 
             let instructions = handle_instructions(func, &mut expression.instrs.iter().collect(), indent, &mut vec![])
                 .iter()
@@ -654,11 +654,7 @@ pub fn handle_func(func: &Func) -> String {
                 .collect::<Vec<String>>()
                 .join("");
 
-            format!(
-                "    locals: [{locals}];
-    instructions: [
-{instructions}    ];"
-            )
+            format!("  locals: [{locals}];\n  instructions: [\n{instructions}  ];")
         }
     }
 }

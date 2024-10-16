@@ -4,26 +4,26 @@ type $selectBranch = Satisfies<Func, {
   kind: 'func';
   params: ['$condition'];
   paramsTypes: ['i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Const'; value: '00000000000000000000000000001010' },
-      { kind: 'Const'; value: '00000000000000000000000000010100' },
-      { kind: 'LocalGet'; id: '$condition' },
-      { kind: 'Select' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Const'; value: '00000000000000000000000000001010' },
+    { kind: 'Const'; value: '00000000000000000000000000010100' },
+    { kind: 'LocalGet'; id: '$condition' },
+    { kind: 'Select' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
   paramsTypes: ['i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Call'; id: '$selectBranch' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$a' },
+    { kind: 'Call'; id: '$selectBranch' },
+  ];
 }>
 
 export type funcs = {

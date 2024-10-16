@@ -4,24 +4,24 @@ type $abs_f64 = Satisfies<Func, {
   kind: 'func';
   params: ['$x'];
   paramsTypes: ['f64'];
-  result: 'f64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$x' },
-      { kind: 'AbsoluteValue' },
-    ];
+  resultTypes: ['f64'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$x' },
+    { kind: 'AbsoluteValue' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
   paramsTypes: ['f64'];
-  result: 'f64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'Call'; id: '$abs_f64' },
-    ];
+  resultTypes: ['f64'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$a' },
+    { kind: 'Call'; id: '$abs_f64' },
+  ];
 }>
 
 export type funcs = {

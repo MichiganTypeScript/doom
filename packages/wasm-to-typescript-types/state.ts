@@ -71,7 +71,7 @@ export namespace State {
       {
         count: TypeMath.Add<state['count'], 1>;
 
-        result: state['result'];
+        results: state['results'];
         stack: state['stack'];
         instructions: state['instructions'];
         activeLocals: state['activeLocals'];
@@ -97,7 +97,7 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-        result: state['result'];
+        results: state['results'];
         stack: state['stack'];
 
         instructions: instructions;
@@ -188,7 +188,7 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-        result: state['result'];
+        results: state['results'];
 
         stack: stack;
 
@@ -230,7 +230,7 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-        result: state['result'];
+        results: state['results'];
         stack: state['stack'];
         instructions: state['instructions'];
 
@@ -271,7 +271,7 @@ export namespace State {
       ]
       ? {
           count: state['count'];
-          result: state['result'];
+          results: state['results'];
           stack: state['stack'];
           instructions: state['instructions'];
           
@@ -303,7 +303,7 @@ export namespace State {
         > = Satisfies<ProgramState,
           {
             count: state['count'];
-            result: state['result'];
+            results: state['results'];
             stack: state['stack'];
             instructions: state['instructions'];
 
@@ -331,7 +331,7 @@ export namespace State {
         > = Satisfies<ProgramState,
           {
             count: state['count'];
-            result: state['result'];
+            results: state['results'];
             stack: state['stack'];
             instructions: state['instructions'];
 
@@ -358,7 +358,7 @@ export namespace State {
         > = Satisfies<ProgramState,
           {
             count: state['count'];
-            result: state['result'];
+            results: state['results'];
             stack: state['stack'];
             instructions: state['instructions'];
             activeLocals: state['activeLocals']
@@ -411,7 +411,7 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-        result: state['result'];
+        results: state['results'];
         stack: state['stack'];
         instructions: state['instructions'];
         activeLocals: state['activeLocals'];
@@ -469,7 +469,7 @@ export namespace State {
       // State.debug<[_update], {
       {
         count: state['count'];
-        result: state['result'];
+        results: state['results'];
         stack: state['stack'];
         instructions: state['instructions'];
         activeLocals: state['activeLocals'];
@@ -500,7 +500,7 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-        result: state['result'];
+        results: state['results'];
         stack: state['stack'];
         instructions: state['instructions'];
         activeLocals: state['activeLocals'];
@@ -529,7 +529,7 @@ export namespace State {
       _next['garbageCollection'] extends CollectAt
       ? {
           count: state['count'];
-          result: state['result'];
+          results: state['results'];
           stack: state['stack'];
           instructions: state['instructions'];
           activeLocals: state['activeLocals'];
@@ -562,24 +562,53 @@ export namespace State {
   }
 
   export namespace Result {
-    export type getWasmType<
+    export type getResultTypes<
       state extends ProgramState
-    > = Satisfies<WasmType | null,
-      state['funcs']['$entry']['result']
+    > = Satisfies<WasmType[],
+      state['funcs']['$entry']['resultTypes']
+    >
+
+    type WasmTypeToTSNumber<
+      type extends WasmType,
+      value extends WasmValue
+    > = type extends 'i32' | 'f32' | 'f64'
+      ? Convert.WasmValue.ToTSNumber<value, type>
+      : Convert.WasmValue.ToTSBigInt<value>
+
+    type CollectResults<
+      stack extends WasmValue[],
+      resultTypes extends WasmType[],
+      _Acc extends (number | bigint)[] = []
+    > = Satisfies<(number | bigint)[],
+      stack extends [
+        infer pop extends WasmValue,
+        ...infer remainingStack extends WasmValue[]
+      ]
+      ? resultTypes extends [
+          infer type extends WasmType,
+          ...infer remainingTypes extends WasmType[]
+        ]
+        ? CollectResults<
+            remainingStack,
+            remainingTypes,
+            [..._Acc, WasmTypeToTSNumber<type, pop>]
+          >
+        : never // should never happen because the lengths should always match
+      : _Acc
     >
 
     export type set<
-      state extends ProgramState
+      state extends ProgramState,
+
+      _resultTypes extends WasmType[] = getResultTypes<state>
     > = Satisfies<ProgramState,
       {
         count: state['count'];
 
-        result:
-          getWasmType<state> extends infer result
-          ? result extends 'i32' | 'f32' | 'f64'
-            ? Convert.WasmValue.ToTSNumber<state['stack'][0], result>
-            : Convert.WasmValue.ToTSBigInt<state['stack'][0]>
-          : never // this suggests there's a missing $entry function
+        results:
+          _resultTypes['length'] extends 1
+          ? WasmTypeToTSNumber<_resultTypes[0], state['stack'][0]>
+          : CollectResults<state['stack'], _resultTypes>;
 
         stack: state['stack'];
         instructions: state['instructions'];
@@ -599,8 +628,8 @@ export namespace State {
 
     export type finish<
       state extends ProgramState
-    > = Satisfies<number | bigint | null,
-        set<state>['result']
+    > = Satisfies<(number | bigint)[] | (number | bigint) | null,
+        set<state>['results']
       >
   }
 }

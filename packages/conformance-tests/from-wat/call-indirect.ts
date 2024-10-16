@@ -4,40 +4,40 @@ type $add = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
   paramsTypes: ['i32', 'i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Add', type: 'i32' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$a' },
+    { kind: 'LocalGet'; id: '$b' },
+    { kind: 'Add', type: 'i32' },
+  ];
 }>
 
 type $indirect_call = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
   paramsTypes: ['i32', 'i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Const'; value: '00000000000000000000000000000000' },
-      { kind: 'CallIndirect'; id: '$__indirect_function_table' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$a' },
+    { kind: 'LocalGet'; id: '$b' },
+    { kind: 'Const'; value: '00000000000000000000000000000000' },
+    { kind: 'CallIndirect'; id: '$__indirect_function_table' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a', '$b'];
   paramsTypes: ['i32', 'i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'LocalGet'; id: '$b' },
-      { kind: 'Call'; id: '$indirect_call' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$a' },
+    { kind: 'LocalGet'; id: '$b' },
+    { kind: 'Call'; id: '$indirect_call' },
+  ];
 }>
 
 export type funcs = {

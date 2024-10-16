@@ -4,22 +4,22 @@ type $nop = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: never;
-    locals: [];
-    instructions: [
-      { kind: 'Nop'; ziltoid: 'theOmniscient' },
-    ];
+  resultTypes: [];
+  locals: [];
+  instructions: [
+    { kind: 'Nop'; ziltoid: 'theOmniscient' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: never;
-    locals: [];
-    instructions: [
-      { kind: 'Call'; id: '$nop' },
-    ];
+  resultTypes: [];
+  locals: [];
+  instructions: [
+    { kind: 'Call'; id: '$nop' },
+  ];
 }>
 
 export type funcs = {

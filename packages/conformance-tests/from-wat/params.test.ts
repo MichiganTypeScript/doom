@@ -11,6 +11,9 @@ test(name, async () => {
   expect(entry(2, 3, 4)).toStrictEqual(4);
 });
 
+type x = entry<[1, 2, 3]>;
+//   ^?
+
 type testCases = [
   Expect<Equal<entry<[1, 2, 3]>, 3>>,
   Expect<Equal<entry<[2, 3, 4]>, 4>>,

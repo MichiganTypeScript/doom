@@ -4,22 +4,22 @@ type $throw = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: never;
-    locals: [];
-    instructions: [
-      { kind: 'Unreachable' },
-    ];
+  resultTypes: [];
+  locals: [];
+  instructions: [
+    { kind: 'Unreachable' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: never;
-    locals: [];
-    instructions: [
-      { kind: 'Call'; id: '$throw' },
-    ];
+  resultTypes: [];
+  locals: [];
+  instructions: [
+    { kind: 'Call'; id: '$throw' },
+  ];
 }>
 
 export type funcs = {

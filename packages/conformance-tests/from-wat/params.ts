@@ -4,23 +4,23 @@ type $test = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
   paramsTypes: ['i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$a' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$first', '$second', '$third'];
   paramsTypes: ['i32', 'i32', 'i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$third' },
-      { kind: 'Call'; id: '$test' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$third' },
+    { kind: 'Call'; id: '$test' },
+  ];
 }>
 
 export type funcs = {

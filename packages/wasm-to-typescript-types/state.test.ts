@@ -9,7 +9,7 @@ import { executeInstruction } from "./program"
 
 type actual1022 = Satisfies<ProgramState, {
   count: 1022;
-  result: null;
+  results: [];
   stack: ["00000000000000000000010000000001", "00000000000000000000000000000000"];
   instructions: [
     {
@@ -38,7 +38,7 @@ type actual1022 = Satisfies<ProgramState, {
 type actual1023 = executeInstruction<actual1022, true, 1023>
 type expected1023 = Satisfies<ProgramState, {
   count: 1023;
-  result: null;
+  results: [];
   stack: [];
   instructions: [
     { kind: 'Const'; value: '10000000000000000000000000000000' },
@@ -64,7 +64,7 @@ type test1023 = Expect<Equal<actual1023, expected1023>>
 type actual1024 = executeInstruction<actual1023, true, 1024>
 type expected1024 = Satisfies<ProgramState, {
   count: 1024;
-  result: null;
+  results: [];
   stack: ['10000000000000000000000000000000'];
   instructions: [
     { kind: 'Nop', ziltoid: 'theOmniscient' },
@@ -88,7 +88,7 @@ type test1024 = Expect<Equal<actual1024, expected1024>>
 type actual1025 = executeInstruction<actual1024, true, 1025>
 type expected1025 = Satisfies<ProgramState, {
   count: 1025;
-  result: null;
+  results: [];
   stack: ['10000000000000000000000000000000'];
   instructions: [];
   activeFuncId: "";

@@ -4,22 +4,22 @@ type $foo = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'MemorySize' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'MemorySize' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Call'; id: '$foo' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Call'; id: '$foo' },
+  ];
 }>
 
 export type funcs = {

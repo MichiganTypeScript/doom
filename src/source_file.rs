@@ -230,7 +230,7 @@ impl SourceFile {
                 let result = if let Some(val) = function_type.results.first() {
                     format_val_type(val)
                 } else {
-                    "null".to_string()
+                    "[]".to_string()
                 };
 
                 (params, result)

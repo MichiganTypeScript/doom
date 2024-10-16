@@ -4,57 +4,57 @@ type $__wasm_call_ctors = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: null;
-    locals: [];
-    instructions: [
-      { kind: 'Nop'; ziltoid: 'theOmniscient' },
-    ];
+  resultTypes: [];
+  locals: [];
+  instructions: [
+    { kind: 'Nop'; ziltoid: 'theOmniscient' },
+  ];
 }>
 
 type $toupper = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
   paramsTypes: ['i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'Const'; value: '00000000000000000000000000100000' },
-      { kind: 'Subtract', type: 'i32' },
-      { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'Const'; value: '00000000000000000000000001100001' },
-      { kind: 'Subtract', type: 'i32' },
-      { kind: 'Const'; value: '00000000000000000000000000011010' },
-      { kind: 'LessThan', signed: false, type: 'i32' },
-      { kind: 'Select' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$p0' },
+    { kind: 'Const'; value: '00000000000000000000000000100000' },
+    { kind: 'Subtract', type: 'i32' },
+    { kind: 'LocalGet'; id: '$p0' },
+    { kind: 'LocalGet'; id: '$p0' },
+    { kind: 'Const'; value: '00000000000000000000000001100001' },
+    { kind: 'Subtract', type: 'i32' },
+    { kind: 'Const'; value: '00000000000000000000000000011010' },
+    { kind: 'LessThan', signed: false, type: 'i32' },
+    { kind: 'Select' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$p0'];
   paramsTypes: ['i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Const'; value: '00000000000000000000010000000000' },
-      { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'Const'; value: '00000000000000000000000000100000' },
-      { kind: 'Subtract', type: 'i32' },
-      { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'LocalGet'; id: '$p0' },
-      { kind: 'Const'; value: '00000000000000000000000001100001' },
-      { kind: 'Subtract', type: 'i32' },
-      { kind: 'Const'; value: '00000000000000000000000000011010' },
-      { kind: 'LessThan', signed: false, type: 'i32' },
-      { kind: 'Select' },
-      { kind: 'Store'; subkind: 'I32Store8' },
-      { kind: 'Const'; value: '00000000000000000000010000000001' },
-      { kind: 'Const'; value: '00000000000000000000000000000000' },
-      { kind: 'Store'; subkind: 'I32Store8' },
-      { kind: 'Const'; value: '00000000000000000000010000000000' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Const'; value: '00000000000000000000010000000000' },
+    { kind: 'LocalGet'; id: '$p0' },
+    { kind: 'Const'; value: '00000000000000000000000000100000' },
+    { kind: 'Subtract', type: 'i32' },
+    { kind: 'LocalGet'; id: '$p0' },
+    { kind: 'LocalGet'; id: '$p0' },
+    { kind: 'Const'; value: '00000000000000000000000001100001' },
+    { kind: 'Subtract', type: 'i32' },
+    { kind: 'Const'; value: '00000000000000000000000000011010' },
+    { kind: 'LessThan', signed: false, type: 'i32' },
+    { kind: 'Select' },
+    { kind: 'Store'; subkind: 'I32Store8' },
+    { kind: 'Const'; value: '00000000000000000000010000000001' },
+    { kind: 'Const'; value: '00000000000000000000000000000000' },
+    { kind: 'Store'; subkind: 'I32Store8' },
+    { kind: 'Const'; value: '00000000000000000000010000000000' },
+  ];
 }>
 
 export type funcs = {

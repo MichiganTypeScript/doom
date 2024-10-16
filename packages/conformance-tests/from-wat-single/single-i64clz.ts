@@ -4,12 +4,12 @@ type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$a'];
   paramsTypes: ['i64'];
-  result: 'i64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$a' },
-      { kind: 'CountLeadingZeros', type: 'i64' },
-    ];
+  resultTypes: ['i64'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$a' },
+    { kind: 'CountLeadingZeros', type: 'i64' },
+  ];
 }>
 
 export type funcs = {

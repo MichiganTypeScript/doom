@@ -95,7 +95,7 @@ export type bootstrap<
   executeInstruction<
     {
       count: 0;
-      result: null;
+      results: null;
       stack: _startData['stack'];
       instructions: _$entry['instructions'];
 

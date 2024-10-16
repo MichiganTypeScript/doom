@@ -4,24 +4,24 @@ type $negate = Satisfies<Func, {
   kind: 'func';
   params: ['$theOmniscient'];
   paramsTypes: ['f64'];
-  result: 'f64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$theOmniscient' },
-      { kind: 'Negate' },
-    ];
+  resultTypes: ['f64'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$theOmniscient' },
+    { kind: 'Negate' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$ziltoid'];
   paramsTypes: ['f64'];
-  result: 'f64';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$ziltoid' },
-      { kind: 'Call'; id: '$negate' },
-    ];
+  resultTypes: ['f64'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$ziltoid' },
+    { kind: 'Call'; id: '$negate' },
+  ];
 }>
 
 export type funcs = {

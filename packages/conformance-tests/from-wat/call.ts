@@ -4,35 +4,35 @@ type $get42 = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Const'; value: '00000000000000000000000000101010' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Const'; value: '00000000000000000000000000101010' },
+  ];
 }>
 
 type $get42Plus1 = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Call'; id: '$get42' },
-      { kind: 'Const'; value: '00000000000000000000000000000001' },
-      { kind: 'Add', type: 'i32' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Call'; id: '$get42' },
+    { kind: 'Const'; value: '00000000000000000000000000000001' },
+    { kind: 'Add', type: 'i32' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Call'; id: '$get42Plus1' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Call'; id: '$get42Plus1' },
+  ];
 }>
 
 export type funcs = {

@@ -13,7 +13,7 @@ export type makeInput = Satisfies<ProgramInput, {
       kind: 'func';
       params: ['$a', '$b'];
       paramsTypes: ['i32', 'i32'];
-      result: 'i32';
+      resultTypes: ['i32'];
       locals: [];
       instructions: [];
     };

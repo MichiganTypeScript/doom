@@ -49,14 +49,15 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
                     source.set_args(format!("[{internals}]"));
                 }
 
-                let result = function_type
+                let results = function_type
                     .results
-                    .first() // BUG! this is a bug. we should be able to handle multiple results
+                    .iter()
                     .map(|val_type| format_val_type(val_type))
-                    .unwrap_or("null".to_string())
+                    .collect::<Vec<String>>()
+                    .join(", ")
                     .to_string();
 
-                format!("  params: [{params}];\n  paramsTypes: [{params_types}];\n  result: {result};")
+                format!("  params: [{params}];\n  paramsTypes: [{params_types}];\n  resultTypes: [{results}];")
             })
             .expect("better have an inline type because we already checked")
     } else if func.ty.index.is_some() {
@@ -67,9 +68,9 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
         let ModuleType { params, result } = source.get_module_type(&id).expect("looking for a module type that doesn't exist");
         let p = params.join(", ");
 
-        format!("  params: [];\n  paramsTypes: [{p}];\n  result: {result};")
+        format!("  params: [];\n  paramsTypes: [{p}];\n  resultTypes: {result};")
     } else {
-        String::from("  params: [];\n  paramsTypes: [];\n  result: never;")
+        String::from("  params: [];\n  paramsTypes: [];\n  resultTypes: [];")
     };
 
     let instructions_and_locals = handle_func(func);

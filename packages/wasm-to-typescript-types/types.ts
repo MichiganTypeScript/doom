@@ -15,7 +15,7 @@ export type Func = {
   kind: 'func';
   params: Param[];
   paramsTypes: WasmType[];
-  result: WasmType | null;
+  resultTypes: WasmType[];
   locals: string[];
   instructions: Instruction[];
 }
@@ -49,12 +49,15 @@ export type ExecutionContext = {
   stackDepth: number;
 }
 
+/** matches what JS implementations do regarding returning one vs multiple values */
+type Results = (number | bigint)[] | (number | bigint) | null;
+
 export type ProgramState = {
   /** the number of instructions we've executed, useful for debugging */
   count: number;
 
   /** the result of the program */
-  result: number | bigint | null;
+  results: Results;
 
   /** a stack of values */
   stack: WasmValue[];

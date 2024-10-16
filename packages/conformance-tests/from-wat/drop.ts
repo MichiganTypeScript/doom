@@ -4,26 +4,26 @@ type $drop = Satisfies<Func, {
   kind: 'func';
   params: ['$first_arg', '$second_arg'];
   paramsTypes: ['i32', 'i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$first_arg' },
-      { kind: 'LocalGet'; id: '$second_arg' },
-      { kind: 'Drop' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$first_arg' },
+    { kind: 'LocalGet'; id: '$second_arg' },
+    { kind: 'Drop' },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: ['$first_arg', '$second_arg'];
   paramsTypes: ['i32', 'i32'];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'LocalGet'; id: '$second_arg' },
-      { kind: 'LocalGet'; id: '$first_arg' },
-      { kind: 'Call'; id: '$drop' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'LocalGet'; id: '$second_arg' },
+    { kind: 'LocalGet'; id: '$first_arg' },
+    { kind: 'Call'; id: '$drop' },
+  ];
 }>
 
 export type funcs = {

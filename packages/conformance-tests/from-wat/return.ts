@@ -4,27 +4,27 @@ type $return = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Const'; value: '00000000000000000000000000000000' },
-      { kind: 'Const'; value: '00000000000000000000000000000001' },
-      { kind: 'Const'; value: '00000000000000000000000000000010' },
-      { kind: 'Const'; value: '00000000000000000000000000000011' },
-      { kind: 'Const'; value: '00000000000000000000000000000100' },
-      { kind: 'Return'; count: 1 },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Const'; value: '00000000000000000000000000000000' },
+    { kind: 'Const'; value: '00000000000000000000000000000001' },
+    { kind: 'Const'; value: '00000000000000000000000000000010' },
+    { kind: 'Const'; value: '00000000000000000000000000000011' },
+    { kind: 'Const'; value: '00000000000000000000000000000100' },
+    { kind: 'Return'; count: 1 },
+  ];
 }>
 
 type $entry = Satisfies<Func, {
   kind: 'func';
   params: [];
   paramsTypes: [];
-  result: 'i32';
-    locals: [];
-    instructions: [
-      { kind: 'Call'; id: '$return' },
-    ];
+  resultTypes: ['i32'];
+  locals: [];
+  instructions: [
+    { kind: 'Call'; id: '$return' },
+  ];
 }>
 
 export type funcs = {
