@@ -8,7 +8,6 @@ import {
   fsWorker,
   incrementBy,
   initialConditions,
-  productionMode,
   shouldLogStats,
   statsDirectory,
   statsJsonPath,
@@ -359,7 +358,7 @@ export const serializeCSV = (csv: CSV) => {
 };
 
 export const logFinalStats = async (programTime: number) => {
-  if (productionMode) {
+  if (!shouldLogStats) {
     return;
   }
 

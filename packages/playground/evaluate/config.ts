@@ -6,17 +6,16 @@ import { Worker } from "node:worker_threads";
 export const resultTypeName = 'Result';
 export const nextResultTypeName = `Next${resultTypeName}`;
 export const stringResultTypeName = `String${resultTypeName}`;
-export const incrementBy = 100;
+export const incrementBy = 103;
 export const readStringFromMemory = true;
-/** turns off logging and formatting */
-export const productionMode = false;
+/** turns off statistics collection and logging (it's expensive over long runs) */
 export const shouldLogStats = false;
 
 /**
  * controls how often the program prints to file.
  * set to 0 for it to always print
  */
-export const comeUpForAirEvery = 5;
+export const comeUpForAirEvery = 10_000;
 
 export interface InitialConditions {
   /**

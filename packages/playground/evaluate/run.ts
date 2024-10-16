@@ -27,10 +27,10 @@ import {
   resultTypeName,
   tsconfigFilePath,
   worker,
-  productionMode,
   errorFilePath,
   nextResultTypeName,
   stringResultTypeName,
+  shouldLogStats,
 } from "./config";
 import { finalizeMeter, meter, resetMeter } from "./metering";
 
@@ -178,12 +178,12 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
 
   meter("getTypeAlias").start();
   let typeAlias: ts.TypeAliasDeclaration;
+  let searchFor = nextResultTypeName;
+  if (justPrint && current === 0 && resultFilePath === null) {
+    // for the final result file
+    searchFor = readStringFromMemory ? stringResultTypeName : resultTypeName;
+  }
   ts.forEachChild(targetSourceFile, (node) => {
-    let searchFor = nextResultTypeName;
-    if (justPrint && current === 0 && resultFilePath === null) {
-      // for the final result file
-      searchFor = readStringFromMemory ? stringResultTypeName : resultTypeName;
-    }
     if (
       ts.isTypeAliasDeclaration(node) &&
       node.name.escapedText === searchFor
@@ -205,6 +205,12 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   meter("typeToString").start();
   const typeString = checker.typeToString(type);
   meter("typeToString").stop();
+
+  if (typeString === "" || typeString === "any") {
+    throw new Error(
+      `typeString is empty for ${evaluationFilePath}. was searching for ${searchFor}`,
+    );
+  }
 
   if (simpleTypeMode) {
     console.log("instantiations:", program.getInstantiationCount());
@@ -232,7 +238,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
       console.error(`sorry, Charlie.  you gotta debug this now.`);
       process.exit(1);
     }
-    throw new Error(`stopped because current is NaN`);
+    throw new Error(`stopped because current is NaN: ${typeString}`);
   }
 
   if (resultFilePath === null) {
@@ -275,9 +281,7 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   meter("writeResults").stop();
   meter("total").stop();
 
-  if (productionMode) {
-    console.log({ current });
-  } else {
+  if (shouldLogStats) {
     const typeStringLength = typeString.length;
     const targetText = targetSourceFile.text;
     const activeInstruction = isBenchmarkingIndividualInstructions
@@ -293,6 +297,8 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
       },
       metering: finalizeMeter(),
     });
+  } else {
+    console.log({ current });
   }
 
   cleanup();
