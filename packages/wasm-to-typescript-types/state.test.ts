@@ -22,6 +22,7 @@ type actual1022 = Satisfies<ProgramState, {
   ];
   activeFuncId: "";
   activeBranches: {};
+  activeStackDepth: 0;
   activeLocals: {};
   globals: {};
   memory: {
@@ -45,6 +46,7 @@ type expected1023 = Satisfies<ProgramState, {
   ];
   activeFuncId: "";
   activeBranches: {};
+  activeStackDepth: 0;
   activeLocals: {};
   globals: {};
   memory: {
@@ -69,6 +71,7 @@ type expected1024 = Satisfies<ProgramState, {
   ];
   activeFuncId: "";
   activeBranches: {};
+  activeStackDepth: 0;
   activeLocals: {};
   globals: {};
   memory: {
@@ -90,6 +93,7 @@ type expected1025 = Satisfies<ProgramState, {
   instructions: [];
   activeFuncId: "";
   activeBranches: {};
+  activeStackDepth: 0;
   activeLocals: {};
   globals: {};
   memory: {

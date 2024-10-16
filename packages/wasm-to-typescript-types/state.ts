@@ -1,17 +1,12 @@
 import { I32AddBinary } from "../ts-type-math/add";
 import type { Instruction } from "./instructions/instructions"
-import { Load } from "./instructions/memory";
 import type {
   BranchesById,
   CollectAt,
   ExecutionContext,
   Func,
-  FuncsById,
   GlobalsById,
-  LocalsById,
   MemoryAddress,
-  MemoryByAddress,
-  Param,
   ProgramState,
 } from "./types"
 import * as TypeMath from "ts-type-math";
@@ -82,6 +77,7 @@ export namespace State {
         activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
         activeBranches: state['activeBranches'];
+        activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
@@ -109,6 +105,7 @@ export namespace State {
         activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
         activeBranches: state['activeBranches'];
+        activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
@@ -133,27 +130,27 @@ export namespace State {
     >
 
     export type popUntil<
-      instruction extends Instruction,
+      searchingFor extends Instruction,
       state extends ProgramState
     > = Satisfies<ProgramState,
       state['instructions'] extends [
         infer discarded extends Instruction,
         ...infer remaining extends Instruction[],
       ]
-      ? discarded extends instruction
+      ? discarded extends searchingFor
 
-        // we found the matching instruction: we can dipset
+        // we found the matching searchingFor Instruction: we can dipset
         ? state
 
-        // we didn't find the matching instruction: we have to keep popping
+        // we didn't find the matching searchingFor Instruction: we have to keep popping
         : popUntil<
-            instruction,
+            searchingFor,
             set<
               remaining,
               state
             >
           >
-      : State.error<"stack exhausted", instruction, state>
+      : State.error<"stack exhausted", searchingFor, state>
     >
 
     export type push<
@@ -199,6 +196,7 @@ export namespace State {
         activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
         activeBranches: state['activeBranches'];
+        activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
@@ -240,6 +238,7 @@ export namespace State {
         activeLocals: executionContext['locals'];
         activeFuncId: executionContext['funcId'];
         activeBranches: executionContext['branches'];
+        activeStackDepth: executionContext['stackDepth'];
 
         globals: state['globals'];
         memory: state['memory'];
@@ -254,6 +253,7 @@ export namespace State {
             locals: state['activeLocals'];
             funcId: state['activeFuncId'];
             branches: state['activeBranches'];
+            stackDepth: state['activeStackDepth'];
           },
         ];
 
@@ -279,6 +279,7 @@ export namespace State {
           activeLocals: active['locals'];
           activeFuncId: active['funcId'];
           activeBranches: active['branches'];
+          activeStackDepth: active['stackDepth'];
 
           globals: state['globals'];
           memory: state['memory'];
@@ -314,7 +315,31 @@ export namespace State {
 
             activeFuncId: state['activeFuncId'];
             activeBranches: state['activeBranches'];
+            activeStackDepth: state['activeStackDepth'];
+            globals: state['globals'];
+            memory: state['memory'];
+            garbageCollection: state['garbageCollection'];
+            indirect: state['indirect'];
+            memorySize: state['memorySize'];
+            executionContexts: state['executionContexts'];
+            funcs: state['funcs'];
+          }
+        >
 
+        export type clear<
+          state extends ProgramState
+        > = Satisfies<ProgramState,
+          {
+            count: state['count'];
+            result: state['result'];
+            stack: state['stack'];
+            instructions: state['instructions'];
+
+            activeLocals: {}
+
+            activeFuncId: state['activeFuncId'];
+            activeBranches: state['activeBranches'];
+            activeStackDepth: state['activeStackDepth'];
             globals: state['globals'];
             memory: state['memory'];
             garbageCollection: state['garbageCollection'];
@@ -336,11 +361,12 @@ export namespace State {
             result: state['result'];
             stack: state['stack'];
             instructions: state['instructions'];
-
             activeLocals: state['activeLocals']
             activeFuncId: state['activeFuncId'];
+
             activeBranches: branches;
 
+            activeStackDepth: state['activeStackDepth'];
             globals: state['globals'];
             memory: state['memory'];
             garbageCollection: state['garbageCollection'];
@@ -375,19 +401,6 @@ export namespace State {
     > = Satisfies<Func,
       state['funcs'][id]
     >
-
-    /** when you call a function, you have to pop the stack some number of times depending on how many parameters and returns there are */
-    export type countCallPops<
-      state extends ProgramState,
-      funcId extends keyof state['funcs']
-    > = Satisfies<number,
-      getById<funcId, state> extends {
-        params: infer params extends Param[];
-        result: infer result extends number;
-      }
-      ? TypeMath.Add<params['length'], result>
-      : never
-    >
   }
 
   /** Helpers for Globals manipulation */
@@ -404,6 +417,7 @@ export namespace State {
         activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
         activeBranches: state['activeBranches'];
+        activeStackDepth: state['activeStackDepth'];
 
         globals:
           Patch<
@@ -461,6 +475,7 @@ export namespace State {
         activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
         activeBranches: state['activeBranches'];
+        activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
 
         memory:
@@ -491,6 +506,7 @@ export namespace State {
         activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
         activeBranches: state['activeBranches'];
+        activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
         memory: state['memory'];
 
@@ -519,6 +535,7 @@ export namespace State {
           activeLocals: state['activeLocals'];
           activeFuncId: state['activeFuncId'];
           activeBranches: state['activeBranches'];
+          activeStackDepth: state['activeStackDepth'];
           globals: state['globals'];
 
           memory: TypeMath.GarbageCollect<state['memory']>; // garbage collection enabled
@@ -569,6 +586,7 @@ export namespace State {
         activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
         activeBranches: state['activeBranches'];
+        activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];

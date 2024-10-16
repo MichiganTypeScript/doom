@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Why?! REally. Why???</title>
+
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>What the hell are you doing with your life.  Truly.</h1>
+
+<script defer>
+      const importObject = {
+        // env: {
+        //   memory: new WebAssembly.Memory({ initial: 1 }),
+        // },
+      };
+
+      WebAssembly.instantiateStreaming(fetch("browser.wasm"), importObject).then(
+        (obj) => {
+          window.wasmObj = obj;
+          console.log(obj.instance.exports.entry());
+        },
+      );
+    </script>
+  </body>
+</html>

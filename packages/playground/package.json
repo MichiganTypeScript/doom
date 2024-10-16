@@ -3,11 +3,15 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
+    "browser": "http-server browser --port 8080",
     "c-to-wasm": "emcc code.c -o code.wasm -g -O3 -s STANDALONE_WASM --no-entry",
     "wasm-to-wat": "wasm2wat code.wasm --enable-code-metadata --inline-exports --inline-imports --disable-reference-types --generate-names --fold-exprs --output=code.wat",
     "c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
     "wat-to-wasm": "wat2wasm code.wat --output code.wasm",
     "test": "vitest",
-    "playground": "node --stack-size=8100 --import tsx/esm ./evaluate/run-playground.ts"
+    "playground": "node --stack-size=8100 --max-old-space-size=4096 --max-semi-space-size=4096 --import tsx/esm ./evaluate/run-playground.ts"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }

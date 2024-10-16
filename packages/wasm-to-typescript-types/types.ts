@@ -44,6 +44,9 @@ export type ExecutionContext = {
    * a control flow helper that tells the program how to interpret the next when it hits a branch
    */
   branches: BranchesById;
+
+  /** the size of the stack right before this function is called (but after params are populated) */
+  stackDepth: number;
 }
 
 export type ProgramState = {
@@ -65,6 +68,8 @@ export type ProgramState = {
   activeFuncId: string;
   /** the current execution context branches */
   activeBranches: BranchesById;
+  /** the current execution context's stack depth */
+  activeStackDepth: number;
 
   globals: GlobalsById;
 

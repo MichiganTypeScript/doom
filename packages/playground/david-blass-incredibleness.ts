@@ -1,6 +1,9 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-c/uppercase'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[97], true, 15>// =>
+import { entry } from 'conformance-tests/from-wat/return-extra-stack'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[], true, 24>// =>
+// import { executeInstruction } from "../wasm-to-typescript-types/program.ts"
+// import { PlaygroundResult_00000951 as result } from  "./evaluate/results/result-00000951.ts"
+// type e = executeInstruction<result, true, 982> // =>
 type r=e['result'] // =>
 type s=e['stack']  // =>
 type s0=s[0]       // =>
@@ -12,25 +15,25 @@ type sl=s['length']// =>
 
 type c=e['count']// =>
 
-type al=e['activeLocals']  // =>
-type af=e['activeFuncId']  // =>
-type ab=e['activeBranches']// =>
+type al=e['activeLocals']    // =>
+type af=e['activeFuncId']    // =>
+type ab=e['activeBranches']  // =>
+type as=e['activeStackDepth']// =>
 
 type ec=e['executionContexts']
-type c0f=ec[0]['funcId']  // =>
-type c0l=ec[0]['locals']  // =>
-type c0b=ec[0]['branches']// =>
-
-type c1f=ec[1]['funcId']  // =>
-type c1l=ec[1]['locals']  // =>
-type c1b=ec[1]['branches']// =>
-
-type c3=ec[2]// =>
-type c4=ec[3]// =>
+type c0=ec[0]['funcId']// =>
+type c1=ec[1]['funcId']// =>
+type c2=ec[2]['funcId']// =>
+type c3=ec[3]['funcId']// =>
+type f = 1;
+type cff=ec[f]['funcId']    // =>
+type cfl=ec[f]['locals']    // =>
+type cfb=ec[f]['branches']  // =>
+type cfs=ec[f]['stackDepth']// =>
 
 type m=e['memory']// =>
 
-type i=e['instructions']
+type  i=e['instructions']
 type i0=e['instructions'][0]// =>
 type i1=e['instructions'][1]// =>
 type i2=e['instructions'][2]// =>

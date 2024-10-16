@@ -11,6 +11,18 @@ import type { HandleSyntheticInstructions, SyntheticInstruction } from "./synthe
 import type { HandleVariableInstructions, VariableInstruction } from "./variable"
 import type { HandleConversionInstructions, ConversionInstruction } from "./conversion"
 
+/*
+
+Implement against this or you're a moron:
+
+https://webassembly.github.io/spec/core/exec/instructions.html
+
+Ask me how I know.
+
+And no, MDN is not a substitute.
+
+*/
+
 export type Instruction =
   | ConstInstruction
   | ComparisonInstruction

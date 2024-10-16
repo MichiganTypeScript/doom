@@ -1,7 +1,7 @@
 import type { Instruction, selectInstruction } from "./instructions/instructions"
 import type { IHalt } from "./instructions/synthetic"
 import type { State } from "./state"
-import type { ProgramInput, ProgramState } from "./types"
+import type { Func, LocalsById, ProgramInput, ProgramState } from "./types"
 import type { Convert, WasmType, WasmValue, evaluate, Satisfies } from "ts-type-math"
 
 type _ProcessInputStack<
@@ -10,8 +10,14 @@ type _ProcessInputStack<
   _Acc extends WasmValue[] = []
 > = Satisfies<WasmValue[],
   args extends [
-    [infer headValue extends (number | bigint), ...infer tailValue extends number[] | bigint[]],
-    [infer headType extends WasmType, ...infer tailType extends WasmType[]],
+    [
+      infer headValue extends (number | bigint),
+      ...infer tailValue extends number[] | bigint[]
+    ],
+    [
+      infer headType extends WasmType,
+      ...infer tailType extends WasmType[]
+    ],
   ]
   ? _ProcessInputStack<
       [tailValue, tailType],
@@ -38,23 +44,65 @@ export type ProcessInputStack<
   ]>
 >
 
+export type PopLocals<
+  params extends string[],
+  stack extends WasmValue[],
+
+  _Acc extends {
+    stack: WasmValue[];
+    activeLocals: LocalsById;
+  } = {
+    stack: stack;
+    activeLocals: {}
+  }
+> = Satisfies<{ stack: WasmValue[]; activeLocals: LocalsById; },
+  params extends [
+    ...infer remainingParams extends string[],
+    infer param extends string,
+  ]
+  ? stack extends [
+      ...infer remainingStack extends WasmValue[],
+      infer pop extends WasmValue,
+    ]
+    ? PopLocals<
+        remainingParams,
+        remainingStack,
+        {
+          stack: remainingStack;
+
+          // append the new local to the activeLocals
+          activeLocals: _Acc['activeLocals'] & {
+            [k in param]: pop;
+          }
+        }
+      >
+    : never
+  : _Acc
+>
+
 export type bootstrap<
   input extends ProgramInput,
   debugMode extends boolean = false,
-  stopAt extends number = number,
+  stopAt extends number = number, // defaulting to `number` ensures it'll always keep executing unless an explicit value is provided
+  _$entry extends Func = input['funcs']['$entry'],
+
+  _freshStack extends WasmValue[] = ProcessInputStack<input>,
+  _startData extends {
+    stack: WasmValue[];
+    activeLocals: LocalsById;
+  } = PopLocals<_$entry['params'], _freshStack>
 > =
   executeInstruction<
     {
       count: 0;
       result: null;
-      stack: ProcessInputStack<input>; // since the stack is a stack, we need to reverse it
-      instructions: [
-        { kind: "Call", id: "$entry" }
-      ];
+      stack: _startData['stack'];
+      instructions: _$entry['instructions'];
 
-      activeLocals: {};
-      activeFuncId: "root";
+      activeLocals: _startData['activeLocals'];
+      activeFuncId: "$entry";
       activeBranches: {};
+      activeStackDepth: _startData['stack']['length']; // BUG
 
       globals: input['globals'];
       memory: evaluate<input['memory']>; // copy readonly memory into memory registers

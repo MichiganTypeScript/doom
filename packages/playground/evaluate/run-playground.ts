@@ -24,6 +24,7 @@ import {
   tsconfigFilePath,
   worker,
   productionMode,
+  errorFilePath,
 } from './config';
 import { finalizeMeter, meter, resetMeter } from './metering';
 
@@ -204,6 +205,15 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
 
   // reset current to the actual count
   current = Number(typeString.match(/count: (\d+);/)?.[1]);
+  if (Number.isNaN(current)) {
+    await fsWorker.writeFile(errorFilePath, typeString)
+    if (typeString.includes(`kind: "Halt";`)) {
+      console.error(`sorry, Charlie.  you gotta debug this now.`);
+      process.exit(1);
+    }
+    throw new Error(`stopped because current is NaN`);
+  }
+
 
   if (resultFilePath === null) {
     await finalizeProgram(current);
@@ -304,15 +314,17 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   const foundAnyArray = formattedFile.includes('any[]');
   const foundErrors = foundNever || foundAnyArray;
   if (foundErrors) {
+    await fsWorker.writeFile(errorFilePath, formattedFile)
     throw new Error(`stopped because errors found in the file (search ${writeFilePath} for "${foundNever ? 'never' : 'any[]'}")`);
-  }
-  if (Number.isNaN(current)) {
-    throw new Error(`stopped because current is NaN`);
   }
 
   if (shouldTakeABreath(timeSpentUnderwater, current)) {
     timeSpentUnderwater = 0; // reset the counter
     await fsWorker.writeFile(evaluationFilePath, evaluationSourceCode);
+    // if (current !== 0) {
+    //   console.log(performance.now() - startProgram);
+    //   process.exit(1);
+    // }
   }
 
   timeSpentUnderwater += incrementBy;
@@ -466,11 +478,13 @@ const mainLoop = async ({
   }
 }
 
+let startProgram = 0;
+
 const runProgram = async () => {
   encourage();
   clearResults();
 
-  const startProgram = performance.now();
+  startProgram = performance.now();
   await mainLoop(await bootstrap());
   const endProgram = performance.now();
   const programTime = endProgram - startProgram;

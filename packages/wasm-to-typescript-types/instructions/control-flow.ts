@@ -1,4 +1,4 @@
-import type { Func, Param, ProgramState } from "../types"
+import type { Func, LocalsById, Param, ProgramState } from "../types"
 import type { State } from '../state'
 import type { Instruction } from "./instructions"
 import type { Wasm, WasmValue, Satisfies } from 'ts-type-math'
@@ -246,47 +246,44 @@ export type BranchTable<
   : never
 >
 
-/** this function's purpose in life is to pop items off the stack according to a function's params and add them as locals */
-type PopulateParams<
-  funcId extends string,
-  params extends Param[],
-  state extends ProgramState
-> = Satisfies<ProgramState,
-  params extends [
+type Refreshment = {
+  params: Param[],
+  stack: WasmValue[],
+  locals: LocalsById,
+}
+
+type Refresh<T extends Refreshment> =
+  T['params'] extends [
     ...infer remainingParams extends Param[],
     infer param extends Param,
   ]
-  ? state['stack'] extends [
+  ? T['stack'] extends [
       ...infer remainingStack extends WasmValue[],
       infer pop extends WasmValue,
     ]
-    ? PopulateParams<
-        funcId,
-        remainingParams,
-
-        // set the locals to have the values from the stack that we just popped off
-        State.ExecutionContexts.Active.Locals.insert<
-          param,
-          pop,
-
-          // set the stack to have remaining values only
-          State.Stack.set<
-            remainingStack,
-
-            state
-          >
-        >
-      >
+    ? Refresh<{
+        params: remainingParams,
+        stack: remainingStack,
+        locals: T['locals'] & {
+          [k in param]: pop
+        }
+      }>
     : never // should never happen because the stack should always have at least as many items as there are params
-  : state // no more params, so we can jump out
->
+  : T
 
 export type Call<
   instruction extends ICall,
   state extends ProgramState,
 
   _func extends Func = state['funcs'][instruction['id']],
-  _funcId extends string = instruction['id']
+  _funcId extends string = instruction['id'],
+
+  // pop things off the stack to populate params
+  _refreshment extends Refreshment = Refresh<{
+    params: _func['params'],
+    stack: state['stack'],
+    locals: {}
+  }>
 > = Satisfies<ProgramState,
   // add the instructions from this func onto the stack
   State.Instructions.concat<
@@ -295,18 +292,16 @@ export type Call<
       { kind: 'EndFunction', id: _funcId }
     ],
 
-    // first, pop things off the stack to populate params
-    PopulateParams<
-      _funcId,
-      _func['params'],
-
-      // push a new execution context
-      State.ExecutionContexts.push<
-        {
-          locals: {}, // even though there may be known locals for the function (in addition to params), they are added when they're set with LocalSet
-          funcId: _funcId,
-          branches: {},
-        },
+    // push a new execution context for the old function we're just leaving
+    State.ExecutionContexts.push<
+      {
+        locals: _refreshment['locals'], // even though there may be known locals for the function (in addition to params), they are added when they're set with LocalSet
+        funcId: _funcId,
+        branches: {},
+        stackDepth: _refreshment['stack']['length'],
+      },
+      State.Stack.set<
+        _refreshment['stack'],
         state
       >
     >
@@ -440,54 +435,125 @@ export type Nop<
 >
 
 /**
- * If there are no values left on the stack, it returns nothing/void.
- * If there are the same amount of values left on the stack as specified in the function's type signature, it returns those values.
- * If there are more values that the function's return type specifies, then the excess values are popped from the stack and discarded, and the last N values are returned.
- */
+ * 1. remove the number of elements from the stack that the function returns
+ * 2. remove values from the stack until you get it to activeStackDepth
+ *   - make sure you accumulate them with prepend logic
+ * 3. append the temporary return (_Acc) to the stack
+ * 4. pop instructions until you reach a `EndFunction` instruction
+*/
 export type Return<
   instruction extends IReturn,
   state extends ProgramState,
 
-  _Acc extends WasmValue[] = []
+  _Acc extends WasmValue[] = [],
 > = Satisfies<ProgramState,
-  // have we accumulated enough values to return?
+  // step 1's check
   _Acc['length'] extends instruction['count']
+  ? // we can proceed to step 2
 
-  // we can return now
-  ?
-    // set the stack to what remains in the accumulator
-    State.Stack.set<
-      _Acc,
+    // step 2's check
+    state['stack']['length'] extends state['activeStackDepth']
+    ? // we can proceed to step 3
 
-      // pop instructions until we reach a matching `EndFunction` instruction
-      State.Instructions.popUntil<
-        { kind: 'EndFunction', id: state['activeFuncId'] },
-        state
+      // step 3
+      State.Stack.set<
+        [
+          ...state['stack'],
+          ..._Acc, // we already prepended, so we can put it here normally
+        ],
+
+        // step 4: pop instructions until we reach a matching `EndFunction` instruction
+        State.Instructions.popUntil<
+          { kind: 'EndFunction', id: state['activeFuncId'] },
+          state
+        >
       >
-    >
+    : // we need to recurse more to grab more values off the stack
+      state['stack'] extends [
+        ...infer remaining extends WasmValue[],
+        infer pop extends WasmValue,
+      ]
+      ? // add this value to the accumulator
+        Return<
+          instruction,
+          State.Stack.set<
+            remaining,
+            state
+          >,
+          _Acc // don't need to touch step 1's stuff
+        >
+      : never
 
-  // we need to recurse more to grab more values off the stack
-  : state['stack'] extends [
+
+  : // step 1's logic: grab more values off the stack
+    state['stack'] extends [
       ...infer remaining extends WasmValue[],
       infer pop extends WasmValue,
     ]
-
-    ? Return<
+    ? // add this value to the accumulator
+      Return<
         instruction,
-
         State.Stack.set<
           remaining,
           state
         >,
-
-        // add this value to the accumulator
         [
+          pop, // MUCHO IMPORTANTE!! - PREPEND LOGIC!!
           ..._Acc,
-          pop
         ]
       >
-    : never
+
+    : // unreachable
+      never
 >
+
+
+
+
+// export type Return<
+//   instruction extends IReturn,
+//   state extends ProgramState,
+
+//   _Acc extends WasmValue[] = []
+// > = Satisfies<ProgramState,
+//   // have we accumulated enough values to return?
+//   _Acc['length'] extends instruction['count']
+
+//   ? // we can return now
+
+//     // set the stack to what remains in the accumulator
+//     State.Stack.set<
+//       _Acc,
+
+//       // pop instructions until we reach a matching `EndFunction` instruction
+//       State.Instructions.popUntil<
+//         { kind: 'EndFunction', id: state['activeFuncId'] },
+//         state
+//       >
+//     >
+
+//   : // we need to recurse more to grab more values off the stack
+//     state['stack'] extends [
+//       ...infer remaining extends WasmValue[],
+//       infer pop extends WasmValue,
+//     ]
+
+//     ? Return<
+//         instruction,
+
+//         State.Stack.set<
+//           remaining,
+//           state
+//         >,
+
+//         // add this value to the accumulator
+//         [
+//           ..._Acc,
+//           pop
+//         ]
+//       >
+//     : never
+// >
 
 export type Select<
   instruction extends ISelect, // unused

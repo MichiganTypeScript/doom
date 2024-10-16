@@ -51,7 +51,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
 
                 let result = function_type
                     .results
-                    .first()
+                    .first() // BUG! this is a bug. we should be able to handle multiple results
                     .map(|val_type| format_val_type(val_type))
                     .unwrap_or("null".to_string())
                     .to_string();
