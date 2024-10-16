@@ -1,5 +1,6 @@
 import { I32AddBinary } from "../ts-type-math/add";
 import type { Instruction } from "./instructions/instructions"
+import { IEndFunction } from "./instructions/synthetic";
 import type {
   BranchesById,
   CollectAt,
@@ -291,7 +292,31 @@ export namespace State {
 
           funcs: state['funcs'];
         }
-      : never
+      : state['instructions'] extends IEndFunction[] // funny story: [IEndFunction] doesn't work here
+        ? // we hit this case on the very last pop (i.e. when the program completes)
+          {
+            count: state['count'];
+            results: state['results'];
+            stack: state['stack'];
+            instructions: state['instructions'];
+            
+            // set the new one
+            activeLocals: {};
+            activeFuncId: 'hope you found what you were looking for';
+            activeBranches: {};
+            activeStackDepth: 9001;
+
+            globals: state['globals'];
+            memory: state['memory'];
+            garbageCollection: state['garbageCollection'];
+            indirect: state['indirect'];
+            memorySize: state['memorySize'];
+
+            executionContexts: [];
+
+            funcs: state['funcs'];
+          }
+        : State.error<"execution contexts exhausted", Instruction, state>
     >
 
     export namespace Active {

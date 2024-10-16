@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/return-extra-stack'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[], true, 23>// =>
+import { entry } from 'conformance-tests/from-wat/unreachable'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[], true, 2>// =>
 // import { executeInstruction } from "../wasm-to-typescript-types/program.ts"
 // import { PlaygroundResult_00000951 as result } from  "./evaluate/results/result-00000951.ts"
 // type e = executeInstruction<result, true, 982> // =>
-type r=e['result'] // =>
+type r=e['results']// =>
 type s=e['stack']  // =>
 type s0=s[0]       // =>
 type s1=s[1]       // =>

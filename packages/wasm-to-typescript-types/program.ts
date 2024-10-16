@@ -97,7 +97,10 @@ export type bootstrap<
       count: 0;
       results: null;
       stack: _startData['stack'];
-      instructions: _$entry['instructions'];
+      instructions: [
+        ..._$entry['instructions'],
+        { kind: 'EndFunction', id: '$entry' },
+      ];
 
       activeLocals: _startData['activeLocals'];
       activeFuncId: "$entry";

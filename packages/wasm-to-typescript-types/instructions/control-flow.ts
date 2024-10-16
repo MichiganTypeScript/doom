@@ -588,8 +588,11 @@ export type Unreachable<
   instruction extends IUnreachable,
   state extends ProgramState
 > = Satisfies<ProgramState,
-  State.Instructions.push<
-    { kind: 'Halt', reason: "reached an Unreachable instruction.  you prolly deserve the debugging session that's coming next" },
+  State.Instructions.unshift<
+    {
+      kind: 'Halt',
+      reason: "reached an Unreachable instruction.  you prolly deserve the debugging session that's coming next"
+    },
     state
   >
 >
