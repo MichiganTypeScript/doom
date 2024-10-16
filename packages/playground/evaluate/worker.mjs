@@ -1,13 +1,11 @@
 import { parentPort } from "node:worker_threads";
 import { promises as fs } from "node:fs";
-import { Rome, Distribution } from "@biomejs/js-api";
+import { Biome, Distribution } from "@biomejs/js-api";
 
-const rome = await Rome.create({
+const biome = await Biome.create({
   distribution: Distribution.NODE,
 });
-rome.applyConfiguration({
-  // @ts-ignore there's a problem with the biome js-api.  there's also a pnpm patch to fix this
-  gitignore_matches: [],
+biome.applyConfiguration({
   files: {
     maxSize: 1024 * 1024 * 1024,
   },
@@ -18,7 +16,7 @@ parentPort?.on(
   async ({ type, filePath, data, options: { format } }) => {
     if (type === "writeFile") {
       if (format) {
-        let { content, diagnostics } = rome.formatContent(data, {
+        let { content, diagnostics } = biome.formatContent(data, {
           filePath,
         });
         if (diagnostics.length > 0) {

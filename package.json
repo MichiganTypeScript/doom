@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rm -f .tsbuildinfo && rm -rf packages/playground/evaluate/results && rm -rf target",
     "preinstall": "npx only-allow pnpm",
-    "playground": "pnpm --filter playground run playground",
+    "evaluate": "pnpm --filter playground run evaluate",
     "generate": "tsx ./packages/playground/generate.ts",
     "test:conformance": "pnpm --filter conformance-tests run test",
     "test:math": "pnpm --filter ts-type-math run test",
@@ -20,10 +20,11 @@
     "build:force": "MICHIGAN_TYPESCRIPT=true time tsc --project tsconfig.force.json"
   },
   "dependencies": {
-    "@biomejs/js-api": "0.3.0-nightly.cfef948",
-    "@biomejs/wasm-bundler": "^1.5.3",
-    "@biomejs/wasm-nodejs": "^1.5.3",
-    "@biomejs/wasm-web": "^1.5.3",
+    "@biomejs/biome": "^1.9.3",
+    "@biomejs/js-api": "^0.7.1",
+    "@biomejs/wasm-bundler": "^1.9.3",
+    "@biomejs/wasm-nodejs": "^1.9.3",
+    "@biomejs/wasm-web": "^1.9.3",
     "@types/node": "^20.11.5",
     "@typescript/vfs": "^1.6.0",
     "lz-string": "^1.5.0",
@@ -36,7 +37,6 @@
   "pnpm": {
     "patchedDependencies": {
       "typescript@5.3.3": "patches/typescript@5.3.3.patch",
-      "@biomejs/js-api@0.3.0-nightly.cfef948": "patches/@biomejs__js-api@0.3.0-nightly.cfef948.patch",
       "type-testing@0.2.0": "patches/type-testing@0.2.0.patch"
     }
   },
