@@ -1,3 +1,4 @@
+export type DoomPaletteToAscii = typeof doomPaletteToAscii;
 export const doomPaletteToAscii = {
   "00000000": " +",
   "00000001": "^+",

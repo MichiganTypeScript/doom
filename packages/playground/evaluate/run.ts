@@ -150,6 +150,23 @@ const createEnv = () => {
 
 const env = createEnv();
 
+const printType = (typeString: string) => {
+  let output = typeString.replaceAll("\\n", "\n");
+
+  // if the first two characters are `{ "` we presume it's an object and format it as such
+
+  if (output.startsWith('{ "')) {
+    const lines = output
+      .replace(/{ "/g, '{\n  "')
+      .replace(/"; "/g, '";\n  "')
+      .replace(/"; }$/g, '";\n}\n')
+      .split("\n");
+    const sortedLines = lines.slice(1, lines.length - 1).sort();
+    output = [lines[0], ...sortedLines, lines[lines.length - 1]].join("\n");
+  }
+  return output;
+};
+
 const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   let { current, timeSpentUnderwater, cleanup } = programRun;
   const {
@@ -215,13 +232,12 @@ const isolatedProgram = async (programRun: ProgramRun): Promise<ProgramRun> => {
   if (simpleTypeMode) {
     console.log("instantiations:", program.getInstantiationCount());
     console.log();
-    console.log(typeString.replaceAll("\\n", "\n"));
-    console.log();
-    throw new Error("not really an error, but we're all set, boss.");
+    console.log(printType(typeString));
+    process.exit(0);
   }
 
   if (justPrint) {
-    console.log(typeString.replaceAll("\\n", "\n"));
+    console.log(printType(typeString));
     console.log();
     return {
       ...programRun,

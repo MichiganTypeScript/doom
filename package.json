@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rm -f .tsbuildinfo && rm -rf packages/playground/evaluate/results && rm -rf target",
     "preinstall": "npx only-allow pnpm",
-    "eval": "pnpm --filter playground run eval",
+    "eval": "pnpm --filter playground --silent run eval",
     "generate": "tsx ./packages/playground/generate.ts",
     "test:conformance": "pnpm --filter conformance-tests run test",
     "test:math": "pnpm --filter ts-type-math run test",

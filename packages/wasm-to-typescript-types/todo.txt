@@ -21,6 +21,8 @@ create a type for wasm runtime entry
 
 ## Other
 
+- validation for input arguments not matching the entry function's signature
+
 - look into variance annotations
 
 - add program-wide stats

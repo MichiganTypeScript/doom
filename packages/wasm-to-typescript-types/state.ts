@@ -14,7 +14,7 @@ import * as TypeMath from "ts-type-math";
 import { WasmValue, WasmType, Convert, Wasm, evaluate, Satisfies } from 'ts-type-math';
 
 /** update Source with Update */
-type Patch<Source, Update> = evaluate<
+export type Patch<Source, Update> = evaluate<
   & Omit<Source, keyof Update>
   & Update
 >;
@@ -304,7 +304,7 @@ export namespace State {
             activeLocals: {};
             activeFuncId: 'hope you found what you were looking for';
             activeBranches: {};
-            activeStackDepth: 9001;
+            activeStackDepth: 1337;
 
             globals: state['globals'];
             memory: state['memory'];
