@@ -1,5 +1,6 @@
 
-export const frameValues = [
+/** derived from running doom.wasm in Chrome */
+export const values = [
   107,
   107,
   106,
@@ -64001,3 +64002,4 @@ export const frameValues = [
   111,
   109
 ] as const;
+

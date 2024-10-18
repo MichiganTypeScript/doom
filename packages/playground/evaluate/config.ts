@@ -6,7 +6,7 @@ import { Worker } from "node:worker_threads";
 export const resultTypeName = 'Result';
 export const nextResultTypeName = `Next${resultTypeName}`;
 export const stringResultTypeName = `String${resultTypeName}`;
-export const incrementBy = 103;
+export const incrementBy = 1;
 export const readStringFromMemory = true;
 /** turns off statistics collection and logging (it's expensive over long runs) */
 export const shouldLogStats = false;
@@ -15,7 +15,12 @@ export const shouldLogStats = false;
  * controls how often the program prints to file.
  * set to 0 for it to always print
  */
-export const comeUpForAirEvery = 10_000;
+export const comeUpForAirEvery = 1;
+
+/**
+ * how often the process should shed this mortal coil
+ */
+export const transcendTheAstralPlane = 100;
 
 export interface InitialConditions {
   /**
