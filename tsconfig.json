@@ -35,6 +35,7 @@
     "packages/playground/evaluate/results/result-*",
     "packages/playground/evaluate/results/bootstrap*",
     "packages/playground/evaluate/start.ts",
+    "packages/playground/evaluate/final-doom-pun-intended/*", // not ready yet.
     //
     // "packages/conformance-tests/from-c/*",
     // "packages/conformance-tests/from-wat/*",

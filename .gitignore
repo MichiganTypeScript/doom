@@ -3,3 +3,4 @@ target/
 *.tsbuildinfo
 packages/playground/evaluate/results*
 tsc-output.cpuprofile
+trace/
