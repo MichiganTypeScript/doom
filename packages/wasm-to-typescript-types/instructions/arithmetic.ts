@@ -63,7 +63,7 @@ export type HandleArithmeticInstructions<
   : instruction extends IRemainder
   ? Remainder<instruction, state>
 
-  : never
+  : State.error<"unknown arithmetic instruction", instruction, state>
 >
 
 export type Add<
@@ -99,9 +99,11 @@ export type Subtract<
   ? State.Stack.set<
       [
         ...remaining,
-        instruction['type'] extends 'i32' ? Wasm.I32Sub<a, b> :
-        instruction['type'] extends 'i64' ? Wasm.I64Sub<a, b> :
-        never
+        instruction['type'] extends 'i32'
+        ? Wasm.I32Sub<a, b>
+        : instruction['type'] extends 'i64'
+          ? Wasm.I64Sub<a, b>
+          : never
       ],
 
       state
@@ -121,9 +123,11 @@ export type Multiply<
   ? State.Stack.set<
       [
         ...remaining,
-        instruction['type'] extends 'i32' ? Wasm.I32Mul<a, b> :
-        instruction['type'] extends 'i64' ? Wasm.I64Mul<a, b> :
-        never
+        instruction['type'] extends 'i32'
+        ? Wasm.I32Mul<a, b>
+        : instruction['type'] extends 'i64'
+          ? Wasm.I64Mul<a, b>
+          : never
       ],
 
       state

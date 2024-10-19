@@ -110,7 +110,7 @@ export type HandleBitwiseInstructions<
   : instruction extends IPopCount
   ? PopCount<instruction, state>
 
-  : never
+  : State.error<"unknown bitwise instruction", instruction, state>
 >
 
 type And<
@@ -125,13 +125,15 @@ type And<
   ? State.Stack.set<
       [
         ...remaining,
-        instruction['type'] extends 'i32' ? TypeMath.Wasm.I32And<a, b> :
-        instruction['type'] extends 'i64' ? TypeMath.Wasm.I64And<a, b> :
-        never
+        instruction['type'] extends 'i32'
+        ? TypeMath.Wasm.I32And<a, b>
+        : instruction['type'] extends 'i64'
+          ? TypeMath.Wasm.I64And<a, b>
+          : never
       ],
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type Or<
@@ -146,14 +148,16 @@ type Or<
   ? State.Stack.set<
       [
         ...remaining,
-        instruction['type'] extends 'i32' ? TypeMath.Wasm.I32Or<a, b> :
-        instruction['type'] extends 'i64' ? TypeMath.Wasm.I64Or<a, b> :
-        never
+        instruction['type'] extends 'i32'
+        ? TypeMath.Wasm.I32Or<a, b>
+        : instruction['type'] extends 'i64'
+          ? TypeMath.Wasm.I64Or<a, b>
+          : never
       ],
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type Xor<
@@ -168,14 +172,16 @@ type Xor<
   ? State.Stack.set<
       [
         ...remaining,
-        instruction['type'] extends 'i32' ? TypeMath.Wasm.I32Xor<a, b> :
-        instruction['type'] extends 'i64' ? TypeMath.Wasm.I64Xor<a, b> :
-        never
+        instruction['type'] extends 'i32'
+        ? TypeMath.Wasm.I32Xor<a, b>
+        : instruction['type'] extends 'i64'
+          ? TypeMath.Wasm.I64Xor<a, b>
+          : never
       ],
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type ShiftLeft<
@@ -197,7 +203,7 @@ type ShiftLeft<
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type ShiftRight<
@@ -224,7 +230,7 @@ type ShiftRight<
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type RotateLeft<
@@ -246,7 +252,7 @@ type RotateLeft<
       ],
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type RotateRight<
@@ -274,7 +280,7 @@ type CountLeadingZeros<
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type CountTrailingZeros<

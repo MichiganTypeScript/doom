@@ -45,7 +45,7 @@ export type HandleMemoryInstructions<
   : instruction extends IStore
   ? Store<instruction, state>
 
-  : never
+  : State.error<"unknown memory instruction", instruction, state>
 >
 
 export type MemorySize<

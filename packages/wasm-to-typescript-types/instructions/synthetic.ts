@@ -51,7 +51,7 @@ export type HandleSyntheticInstructions<
   : instruction extends IHalt
   ? Halt<instruction, state>
 
-  : never
+  : State.error<"unknown synthetic instruction", instruction, state>
 >
 
 export type EndFunction<

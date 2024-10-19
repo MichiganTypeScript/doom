@@ -147,7 +147,7 @@ export type HandleControlFlowInstructions<
   : instruction extends IUnreachable
   ? Unreachable<instruction, state>
 
-  : never
+  : State.error<"unknown control-flow instruction", instruction, state>
 >
 
 export type Block<
@@ -208,7 +208,7 @@ export type BranchIf<
         >
       >
 
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type BranchTable<
@@ -243,7 +243,7 @@ export type BranchTable<
           state
         >
       >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 type Refreshment = {
@@ -342,7 +342,7 @@ export type Drop<
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type If<
@@ -386,7 +386,7 @@ export type If<
         >
       >
 
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type Loop<
@@ -479,7 +479,7 @@ export type Return<
           >,
           _Acc // don't need to touch step 1's stuff
         >
-      : never
+      : State.error<"stack exhausted", instruction, state>
 
 
   : // step 1's logic: grab more values off the stack
@@ -500,57 +500,8 @@ export type Return<
         ]
       >
 
-    : // unreachable
-      never
+    : State.error<"stack exhausted", instruction, state>
 >
-
-
-
-
-// export type Return<
-//   instruction extends IReturn,
-//   state extends ProgramState,
-
-//   _Acc extends WasmValue[] = []
-// > = Satisfies<ProgramState,
-//   // have we accumulated enough values to return?
-//   _Acc['length'] extends instruction['count']
-
-//   ? // we can return now
-
-//     // set the stack to what remains in the accumulator
-//     State.Stack.set<
-//       _Acc,
-
-//       // pop instructions until we reach a matching `EndFunction` instruction
-//       State.Instructions.popUntil<
-//         { kind: 'EndFunction', id: state['activeFuncId'] },
-//         state
-//       >
-//     >
-
-//   : // we need to recurse more to grab more values off the stack
-//     state['stack'] extends [
-//       ...infer remaining extends WasmValue[],
-//       infer pop extends WasmValue,
-//     ]
-
-//     ? Return<
-//         instruction,
-
-//         State.Stack.set<
-//           remaining,
-//           state
-//         >,
-
-//         // add this value to the accumulator
-//         [
-//           ..._Acc,
-//           pop
-//         ]
-//       >
-//     : never
-// >
 
 export type Select<
   instruction extends ISelect, // unused
@@ -578,7 +529,7 @@ export type Select<
         ],
         state
       >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type Unreachable<

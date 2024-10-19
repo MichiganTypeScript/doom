@@ -62,7 +62,7 @@ export type HandleConversionInstructions<
   : instruction extends IReinterpret
   ? Reinterpret<instruction, state>
 
-  : never
+  : State.error<"unknown conversion instruction", instruction, state>
 
 // https://developer.mozilla.org/en-US/docs/WebAssembly/Reference/Numeric/Wrap
 export type Warp<

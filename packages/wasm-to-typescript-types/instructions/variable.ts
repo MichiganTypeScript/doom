@@ -63,7 +63,7 @@ export type HandleVariableInstructions<
   : instruction extends IGlobalSet
   ? GlobalSet<instruction, state>
 
-  : never
+  : State.error<"unknown variable instruction", instruction, state>
 >
 
 export type LocalGet<
@@ -96,7 +96,7 @@ export type LocalSet<
         state
       >
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type LocalTee<
@@ -112,7 +112,7 @@ export type LocalTee<
       entry,
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type GlobalGet<
@@ -141,5 +141,5 @@ export type GlobalSet<
         state
       >
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >

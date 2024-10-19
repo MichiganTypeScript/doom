@@ -86,7 +86,7 @@ export type HandleComparisonInstruction<
   : instruction extends ILessThanOrEqual
   ? LessThanOrEqual<instruction, state>
 
-  : never
+  : State.error<"unknown comparison instruction", instruction, state>
 >
 
 export type EqualsZero<
@@ -101,14 +101,16 @@ export type EqualsZero<
       [
         ...remaining,
         
-        instruction['type'] extends 'i32' ? Wasm.I32Eqz<a> :
-        instruction['type'] extends 'i64' ? Wasm.I64Eqz<a> :
-        never
+        instruction['type'] extends 'i32'
+        ? Wasm.I32Eqz<a>
+        : instruction['type'] extends 'i64'
+          ? Wasm.I64Eqz<a>
+          : never
       ],
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type Equals<
@@ -124,14 +126,16 @@ export type Equals<
       [
         ...remaining,
         
-        instruction['type'] extends 'i32' ? Wasm.I32Eq<a, b> :
-        instruction['type'] extends 'i64' ? Wasm.I64Eq<a, b> :
-        never
+        instruction['type'] extends 'i32'
+        ? Wasm.I32Eq<a, b>
+        : instruction['type'] extends 'i64'
+          ? Wasm.I64Eq<a, b>
+          : never
       ],
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type NotEqual<
@@ -147,14 +151,16 @@ export type NotEqual<
       [
         ...remaining,
         
-        instruction['type'] extends 'i32' ? Wasm.I32Neq<a, b> :
-        instruction['type'] extends 'i64' ? Wasm.I64Neq<a, b> :
-        never
+        instruction['type'] extends 'i32'
+        ? Wasm.I32Neq<a, b>
+        : instruction['type'] extends 'i64'
+          ? Wasm.I64Neq<a, b>
+          : never
       ],
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type GreaterThan<
@@ -182,7 +188,7 @@ export type GreaterThan<
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type LessThan<
@@ -209,7 +215,7 @@ export type LessThan<
       ],
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type GreaterThanOrEqual<
@@ -237,7 +243,7 @@ export type GreaterThanOrEqual<
 
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type LessThanOrEqual<
@@ -264,5 +270,5 @@ export type LessThanOrEqual<
       ],
       state
     >
-  : never
+  : State.error<"stack exhausted", instruction, state>
 >

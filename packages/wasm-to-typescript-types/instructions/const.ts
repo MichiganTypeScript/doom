@@ -28,5 +28,6 @@ export type HandleConstInstruction<
 > = Satisfies<ProgramState,
   instruction extends IConst
   ? Const<instruction, state>
-  : never
+
+  : State.error<"unknown const instruction", instruction, state>
 >

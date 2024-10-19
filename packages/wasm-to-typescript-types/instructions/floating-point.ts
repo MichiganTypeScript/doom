@@ -1,7 +1,6 @@
 import type { ProgramState } from "../types"
 import type { State } from '../state'
-import * as TypeMath from "ts-type-math"
-import { WasmValue, Satisfies } from "ts-type-math"
+import { Satisfies } from "ts-type-math"
 
 export type IAbsoluteValue = {
   kind: "AbsoluteValue"
@@ -26,7 +25,7 @@ export type HandleFloatingPointInstructions<
   : instruction extends INegate
   ? Negate<instruction, state>
 
-  : never
+  : State.error<"unknown floating-point instruction", instruction, state>
 >
 
 export type AbsoluteValue<
