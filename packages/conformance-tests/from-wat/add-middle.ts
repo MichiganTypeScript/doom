@@ -86,7 +86,9 @@ export type entry<
     };
     memory: {};
     memorySize: '00000000000000000000000100000000';
-    indirect: ['$__wasm_call_ctors'];
+    indirect: {
+      '00000000000000000000000000000001' : '$__wasm_call_ctors';
+    };
   },
   debugMode,
   stopAt

@@ -11,6 +11,8 @@ export type GlobalsById = Record<string, WasmValue>;
 
 export type Param = string;
 
+export type FuncId = string;
+
 export type Func = {
   kind: 'func';
   params: Param[];
@@ -24,9 +26,11 @@ export type LocalsById = Record<string, WasmValue>;
 
 export type BranchesById = Record<BranchId, Instruction[]>;
 
-export type FuncsById = Record<string, Func>;
+export type FuncsById = Record<FuncId, Func>;
 
 export type GarbageCollection = number;
+
+export type IndirectTable = Record<MemoryAddress, FuncId>;
 
 /** do a memory sweep every 1 kibibyte */
 export type CollectAt = 1024;
@@ -83,7 +87,7 @@ export type ProgramState = {
   garbageCollection: GarbageCollection;
 
   /** used for dynamic dispatch: maps directly to funcs */
-  indirect: MemoryAddress[];
+  indirect: IndirectTable;
 
   memorySize: WasmValue;
 

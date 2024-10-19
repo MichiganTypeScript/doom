@@ -16,7 +16,8 @@
     "test:create-new": "pnpm --filter conformance-tests run test:create-new",
     "test:rust": "cargo test",
     "test": "pnpm run test:rust && CI=true pnpm run test:math && CI=true pnpm run test:conformance && pnpm run build",
-    "build": "tsc",
+    "build": "node --stack-size=8100 --max-old-space-size=4096 --max-semi-space-size=4096  ./node_modules/typescript/lib/tsc",
+    "build:trace": "pnpm run build --generateTrace trace",
     "build:force": "MICHIGAN_TYPESCRIPT=true time tsc --project tsconfig.force.json"
   },
   "dependencies": {

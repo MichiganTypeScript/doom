@@ -576,16 +576,6 @@ export namespace State {
     >
   }
 
-  /** Helpers for indirect function lookups */
-  export namespace Indirect {
-    export type getByIndex<
-      state extends ProgramState,
-      index extends WasmValue
-    > = Satisfies<string,
-      state['indirect'][Convert.WasmValue.ToTSNumber<index, 'i32'>]
-    >
-  }
-
   export namespace Result {
     export type getResultTypes<
       state extends ProgramState

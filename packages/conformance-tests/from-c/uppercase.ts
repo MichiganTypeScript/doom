@@ -84,7 +84,7 @@ export type entry<
     };
     memory: {};
     memorySize: '00000000000000000000000000000010';
-    indirect: [];
+    indirect: {};
   },
   debugMode,
   stopAt

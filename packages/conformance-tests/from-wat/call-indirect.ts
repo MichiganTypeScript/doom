@@ -57,7 +57,9 @@ export type entry<
     globals: {};
     memory: {};
     memorySize: '00000000000000000000000000000000';
-    indirect: ['$add'];
+    indirect: {
+      '00000000000000000000000000000000' : '$add';
+    };
   },
   debugMode,
   stopAt

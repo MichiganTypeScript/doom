@@ -314,22 +314,19 @@ export type CallIndirect<
 > = Satisfies<ProgramState,
   state['stack'] extends [
     ...infer remainder extends WasmValue[],
-    infer index extends WasmValue, // it's sorta hard to tell because there are no MDN docs to go from on this but it does seem like the argument that comes before is in fact the index.  if instead the params come before... we'll just have to look up the count and pop accordingly.
+    infer address extends WasmValue,
   ]
-  ?
-    State.Instructions.unshift<
-      {
-        kind: 'Call',
-        id: State.Indirect.getByIndex<state, index>
-      },
+  ? state['indirect'][address] extends infer nextFunc extends WasmValue
+    ? State.Instructions.unshift<
+        { kind: 'Call', id: nextFunc },
 
-      State.Stack.set<
-        remainder,
-
-        state
+        State.Stack.set<
+          remainder,
+          state
+        >
       >
-    >
-  : never // there should always at least be a single value on the stack (the index)
+    : State.error<"CallIndirect instruction expects an address on the stack that points to a function", instruction, state>
+  : State.error<"CallIndirect instruction expects an address on the stack", instruction, state>
 >
 
 export type Drop<

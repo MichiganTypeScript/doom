@@ -518,7 +518,7 @@ export type entry<
       & $d1
     ;
     memorySize: '00000000000000000000000000000010';
-    indirect: [];
+    indirect: {};
   },
   debugMode,
   stopAt

@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/unreachable'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[], true, 2>// =>
-// import { executeInstruction } from "../wasm-to-typescript-types/program.ts"
+import { entry } from 'conformance-tests/from-wat/call-indirect-offset'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[1, 1], true, 14>// =>
+// import { executeInstruction } from "wasm-to-typescript-types"
 // import { Result } from  "./evaluate/results/result-00000951.ts"
 // type e = executeInstruction<Result, true, 982> // =>
 type r=e['results']// =>

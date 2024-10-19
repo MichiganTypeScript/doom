@@ -59,7 +59,7 @@ export type entry<
     globals: {};
     memory: {};
     memorySize: '00000000000000000000000000000001';
-    indirect: [];
+    indirect: {};
   },
   debugMode,
   stopAt

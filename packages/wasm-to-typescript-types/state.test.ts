@@ -29,7 +29,7 @@ type actual1022 = Satisfies<ProgramState, {
       "00000000000000000000010000000000": "01000001";
   };
   garbageCollection: 1022;
-  indirect: [];
+  indirect: {};
   memorySize: "";
   executionContexts: [];
   funcs: {};
@@ -54,7 +54,7 @@ type expected1023 = Satisfies<ProgramState, {
       "00000000000000000000010000000001": "00000000";
   };
   garbageCollection: 1023;
-  indirect: [];
+  indirect: {};
   memorySize: "";
   executionContexts: [];
   funcs: {};
@@ -78,7 +78,7 @@ type expected1024 = Satisfies<ProgramState, {
       "00000000000000000000010000000000": "01000001";
   };
   garbageCollection: 0;
-  indirect: [];
+  indirect: {};
   memorySize: "";
   executionContexts: [];
   funcs: {};
@@ -100,7 +100,7 @@ type expected1025 = Satisfies<ProgramState, {
       "00000000000000000000010000000000": "01000001";
   };
   garbageCollection: 1;
-  indirect: [];
+  indirect: {};
   memorySize: "";
   executionContexts: [];
   funcs: {};

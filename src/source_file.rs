@@ -1,7 +1,7 @@
-use std::{cell::RefCell, fmt, str::from_utf8};
+use std::{cell::RefCell, collections::HashMap, fmt, str::from_utf8};
 
 use indexmap::{IndexMap, IndexSet};
-use wast::core::{Elem, Type};
+use wast::core::{Elem, ElemKind, Instruction, Type};
 
 use crate::utils::{format_id, format_index, format_val_type};
 
@@ -34,7 +34,7 @@ pub struct SourceFile {
     memory: RefCell<(u64, u64)>,
 
     /// table ref elements
-    indirect: RefCell<Vec<String>>,
+    indirect: RefCell<HashMap<i32, String>>,
 
     // MemoryData by id
     data: RefCell<IndexMap<String, MemoryData>>,
@@ -135,7 +135,21 @@ impl ToString for SourceFile {
         dbg!(&memory_size);
         let memory_size_binary = format!("{:032b}", memory_size);
 
-        let indirect = self.indirect.borrow().to_owned().join(", ");
+        // return a TypeScript object formatting
+        // this is god-awful rust.. but oh well.
+        let indirect = self.indirect.borrow();
+        let mut indirect: Vec<_> = indirect.iter().collect();
+        indirect.sort_by_key(|(key, _)| *key);
+        let indirect = indirect
+            .into_iter()
+            .map(|(key, value)| format!("'{key:032b}' : {value};"))
+            .collect::<Vec<_>>()
+            .join("\n      ");
+        let indirect = if !indirect.is_empty() {
+            format!("\n      {indirect}\n    ")
+        } else {
+            String::new()
+        };
 
         // look for the `$entry` type and use the number of params it has to create a tuple like [number, number] for each
         let arguments = self.args.borrow();
@@ -152,7 +166,7 @@ impl ToString for SourceFile {
     globals: {{{globals}}};
     memory:{memory};
     memorySize: '{memory_size_binary}';
-    indirect: [{indirect}];
+    indirect: {{{indirect}}};
   }},
   debugMode,
   stopAt
@@ -176,7 +190,7 @@ impl SourceFile {
             data: RefCell::new(IndexMap::new()),
             globals: RefCell::new(IndexMap::new()),
             imports: RefCell::new(IndexMap::new()),
-            indirect: RefCell::new(Vec::new()),
+            indirect: RefCell::new(HashMap::new()),
             memory: RefCell::new((0, 0)),
             types: RefCell::new(IndexMap::new()),
             module_types: RefCell::new(IndexMap::new()),
@@ -203,8 +217,28 @@ impl SourceFile {
     }
 
     pub fn add_element(&self, element: &Elem) {
-        let strings: Vec<String> = match element.payload {
-            wast::core::ElemPayload::Indices(ref indices) => indices.iter().map(format_index).collect(),
+        let start = if let ElemKind::Active { table: _, offset } = &element.kind {
+            if let Some(Instruction::I32Const(num)) = offset.instrs.first() {
+                num
+            } else {
+                panic!("element offset should only be i32.const")
+            }
+        } else {
+            panic!("only Active ElemKind supported")
+        };
+
+        let strings: HashMap<i32, String> = match element.payload {
+            wast::core::ElemPayload::Indices(ref indices) => {
+                // map over the indices and convert them to strings as the value of the hashmap, while the key will be a binary 32 starting at `start`
+                indices
+                    .iter()
+                    .enumerate()
+                    .map(|(i, index)| {
+                        let index = format_index(index);
+                        (start + i as i32, index)
+                    })
+                    .collect()
+            }
             _ => panic!("only Indices ElemPayload supported"),
         };
 
