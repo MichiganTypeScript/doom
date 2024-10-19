@@ -8,7 +8,7 @@
   },
   "scripts": {
     "browser": "pnpm --filter playground run browser",
-    "clean": "rm -f .tsbuildinfo && rm -rf packages/playground/evaluate/results && rm -rf target",
+    "clean": "rm -f .tsbuildinfo && rm -rf packages/playground/evaluate/results && rm -rf target && rm -rf trace",
     "preinstall": "npx only-allow pnpm",
     "eval": "pnpm --filter playground --silent run eval",
     "generate": "tsx ./packages/playground/generate.ts",
