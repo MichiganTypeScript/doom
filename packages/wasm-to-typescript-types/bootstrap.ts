@@ -106,6 +106,7 @@ export type bootstrap<
       activeStackDepth: _startData['stack']['length']; // BUG
 
       globals: input['globals'];
+      L1Cache: {};
       memory: evaluate<input['memory']>; // copy readonly memory into memory registers
       garbageCollection: 0;
       indirect: input['indirect'];

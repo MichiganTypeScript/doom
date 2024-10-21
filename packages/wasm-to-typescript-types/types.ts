@@ -86,6 +86,9 @@ export type ProgramState = {
   /** the linear memory of the program */
   memory: MemoryByAddress;
 
+  /** the L1 cache */
+  L1Cache: MemoryByAddress;
+
   /** records interval for GarbageCollection */
   garbageCollection: GarbageCollection;
 

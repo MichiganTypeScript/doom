@@ -13,6 +13,9 @@ export namespace Load {
   export type IsUnknownOrAnyFallback<T, Fallback> = unknown extends T ? Fallback : T
 
   export type Read1Byte<
+    /** L1 Cache memory to read from first */
+    L1Cache extends Record<WasmValue, Wasm.Byte>,
+
     /** memory object to read from */
     memory extends Record<WasmValue, Wasm.Byte>,
   
@@ -20,79 +23,80 @@ export namespace Load {
 
     _b0 extends string = memory[address]
   > =
-    `${IsUnknownOrAnyFallback<_b0, FalseByte>}`
+    address extends keyof L1Cache
+    ? L1Cache[address]
+    : address extends keyof memory
+      ? memory[address]
+      : FalseByte
   
   export type Read2Bytes<
-      /** memory object to read from */
-      memory extends Record<WasmValue, Wasm.Byte>,
-  
-      address extends WasmValue,
+    /** L1 Cache memory to read from first */
+    L1Cache extends Record<WasmValue, Wasm.Byte>,
+    
+    /** memory object to read from */
+    memory extends Record<WasmValue, Wasm.Byte>,
 
-      // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
-      // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
-      _b1 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000001'>],
-      _b0 extends string = memory[address],
-    > =
-      `${
-        IsUnknownOrAnyFallback<_b1, FalseByte>
-      }${
-        IsUnknownOrAnyFallback<_b0, FalseByte>
-      }`
+    address extends WasmValue,
+
+    // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
+    // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
+    _b1 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000001'>],
+    _b0 extends string = memory[address],
+  > =
+    `${
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000001'>>
+    }${
+      Read1Byte<L1Cache, memory, address>
+    }`
   
   export type Read4Bytes<
+    /** L1 Cache memory to read from first */
+    L1Cache extends Record<WasmValue, Wasm.Byte>,
+
     /** memory object to read from */
     memory extends Record<WasmValue, Wasm.Byte>,
   
     // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
     // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     address extends WasmValue,
-    _b3 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000011'>],
-    _b2 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000010'>],
-    _b1 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000001'>],
-    _b0 extends string = memory[address],
   > =
     `${
-      IsUnknownOrAnyFallback<_b3, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000011'>>
     }${
-      IsUnknownOrAnyFallback<_b2, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000010'>>
     }${
-      IsUnknownOrAnyFallback<_b1, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000001'>>
     }${
-      IsUnknownOrAnyFallback<_b0, FalseByte>
+      Read1Byte<L1Cache, memory, address>
     }`
   
   export type Read8Bytes<
+    /** L1 Cache memory to read from first */
+    L1Cache extends Record<WasmValue, Wasm.Byte>,
+
     /** memory object to read from */
     memory extends Record<WasmValue, Wasm.Byte>,
   
     // WARNING using AddBinary here is dangerous because it can overflow past I32 but the other (safer) option is to use Wasm.I32Add which does a Clamp, which is very expensive.
     // this is such an incredibly hot path for memory management that if we actually overflow here.. well.. that's gonna be a rough debugging day.  just gonna have to hope that doesn't happen.
     address extends WasmValue,
-    _b7 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000111'>],
-    _b6 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000110'>],
-    _b5 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000101'>],
-    _b4 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000100'>],
-    _b3 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000011'>],
-    _b2 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000010'>],
-    _b1 extends string = memory[AddBinaryFixed<address, '00000000000000000000000000000001'>],
-    _b0 extends string = memory[address],
   > =
     `${
-      IsUnknownOrAnyFallback<_b7, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000111'>>
     }${
-      IsUnknownOrAnyFallback<_b6, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000110'>>
     }${
-      IsUnknownOrAnyFallback<_b5, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000101'>>
     }${
-      IsUnknownOrAnyFallback<_b4, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000100'>>
     }${
-      IsUnknownOrAnyFallback<_b3, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000011'>>
     }${
-      IsUnknownOrAnyFallback<_b2, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000010'>>
     }${
-      IsUnknownOrAnyFallback<_b1, FalseByte>
+      Read1Byte<L1Cache, memory, AddBinaryFixed<address, '00000000000000000000000000000001'>>
     }${
-      IsUnknownOrAnyFallback<_b0, FalseByte>
+      Read1Byte<L1Cache, memory, address>
     }`
 
 

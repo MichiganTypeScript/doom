@@ -25,9 +25,10 @@ type actual1022 = Satisfies<ProgramState, {
   activeStackDepth: 0;
   activeLocals: {};
   globals: {};
-  memory: {
-      "00000000000000000000010000000000": "01000001";
+  L1Cache: {
+    "00000000000000000000010000000000": "01000001";
   };
+  memory: {};
   garbageCollection: 1022;
   indirect: {};
   memorySize: "";
@@ -49,10 +50,11 @@ type expected1023 = Satisfies<ProgramState, {
   activeStackDepth: 0;
   activeLocals: {};
   globals: {};
-  memory: {
-      "00000000000000000000010000000000": "01000001";
-      "00000000000000000000010000000001": "00000000";
+  L1Cache: {
+    "00000000000000000000010000000000": "01000001";
+    "00000000000000000000010000000001": "00000000";
   };
+  memory: {};
   garbageCollection: 1023;
   indirect: {};
   memorySize: "";
@@ -74,8 +76,9 @@ type expected1024 = Satisfies<ProgramState, {
   activeStackDepth: 0;
   activeLocals: {};
   globals: {};
+  L1Cache: {};
   memory: {
-      "00000000000000000000010000000000": "01000001";
+    "00000000000000000000010000000000": "01000001";
   };
   garbageCollection: 0;
   indirect: {};
@@ -96,10 +99,11 @@ type expected1025 = Satisfies<ProgramState, {
   activeStackDepth: 0;
   activeLocals: {};
   globals: {};
+  L1Cache: {};
   memory: {
-      "00000000000000000000010000000000": "01000001";
+    "00000000000000000000010000000000": "01000001";
   };
-  garbageCollection: 1;
+  garbageCollection: 0; // 0 again, because we finalized
   indirect: {};
   memorySize: "";
   executionContexts: [];

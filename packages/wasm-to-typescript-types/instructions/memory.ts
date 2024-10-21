@@ -105,6 +105,7 @@ type I32Load<
   address extends WasmValue
 > = Satisfies<WasmValue,
   TypeMath.Load.Read4Bytes<
+    state['L1Cache'],
     state['memory'],
     instruction['offset'] extends WasmValue
       ? Wasm.I32Add<address, instruction['offset']>
@@ -119,6 +120,7 @@ type I32Load8U<
 > = Satisfies<WasmValue,
   Pad.StartWith24Zeros<
     TypeMath.Load.Read1Byte<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -134,6 +136,7 @@ type I32Load8S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read1Byte<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -150,6 +153,7 @@ type I32Load16U<
 > = Satisfies<WasmValue,
   Pad.StartWith16Zeros<
     TypeMath.Load.Read2Bytes<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -165,6 +169,7 @@ type I32Load16S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read2Bytes<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -180,6 +185,7 @@ type I64Load<
   address extends WasmValue
 > = Satisfies<WasmValue,
   TypeMath.Load.Read8Bytes<
+    state['L1Cache'],
     state['memory'],
     instruction['offset'] extends WasmValue
       ? Wasm.I32Add<address, instruction['offset']>
@@ -194,6 +200,7 @@ type I64Load8U<
 > = Satisfies<WasmValue,
   Pad.StartWith56Zeros<
     TypeMath.Load.Read1Byte<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -209,6 +216,7 @@ type I64Load8S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read1Byte<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -225,6 +233,7 @@ type I64Load16U<
 > = Satisfies<WasmValue,
   Pad.StartWith48Zeros<
     TypeMath.Load.Read2Bytes<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -240,6 +249,7 @@ type I64Load16S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read2Bytes<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -256,6 +266,7 @@ type I64Load32U<
 > = Satisfies<WasmValue,
   Pad.StartWith32Zeros<
     TypeMath.Load.Read4Bytes<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>
@@ -271,6 +282,7 @@ type I64Load32S<
 > = Satisfies<WasmValue,
   Storage.SignedFill<
     TypeMath.Load.Read4Bytes<
+      state['L1Cache'],
       state['memory'],
       instruction['offset'] extends WasmValue
         ? Wasm.I32Add<address, instruction['offset']>

@@ -73,7 +73,7 @@ export type LocalGet<
   State.Stack.push<
     Load.IsUnknownOrAnyFallback< // the behavior of wasm
       state['activeLocals'][instruction['id']],
-      Wasm.I32False // TODO(bug): we need to know the type of the local
+      Wasm.I32False // TODO(bug): we need to know the type of the local, but ultimately we _should_ be fine to do this because the addition is implemented in arbitrary precision
     >,
     state
   >

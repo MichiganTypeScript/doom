@@ -39,33 +39,33 @@ export type memory = {
 }
 
 type i = 0
-type ki = k[i]                       // =>
-type vi = v[i]                       // =>
-type xi = Load.Read2Bytes<memory, ki>// =>
+type ki = k[i]                           // =>
+type vi = v[i]                           // =>
+type xi = Load.Read2Bytes<memory, {}, ki>// =>
 
 type testRead1Byte = [
-  Expect<Equal<Load.Read1Byte<memory, k[0]>, v[0]>>,
-  Expect<Equal<Load.Read1Byte<memory, k[1]>, v[1]>>,
-  Expect<Equal<Load.Read1Byte<memory, k[2]>, v[2]>>,
-  Expect<Equal<Load.Read1Byte<memory, k[3]>, v[3]>>,
-  Expect<Equal<Load.Read1Byte<memory, k[4]>, v[4]>>,
-  Expect<Equal<Load.Read1Byte<memory, k[5]>, v[5]>>,
-  Expect<Equal<Load.Read1Byte<memory, k[6]>, v[6]>>,
-  Expect<Equal<Load.Read1Byte<memory, k[7]>, v[7]>>,
+  Expect<Equal<Load.Read1Byte<memory, {}, k[0]>, v[0]>>,
+  Expect<Equal<Load.Read1Byte<memory, {}, k[1]>, v[1]>>,
+  Expect<Equal<Load.Read1Byte<memory, {}, k[2]>, v[2]>>,
+  Expect<Equal<Load.Read1Byte<memory, {}, k[3]>, v[3]>>,
+  Expect<Equal<Load.Read1Byte<memory, {}, k[4]>, v[4]>>,
+  Expect<Equal<Load.Read1Byte<memory, {}, k[5]>, v[5]>>,
+  Expect<Equal<Load.Read1Byte<memory, {}, k[6]>, v[6]>>,
+  Expect<Equal<Load.Read1Byte<memory, {}, k[7]>, v[7]>>,
 
-  Expect<Equal<Load.Read2Bytes<memory, k[0]>, `${v[1]}${v[0]}`>>,
-  Expect<Equal<Load.Read2Bytes<memory, k[1]>, `${v[2]}${v[1]}`>>,
-  Expect<Equal<Load.Read2Bytes<memory, k[2]>, `${v[3]}${v[2]}`>>,
-  Expect<Equal<Load.Read2Bytes<memory, k[3]>, `${v[4]}${v[3]}`>>,
-  Expect<Equal<Load.Read2Bytes<memory, k[4]>, `${v[5]}${v[4]}`>>,
-  Expect<Equal<Load.Read2Bytes<memory, k[5]>, `${v[6]}${v[5]}`>>,
-  Expect<Equal<Load.Read2Bytes<memory, k[6]>, `${v[7]}${v[6]}`>>,
+  Expect<Equal<Load.Read2Bytes<memory, {}, k[0]>, `${v[1]}${v[0]}`>>,
+  Expect<Equal<Load.Read2Bytes<memory, {}, k[1]>, `${v[2]}${v[1]}`>>,
+  Expect<Equal<Load.Read2Bytes<memory, {}, k[2]>, `${v[3]}${v[2]}`>>,
+  Expect<Equal<Load.Read2Bytes<memory, {}, k[3]>, `${v[4]}${v[3]}`>>,
+  Expect<Equal<Load.Read2Bytes<memory, {}, k[4]>, `${v[5]}${v[4]}`>>,
+  Expect<Equal<Load.Read2Bytes<memory, {}, k[5]>, `${v[6]}${v[5]}`>>,
+  Expect<Equal<Load.Read2Bytes<memory, {}, k[6]>, `${v[7]}${v[6]}`>>,
 
-  Expect<Equal<Load.Read4Bytes<memory, k[0]>, `${v[3]}${v[2]}${v[1]}${v[0]}`>>,
-  Expect<Equal<Load.Read4Bytes<memory, k[1]>, `${v[4]}${v[3]}${v[2]}${v[1]}`>>,
-  Expect<Equal<Load.Read4Bytes<memory, k[2]>, `${v[5]}${v[4]}${v[3]}${v[2]}`>>,
-  Expect<Equal<Load.Read4Bytes<memory, k[3]>, `${v[6]}${v[5]}${v[4]}${v[3]}`>>,
-  Expect<Equal<Load.Read4Bytes<memory, k[4]>, `${v[7]}${v[6]}${v[5]}${v[4]}`>>,
+  Expect<Equal<Load.Read4Bytes<memory, {}, k[0]>, `${v[3]}${v[2]}${v[1]}${v[0]}`>>,
+  Expect<Equal<Load.Read4Bytes<memory, {}, k[1]>, `${v[4]}${v[3]}${v[2]}${v[1]}`>>,
+  Expect<Equal<Load.Read4Bytes<memory, {}, k[2]>, `${v[5]}${v[4]}${v[3]}${v[2]}`>>,
+  Expect<Equal<Load.Read4Bytes<memory, {}, k[3]>, `${v[6]}${v[5]}${v[4]}${v[3]}`>>,
+  Expect<Equal<Load.Read4Bytes<memory, {}, k[4]>, `${v[7]}${v[6]}${v[5]}${v[4]}`>>,
 ];
 
 type testJoinBytes = [

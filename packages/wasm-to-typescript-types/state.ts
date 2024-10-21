@@ -8,6 +8,7 @@ import type {
   Func,
   GlobalsById,
   MemoryAddress,
+  MemoryByAddress,
   ProgramState,
 } from "./types"
 import * as TypeMath from "ts-type-math";
@@ -80,6 +81,7 @@ export namespace State {
         activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
+        L1Cache: state['L1Cache'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
@@ -108,6 +110,7 @@ export namespace State {
         activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
+        L1Cache: state['L1Cache'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
@@ -175,6 +178,7 @@ export namespace State {
         activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
+        L1Cache: state['L1Cache'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
@@ -219,6 +223,7 @@ export namespace State {
         activeStackDepth: executionContext['stackDepth'];
 
         globals: state['globals'];
+        L1Cache: state['L1Cache'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
@@ -265,6 +270,7 @@ export namespace State {
           activeStackDepth: active['stackDepth'];
 
           globals: state['globals'];
+          L1Cache: state['L1Cache'];
           memory: state['memory'];
           garbageCollection: state['garbageCollection'];
           indirect: state['indirect'];
@@ -289,6 +295,7 @@ export namespace State {
             activeStackDepth: 9001;
 
             globals: state['globals'];
+            L1Cache: state['L1Cache'];
             memory: state['memory'];
             garbageCollection: state['garbageCollection'];
             indirect: state['indirect'];
@@ -324,6 +331,7 @@ export namespace State {
             activeBranches: state['activeBranches'];
             activeStackDepth: state['activeStackDepth'];
             globals: state['globals'];
+            L1Cache: state['L1Cache'];
             memory: state['memory'];
             garbageCollection: state['garbageCollection'];
             indirect: state['indirect'];
@@ -348,6 +356,7 @@ export namespace State {
             activeBranches: state['activeBranches'];
             activeStackDepth: state['activeStackDepth'];
             globals: state['globals'];
+            L1Cache: state['L1Cache'];
             memory: state['memory'];
             garbageCollection: state['garbageCollection'];
             indirect: state['indirect'];
@@ -375,6 +384,7 @@ export namespace State {
 
             activeStackDepth: state['activeStackDepth'];
             globals: state['globals'];
+            L1Cache: state['L1Cache'];
             memory: state['memory'];
             garbageCollection: state['garbageCollection'];
             indirect: state['indirect'];
@@ -432,6 +442,7 @@ export namespace State {
             globals
           >;
 
+        L1Cache: state['L1Cache'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
@@ -485,11 +496,15 @@ export namespace State {
         activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
 
-        memory:
-          Patch<
-            state['memory'],
-            _update
-          >;
+        // only update the L1 Cache.
+        // the Memory is updated via the garbage collector
+        L1Cache: Patch<
+          state['L1Cache'],
+          _update
+        >;
+
+        // note that we don't actually update the large memory blob
+        memory: state['memory'];
 
         garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
@@ -516,6 +531,7 @@ export namespace State {
         activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
         memory: state['memory'];
+        L1Cache: state['L1Cache'];
 
         garbageCollection: TypeMath.Add<state['garbageCollection'], 1>;
 
@@ -529,11 +545,19 @@ export namespace State {
 
     export type collect<
       state extends ProgramState,
+      force extends 'force' | 'schedule' = 'schedule',
 
       // increment first, then check for collection
-      _next extends ProgramState = increment<state>
+      _next extends ProgramState = increment<state>,
+
+      _shoudlCollect extends boolean =
+        force extends 'force'
+        ? true
+        : _next['garbageCollection'] extends CollectAt
+          ? true
+          : false,
     > = Satisfies<ProgramState,
-      _next['garbageCollection'] extends CollectAt
+      _shoudlCollect extends true
       ? {
           count: state['count'];
           results: state['results'];
@@ -545,8 +569,13 @@ export namespace State {
           activeStackDepth: state['activeStackDepth'];
           globals: state['globals'];
 
-          memory: TypeMath.GarbageCollect<state['memory']>; // garbage collection enabled
-          // memory: state['memory']; // garbage collection disabled
+          L1Cache: {}; // clear the L1Cache
+
+          memory: Patch<
+            state['memory'],
+            TypeMath.GarbageCollect<state['L1Cache']>
+          >;
+
           garbageCollection: 0;
 
           indirect: state['indirect'];
@@ -614,6 +643,7 @@ export namespace State {
         activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
         globals: state['globals'];
+        L1Cache: state['L1Cache'];
         memory: state['memory'];
         garbageCollection: state['garbageCollection'];
         indirect: state['indirect'];
@@ -626,7 +656,13 @@ export namespace State {
     export type finish<
       state extends ProgramState
     > = Satisfies<(number | bigint)[] | (number | bigint) | null,
-        set<state>['results']
+        // do one final garbage collection
+        set<
+          State.GarbageCollection.collect<
+            state,
+            'force'
+          >
+        >['results']
       >
   }
 }
