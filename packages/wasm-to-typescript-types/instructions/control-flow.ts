@@ -285,25 +285,26 @@ export type Call<
     locals: {}
   }>
 > = Satisfies<ProgramState,
-  // add the instructions from this func onto the stack
-  State.Instructions.concat<
+  // push a new execution context for the old function we're just leaving
+  State.ExecutionContexts.push<
+    {
+      locals: _refreshment['locals'], // even though there may be known locals for the function (in addition to params), they are added when they're set with LocalSet
+      funcId: _funcId,
+      branches: {},
+      stackDepth: _refreshment['stack']['length'],
+      instructions: [], // we will capture current instructions in the State.ExecutionContexts.push helper
+    },
     [
+      // set instructions from this func onto the instructions stack
+      // it's VERY important that this happens AFTER the execution context has a chance to capture the current instructions
       ..._func['instructions'],
+
+      // add this synthetic for when we hit the end
       { kind: 'EndFunction', id: _funcId }
     ],
-
-    // push a new execution context for the old function we're just leaving
-    State.ExecutionContexts.push<
-      {
-        locals: _refreshment['locals'], // even though there may be known locals for the function (in addition to params), they are added when they're set with LocalSet
-        funcId: _funcId,
-        branches: {},
-        stackDepth: _refreshment['stack']['length'],
-      },
-      State.Stack.set<
-        _refreshment['stack'],
-        state
-      >
+    State.Stack.set<
+      _refreshment['stack'],
+      state
     >
   >
 >
@@ -459,9 +460,12 @@ export type Return<
           ..._Acc, // we already prepended, so we can put it here normally
         ],
 
-        // step 4: pop instructions until we reach a matching `EndFunction` instruction
-        State.Instructions.popUntil<
-          { kind: 'EndFunction', id: state['activeFuncId'] },
+        // step 4: unshift an `EndFunction` instruction
+        State.Instructions.unshift<
+          {
+            kind: 'EndFunction',
+            id: state['activeFuncId']
+          },
           state
         >
       >

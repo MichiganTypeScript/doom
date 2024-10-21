@@ -1,0 +1,484 @@
+Module {
+    span: Span {
+        offset: 1,
+    },
+    id: None,
+    name: None,
+    kind: Text(
+        [
+            Memory(
+                Memory {
+                    span: Span {
+                        offset: 11,
+                    },
+                    id: Some(
+                        "memory",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "memory",
+                        ],
+                    },
+                    kind: Normal(
+                        B32 {
+                            limits: Limits {
+                                min: 7,
+                                max: None,
+                            },
+                            shared: false,
+                        },
+                    ),
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 50,
+                    },
+                    id: Some(
+                        "f5",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [],
+                    },
+                    kind: Inline {
+                        locals: [
+                            Local {
+                                id: Some(
+                                    "l2",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "l3",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                            Local {
+                                id: Some(
+                                    "l4",
+                                ),
+                                name: None,
+                                ty: I32,
+                            },
+                        ],
+                        expression: Expression {
+                            instrs: [
+                                Loop(
+                                    BlockType {
+                                        label: Some(
+                                            "L0",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "p0",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                Block(
+                                    BlockType {
+                                        label: Some(
+                                            "B1",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Const(
+                                    8,
+                                ),
+                                I32Ne,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I2",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "p1",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Add,
+                                I32Load8u(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 451,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalTee(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                BrIf(
+                                    Id(
+                                        "B1",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                I32Const(
+                                    8,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Sub,
+                                LocalSet(
+                                    Id(
+                                        "p0",
+                                    ),
+                                ),
+                                I32Const(
+                                    0,
+                                ),
+                                LocalSet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                Loop(
+                                    BlockType {
+                                        label: Some(
+                                            "L3",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "p0",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Ne,
+                                If(
+                                    BlockType {
+                                        label: Some(
+                                            "I4",
+                                        ),
+                                        label_name: None,
+                                        ty: TypeUse {
+                                            index: None,
+                                            inline: None,
+                                        },
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                I32Add,
+                                I32Const(
+                                    0,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 863,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                Br(
+                                    Id(
+                                        "L3",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                End(
+                                    None,
+                                ),
+                                Return,
+                                End(
+                                    None,
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l3",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l4",
+                                    ),
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 1172,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                I32Const(
+                                    1,
+                                ),
+                                I32Add,
+                                LocalSet(
+                                    Id(
+                                        "l2",
+                                    ),
+                                ),
+                                Br(
+                                    Id(
+                                        "L0",
+                                    ),
+                                ),
+                                End(
+                                    None,
+                                ),
+                                Unreachable,
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "p0",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "p1",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [],
+                            },
+                        ),
+                    },
+                },
+            ),
+            Func(
+                Func {
+                    span: Span {
+                        offset: 1351,
+                    },
+                    id: Some(
+                        "entry",
+                    ),
+                    name: None,
+                    exports: InlineExport {
+                        names: [
+                            "entry",
+                        ],
+                    },
+                    kind: Inline {
+                        locals: [],
+                        expression: Expression {
+                            instrs: [
+                                I32Const(
+                                    60552,
+                                ),
+                                I32Const(
+                                    80,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 1463,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                I32Const(
+                                    393736,
+                                ),
+                                I32Const(
+                                    80,
+                                ),
+                                I32Store8(
+                                    MemArg {
+                                        align: 1,
+                                        offset: 0,
+                                        memory: Num(
+                                            0,
+                                            Span {
+                                                offset: 1513,
+                                            },
+                                        ),
+                                    },
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "a",
+                                    ),
+                                ),
+                                LocalGet(
+                                    Id(
+                                        "b",
+                                    ),
+                                ),
+                                Call(
+                                    Id(
+                                        "f5",
+                                    ),
+                                ),
+                                I32Const(
+                                    10,
+                                ),
+                            ],
+                        },
+                    },
+                    ty: TypeUse {
+                        index: None,
+                        inline: Some(
+                            FunctionType {
+                                params: [
+                                    (
+                                        Some(
+                                            "a",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                    (
+                                        Some(
+                                            "b",
+                                        ),
+                                        None,
+                                        I32,
+                                    ),
+                                ],
+                                results: [
+                                    I32,
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ),
+        ],
+    ),
+}
+
+
+
+
+{
+    "LocalGet": 16,
+    "I32Const": 11,
+    "I32Add": 5,
+    "LocalSet": 5,
+    "End": 5,
+    "I32Store8": 4,
+    "Loop": 2,
+    "I32Ne": 2,
+    "If": 2,
+    "Br": 2,
+    "Block": 1,
+    "I32Load8u": 1,
+    "LocalTee": 1,
+    "BrIf": 1,
+    "I32Sub": 1,
+    "Return": 1,
+    "Unreachable": 1,
+    "Call": 1,
+}

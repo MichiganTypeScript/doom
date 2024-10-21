@@ -51,6 +51,9 @@ export type ExecutionContext = {
 
   /** the size of the stack right before this function is called (but after params are populated) */
   stackDepth: number;
+
+  /** the state of the instruction stack right before this function was called, we will resume from this */
+  instructions: Instruction[]
 }
 
 /** matches what JS implementations do regarding returning one vs multiple values */

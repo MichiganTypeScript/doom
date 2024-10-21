@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { entry } from 'conformance-tests/from-wat/call-indirect-offset'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[1, 1], true, 14>// =>
+import { entry } from 'conformance-tests/from-wat/return-mid-loop'; import type { ReadStringFromMemory } from 'ts-type-math';
+type e=entry<[393736, 60552], true, 9>// =>
 // import { executeInstruction } from "wasm-to-typescript-types"
-// import { Result } from  "./evaluate/results/result-00000951.ts"
-// type e = executeInstruction<Result, true, 982> // =>
+// import { Result } from  "./evaluate/restart/result-02775272.ts"
+// type e = executeInstruction<Result, true, 2775272> // =>
 type r=e['results']// =>
 type s=e['stack']  // =>
 type s0=s[0]       // =>
@@ -25,11 +25,12 @@ type c0=ec[0]['funcId']// =>
 type c1=ec[1]['funcId']// =>
 type c2=ec[2]['funcId']// =>
 type c3=ec[3]['funcId']// =>
-type f = 1;
-type cff=ec[f]['funcId']    // =>
-type cfl=ec[f]['locals']    // =>
-type cfb=ec[f]['branches']  // =>
-type cfs=ec[f]['stackDepth']// =>
+type f = 0;
+type cff=ec[f]['funcId']      // =>
+type cfl=ec[f]['locals']      // =>
+type cfb=ec[f]['branches']    // =>
+type cfs=ec[f]['stackDepth']  // =>
+type cfs=ec[f]['instructions']// =>
 
 type m=e['memory']// =>
 

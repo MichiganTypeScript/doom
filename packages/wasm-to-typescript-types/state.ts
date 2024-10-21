@@ -130,30 +130,6 @@ export namespace State {
       >
     >
 
-    export type popUntil<
-      searchingFor extends Instruction,
-      state extends ProgramState
-    > = Satisfies<ProgramState,
-      state['instructions'] extends [
-        infer discarded extends Instruction,
-        ...infer remaining extends Instruction[],
-      ]
-      ? discarded extends searchingFor
-
-        // we found the matching searchingFor Instruction: we can dipset
-        ? state
-
-        // we didn't find the matching searchingFor Instruction: we have to keep popping
-        : popUntil<
-            searchingFor,
-            set<
-              remaining,
-              state
-            >
-          >
-      : State.error<"stack exhausted", searchingFor, state>
-    >
-
     export type push<
       instruction extends Instruction,
       state extends ProgramState
@@ -227,13 +203,14 @@ export namespace State {
     /** push a brand new execution context */
     export type push<
       executionContext extends ExecutionContext,
+      newInstructions extends Instruction[],
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
         count: state['count'];
         results: state['results'];
         stack: state['stack'];
-        instructions: state['instructions'];
+        instructions: newInstructions;
 
         // set the new one
         activeLocals: executionContext['locals'];
@@ -249,12 +226,15 @@ export namespace State {
 
         executionContexts: [
           ...state['executionContexts'],
-          // add the old active execution context to the stack
+          // archive the previous active execution context
           {
             locals: state['activeLocals'];
             funcId: state['activeFuncId'];
             branches: state['activeBranches'];
             stackDepth: state['activeStackDepth'];
+
+            // store the current state of the instructions with this one
+            instructions: state['instructions'];
           },
         ];
 
@@ -274,8 +254,10 @@ export namespace State {
           count: state['count'];
           results: state['results'];
           stack: state['stack'];
-          instructions: state['instructions'];
-          
+
+          // set the instruction stack to what the previous capture state contained
+          instructions: active['instructions'];
+
           // set the new one
           activeLocals: active['locals'];
           activeFuncId: active['funcId'];
@@ -298,7 +280,7 @@ export namespace State {
             count: state['count'];
             results: state['results'];
             stack: state['stack'];
-            instructions: state['instructions'];
+            instructions: state['instructions']; // this should be empty
             
             // set the new one
             activeLocals: {};

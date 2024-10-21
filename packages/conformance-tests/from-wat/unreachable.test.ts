@@ -11,13 +11,15 @@ test(name, async () => {
   expect(() => entry()).toThrow();
 });
 
+type e = entry<[], true>;
+
 type testCases = [
   Expect<Equal<
-    entry<[]>['instructions']['length'],
-    3
+    e['instructions']['length'],
+    2
   >>,
   Expect<Equal<
-    entry<[]>['instructions'][0]['kind'],
+    e['instructions'][0]['kind'],
     'Halt'
   >>,
 ]
