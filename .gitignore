@@ -4,3 +4,4 @@ target/
 packages/playground/evaluate/results*
 tsc-output.cpuprofile
 packages/playground/evaluate/restart*
+trace/
