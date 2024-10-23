@@ -20,9 +20,10 @@ export type HolyShitIfThisActuallyWorksOMGOMGROFLWHATISWRONGWITHME = {
 	activeBranches: {};
 	activeStackDepth: 0;
 	globals: {};
+	L1Cache: {};
 	memory: evaluate<ExpectedMemory>;
 	garbageCollection: 100;
-	indirect: [];
+	indirect: {};
 	memorySize: "00000000000000000000000000000110";
 	executionContexts: [];
 	funcs: funcs;
