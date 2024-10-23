@@ -42,10 +42,11 @@ index 3ea9087202585e3e7ffeb6627106e060abcbf9f0..a01fd980332d27e11bb92e95b597729b
    The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method: diag(2860, 1 /* Error */, "The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_2860", "The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method."),
    An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression: diag(2861, 1 /* Error */, "An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_han_2861", "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression."),
    Type_0_is_generic_and_can_only_be_indexed_for_reading: diag(2862, 1 /* Error */, "Type_0_is_generic_and_can_only_be_indexed_for_reading_2862", "Type '{0}' is generic and can only be indexed for reading."),
-@@ -12463,7 +12463,7 @@ function isInternalDeclaration(node, sourceFile) {
+@@ -12462,7 +12462,7 @@ function isInternalDeclaration(node, sourceFile) {
  var resolvingEmptyArray = [];
  var externalHelpersModuleNameText = "tslib";
- var defaultMaximumTruncationLength = 160;
+-var defaultMaximumTruncationLength = 160;
++var defaultMaximumTruncationLength = 1e60;
 -var noTruncationMaximumTruncationLength = 1e6;
 +var noTruncationMaximumTruncationLength = 1e60;
  function getDeclarationOfKind(symbol, kind) {
@@ -149,10 +150,11 @@ index 0c2c66fb524e13da65b1328ee489bc410dffccf4..837d015f2a91f27802651c982c40fe5c
    The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method: diag(2860, 1 /* Error */, "The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_2860", "The left-hand side of an 'instanceof' expression must be assignable to the first argument of the right-hand side's '[Symbol.hasInstance]' method."),
    An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression: diag(2861, 1 /* Error */, "An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_han_2861", "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression."),
    Type_0_is_generic_and_can_only_be_indexed_for_reading: diag(2862, 1 /* Error */, "Type_0_is_generic_and_can_only_be_indexed_for_reading_2862", "Type '{0}' is generic and can only be indexed for reading."),
-@@ -16055,7 +16055,7 @@ function isInternalDeclaration(node, sourceFile) {
+@@ -16054,7 +16054,7 @@ function isInternalDeclaration(node, sourceFile) {
  var resolvingEmptyArray = [];
  var externalHelpersModuleNameText = "tslib";
- var defaultMaximumTruncationLength = 160;
+-var defaultMaximumTruncationLength = 160;
++var defaultMaximumTruncationLength = 1e60;
 -var noTruncationMaximumTruncationLength = 1e6;
 +var noTruncationMaximumTruncationLength = 1e60;
  function getDeclarationOfKind(symbol, kind) {
