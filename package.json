@@ -19,7 +19,7 @@
     "test": "pnpm run test:rust && CI=true pnpm run test:math && CI=true pnpm run test:conformance && pnpm run build",
     "build": "node --stack-size=8100 --max-old-space-size=4096 --max-semi-space-size=4096  ./node_modules/typescript/lib/tsc",
     "build:trace": "pnpm run build --generateTrace trace",
-    "build:force": "MICHIGAN_TYPESCRIPT=true time tsc --project tsconfig.force.json"
+    "build:force": "MICHIGAN_TYPESCRIPT=true time tsc --incremental false --tsBuildInfoFile null --generateCpuProfile tsc-output.cpuprofile"
   },
   "dependencies": {
     "@biomejs/biome": "^1.9.3",
