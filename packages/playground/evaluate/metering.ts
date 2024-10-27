@@ -1,14 +1,13 @@
 // this is a micro metering library
-
 const metrics = [
-  'createFile',
-  'getProgram',
   'getSourceFile',
   'getTypeAlias',
   'checker',
   'getTypeAtLocation',
   'typeToString',
-  'formatter',
+  'newFilePrep',
+  'createVirtualFile',
+  'diagnostics',
   'writeResults',
   'total',
 ] as const;
@@ -25,45 +24,43 @@ export type MeteringDefinite = Record<
   number
 >;
 
-const metering = metrics.reduce((acc, metric) => ({
-  ...acc,
-  [metric]: null,
-}), {} as Metering);
+export class Meter {
+  metering: Metering = metrics.reduce((acc, metric) => ({
+    ...acc,
+    [metric]: null,
+  }), {} as Metering);
 
-export const resetMeter = () => {
-  for (const metric in metering) {
-    metering[metric as Metric] = null;
-  }
-}
+  totals: MeteringDefinite = metrics.reduce((acc, metric) => ({
+    ...acc,
+    [metric]: 0,
+  }), {} as MeteringDefinite);
 
-export const meter = (metric: Metric) => ({
-  start: () => {
-    if (metering[metric] !== null) {
+  creationTime = performance.now();
+  lifetime = () => performance.now() - this.creationTime;
+
+  start = (metric: Metric) => {
+    if (this.metering[metric] !== null) {
       throw new Error(`bro.  come on.  metering ${metric} was already started!`);
     }
-    metering[metric] = performance.now();
-  },
-  stop: () => {
-    const start = metering[metric];
+    this.metering[metric] = performance.now();
+  }
+
+  stop = (metric: Metric) => {
+    const start = this.metering[metric];
     if (start === null) {
       throw new Error(`metering ${metric} was not started.  get your shit together.`);
     }
     const result = performance.now() - start;
-    metering[metric] = result;
-    totals[metric] += result;
-  },
-})
-
-export const finalizeMeter = () => {
-  for (const metric in metering) {
-    if (metering[metric as keyof Metering] === null) {
-      throw new Error(`hey dumb dumb.  you forgot to stop measurement for ${metric}`)
-    }
+    this.metering[metric] = result;
+    this.totals[metric] += result;
   }
-  return metering as MeteringDefinite
-}
 
-const totals = metrics.reduce((acc, metric) => ({
-  ...acc,
-  [metric]: 0,
-}), {} as MeteringDefinite);
+  finalize = () => {
+    for (const metric in this.metering) {
+      if (this.metering[metric as keyof Metering] === null) {
+        throw new Error(`hey dumb dumb.  you forgot to stop measurement for ${metric}`)
+      }
+    }
+    return this.metering as MeteringDefinite
+  }
+}

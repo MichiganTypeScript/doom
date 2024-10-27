@@ -14,20 +14,15 @@ use indexmap::{IndexMap, IndexSet};
 
 use wast::{
     core::{
-        DataVal, Elem, ElemKind, Func, FuncKind, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType,
-        Module, ModuleField, ModuleKind, Type, ValType,
+        DataVal, Elem, ElemKind, Func, FuncKind, Global, GlobalKind, Instruction, Memory, MemoryKind, MemoryType, Module, ModuleField, ModuleKind, Type,
+        ValType,
     },
     parser,
     token::{Id, Index},
     Wat,
 };
 
-pub fn handle_instructions(
-    func: &Func,
-    instrs: &mut VecDeque<&Instruction>,
-    indent: &mut usize,
-    context: &mut Vec<&str>,
-) -> Vec<(usize, String)> {
+pub fn handle_instructions(func: &Func, instrs: &mut VecDeque<&Instruction>, indent: &mut usize, context: &mut Vec<&str>) -> Vec<(usize, String)> {
     let mut result: Vec<(usize, String)> = vec![];
 
     while let Some(instruction) = instrs.pop_front() {
@@ -103,40 +98,22 @@ fn handle_instruction(
         }
 
         Instruction::I32GtS => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThan', signed: true, type: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: true, type: 'i32' }},"))]
         }
         Instruction::I64GtS => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThan', signed: true, type: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: true, type: 'i64' }},"))]
         }
         Instruction::I32GtU => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThan', signed: false, type: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: false, type: 'i32' }},"))]
         }
         Instruction::I64GtU => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThan', signed: false, type: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: false, type: 'i64' }},"))]
         }
         Instruction::F32Gt => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThan', signed: true, type: 'f32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: true, type: 'f32' }},"))]
         }
         Instruction::F64Gt => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThan', signed: true, type: 'f64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThan', signed: true, type: 'f64' }},"))]
         }
 
         Instruction::I32LtS => {
@@ -159,77 +136,41 @@ fn handle_instruction(
         }
 
         Instruction::I32GeS => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'i32' }},"))]
         }
         Instruction::I64GeS => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'i64' }},"))]
         }
         Instruction::I32GeU => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThanOrEqual', signed: false, type: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: false, type: 'i32' }},"))]
         }
         Instruction::I64GeU => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThanOrEqual', signed: false, type: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: false, type: 'i64' }},"))]
         }
         Instruction::F32Ge => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'f32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'f32' }},"))]
         }
         Instruction::F64Ge => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'f64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'GreaterThanOrEqual', signed: true, type: 'f64' }},"))]
         }
 
         Instruction::I32LeS => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'i32' }},"))]
         }
         Instruction::I64LeS => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'i64' }},"))]
         }
         Instruction::I32LeU => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'LessThanOrEqual', signed: false, type: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: false, type: 'i32' }},"))]
         }
         Instruction::I64LeU => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'LessThanOrEqual', signed: false, type: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: false, type: 'i64' }},"))]
         }
         Instruction::F32Le => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'f32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'f32' }},"))]
         }
         Instruction::F64Le => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'f64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'LessThanOrEqual', signed: true, type: 'f64' }},"))]
         }
 
         /* Arithmetic Instructions */
@@ -319,80 +260,44 @@ fn handle_instruction(
         Instruction::I64Extend32S => {
             vec![(*indent, format!("{{ kind: 'ExtendSign', from: 32 }},"))]
         }
-        Instruction::F32ReinterpretI32
-        | Instruction::I32ReinterpretF32
-        | Instruction::F64ReinterpretI64
-        | Instruction::I64ReinterpretF64 => {
+        Instruction::F32ReinterpretI32 | Instruction::I32ReinterpretF32 | Instruction::F64ReinterpretI64 | Instruction::I64ReinterpretF64 => {
             vec![(*indent, format!("{{ kind: 'Reinterpret' }},"))]
         }
         Instruction::F64PromoteF32 => {
             vec![(*indent, format!("{{ kind: 'Promote' }},"))]
         }
         Instruction::F32ConvertI32S => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Convert', signed: true, from: 'f32', to: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Convert', signed: true, from: 'f32', to: 'i32' }},"))]
         }
         Instruction::F32ConvertI32U => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Convert', signed: false, from: 'f32', to: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Convert', signed: false, from: 'f32', to: 'i32' }},"))]
         }
         Instruction::F32ConvertI64S => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Convert', signed: true, from: 'f32', to: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Convert', signed: true, from: 'f32', to: 'i64' }},"))]
         }
         Instruction::F32ConvertI64U => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Convert', signed: false, from: 'f32', to: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Convert', signed: false, from: 'f32', to: 'i64' }},"))]
         }
         Instruction::F64ConvertI32S => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Convert', signed: true, from: 'f64', to: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Convert', signed: true, from: 'f64', to: 'i32' }},"))]
         }
         Instruction::F64ConvertI32U => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Convert', signed: false, from: 'f64', to: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Convert', signed: false, from: 'f64', to: 'i32' }},"))]
         }
         Instruction::F64ConvertI64S => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Convert', signed: true, from: 'f64', to: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Convert', signed: true, from: 'f64', to: 'i64' }},"))]
         }
         Instruction::F64ConvertI64U => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Convert', signed: false, from: 'f64', to: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Convert', signed: false, from: 'f64', to: 'i64' }},"))]
         }
         Instruction::I32TruncF32S => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Truncate', signed: true, from: 'i32', to: 'f32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Truncate', signed: true, from: 'i32', to: 'f32' }},"))]
         }
         Instruction::I32TruncF64U => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Truncate', signed: false, from: 'i32', to: 'f64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Truncate', signed: false, from: 'i32', to: 'f64' }},"))]
         }
         Instruction::I32TruncF64S => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'Truncate', signed: true, from: 'i32', to: 'f64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'Truncate', signed: true, from: 'i32', to: 'f64' }},"))]
         }
         Instruction::F32DemoteF64 => {
             vec![(*indent, format!("{{ kind: 'Demote' }},"))]
@@ -440,16 +345,10 @@ fn handle_instruction(
             vec![(*indent, format!("{{ kind: 'ShiftLeft', type: 'i64' }},"))]
         }
         Instruction::I32ShrU => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'ShiftRight', signed: false, type: 'i32' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'ShiftRight', signed: false, type: 'i32' }},"))]
         }
         Instruction::I64ShrU => {
-            vec![(
-                *indent,
-                format!("{{ kind: 'ShiftRight', signed: false, type: 'i64' }},"),
-            )]
+            vec![(*indent, format!("{{ kind: 'ShiftRight', signed: false, type: 'i64' }},"))]
         }
         Instruction::I32ShrS => {
             vec![(*indent, format!("{{ kind: 'ShiftRight', signed: true, type: 'i32' }},"))]
@@ -678,11 +577,7 @@ fn handle_instruction(
         Instruction::End(_) => {
             let this_context = context.pop();
 
-            let pop = if this_context == Some("If")
-                || this_context == Some("Else")
-                || this_context == Some("Block")
-                || this_context == Some("Loop")
-            {
+            let pop = if this_context == Some("If") || this_context == Some("Else") || this_context == Some("Block") || this_context == Some("Loop") {
                 (*indent - 1, format!("];"))
             } else {
                 panic!("unexpected context {:#?}", this_context);
@@ -724,10 +619,7 @@ fn handle_instruction(
 
             let thing = vec![
                 (*indent, format!("{{ kind: 'Loop';")),
-                (
-                    *indent + 1,
-                    format!("id: '${}';", block_type.label.expect("loops must have labels").name()),
-                ),
+                (*indent + 1, format!("id: '${}';", block_type.label.expect("loops must have labels").name())),
                 (*indent + 1, format!("instructions: [")),
             ]
             .into_iter()
@@ -741,11 +633,7 @@ fn handle_instruction(
         }
         Instruction::Return => {
             let maybe_inline = func.ty.inline.clone();
-            let count = if let Some(ft) = maybe_inline {
-                ft.results.len()
-            } else {
-                0
-            };
+            let count = if let Some(ft) = maybe_inline { ft.results.len() } else { 0 };
             vec![(*indent, format!("{{ kind: 'Return'; count: {count} }},"))]
         }
         Instruction::Select(_) => {
@@ -798,11 +686,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
     let name = "$".to_string()
         + &func
             .id
-            .unwrap_or_else(|| {
-                panic!(
-                    "need to implement no name funcs but it looks like I can skirt by without having to do any of it"
-                )
-            })
+            .unwrap_or_else(|| panic!("need to implement no name funcs but it looks like I can skirt by without having to do any of it"))
             .name()
             .replace('.', "_");
 
@@ -820,15 +704,8 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
                     (format!("'${id}'"), format_val_type(val_type))
                 });
 
-                let params = &params_and_types
-                    .clone()
-                    .map(|(id, _)| id.clone())
-                    .collect::<Vec<String>>()
-                    .join(", ");
-                let params_types = &params_and_types
-                    .map(|(_, val_type)| val_type.clone())
-                    .collect::<Vec<String>>()
-                    .join(", ");
+                let params = &params_and_types.clone().map(|(id, _)| id.clone()).collect::<Vec<String>>().join(", ");
+                let params_types = &params_and_types.map(|(_, val_type)| val_type.clone()).collect::<Vec<String>>().join(", ");
 
                 if name == "$entry" {
                     let internals = function_type
@@ -856,9 +733,7 @@ fn handle_module_field_func(source: &SourceFile, func: &Func) {
             Some(Index::Id(id)) => format_id(&id),
             _ => panic!("only id indexes supported for type use"),
         };
-        let ModuleType { params, result } = source
-            .get_module_type(&id)
-            .expect("looking for a module type that doesn't exist");
+        let ModuleType { params, result } = source.get_module_type(&id).expect("looking for a module type that doesn't exist");
         let p = params.join(", ");
 
         format!("  params: [];\n  paramsTypes: [{p}];\n  resultTypes: {result};")
@@ -888,10 +763,7 @@ fn handle_module_field_global(source: &SourceFile, global: &Global) {
             panic!("imported globals are not supported");
         }
         GlobalKind::Inline(inline) => {
-            let first = inline
-                .instrs
-                .first()
-                .expect("inline global to have at least one instruction");
+            let first = inline.instrs.first().expect("inline global to have at least one instruction");
             match first {
                 Instruction::I32Const(value) => format!("'{:032b}'", value),
                 _ => {
@@ -1055,6 +927,8 @@ pub struct SourceFile {
 
     // module types.  rarely needed, but unfortunately not never needed
     module_types: RefCell<IndexMap<String, ModuleType>>,
+
+    preview_bytes: bool,
 }
 
 impl fmt::Debug for SourceFile {
@@ -1070,32 +944,36 @@ impl ToString for SourceFile {
 
         let mut memory_data = vec![];
 
-        self.data
-            .borrow()
-            .iter()
-            .for_each(|(_name, MemoryData { data, name, index, .. })| {
-                let mut current_index = *index;
-                let contained_string = from_utf8(data).unwrap_or("<not valid uft-8.  sorry bro.>");
+        self.data.borrow().iter().for_each(|(_name, MemoryData { data, name, index, .. })| {
+            let mut current_index = *index;
+            let mut contained_string = "byte preview disabled";
+            if self.preview_bytes {
+                contained_string = from_utf8(data).unwrap_or("<not valid uft-8.  sorry bro.>");
+            }
 
-                let expanded_data = data
-                    .iter()
-                    .map(|byte| {
-                        let utf8_byte = [*byte];
-                        let utf8 = from_utf8(&utf8_byte).unwrap_or("");
-                        let result = format!("  '{:032b}': '{:08b}'; // {}", current_index, byte, utf8);
-                        current_index += 1;
-                        result
-                    })
-                    .filter(|line| !line.contains(": '00000000'"))
-                    .collect::<Vec<String>>()
-                    .join("\n");
+            let expanded_data = data
+                .iter()
+                .map(|byte| {
+                    let utf8_byte = [*byte];
+                    let mut utf8 = String::from("");
+                    if self.preview_bytes {
+                        let res = from_utf8(&utf8_byte);
+                        if let Ok(v) = res {
+                            utf8 = format!(" // {v}")
+                        }
+                    }
+                    let result = format!("  '{:032b}': '{:08b}';{}", current_index, byte, utf8);
+                    current_index += 1;
+                    result
+                })
+                .filter(|line| !line.contains(": '00000000'"))
+                .collect::<Vec<String>>()
+                .join("\n");
 
-                data_types.push_str(&format!(
-                    "\n/** {contained_string} */\ntype {name} = {{\n{expanded_data}\n}}\n"
-                ));
+            data_types.push_str(&format!("\n/** {contained_string} */\ntype {name} = {{\n{expanded_data}\n}}\n"));
 
-                memory_data.push(format!("      & {}", name));
-            });
+            memory_data.push(format!("      & {}", name));
+        });
 
         let memory = if !memory_data.is_empty() {
             format!("\n{}\n    ", memory_data.join("\n"))
@@ -1195,12 +1073,12 @@ impl ToString for SourceFile {
 
 impl Default for SourceFile {
     fn default() -> Self {
-        Self::new()
+        Self::new(true)
     }
 }
 
 impl SourceFile {
-    pub fn new() -> Self {
+    pub fn new(preview_bytes: bool) -> Self {
         SourceFile {
             args: RefCell::new(String::from("")),
             data: RefCell::new(IndexMap::new()),
@@ -1210,6 +1088,7 @@ impl SourceFile {
             memory: RefCell::new((0, 0)),
             types: RefCell::new(IndexMap::new()),
             module_types: RefCell::new(IndexMap::new()),
+            preview_bytes,
         }
     }
 
@@ -1262,9 +1141,7 @@ impl SourceFile {
     }
 
     pub fn add_data(&self, index: i32, name: String, data: Vec<u8>) {
-        self.data
-            .borrow_mut()
-            .insert(name.clone(), MemoryData { name, data, index });
+        self.data.borrow_mut().insert(name.clone(), MemoryData { name, data, index });
     }
 
     pub fn set_args(&self, args: String) {
@@ -1274,11 +1151,7 @@ impl SourceFile {
     pub fn add_module_type(&self, module_type: &Type) {
         let (params, result) = match module_type.def {
             wast::core::TypeDef::Func(ref function_type) => {
-                let params = function_type
-                    .params
-                    .iter()
-                    .map(|(_, _, val)| format_val_type(val))
-                    .collect();
+                let params = function_type.params.iter().map(|(_, _, val)| format_val_type(val)).collect();
 
                 if function_type.results.len() > 1 {
                     panic!("multiple results not supported");
@@ -1296,9 +1169,7 @@ impl SourceFile {
 
         let name = format_id(&module_type.id.expect("module type to have a name"));
 
-        self.module_types
-            .borrow_mut()
-            .insert(name, ModuleType { params, result });
+        self.module_types.borrow_mut().insert(name, ModuleType { params, result });
     }
 
     pub fn get_module_type(&self, name: &String) -> Option<ModuleType> {
@@ -1370,11 +1241,11 @@ pub fn count_instructions(module: &Module) -> IndexMap<String, u32> {
     counts
 }
 
-pub fn wat_to_dts(wat: String, dump_path: &str) -> SourceFile {
+pub fn wat_to_dts(wat: String, dump_path: &str, preview_bytes: bool) -> SourceFile {
     let buf = parser::ParseBuffer::new(&wat).unwrap();
     let parsed_wat = &parser::parse::<Wat>(&buf).unwrap();
 
-    let source = SourceFile::new();
+    let source = SourceFile::new(preview_bytes);
 
     if let wast::Wat::Module(ref module) = parsed_wat {
         let counter = count_instructions(module);
@@ -1483,12 +1354,8 @@ pub fn generate_wasm2wat(dir_entry: &DirEntry) {
 }
 
 pub fn get_wat_files() -> Vec<DirEntry> {
-    let from_wat = fs::read_dir("./packages/conformance-tests/from-wat/")
-        .unwrap()
-        .flatten();
-    let single_wat = fs::read_dir("./packages/conformance-tests/from-wat-single/")
-        .unwrap()
-        .flatten();
+    let from_wat = fs::read_dir("./packages/conformance-tests/from-wat/").unwrap().flatten();
+    let single_wat = fs::read_dir("./packages/conformance-tests/from-wat-single/").unwrap().flatten();
 
     let files = from_wat.chain(single_wat);
 
@@ -1566,7 +1433,7 @@ pub fn parse_wat_and_dump(dir_entry: &DirEntry) -> SourceFile {
     let wat = fs::read_to_string(wat_file).unwrap();
     let dump_path = dir_entry.path().with_extension("dump").to_str().unwrap().to_owned();
 
-    wat_to_dts(wat, &dump_path)
+    wat_to_dts(wat, &dump_path, true)
 }
 
 pub fn create_ts(source_file: &SourceFile, dir_entry: &DirEntry) {
@@ -1619,7 +1486,7 @@ fn main() {
                 let wat_path = current_dir.join(wat_file);
                 let wat = fs::read_to_string(wat_path).unwrap();
 
-                let output = wat_to_dts(wat, PathBuf::from(doom_dir).join("doom.dump").to_str().unwrap()).to_string();
+                let output = wat_to_dts(wat, PathBuf::from(doom_dir).join("doom.dump").to_str().unwrap(), false).to_string();
                 fs::write(PathBuf::from(doom_dir).join("doom.ts"), output).unwrap();
                 println!("I did the needful, boss.");
             })

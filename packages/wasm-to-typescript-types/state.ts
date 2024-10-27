@@ -71,23 +71,23 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
-        count: TypeMath.Add<state['count'], 1>;
-
-        results: state['results'];
+        count: TypeMath.Add<state['count'], 1>;  // increment the count
+        // count: state['count'];
         stack: state['stack'];
-        instructions: state['instructions'];
-        activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
-        activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
-        globals: state['globals'];
+        activeLocals: state['activeLocals'];
+        instructions: state['instructions'];
+        activeBranches: state['activeBranches'];
         L1Cache: state['L1Cache'];
         memory: state['memory'];
-        garbageCollection: state['garbageCollection'];
-        indirect: state['indirect'];
-        memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
+        garbageCollection: state['garbageCollection'];
+        globals: state['globals'];
+        memorySize: state['memorySize'];
+        indirect: state['indirect'];
+        results: state['results'];
       }
     >
   }
@@ -99,24 +99,23 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
+
         count: state['count'];
-        results: state['results'];
         stack: state['stack'];
-
-        instructions: instructions;
-
-        activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
-        activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
-        globals: state['globals'];
+        activeLocals: state['activeLocals'];
+        instructions: instructions; // use new
+        activeBranches: state['activeBranches'];
         L1Cache: state['L1Cache'];
         memory: state['memory'];
-        garbageCollection: state['garbageCollection'];
-        indirect: state['indirect'];
-        memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
+        garbageCollection: state['garbageCollection'];
+        globals: state['globals'];
+        memorySize: state['memorySize'];
+        indirect: state['indirect'];
+        results: state['results'];
       }
     >
 
@@ -168,23 +167,21 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-        results: state['results'];
-
-        stack: stack;
-
-        instructions: state['instructions'];
-        activeLocals: state['activeLocals'];
+        stack: stack; // use new
         activeFuncId: state['activeFuncId'];
-        activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
-        globals: state['globals'];
+        activeLocals: state['activeLocals'];
+        instructions: state['instructions'];
+        activeBranches: state['activeBranches'];
         L1Cache: state['L1Cache'];
         memory: state['memory'];
-        garbageCollection: state['garbageCollection'];
-        indirect: state['indirect'];
-        memorySize: state['memorySize'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
+        garbageCollection: state['garbageCollection'];
+        globals: state['globals'];
+        memorySize: state['memorySize'];
+        indirect: state['indirect'];
+        results: state['results'];
       }
     >
 
@@ -212,23 +209,14 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-        results: state['results'];
         stack: state['stack'];
-        instructions: newInstructions;
-
-        // set the new one
-        activeLocals: executionContext['locals'];
-        activeFuncId: executionContext['funcId'];
-        activeBranches: executionContext['branches'];
-        activeStackDepth: executionContext['stackDepth'];
-
-        globals: state['globals'];
+        activeFuncId: executionContext['funcId']; // use new
+        activeStackDepth: executionContext['stackDepth']; // use new
+        activeLocals: executionContext['locals']; // use new
+        instructions: newInstructions; // use new
+        activeBranches: executionContext['branches']; // use new
         L1Cache: state['L1Cache'];
         memory: state['memory'];
-        garbageCollection: state['garbageCollection'];
-        indirect: state['indirect'];
-        memorySize: state['memorySize'];
-
         executionContexts: [
           ...state['executionContexts'],
           // archive the previous active execution context
@@ -242,8 +230,12 @@ export namespace State {
             instructions: state['instructions'];
           },
         ];
-
         funcs: state['funcs'];
+        garbageCollection: state['garbageCollection'];
+        globals: state['globals'];
+        memorySize: state['memorySize'];
+        indirect: state['indirect'];
+        results: state['results'];
       }
     >
 
@@ -257,53 +249,41 @@ export namespace State {
       ]
       ? {
           count: state['count'];
-          results: state['results'];
           stack: state['stack'];
-
-          // set the instruction stack to what the previous capture state contained
-          instructions: active['instructions'];
-
-          // set the new one
-          activeLocals: active['locals'];
-          activeFuncId: active['funcId'];
-          activeBranches: active['branches'];
-          activeStackDepth: active['stackDepth'];
-
-          globals: state['globals'];
+          activeFuncId: active['funcId']; // use new
+          activeStackDepth: active['stackDepth']; // use new
+          activeLocals: active['locals']; // use new
+          instructions: active['instructions']; // set the instruction stack to what the previous capture state contained
+          activeBranches: active['branches']; // use new
           L1Cache: state['L1Cache'];
           memory: state['memory'];
-          garbageCollection: state['garbageCollection'];
-          indirect: state['indirect'];
-          memorySize: state['memorySize'];
-          
-          executionContexts: remaining;
-
+          executionContexts: remaining; // use new
           funcs: state['funcs'];
+          garbageCollection: state['garbageCollection'];
+          globals: state['globals'];
+          memorySize: state['memorySize'];
+          indirect: state['indirect'];
+          results: state['results'];
         }
-      : state['instructions'] extends IEndFunction[] // funny story: [IEndFunction] doesn't work here
+        : state['instructions'] extends IEndFunction[] // funny story: [IEndFunction] doesn't work here
         ? // we hit this case on the very last pop (i.e. when the program completes)
           {
             count: state['count'];
-            results: state['results'];
             stack: state['stack'];
+            activeFuncId: 'hope you found what you were looking for'; // lol
+            activeStackDepth: 1337; // reset
+            activeLocals: {}; // reset
             instructions: state['instructions']; // this should be empty
-            
-            // set the new one
-            activeLocals: {};
-            activeFuncId: 'hope you found what you were looking for';
-            activeBranches: {};
-            activeStackDepth: 1337;
-
-            globals: state['globals'];
+            activeBranches: {}; // reset
             L1Cache: state['L1Cache'];
             memory: state['memory'];
-            garbageCollection: state['garbageCollection'];
-            indirect: state['indirect'];
-            memorySize: state['memorySize'];
-
-            executionContexts: [];
-
+            executionContexts: []; // clear
             funcs: state['funcs'];
+            garbageCollection: state['garbageCollection'];
+            globals: state['globals'];
+            memorySize: state['memorySize'];
+            indirect: state['indirect'];
+            results: state['results'];
           }
         : State.error<"execution contexts exhausted", Instruction, state>
     >
@@ -316,53 +296,26 @@ export namespace State {
           state extends ProgramState
         > = Satisfies<ProgramState,
           {
-            count: state['count'];
-            results: state['results'];
+            count: state['count']; 
             stack: state['stack'];
-            instructions: state['instructions'];
-
+            activeFuncId: state['activeFuncId'];
+            activeStackDepth: state['activeStackDepth'];
             activeLocals:
               Patch<
                 state['activeLocals'],
                 { [k in id]: value }
               >;
-
-            activeFuncId: state['activeFuncId'];
-            activeBranches: state['activeBranches'];
-            activeStackDepth: state['activeStackDepth'];
-            globals: state['globals'];
-            L1Cache: state['L1Cache'];
-            memory: state['memory'];
-            garbageCollection: state['garbageCollection'];
-            indirect: state['indirect'];
-            memorySize: state['memorySize'];
-            executionContexts: state['executionContexts'];
-            funcs: state['funcs'];
-          }
-        >
-
-        export type clear<
-          state extends ProgramState
-        > = Satisfies<ProgramState,
-          {
-            count: state['count'];
-            results: state['results'];
-            stack: state['stack'];
             instructions: state['instructions'];
-
-            activeLocals: {}
-
-            activeFuncId: state['activeFuncId'];
             activeBranches: state['activeBranches'];
-            activeStackDepth: state['activeStackDepth'];
-            globals: state['globals'];
             L1Cache: state['L1Cache'];
             memory: state['memory'];
-            garbageCollection: state['garbageCollection'];
-            indirect: state['indirect'];
-            memorySize: state['memorySize'];
             executionContexts: state['executionContexts'];
             funcs: state['funcs'];
+            garbageCollection: state['garbageCollection'];
+            globals: state['globals'];
+            memorySize: state['memorySize'];
+            indirect: state['indirect'];
+            results: state['results'];
           }
         >
       }
@@ -373,24 +326,22 @@ export namespace State {
           state extends ProgramState
         > = Satisfies<ProgramState,
           {
-            count: state['count'];
-            results: state['results'];
+            count: state['count']; 
             stack: state['stack'];
-            instructions: state['instructions'];
-            activeLocals: state['activeLocals']
             activeFuncId: state['activeFuncId'];
-
-            activeBranches: branches;
-
             activeStackDepth: state['activeStackDepth'];
-            globals: state['globals'];
+            activeLocals: state['activeLocals'];
+            instructions: state['instructions'];
+            activeBranches: branches; // use new
             L1Cache: state['L1Cache'];
             memory: state['memory'];
-            garbageCollection: state['garbageCollection'];
-            indirect: state['indirect'];
-            memorySize: state['memorySize'];
             executionContexts: state['executionContexts'];
             funcs: state['funcs'];
+            garbageCollection: state['garbageCollection'];
+            globals: state['globals'];
+            memorySize: state['memorySize'];
+            indirect: state['indirect'];
+            results: state['results'];
           }
         >
 
@@ -411,15 +362,6 @@ export namespace State {
     }
   }
 
-  export namespace Funcs {
-    export type getById<
-      id extends keyof state['funcs'],
-      state extends ProgramState
-    > = Satisfies<Func,
-      state['funcs'][id]
-    >
-  }
-
   /** Helpers for Globals manipulation */
   export namespace Globals {
     export type insert<
@@ -427,28 +369,26 @@ export namespace State {
       state extends ProgramState
     > = Satisfies<ProgramState,
       {
-        count: state['count'];
-        results: state['results'];
+        count: state['count']; 
         stack: state['stack'];
-        instructions: state['instructions'];
-        activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
-        activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
-
+        activeLocals: state['activeLocals'];
+        instructions: state['instructions'];
+        activeBranches: state['activeBranches'];
+        L1Cache: state['L1Cache'];
+        memory: state['memory'];
+        executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+        garbageCollection: state['garbageCollection'];
         globals:
           Patch<
             state['globals'],
             globals
           >;
-
-        L1Cache: state['L1Cache'];
-        memory: state['memory'];
-        garbageCollection: state['garbageCollection'];
-        indirect: state['indirect'];
         memorySize: state['memorySize'];
-        executionContexts: state['executionContexts'];
-        funcs: state['funcs'];
+        indirect: state['indirect'];
+        results: state['results'];
       }
     >
   }
@@ -486,31 +426,22 @@ export namespace State {
     > = Satisfies<ProgramState,
       // State.debug<[_update], {
       {
-        count: state['count'];
-        results: state['results'];
+        count: state['count']; 
         stack: state['stack'];
-        instructions: state['instructions'];
-        activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
-        activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
-        globals: state['globals'];
-
-        // only update the L1 Cache.
-        // the Memory is updated via the garbage collector
-        L1Cache: Patch<
-          state['L1Cache'],
-          _update
-        >;
-
-        // note that we don't actually update the large memory blob
-        memory: state['memory'];
-
-        garbageCollection: state['garbageCollection'];
-        indirect: state['indirect'];
-        memorySize: state['memorySize'];
+        activeLocals: state['activeLocals'];
+        instructions: state['instructions'];
+        activeBranches: state['activeBranches'];
+        L1Cache: Patch<state['L1Cache'], _update>; // only update the L1 Cache.
+        memory: state['memory']; // note that we don't actually update the large memory blob.  the Memory is updated during garbage collection
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
+        garbageCollection: state['garbageCollection'];
+        globals: state['globals'];
+        memorySize: state['memorySize'];
+        indirect: state['indirect'];
+        results: state['results'];
       }
       // >
     >
@@ -522,24 +453,21 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-        results: state['results'];
         stack: state['stack'];
-        instructions: state['instructions'];
-        activeLocals: state['activeLocals'];
         activeFuncId: state['activeFuncId'];
-        activeBranches: state['activeBranches'];
         activeStackDepth: state['activeStackDepth'];
-        globals: state['globals'];
-        memory: state['memory'];
+        activeLocals: state['activeLocals'];
+        instructions: state['instructions'];
+        activeBranches: state['activeBranches'];
         L1Cache: state['L1Cache'];
-
-        garbageCollection: TypeMath.Add<state['garbageCollection'], 1>;
-
-        indirect: state['indirect'];
-        memorySize: state['memorySize'];
+        memory: state['memory'];
         executionContexts: state['executionContexts'];
         funcs: state['funcs'];
-
+        garbageCollection: TypeMath.Add<state['garbageCollection'], 1>; // increment
+        globals: state['globals'];
+        memorySize: state['memorySize'];
+        indirect: state['indirect'];
+        results: state['results'];
       }
     >
 
@@ -560,28 +488,24 @@ export namespace State {
       _shoudlCollect extends true
       ? {
           count: state['count'];
-          results: state['results'];
           stack: state['stack'];
-          instructions: state['instructions'];
-          activeLocals: state['activeLocals'];
           activeFuncId: state['activeFuncId'];
-          activeBranches: state['activeBranches'];
           activeStackDepth: state['activeStackDepth'];
-          globals: state['globals'];
-
+          activeLocals: state['activeLocals'];
+          instructions: state['instructions'];
+          activeBranches: state['activeBranches'];
           L1Cache: {}; // clear the L1Cache
-
           memory: Patch<
             state['memory'],
             TypeMath.GarbageCollect<state['L1Cache']>
-          >;
-
-          garbageCollection: 0;
-
-          indirect: state['indirect'];
-          memorySize: state['memorySize'];
+          >; // update the memory with the L1Cache
           executionContexts: state['executionContexts'];
           funcs: state['funcs'];
+          garbageCollection: 0; // reset
+          globals: state['globals'];
+          memorySize: state['memorySize'];
+          indirect: state['indirect'];
+          results: state['results'];
         }
       : _next
     >
@@ -630,26 +554,24 @@ export namespace State {
     > = Satisfies<ProgramState,
       {
         count: state['count'];
-
+        stack: state['stack'];
+        activeFuncId: state['activeFuncId'];
+        activeStackDepth: state['activeStackDepth'];
+        activeLocals: state['activeLocals'];
+        instructions: state['instructions'];
+        activeBranches: state['activeBranches'];
+        L1Cache: state['L1Cache'];
+        memory: state['memory'];
+        executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+        garbageCollection: state['garbageCollection'];
+        globals: state['globals'];
+        memorySize: state['memorySize'];
+        indirect: state['indirect'];
         results:
           _resultTypes['length'] extends 1
           ? WasmTypeToTSNumber<_resultTypes[0], state['stack'][0]>
           : CollectResults<state['stack'], _resultTypes>;
-
-        stack: state['stack'];
-        instructions: state['instructions'];
-        activeLocals: state['activeLocals'];
-        activeFuncId: state['activeFuncId'];
-        activeBranches: state['activeBranches'];
-        activeStackDepth: state['activeStackDepth'];
-        globals: state['globals'];
-        L1Cache: state['L1Cache'];
-        memory: state['memory'];
-        garbageCollection: state['garbageCollection'];
-        indirect: state['indirect'];
-        memorySize: state['memorySize'];
-        executionContexts: state['executionContexts'];
-        funcs: state['funcs'];
       }
     >
 

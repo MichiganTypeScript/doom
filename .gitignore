@@ -2,6 +2,7 @@ node_modules/
 target/
 *.tsbuildinfo
 packages/playground/evaluate/results*
+packages/playground/evaluate/stats
 tsc-output.cpuprofile
 packages/playground/evaluate/restart*
 trace/

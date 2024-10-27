@@ -5,15 +5,13 @@ import { mkdirSync, readdirSync, statSync, unlinkSync } from "fs";
 import {
   STATS_PREFIX,
   csvPath,
-  fsWorker,
-  incrementBy,
-  initialConditions,
-  shouldLogStats,
+  config,
   statsDirectory,
   statsJsonPath,
   statsPath,
 } from "./config";
-import { MeteringDefinite } from "./metering";
+import { Meter, MeteringDefinite } from "./metering";
+import { fsWorker, getActiveInstruction } from "./utils";
 
 const stackSize = (depth = 1): number => {
   try {
@@ -27,7 +25,7 @@ const stackSize = (depth = 1): number => {
  * There is a mode of operation where the program will run one instruction at a time, so we can benchmark individual instructions.
  */
 export const isBenchmarkingIndividualInstructions =
-  (incrementBy as number) === 1;
+  (config.incrementBy as number) === 1;
 
 export const clearStats = () => {
   try {
@@ -38,8 +36,10 @@ export const clearStats = () => {
     }
   } catch (e) {
     if ((e as unknown as any).code === "ENOENT") {
-      // if the directory doesn't exist, create it
-      mkdirSync(statsDirectory);
+      if (config.shouldComputeFullStats) {
+        // if the directory doesn't exist, create it
+        mkdirSync(statsDirectory);
+      }
     }
   }
 };
@@ -129,7 +129,7 @@ type RunMetadata = {
   current: number;
 };
 
-export const runStats = async ({
+export const generateFullStats = async ({
   program,
   metadata,
   metering,
@@ -148,7 +148,7 @@ export const runStats = async ({
   fsWorker.writeFile(
     statsJsonPath(metadata.current),
     JSON.stringify({ metering, stats, metadata }),
-    { format: true },
+    'json'
   );
 };
 
@@ -197,13 +197,13 @@ const getTotals = (runs: Runs) => {
 
       totals[groupId][statId] = {
         sum: round(sum),
-        sumPerInstruction: round(sum / incrementBy),
+        sumPerInstruction: round(sum / config.incrementBy),
         min: round(min),
-        minPerInstruction: round(min / incrementBy),
+        minPerInstruction: round(min / config.incrementBy),
         max: round(max),
-        maxPerInstruction: round(max / incrementBy),
+        maxPerInstruction: round(max / config.incrementBy),
         avg: round(avg),
-        avgPerInstruction: round(avg / incrementBy),
+        avgPerInstruction: round(avg / config.incrementBy),
         median: round(median),
         stdev: round(stdev),
       };
@@ -357,23 +357,22 @@ export const serializeCSV = (csv: CSV) => {
   return `${header}\n${body}`;
 };
 
-export const logFinalStats = async (programTime: number) => {
-  if (!shouldLogStats) {
+export const logFinalStats = async (startProgramTime: number) => {
+  if (!config.shouldComputeFullStats) {
     return;
   }
 
-  console.log("total time (ms)", Math.round(programTime));
+  const totalTime = performance.now() - startProgramTime;
+  console.log("total time (ms)", Math.round(totalTime));
 
-  if (shouldLogStats) {
-    const { programStats, csv } = await calculateTotals(programTime);
+  if (config.shouldComputeFullStats) {
+    const { programStats, csv } = await calculateTotals(totalTime);
     console.log(
       "total instantiations ",
       programStats.totals.stats.instantiations.sum,
     );
-    fsWorker.writeFile(statsPath, JSON.stringify(programStats), {
-      format: true,
-    });
-    fsWorker.writeFile(csvPath, serializeCSV(csv), { format: true });
+    fsWorker.writeFile(statsPath, JSON.stringify(programStats), 'json');
+    fsWorker.writeFile(csvPath, serializeCSV(csv), 'csv');
   }
 };
 
@@ -401,20 +400,19 @@ export const shortStats = ({
     current: count,
     instructions,
   },
-  metering: { total: totalTime, getTypeAtLocation, getProgram },
+  metering: { total: totalTime, getTypeAtLocation },
 }: {
   stats: TSProgramStats;
   metadata: RunMetadata;
   metering: MeteringDefinite;
 }) => {
   console.log(
-    ...printColumn("count", initialConditions.digits, count),
+    ...printColumn("count", config.digits, count),
     ...printColumn("time (ms)", 7, getTypeAtLocation),
     ...printColumn("wasm/sec", 5, instructions / (totalTime / 1000)),
     ...printColumn("instantiations", 10, instantiations),
     ...printColumn("instan/ms", 7, instantiations / getTypeAtLocation),
     ...printColumn("length", 10, typeStringLength),
-    ...printColumn("getProgram", 4, getProgram),
     `|${activeInstruction ? ` ${activeInstruction} |` : ""}`,
   );
 };
@@ -439,3 +437,41 @@ export const encourage = () => {
   console.log(phrases[Math.floor(Math.random() * phrases.length)]);
   console.log();
 };
+
+export const logStats = async ({
+  typeString,
+  current,
+  program,
+  meter,
+  previousCount,
+}: {
+  typeString: string,
+  current: number,
+  program: ts.Program,
+  meter: Meter,
+  previousCount: number,
+}) => {
+  if (config.shouldComputeFullStats) {
+    const typeStringLength = typeString.length;
+    const activeInstruction = isBenchmarkingIndividualInstructions
+      ? getActiveInstruction(typeString, current)
+      : null;
+    await generateFullStats({
+      program,
+      metadata: {
+        typeStringLength,
+        activeInstruction,
+        instructions: config.incrementBy,
+        current,
+      },
+      metering: meter.finalize(),
+    });
+  } else {
+    const totalTime = meter.lifetime() / 1000;
+    const actualCount = current - previousCount;
+    const ips = Math.round(actualCount / totalTime);
+
+    console.log(`current ${current} | ips ${ips}`, totalTime.toFixed(2));
+  }
+
+}

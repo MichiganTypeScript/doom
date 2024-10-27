@@ -93,26 +93,24 @@ export type bootstrap<
   executeInstruction<
     {
       count: 0;
-      results: null;
       stack: _startData['stack'];
+      activeFuncId: "$entry";
+      activeStackDepth: _startData['stack']['length']; // BUG
+      activeLocals: _startData['activeLocals'];
       instructions: [
         ..._$entry['instructions'],
         { kind: 'EndFunction', id: '$entry' },
       ];
-
-      activeLocals: _startData['activeLocals'];
-      activeFuncId: "$entry";
       activeBranches: {};
-      activeStackDepth: _startData['stack']['length']; // BUG
-
-      globals: input['globals'];
       L1Cache: {};
       memory: evaluate<input['memory']>; // copy readonly memory into memory registers
-      garbageCollection: 0;
-      indirect: input['indirect'];
-      memorySize: input['memorySize'];
       executionContexts: [];
       funcs: input['funcs'];
+      garbageCollection: 0;
+      globals: input['globals'];
+      memorySize: input['memorySize'];
+      indirect: input['indirect'];
+      results: null;
     },
     debugMode,
     stopAt

@@ -1,48 +1,50 @@
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "url";
-import { Worker } from "node:worker_threads";
 
-/** this is the magic type alias that the script is looking for in the evaluationFilePath */
-export const resultTypeName = 'Result';
-export const nextResultTypeName = `Next${resultTypeName}`;
-export const stringResultTypeName = `String${resultTypeName}`;
-export const incrementBy = 1;
-export const readStringFromMemory = true;
-/** turns off statistics collection and logging (it's expensive over long runs) */
-export const shouldLogStats = false;
-
-/**
- * controls how often the program prints to file.
- * set to 0 for it to always print
- */
-export const comeUpForAirEvery = 1;
-
-/**
- * how often the process should shed this mortal coil
- */
-export const transcendTheAstralPlane = 100;
-
-export interface InitialConditions {
-  /**
-   * the current instruction to start from.
-   * if greater than 0 it will automatically not clear prior results
-   */
-  startAt: 0 | number;
-
+export interface Config {
   /** if `Infinity`, the fun never stops.  otherwise it will forcibly halt at a the specified instructions count */
   stopAt: number;
 
   /** the number of digits in the filenames and types.  so a value of 4 will yield "0001", "0002", etc. */
   digits: number;
+
+  /** turns off statistics collection and logging (it's expensive over long runs) */
+  shouldComputeFullStats: boolean;
+
+  /**
+   * controls how often the program prints to file.
+   * set to 0 for it to always print
+   */
+  comeUpForAirEvery: number;
+
+  /** how many instructions to add per run */
+  incrementBy: number;
+
+  /** how often the process should shed this mortal coil */
+  transcendTheAstralPlane: number;
+
+  /** whether the finishing step should include ReadStringFromMemory` */
+  readStringFromMemory: boolean;
 }
 
-export const initialConditions = {
-  startAt: 0,
-  stopAt: Infinity, // 1_000_000,
+export const config = {
+  stopAt: Infinity,
   digits: 8,
-} satisfies InitialConditions;
+  shouldComputeFullStats: false,
+  incrementBy: 100,
+  comeUpForAirEvery: 100,
+  transcendTheAstralPlane: 100,
+  readStringFromMemory: false,
+} satisfies Config;
+
+/** this is the magic type alias that the script is looking for in the evaluationFilePath */
+export const resultTypeName = 'Result';
+export const nextResultTypeName = `Next${resultTypeName}`;
+export const stringResultTypeName = `String${resultTypeName}`;
 
 export const simpleTypeMode = process.argv.includes('--simple');
+export const statsOnlyMode = process.argv.includes("--stats-only");
+export const reportDiagnosticsMode = process.argv.includes("--report-ts-diagnostics");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -54,23 +56,15 @@ export const resultsDirectory = join(__dirname, 'results');
 export const startFilePath = join(__dirname, 'start.ts');
 export const finalResultPath = join(resultsDirectory, 'result.ts');
 export const errorFilePath = join(resultsDirectory, 'error.ts');
+export const formatterErrorFilePath = join(resultsDirectory, 'formatter-error.html');
 export const bootstrapFilePath = join(resultsDirectory, 'bootstrap.ts');
-export const statsDirectory = join(resultsDirectory, 'stats');
+export const statsDirectory = join(__dirname, 'stats');
 export const statsPath = join(statsDirectory, 'program-stats.json');
 export const csvPath = join(statsDirectory, 'program-stats.csv');
 
-export const formatCurrent = (current: number) => String(current).padStart(initialConditions.digits, '0');
+export const formatCurrent = (current: number) => String(current).padStart(config.digits, '0');
 export const RESULT_PREFIX = 'result-';
 export const createResultFilePath = (current: number) => join(resultsDirectory, `${RESULT_PREFIX}${formatCurrent(current)}.ts`)
 export const STATS_PREFIX = 'stats-';
 export const statsJsonPath = (current: number) => join(statsDirectory, `${STATS_PREFIX}${formatCurrent(current)}.json`);
-export const shouldTakeABreath = (timeSpentUnderwater: number, current: number) => current === 0 || timeSpentUnderwater >= comeUpForAirEvery;
-
-export const worker = new Worker("./evaluate/worker.mjs");
-worker.setMaxListeners(100);
-
-export const fsWorker = {
-  writeFile: (filePath: string, data: string, options: { format: boolean }) => {
-      worker.postMessage({ type: 'writeFile', filePath, data, options });
-  },
-};
+export const shouldTakeABreath = (timeSpentUnderwater: number) => timeSpentUnderwater >= config.comeUpForAirEvery;

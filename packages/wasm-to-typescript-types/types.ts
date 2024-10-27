@@ -63,44 +63,47 @@ export type ProgramState = {
   /** the number of instructions we've executed, useful for debugging */
   count: number;
 
-  /** the result of the program */
-  results: Results;
-
   /** a stack of values */
   stack: WasmValue[];
+
+  /** the current execution context funcId */
+  activeFuncId: string;
+
+  /** the current execution context's stack depth */
+  activeStackDepth: number;
+
+  /** the current execution context locals */
+  activeLocals: LocalsById;
 
   /** the currently executing instructions */
   instructions: Instruction[];
 
-  /** the current execution context locals */
-  activeLocals: LocalsById;
-  /** the current execution context funcId */
-  activeFuncId: string;
   /** the current execution context branches */
   activeBranches: BranchesById;
-  /** the current execution context's stack depth */
-  activeStackDepth: number;
-
-  globals: GlobalsById;
-
-  /** the linear memory of the program */
-  memory: MemoryByAddress;
 
   /** the L1 cache */
   L1Cache: MemoryByAddress;
 
-  /** records interval for GarbageCollection */
-  garbageCollection: GarbageCollection;
-
-  /** used for dynamic dispatch: maps directly to funcs */
-  indirect: IndirectTable;
-
-  memorySize: WasmValue;
+  /** the linear memory of the program */
+  memory: MemoryByAddress;
 
   /** a stack of execution contexts */
   executionContexts: ExecutionContext[];
 
   funcs: FuncsById;
+
+  /** records interval for GarbageCollection */
+  garbageCollection: GarbageCollection;
+
+  globals: GlobalsById;
+
+  memorySize: WasmValue;
+
+  /** used for dynamic dispatch: maps directly to funcs */
+  indirect: IndirectTable;
+
+  /** the result of the program */
+  results: Results;
 }
 
 export type ProgramInput = Pick<
