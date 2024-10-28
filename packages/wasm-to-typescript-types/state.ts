@@ -407,13 +407,10 @@ export namespace State {
       ? CollectBytes<
           I32AddBinary<address, Wasm.I32True>,
           tail,
+          // POTENTIAL OPTIMIZATION: if we are setting head for the first time we can just skip it entirely
           _Acc & { [k in address]: head } // note: this doesn't need Patch because we are building it up from scratch
         >
-      : { [
-            k in keyof _Acc as _Acc[k] extends Wasm.I8False
-            ? never
-            : k
-          ]: _Acc[k] }
+      : _Acc
     >
 
     export type insert<
@@ -427,7 +424,7 @@ export namespace State {
           bytes
         >
     > = Satisfies<ProgramState,
-      // State.debug<[_update],
+      // State.debug<[_update], {
       {
         count: state['count']; 
         stack: state['stack'];
@@ -478,10 +475,13 @@ export namespace State {
       state extends ProgramState,
       force extends 'force' | 'schedule' = 'schedule',
 
+      // increment first, then check for collection
+      _next extends ProgramState = increment<state>,
+
       _shoudlCollect extends boolean =
         force extends 'force'
         ? true
-        : state['garbageCollection'] extends CollectAt
+        : _next['garbageCollection'] extends CollectAt
           ? true
           : false,
     > = Satisfies<ProgramState,
@@ -495,7 +495,10 @@ export namespace State {
           instructions: state['instructions'];
           activeBranches: state['activeBranches'];
           L1Cache: {}; // clear the L1Cache
-          memory: Patch<state['memory'], state['L1Cache']>; // update the memory with the L1Cache
+          memory: Patch<
+            state['memory'],
+            TypeMath.GarbageCollect<state['L1Cache']>
+          >; // update the memory with the L1Cache
           executionContexts: state['executionContexts'];
           funcs: state['funcs'];
           garbageCollection: 0; // reset
@@ -504,7 +507,7 @@ export namespace State {
           indirect: state['indirect'];
           results: state['results'];
         }
-      : state
+      : _next
     >
   }
 
