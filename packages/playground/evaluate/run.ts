@@ -1,5 +1,5 @@
-import { join } from "path";
-import { statSync, mkdirSync, readdirSync, unlinkSync } from "fs";
+import { join } from "node:path";
+import { statSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import {
   clearStats,
   encourage,
@@ -8,14 +8,14 @@ import {
 } from "./stats";
 import {
   config,
-  startFilePath,
   resultsDirectory,
   simpleTypeMode,
   statsOnlyMode,
   reportDiagnosticsMode,
+  resumeMode,
 } from "./config";
 import { Meter } from "./metering";
-import { getFuncImportLine, printType, programIsComplete, ProgramRun } from './utils';
+import { getStartFilePath as getStartFilePath, getFuncImportLine, printType, programIsComplete, ProgramRun } from './utils';
 import { createEnv, createNewFile, evaluateType, reportErrors } from "./ts";
 
 const isolatedProgram = async ({
@@ -128,6 +128,7 @@ const clearResults = () => {
 };
 
 const bootstrap = async () => {
+  const startFilePath = getStartFilePath();
   const startProgramTime = performance.now();
   const env = createEnv(startFilePath);
   const program = env.languageService.getProgram();
@@ -191,8 +192,10 @@ const mainLoop = async () => {
 
 const startProgram = async () => {
   encourage();
-  clearResults();
-  clearStats();
+  if (!resumeMode) {
+    clearResults();
+    clearStats();
+  }
   await mainLoop();
 };
 

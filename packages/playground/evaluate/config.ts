@@ -1,5 +1,5 @@
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 
 export interface Config {
   /** if `Infinity`, the fun never stops.  otherwise it will forcibly halt at a the specified instructions count */
@@ -45,6 +45,7 @@ export const stringResultTypeName = `String${resultTypeName}`;
 export const simpleTypeMode = process.argv.includes('--simple');
 export const statsOnlyMode = process.argv.includes("--stats-only");
 export const reportDiagnosticsMode = process.argv.includes("--report-ts-diagnostics");
+export const resumeMode = process.argv.includes("--resume");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

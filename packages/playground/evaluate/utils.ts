@@ -1,10 +1,11 @@
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { Biome, Distribution } from "@biomejs/js-api";
-import { config, createResultFilePath, errorFilePath, finalResultPath, formatterErrorFilePath, shouldTakeABreath, startFilePath } from "./config";
+import { config, createResultFilePath, errorFilePath, finalResultPath, formatterErrorFilePath, resultsDirectory, resumeMode, shouldTakeABreath, startFilePath } from "./config";
 import { VirtualTypeScriptEnvironment } from "@typescript/vfs";
 import ts from "typescript";
 import { inspect } from "node:util";
+import { join } from "node:path";
 
 export interface ProgramRun {
   env: VirtualTypeScriptEnvironment;
@@ -172,7 +173,8 @@ export const finalizeProgram = async ({
   resultTypeName: string;
   env: VirtualTypeScriptEnvironment;
 }) => {
-  const relativeLastResult = createResultFilePath(lastInstructionCount)
+  const absoluteLastResult = createResultFilePath(lastInstructionCount)
+  const relativeLastResult = absoluteLastResult.replace(resultsDirectory, ".");
   
   const readStringImportLine = config.readStringFromMemory
     ? [
@@ -253,3 +255,26 @@ export const printType = (typeString: string) => {
 
   return output;
 };
+
+export const getStartFilePath = () => {
+  if (!resumeMode) {
+    return startFilePath;
+  }
+
+  const files = readdirSync(resultsDirectory);
+
+  const resumeIndex = process.argv.indexOf("--resume");
+  const maybeResumeFile = process.argv[resumeIndex + 1];
+  if (maybeResumeFile) {
+    if (!files.includes(maybeResumeFile)) {
+      throw new Error(`specified resume file '${maybeResumeFile}' not found in ${resultsDirectory}`);
+    }
+    return join(resultsDirectory, maybeResumeFile);
+  }
+
+  const filenames = files.filter(file => {
+    return file.startsWith("result-") && file.endsWith(".ts");
+  }).sort();
+
+  return join(resultsDirectory, filenames[filenames.length - 1]);
+}
