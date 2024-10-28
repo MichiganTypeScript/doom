@@ -33,7 +33,7 @@ export type GarbageCollection = number;
 export type IndirectTable = Record<MemoryAddress, FuncId>;
 
 /** do a memory sweep every 4 kibibytes */
-export type SweepL1Every = 4096;
+export type SweepL1Every = 1024;
 
 export type StorageBits = 8 | 16 | 32 | 64;
 

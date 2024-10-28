@@ -34,7 +34,7 @@ export const config = {
   incrementBy: 100,
   comeUpForAirEvery: 100,
   transcendTheAstralPlane: 100,
-  readStringFromMemory: false,
+  readStringFromMemory: true,
 } satisfies Config;
 
 /** this is the magic type alias that the script is looking for in the evaluationFilePath */

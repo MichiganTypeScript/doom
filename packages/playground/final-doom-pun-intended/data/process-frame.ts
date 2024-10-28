@@ -46,12 +46,12 @@ type _GenerateLine<
   count extends `1${infer S}`
 
   ? // look up the value in memory
-    memory[address] extends infer value extends keyof DoomPaletteToAscii
+    memory[address] extends infer value
     ? _GenerateLine<
         memory,
         I32PlusOne<address>,
         S,
-        `${line}${DoomPaletteToAscii[value]}`
+        `${line}${DoomPaletteToAscii[value extends keyof DoomPaletteToAscii ? value : "00000000"]}`
       >
 
     : // you fucked up. you. fucked. up... yet again.

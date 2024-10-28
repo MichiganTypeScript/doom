@@ -1,98 +1,12 @@
 import { Equal, Expect } from "type-testing"
 import { ProgramState } from "./types"
-import { State } from './state'
-import type { Satisfies } from 'ts-type-math'
+import type { evaluate, Satisfies } from 'ts-type-math'
 import { executeInstruction } from "./program"
 
-
-// end-to-end test for garbage collection
-
-type actual1022 = Satisfies<ProgramState, {
-  count: 1022;
-  results: [];
-  stack: ["00000000000000000000010000000001", "00000000000000000000000000000000"];
-  instructions: [
-    {
-      kind: "Store";
-      subkind: "I32Store8";
-      offset: "00000000000000000000000000000000";
-    },
-    { kind: 'Const'; value: '10000000000000000000000000000000' },
-    { kind: 'Nop', ziltoid: 'theOmniscient' },
-  ];
-  activeFuncId: "";
-  activeBranches: {};
-  activeStackDepth: 0;
-  activeLocals: {};
-  globals: {};
-  L1Cache: {
-    "00000000000000000000010000000000": "01000001";
-  };
-  memory: {};
-  garbageCollection: 1022;
-  indirect: {};
-  memorySize: "";
-  executionContexts: [];
-  funcs: {};
-}>
-
-type actual1023 = executeInstruction<actual1022, true, 1023>
-type expected1023 = Satisfies<ProgramState, {
-  count: 1023;
+type blank = Satisfies<ProgramState, {
+  count: 0;
   results: [];
   stack: [];
-  instructions: [
-    { kind: 'Const'; value: '10000000000000000000000000000000' },
-    { kind: 'Nop', ziltoid: 'theOmniscient' },
-  ];
-  activeFuncId: "";
-  activeBranches: {};
-  activeStackDepth: 0;
-  activeLocals: {};
-  globals: {};
-  L1Cache: {
-    "00000000000000000000010000000000": "01000001";
-    "00000000000000000000010000000001": "00000000";
-  };
-  memory: {};
-  garbageCollection: 1023;
-  indirect: {};
-  memorySize: "";
-  executionContexts: [];
-  funcs: {};
-}>
-type test1023 = Expect<Equal<actual1023, expected1023>>
-
-type actual1024 = executeInstruction<actual1023, true, 1024>
-type expected1024 = Satisfies<ProgramState, {
-  count: 1024;
-  results: [];
-  stack: ['10000000000000000000000000000000'];
-  instructions: [
-    { kind: 'Nop', ziltoid: 'theOmniscient' },
-  ];
-  activeFuncId: "";
-  activeBranches: {};
-  activeStackDepth: 0;
-  activeLocals: {};
-  globals: {};
-  L1Cache: {};
-  memory: {
-    "00000000000000000000010000000000": "01000001";
-  };
-  garbageCollection: 0;
-  indirect: {};
-  memorySize: "";
-  executionContexts: [];
-  funcs: {};
-}>
-type test1024 = Expect<Equal<actual1024, expected1024>>
-
-type actual1025 = executeInstruction<actual1024, true, 1025>
-type expected1025 = Satisfies<ProgramState, {
-  count: 1025;
-  results: [];
-  stack: ['10000000000000000000000000000000'];
   instructions: [];
   activeFuncId: "";
   activeBranches: {};
@@ -100,13 +14,65 @@ type expected1025 = Satisfies<ProgramState, {
   activeLocals: {};
   globals: {};
   L1Cache: {};
-  memory: {
-    "00000000000000000000010000000000": "01000001";
-  };
-  garbageCollection: 0; // 0 again, because we finalized
+  memory: {};
+  garbageCollection: 0;
   indirect: {};
   memorySize: "";
   executionContexts: [];
   funcs: {};
 }>
+
+type s<
+  Update extends Partial<ProgramState>
+> = Satisfies<ProgramState,
+  evaluate<
+    & Omit<
+      blank,
+      keyof Update
+    >
+    & Required<Update>
+  >
+>
+
+// end-to-end test for garbage collection
+
+type actual1023 = Satisfies<ProgramState, s<{
+  count: 1023;
+  instructions: [
+    { kind: 'Nop', ziltoid: 'theOmniscient' },
+    { kind: 'Nop', ziltoid: 'theOmniscient' },
+  ];
+  L1Cache: {
+    "00000000000000000000000000000000": "00101110"; // will not change because it matches the source
+    "00000000000000000000000000000001": "00000000"; // will clear the source value
+    "00000000000000000000000000000011": "00000000"; // will never be set in the first place
+    "00000000000000000000000000000100": "01010101"; // will append this new value because it's not false
+    "00000000000000000000000000000101": "00000000"; // will skip because it's false
+    "00000000000000000000000000000111": "00000010"; // will modify the source value
+  }
+  memory: {
+    "00000000000000000000000000000000": "00101110"; // will keep because it hasn't changed
+    "00000000000000000000000000000001": "11111111"; // will be removed because the update for this address is false
+    "00000000000000000000000000000111": "00000001"; // will be modified by the update
+    "11111111111111111111111100000011": "00000001"; // will keep because it's random other data only present in the source
+  };
+  garbageCollection: 1023;
+}>>
+
+type actual1025 = executeInstruction<actual1023, true, 1024>
+type expected1025 = Satisfies<ProgramState, s<{
+  count: 1024;
+  instructions: [
+    { kind: 'Nop', ziltoid: 'theOmniscient' },
+  ];
+  L1Cache: {};
+  memory: {
+    "00000000000000000000000000000000": "00101110"; // source and update match
+  //"00000000000000000000000000000001": "11111111"; // the update cleared this value
+    "00000000000000000000000000000100": "01010101"; // newly added by the update
+    "00000000000000000000000000000111": "00000010"; // modified by the update
+    "11111111111111111111111100000011": "00000001"; // the random other data only present in the source
+  }
+  garbageCollection: 0;
+}>>
 type test1025 = Expect<Equal<actual1025, expected1025>>

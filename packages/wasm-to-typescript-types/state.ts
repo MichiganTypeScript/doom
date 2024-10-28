@@ -495,9 +495,11 @@ export namespace State {
           instructions: state['instructions'];
           activeBranches: state['activeBranches'];
           L1Cache: {}; // clear the L1Cache
-          memory: Patch<
-            state['memory'],
-            TypeMath.GarbageCollect<state['L1Cache']>
+          memory: TypeMath.GarbageCollect<
+            Patch<
+              state['memory'],
+              state['L1Cache']
+            >
           >; // update the memory with the L1Cache
           executionContexts: state['executionContexts'];
           funcs: state['funcs'];

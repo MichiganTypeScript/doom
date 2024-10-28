@@ -231,6 +231,7 @@ export const printType = (typeString: string) => {
 
   // if the first two characters are `{ "` we presume it's an object and format it as such
 
+  // object detection
   if (output.startsWith('{ "')) {
     const lines = output
       .replace(/{ "/g, '{\n  "')
@@ -240,5 +241,15 @@ export const printType = (typeString: string) => {
     const sortedLines = lines.slice(1, lines.length - 1).sort();
     output = [lines[0], ...sortedLines, lines[lines.length - 1]].join("\n");
   }
+
+  // string detection
+  if (output.startsWith(`"`) && output.endsWith(`"`)) {
+    output = output.slice(1, output.length - 1);
+
+    if (output === "") {
+      return "<empty string>";
+    }
+  }
+
   return output;
 };
