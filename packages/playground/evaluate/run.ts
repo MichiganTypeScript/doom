@@ -28,6 +28,7 @@ const isolatedProgram = async ({
   timeSpentUnderwater,
   cleanup: thisCleanup,
   previousCount,
+  startingCount,
   // program,
 }: ProgramRun): Promise<ProgramRun> => {
   const meter = new Meter();
@@ -84,6 +85,8 @@ const isolatedProgram = async ({
     program,
     meter,
     previousCount,
+    startingCount,
+    startProgramTime,
   })
 
   thisCleanup();
@@ -104,6 +107,7 @@ const isolatedProgram = async ({
     startProgramTime,
     program,
     previousCount: current,
+    startingCount,
   };
 };
 
@@ -149,12 +153,16 @@ const bootstrap = async () => {
     startProgramTime,
   });
 
+  const startingCount = current;
+
   await logStats({
     typeString,
     current,
     program,
     meter,
     previousCount: 0,
+    startingCount,
+    startProgramTime,
   })
 
   const funcImportLine = getFuncImportLine();
@@ -169,6 +177,7 @@ const bootstrap = async () => {
     startProgramTime,
     program,
     previousCount: current,
+    startingCount: current,
   };
   return runConfig;
 }

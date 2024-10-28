@@ -16,7 +16,6 @@ import {
 } from "./config";
 import { Meter } from "./metering";
 import { consoleLog, finalizeProgram, fsWorker, gaspForBreath, getCurrent, preBreakFile, printType } from './utils';
-import { time } from "console";
 
 export const createEnv = (startFilePath: string) => {
   const configFile = ts.readConfigFile(tsconfigFilePath, ts.sys.readFile);
@@ -90,6 +89,7 @@ export const evaluateType = async (
     }
   });
   if (!typeAlias) {
+    fsWorker.writeFile(errorFilePath, inputSourceFile.text, 'ts');
     throw new Error(`could not find type alias ${searchFor} in ${filePath}`);
   }
   meter.stop("getTypeAlias");
@@ -105,11 +105,14 @@ export const evaluateType = async (
   meter.start("typeToString");
   const typeString = checker.typeToString(type);
   if (typeString === "" || typeString === "any") {
+    fsWorker.writeFile(errorFilePath, typeString, 'ts');
     throw new Error(
       `typeString is empty for ${filePath}. was searching for ${searchFor}`,
     );
   }
-  if (typeString.includes(`kind: "Halt";`)) {
+  if (/instructions: \[\s*{ kind: "Halt";/.test(typeString)) {
+    // the top instruction is a halt
+    fsWorker.writeFile(errorFilePath, typeString, 'ts');
     throw new Error(`sorry, Charlie.  you gotta debug this now.`);
   }
   meter.stop("typeToString");

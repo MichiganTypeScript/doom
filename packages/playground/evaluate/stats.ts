@@ -444,12 +444,16 @@ export const logStats = async ({
   program,
   meter,
   previousCount,
+  startingCount,
+  startProgramTime,
 }: {
   typeString: string,
   current: number,
   program: ts.Program,
   meter: Meter,
   previousCount: number,
+  startingCount: number,
+  startProgramTime: number,
 }) => {
   if (config.shouldComputeFullStats) {
     const typeStringLength = typeString.length;
@@ -467,11 +471,14 @@ export const logStats = async ({
       metering: meter.finalize(),
     });
   } else {
-    const totalTime = meter.lifetime() / 1000;
+    const runLifetime = meter.lifetime() / 1000;
     const actualCount = current - previousCount;
-    const ips = Math.round(actualCount / totalTime);
+    const ips = Math.round(actualCount / runLifetime);
 
-    console.log(`current ${current} | ips ${ips}`, totalTime.toFixed(2));
+    const totalInstructions = current - startingCount;
+    const totalTime = Math.round((performance.now() - startProgramTime) / 1000);
+    const avg = Math.round(totalInstructions / totalTime);
+
+    console.log(`current ${current} | ips ${ips} ${totalInstructions}/${totalTime}=${avg}`);
   }
-
 }

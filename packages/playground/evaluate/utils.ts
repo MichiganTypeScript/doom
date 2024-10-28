@@ -30,6 +30,9 @@ export interface ProgramRun {
 
   /** the instruction count of the previous run, used for IPS calculation */
   previousCount: number;
+
+  /** the very first instruction of this entire run */
+  startingCount: number;
 }
 
 export const consoleLog = (args: any) => {
@@ -95,10 +98,11 @@ export const fsWorker = {
       const end = data.indexOf('\t}', start);
       const memoryLines = data.substring(start, end);
       const sortedMemoryLines = sortMemoryLines(memoryLines);
+      data = data.replace(memoryLines, sortedMemoryLines);
       if (memoryLines.indexOf(`"111111111`) !== -1) {
+        writeFileSync(errorFilePath, data, "utf-8");
         throw new Error(`found an invalid memory address!`);
       }
-      data = data.replace(memoryLines, sortedMemoryLines);
     }
 
     writeFileSync(filePath, data, "utf-8");

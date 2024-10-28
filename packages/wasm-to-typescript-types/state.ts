@@ -3,7 +3,7 @@ import type { Instruction } from "./instructions/instructions"
 import { IEndFunction } from "./instructions/synthetic";
 import type {
   BranchesById,
-  CollectAt,
+  SweepL1Every,
   ExecutionContext,
   Func,
   GlobalsById,
@@ -481,7 +481,7 @@ export namespace State {
       _shoudlCollect extends boolean =
         force extends 'force'
         ? true
-        : _next['garbageCollection'] extends CollectAt
+        : _next['garbageCollection'] extends SweepL1Every
           ? true
           : false,
     > = Satisfies<ProgramState,
