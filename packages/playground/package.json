@@ -9,9 +9,11 @@
     "c-to-wat": "pnpm run compile:c-to-wasm && pnpm run compile:wasm-to-wat",
     "wat-to-wasm": "wat2wasm code.wat --output code.wasm",
     "test": "vitest",
-    "eval": "node --stack-size=8100 --max-old-space-size=4096 --max-semi-space-size=4096 --import tsx/esm ./evaluate/run.ts"
+    "eval": "node --stack-size=8100 --max-old-space-size=4096 --max-semi-space-size=4096 --import tsx/esm ./evaluate/run.ts",
+    "eval:pprof": "node --require pprof-it --stack-size=8100 --max-old-space-size=4096 --max-semi-space-size=4096 --import tsx/esm ./evaluate/run.ts"
   },
   "devDependencies": {
+    "pprof-it": "^0.1.1",
     "http-server": "^14.1.1"
   }
 }
