@@ -13,6 +13,7 @@ import {
   statsOnlyMode,
   reportDiagnosticsMode,
   resumeMode,
+  RESUME_CODE,
 } from "./config";
 import { Meter } from "./metering";
 import { getStartFilePath as getStartFilePath, getFuncImportLine, printType, programIsComplete, ProgramRun } from './utils';
@@ -29,7 +30,7 @@ const isolatedProgram = async ({
   cleanup: thisCleanup,
   previousCount,
   startingCount,
-  // program,
+  timeSpentExploringTheAbyss,
 }: ProgramRun): Promise<ProgramRun> => {
   const meter = new Meter();
   meter.start("total");
@@ -96,6 +97,12 @@ const isolatedProgram = async ({
     process.exit(0);
   }
 
+  if (timeSpentExploringTheAbyss >= config.transcendTheAstralPlane) {
+    // we've been exploring the abyss for too long
+    console.log("shedding this mortal coil");
+    process.exit(RESUME_CODE);
+  }
+
   // next iteration
   return {
     env,
@@ -105,9 +112,9 @@ const isolatedProgram = async ({
     cleanup: nextCleanup,
     funcImportLine,
     startProgramTime,
-    program,
     previousCount: current,
     startingCount,
+    timeSpentExploringTheAbyss: timeSpentExploringTheAbyss + (current - previousCount),
   };
 };
 
@@ -176,9 +183,9 @@ const bootstrap = async () => {
     cleanup: () => {},
     funcImportLine,
     startProgramTime,
-    program,
     previousCount: current,
     startingCount: current,
+    timeSpentExploringTheAbyss: 0,
   };
   return runConfig;
 }

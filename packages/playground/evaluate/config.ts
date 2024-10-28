@@ -33,7 +33,7 @@ export const config = {
   shouldComputeFullStats: false,
   incrementBy: 100,
   comeUpForAirEvery: 100,
-  transcendTheAstralPlane: 100,
+  transcendTheAstralPlane: 10_000,
   readStringFromMemory: true,
 } satisfies Config;
 
@@ -46,6 +46,7 @@ export const simpleTypeMode = process.argv.includes('--simple');
 export const statsOnlyMode = process.argv.includes("--stats-only");
 export const reportDiagnosticsMode = process.argv.includes("--report-ts-diagnostics");
 export const resumeMode = process.argv.includes("--resume");
+export const RESUME_CODE = 3;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -27,13 +27,14 @@ export interface ProgramRun {
   /** time since the very bigging of this run */
   startProgramTime: number;
 
-  program: ts.Program;
-
   /** the instruction count of the previous run, used for IPS calculation */
   previousCount: number;
 
   /** the very first instruction of this entire run */
   startingCount: number;
+
+  /** how long to spend exploring the abyss */
+  timeSpentExploringTheAbyss: number;
 }
 
 export const consoleLog = (args: any) => {
