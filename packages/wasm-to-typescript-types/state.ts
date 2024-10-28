@@ -475,13 +475,10 @@ export namespace State {
       state extends ProgramState,
       force extends 'force' | 'schedule' = 'schedule',
 
-      // increment first, then check for collection
-      _next extends ProgramState = increment<state>,
-
       _shoudlCollect extends boolean =
         force extends 'force'
         ? true
-        : _next['garbageCollection'] extends SweepL1Every
+        : state['garbageCollection'] extends SweepL1Every
           ? true
           : false,
     > = Satisfies<ProgramState,
@@ -509,7 +506,7 @@ export namespace State {
           indirect: state['indirect'];
           results: state['results'];
         }
-      : _next
+      : state
     >
   }
 

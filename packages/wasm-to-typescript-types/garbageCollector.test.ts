@@ -23,11 +23,12 @@ type blank = Satisfies<ProgramState, {
 }>
 
 type s<
-  Update extends Partial<ProgramState>
+  Source extends ProgramState,
+  Update extends Partial<ProgramState>,
 > = Satisfies<ProgramState,
   evaluate<
     & Omit<
-      blank,
+      Source,
       keyof Update
     >
     & Required<Update>
@@ -36,10 +37,12 @@ type s<
 
 // end-to-end test for garbage collection
 
-type actual1023 = Satisfies<ProgramState, s<{
-  count: 1023;
+type start1 = Satisfies<ProgramState, s<blank, {
+  count: 1;
+  stack: ["10000000000000000000000000000000", "00000000000000000000000000001111"]
   instructions: [
     { kind: 'Nop', ziltoid: 'theOmniscient' },
+    { kind: 'Store', subkind: 'I32Store8' },
     { kind: 'Nop', ziltoid: 'theOmniscient' },
   ];
   L1Cache: {
@@ -59,20 +62,42 @@ type actual1023 = Satisfies<ProgramState, s<{
   garbageCollection: 1023;
 }>>
 
-type actual1025 = executeInstruction<actual1023, true, 1024>
-type expected1025 = Satisfies<ProgramState, s<{
-  count: 1024;
+// no change to the garbage collection counter for regular instructions
+type actual2 = executeInstruction<start1, true, 2>
+type expected2 = Satisfies<ProgramState, s<start1 /* note: using `start1` here, not `blank` like the rest */, {
+  count: 2;
+  instructions: [
+    { kind: 'Store', subkind: 'I32Store8' },
+    { kind: 'Nop', ziltoid: 'theOmniscient' },
+  ];
+}>>
+type test2 = Expect<Equal<actual2, expected2>>
+
+type actual3 = executeInstruction<actual2, true, 3>
+type expected3 = Satisfies<ProgramState, s<blank, {
+  count: 3;
   instructions: [
     { kind: 'Nop', ziltoid: 'theOmniscient' },
   ];
-  L1Cache: {};
+  L1Cache: evaluate<start1['L1Cache'] & {
+    "10000000000000000000000000000000": "00001111"; // from the I32Store8
+  }>;
+  memory: start1['memory'];
+  garbageCollection: 1024;
+}>>
+type test3 = Expect<Equal<actual3, expected3>>
+
+type actual4 = executeInstruction<actual3, true, 4>
+type expected4 = Satisfies<ProgramState, s<blank, {
+  count: 4;
   memory: {
     "00000000000000000000000000000000": "00101110"; // source and update match
   //"00000000000000000000000000000001": "11111111"; // the update cleared this value
     "00000000000000000000000000000100": "01010101"; // newly added by the update
     "00000000000000000000000000000111": "00000010"; // modified by the update
     "11111111111111111111111100000011": "00000001"; // the random other data only present in the source
+    "10000000000000000000000000000000": "00001111"; // from the I32Store8
   }
   garbageCollection: 0;
 }>>
-type test1025 = Expect<Equal<actual1025, expected1025>>
+type test4 = Expect<Equal<actual4, expected4>>

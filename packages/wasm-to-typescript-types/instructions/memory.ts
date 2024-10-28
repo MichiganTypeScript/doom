@@ -14,13 +14,32 @@ export type IMemoryGrow = {
 export type ILoad = {
   kind: "Load"
   offset?: WasmValue
-  subkind: string
+  subkind:
+    | 'I32Load'
+    | 'I32Load8u'
+    | 'I32Load8s'
+    | 'I32Load16u'
+    | 'I32Load16s'
+    | 'I64Load'
+    | 'I64Load8u'
+    | 'I64Load8s'
+    | 'I64Load16u'
+    | 'I64Load16s'
+    | 'I64Load32u'
+    | 'I64Load32s'
 }
 
 export type IStore = {
   kind: "Store"
   offset?: WasmValue
-  subkind: string
+  subkind:
+    | "I32Store"
+    | "I32Store8"
+    | "I32Store16"
+    | "I64Store"
+    | "I64Store8"
+    | "I64Store16"
+    | "I64Store32"
 }
 
 export type MemoryInstruction =
@@ -301,18 +320,20 @@ export type Store<
     infer address extends MemoryAddress,
     infer value extends WasmValue,
   ]
-  ? State.Stack.set<
-      remaining,
+  ? State.GarbageCollection.increment<
+      State.Stack.set<
+        remaining,
 
-      instruction['subkind'] extends 'I32Store'   ? StoreAll<address, value, instruction, state> :
-      instruction['subkind'] extends 'I32Store8'  ? Store8<address, value, instruction, state> :
-      instruction['subkind'] extends 'I32Store16' ? Store16<address, value, instruction, state> :
+        instruction['subkind'] extends 'I32Store'   ? StoreAll<address, value, instruction, state> :
+        instruction['subkind'] extends 'I32Store8'  ? Store8<address, value, instruction, state> :
+        instruction['subkind'] extends 'I32Store16' ? Store16<address, value, instruction, state> :
 
-      instruction['subkind'] extends 'I64Store'   ? StoreAll<address, value, instruction, state> :
-      instruction['subkind'] extends 'I64Store8'  ? Store8<address, value, instruction, state> :
-      instruction['subkind'] extends 'I64Store16' ? Store16<address, value, instruction, state> :
-      instruction['subkind'] extends 'I64Store32' ? Store32<address, value, instruction, state> :
-      never
+        instruction['subkind'] extends 'I64Store'   ? StoreAll<address, value, instruction, state> :
+        instruction['subkind'] extends 'I64Store8'  ? Store8<address, value, instruction, state> :
+        instruction['subkind'] extends 'I64Store16' ? Store16<address, value, instruction, state> :
+        instruction['subkind'] extends 'I64Store32' ? Store32<address, value, instruction, state> :
+        never
+      >
     >
   : State.error<"stack exhausted", instruction, state>
 >
