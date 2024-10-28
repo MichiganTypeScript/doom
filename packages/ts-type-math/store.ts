@@ -90,16 +90,6 @@ export type BytePatch<
       : never // unreachable
 }>, MemoryByAddress>>;
 
-export type GarbageCollect<
-  Memory extends MemoryByAddress
-> = Satisfies<MemoryByAddress, {
-  [k in keyof Memory as
-    Memory[k] extends Wasm.I8False
-    ? never
-    : k
-  ]: Memory[k]
-}>
-
 export namespace Store {
   export type I32<
     a extends WasmValue

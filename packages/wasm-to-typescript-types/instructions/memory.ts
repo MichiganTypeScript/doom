@@ -301,18 +301,20 @@ export type Store<
     infer address extends MemoryAddress,
     infer value extends WasmValue,
   ]
-  ? State.Stack.set<
-      remaining,
+  ? State.GarbageCollection.increment<
+      State.Stack.set<
+        remaining,
 
-      instruction['subkind'] extends 'I32Store'   ? StoreAll<address, value, instruction, state> :
-      instruction['subkind'] extends 'I32Store8'  ? Store8<address, value, instruction, state> :
-      instruction['subkind'] extends 'I32Store16' ? Store16<address, value, instruction, state> :
+        instruction['subkind'] extends 'I32Store'   ? StoreAll<address, value, instruction, state> :
+        instruction['subkind'] extends 'I32Store8'  ? Store8<address, value, instruction, state> :
+        instruction['subkind'] extends 'I32Store16' ? Store16<address, value, instruction, state> :
 
-      instruction['subkind'] extends 'I64Store'   ? StoreAll<address, value, instruction, state> :
-      instruction['subkind'] extends 'I64Store8'  ? Store8<address, value, instruction, state> :
-      instruction['subkind'] extends 'I64Store16' ? Store16<address, value, instruction, state> :
-      instruction['subkind'] extends 'I64Store32' ? Store32<address, value, instruction, state> :
-      never
+        instruction['subkind'] extends 'I64Store'   ? StoreAll<address, value, instruction, state> :
+        instruction['subkind'] extends 'I64Store8'  ? Store8<address, value, instruction, state> :
+        instruction['subkind'] extends 'I64Store16' ? Store16<address, value, instruction, state> :
+        instruction['subkind'] extends 'I64Store32' ? Store32<address, value, instruction, state> :
+        never
+      >
     >
   : State.error<"stack exhausted", instruction, state>
 >

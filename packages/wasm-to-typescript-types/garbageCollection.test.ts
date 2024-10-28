@@ -1,9 +1,7 @@
 import { Equal, Expect } from "type-testing"
 import { ProgramState } from "./types"
-import { State } from './state'
 import type { Satisfies } from 'ts-type-math'
 import { executeInstruction } from "./program"
-
 
 // end-to-end test for garbage collection
 
@@ -12,11 +10,7 @@ type actual1022 = Satisfies<ProgramState, {
   results: [];
   stack: ["00000000000000000000010000000001", "00000000000000000000000000000000"];
   instructions: [
-    {
-      kind: "Store";
-      subkind: "I32Store8";
-      offset: "00000000000000000000000000000000";
-    },
+    { kind: "Store"; subkind: "I32Store8" },
     { kind: 'Const'; value: '10000000000000000000000000000000' },
     { kind: 'Nop', ziltoid: 'theOmniscient' },
   ];
@@ -29,7 +23,7 @@ type actual1022 = Satisfies<ProgramState, {
     "00000000000000000000010000000000": "01000001";
   };
   memory: {};
-  garbageCollection: 1022;
+  garbageCollection: 1023;
   indirect: {};
   memorySize: "";
   executionContexts: [];
@@ -52,10 +46,9 @@ type expected1023 = Satisfies<ProgramState, {
   globals: {};
   L1Cache: {
     "00000000000000000000010000000000": "01000001";
-    "00000000000000000000010000000001": "00000000";
   };
   memory: {};
-  garbageCollection: 1023;
+  garbageCollection: 1024;
   indirect: {};
   memorySize: "";
   executionContexts: [];
