@@ -3,7 +3,6 @@ import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { Biome, Distribution } from "@biomejs/js-api";
 import { config, createResultFilePath, errorFilePath, finalResultPath, formatterErrorFilePath, resultsDirectory, resumeMode, shouldTakeABreath, startFilePath } from "./config";
 import { VirtualTypeScriptEnvironment } from "@typescript/vfs";
-import ts from "typescript";
 import { inspect } from "node:util";
 import { join } from "node:path";
 
@@ -70,8 +69,38 @@ const extractAddress = (line: string) => {
 }
 
 const sortMemoryLines = (memoryLines: string) => memoryLines.split('\n')
-	.sort((a, b) => extractAddress(a) - extractAddress(b))
-	.join('\n');
+  .sort((a, b) => extractAddress(a) - extractAddress(b))
+  .join('\n');
+
+const sortSections = (data: string) => {
+      // find the lines between `\tmemory: {` and `\t{`
+      const memoryLines = data.match(/\tmemory: {\r?\n(.*?)\r?\n\t}/s);
+      if (memoryLines) {
+        const old = memoryLines[1];
+        if (old.indexOf(`"111111111`) !== -1) {
+          writeFileSync(errorFilePath, data, "utf-8");
+          throw new Error(`found an invalid memory address!`);
+        }
+        const sorted = sortMemoryLines(old);
+        data = data.replace(old, sorted)
+      }
+
+      const L1CacheLines = data.match(/\tL1Cache: {\r?\n(.*?)\r?\n\t}/s);
+      if (L1CacheLines) {
+        const old = L1CacheLines[1];
+        const sorted = sortMemoryLines(old);
+        data = data.replace(old, sorted)
+      }
+
+      const activeLocalsLines = data.match(/\tactiveLocals: {\r?\n(.*?)\r?\n\t}/s);
+      if (activeLocalsLines) {
+        const old = activeLocalsLines[1];
+        const sorted = old.split('\n').sort().join('\n');
+        data = data.replace(old, sorted)
+      }
+
+      return data;
+}
 
 export const fsWorker = {
   writeFile: (
@@ -95,16 +124,7 @@ export const fsWorker = {
     }
 
     if (kind === 'ts') {
-      // find the lines between `\tmemory: {` and `\t{`
-      const start = data.indexOf('\tmemory: {');
-      const end = data.indexOf('\t}', start);
-      const memoryLines = data.substring(start, end);
-      const sortedMemoryLines = sortMemoryLines(memoryLines);
-      data = data.replace(memoryLines, sortedMemoryLines);
-      if (memoryLines.indexOf(`"111111111`) !== -1) {
-        writeFileSync(errorFilePath, data, "utf-8");
-        throw new Error(`found an invalid memory address!`);
-      }
+      data = sortSections(data);
     }
 
     writeFileSync(filePath, data, "utf-8");

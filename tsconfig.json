@@ -28,13 +28,12 @@
   "exclude": [
     //
     //
-    // "packages/playground/doom/*",
+    "packages/playground/doom/*",
     "packages/playground/add/*",
     "packages/playground/conway-stateless/*", // this can always be off because the file has no dependencies
     "packages/playground/conway-stateful/*", // this can always be off because the file has no dependencies
     "packages/playground/evaluate/results/result-*",
-    "packages/playground/evaluate/stats",
-    "packages/playground/evaluate/results/bootstrap*",
+    "packages/playground/evaluate/stats/*",
     "packages/playground/evaluate/start.ts",
     "packages/playground/evaluate/restart/*",
     //
