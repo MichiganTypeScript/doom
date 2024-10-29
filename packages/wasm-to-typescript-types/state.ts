@@ -5,11 +5,10 @@ import type {
   BranchesById,
   SweepL1Every,
   ExecutionContext,
-  Func,
   GlobalsById,
   MemoryAddress,
-  MemoryByAddress,
   ProgramState,
+  FuncId,
 } from "./types"
 import * as TypeMath from "ts-type-math";
 import { WasmValue, WasmType, Convert, Wasm, evaluate, Satisfies } from 'ts-type-math';
@@ -19,6 +18,8 @@ export type Patch<Source, Update> = evaluate<
   & Omit<Source, keyof Update>
   & Update
 >;
+
+export type IDugMyselfANiceBigHoleAndNowIHaveToDebugMyWayOutOfItSomehow = true;
 
 export namespace State {
   export type error<
@@ -66,6 +67,42 @@ export namespace State {
     >
   >
 
+  export namespace CallHistory {
+    export type record<
+      funcId extends FuncId,
+      state extends ProgramState
+    > = Satisfies<ProgramState,
+      IDugMyselfANiceBigHoleAndNowIHaveToDebugMyWayOutOfItSomehow extends true
+      ? {
+          count: state['count'];
+          stack: state['stack'];
+          activeFuncId: state['activeFuncId'];
+          activeStackDepth: state['activeStackDepth'];
+          activeLocals: state['activeLocals'];
+          instructions: state['instructions'];
+          activeBranches: state['activeBranches'];
+          L1Cache: state['L1Cache'];
+          memory: state['memory'];
+          executionContexts: state['executionContexts'];
+          funcs: state['funcs'];
+          garbageCollection: state['garbageCollection'];
+          globals: state['globals'];
+          memorySize: state['memorySize'];
+          indirect: state['indirect'];
+          results: state['results'];
+          callHistory: state['callHistory'] extends []
+          ? [
+              [funcId, state['count']] // this is the first one!
+            ]
+          : [
+              ...state['callHistory'],
+              [funcId, state['count']] // append
+            ]
+        }
+      : state
+    >
+  }
+
   export namespace Count {
     export type increment<
       state extends ProgramState
@@ -88,6 +125,7 @@ export namespace State {
         memorySize: state['memorySize'];
         indirect: state['indirect'];
         results: state['results'];
+        callHistory: state['callHistory'];
       }
     >
   }
@@ -116,6 +154,7 @@ export namespace State {
         memorySize: state['memorySize'];
         indirect: state['indirect'];
         results: state['results'];
+        callHistory: state['callHistory'];
       }
     >
 
@@ -182,6 +221,7 @@ export namespace State {
         memorySize: state['memorySize'];
         indirect: state['indirect'];
         results: state['results'];
+        callHistory: state['callHistory'];
       }
     >
 
@@ -236,6 +276,7 @@ export namespace State {
         memorySize: state['memorySize'];
         indirect: state['indirect'];
         results: state['results'];
+        callHistory: state['callHistory'];
       }
     >
 
@@ -264,6 +305,7 @@ export namespace State {
           memorySize: state['memorySize'];
           indirect: state['indirect'];
           results: state['results'];
+          callHistory: state['callHistory'];
         }
         : state['instructions'] extends IEndFunction[] // funny story: [IEndFunction] doesn't work here
         ? // we hit this case on the very last pop (i.e. when the program completes)
@@ -284,6 +326,7 @@ export namespace State {
             memorySize: state['memorySize'];
             indirect: state['indirect'];
             results: state['results'];
+            callHistory: state['callHistory'];
           }
         : State.error<"execution contexts exhausted", Instruction, state>
     >
@@ -316,6 +359,7 @@ export namespace State {
             memorySize: state['memorySize'];
             indirect: state['indirect'];
             results: state['results'];
+            callHistory: state['callHistory'];
           }
         >
       }
@@ -342,6 +386,7 @@ export namespace State {
             memorySize: state['memorySize'];
             indirect: state['indirect'];
             results: state['results'];
+            callHistory: state['callHistory'];
           }
         >
 
@@ -389,6 +434,7 @@ export namespace State {
         memorySize: state['memorySize'];
         indirect: state['indirect'];
         results: state['results'];
+        callHistory: state['callHistory'];
       }
     >
   }
@@ -442,6 +488,7 @@ export namespace State {
         memorySize: state['memorySize'];
         indirect: state['indirect'];
         results: state['results'];
+        callHistory: state['callHistory'];
       }
       // >
     >
@@ -468,6 +515,7 @@ export namespace State {
         memorySize: state['memorySize'];
         indirect: state['indirect'];
         results: state['results'];
+        callHistory: state['callHistory'];
       }
     >
 
@@ -505,6 +553,7 @@ export namespace State {
           memorySize: state['memorySize'];
           indirect: state['indirect'];
           results: state['results'];
+          callHistory: state['callHistory'];
         }
       : state
     >
@@ -571,6 +620,7 @@ export namespace State {
           _resultTypes['length'] extends 1
           ? WasmTypeToTSNumber<_resultTypes[0], state['stack'][0]>
           : CollectResults<state['stack'], _resultTypes>;
+        callHistory: state['callHistory'];
       }
     >
 

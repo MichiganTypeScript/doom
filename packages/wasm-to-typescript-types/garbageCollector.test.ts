@@ -20,6 +20,7 @@ type blank = Satisfies<ProgramState, {
   memorySize: "";
   executionContexts: [];
   funcs: {};
+  callHistory: [];
 }>
 
 type s<

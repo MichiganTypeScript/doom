@@ -57,11 +57,15 @@ export type ExecutionContext = {
 }
 
 /** matches what JS implementations do regarding returning one vs multiple values */
-type Results = (number | bigint)[] | (number | bigint) | null;
+export type Results = (number | bigint)[] | (number | bigint) | null;
+
+export type Count = number;
+
+export type CallHistory = [FuncId, Count];
 
 export type ProgramState = {
   /** the number of instructions we've executed, useful for debugging */
-  count: number;
+  count: Count;
 
   /** a stack of values */
   stack: WasmValue[];
@@ -104,6 +108,9 @@ export type ProgramState = {
 
   /** the result of the program */
   results: Results;
+
+  /** used for debugging */
+  callHistory: CallHistory[];
 }
 
 export type ProgramInput = Pick<

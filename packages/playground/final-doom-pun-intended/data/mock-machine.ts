@@ -27,6 +27,7 @@ export type HolyShitIfThisActuallyWorksOMGOMGROFLWHATISWRONGWITHME = {
 	memorySize: "00000000000000000000000000000110";
 	executionContexts: [];
 	funcs: funcs;
+	callHistory: [];
 };
 /** finalize */
 export type HoldOntoYourMonadsAndBraceForImpact = executeInstruction<HolyShitIfThisActuallyWorksOMGOMGROFLWHATISWRONGWITHME, true, 9001>;

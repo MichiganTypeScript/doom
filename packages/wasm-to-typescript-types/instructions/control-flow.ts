@@ -304,7 +304,10 @@ export type Call<
     ],
     State.Stack.set<
       _refreshment['stack'],
-      state
+      State.CallHistory.record<
+        _funcId,
+        state
+      >
     >
   >
 >

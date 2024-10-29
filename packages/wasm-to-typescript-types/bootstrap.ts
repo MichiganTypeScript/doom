@@ -111,6 +111,7 @@ export type bootstrap<
       memorySize: input['memorySize'];
       indirect: input['indirect'];
       results: null;
+      callHistory: [];
     },
     debugMode,
     stopAt
