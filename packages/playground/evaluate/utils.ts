@@ -285,12 +285,17 @@ export const getStartFilePath = () => {
   const files = readdirSync(resultsDirectory);
 
   const resumeIndex = process.argv.indexOf("--resume");
-  const maybeResumeFile = process.argv[resumeIndex + 1];
-  if (maybeResumeFile) {
-    if (!files.includes(maybeResumeFile)) {
-      throw new Error(`specified resume file '${maybeResumeFile}' not found in ${resultsDirectory}`);
+  const nextArg = process.argv[resumeIndex + 1];
+
+  
+  if (nextArg) {
+    const hitAnotherFlag = nextArg.startsWith("--");
+    if (!hitAnotherFlag) {
+      if (!files.includes(nextArg)) {
+        throw new Error(`specified resume file '${nextArg}' not found in ${resultsDirectory}`);
+      }
+      return join(resultsDirectory, nextArg);
     }
-    return join(resultsDirectory, maybeResumeFile);
   }
 
   const filenames = files.filter(file => {

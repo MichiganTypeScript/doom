@@ -23,9 +23,9 @@ const runCommand = (command: string, args: string[]) => {
 const runIndefinitely = async () => {
   console.log("I see you've chosen to spawn.  Excellent.  You will fail.")
   try {
-    let code = await runCommand('pnpm', ['eval']);
+    let code = await runCommand('pnpm', ['eval', '--spawn']);
     while (code === RESUME_CODE) {
-      code = await runCommand('pnpm', ['eval', '--', '--resume']);
+      code = await runCommand('pnpm', ['eval', '--spawn', '--resume']);
     }
   } catch (error) {
     console.log('Error running command');

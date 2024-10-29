@@ -14,6 +14,7 @@ import {
   reportDiagnosticsMode,
   resumeMode,
   RESUME_CODE,
+  shouldSlingArrowsOfOutrageousFortune,
 } from "./config";
 import { Meter } from "./metering";
 import { getStartFilePath as getStartFilePath, getFuncImportLine, printType, programIsComplete, ProgramRun } from './utils';
@@ -97,7 +98,7 @@ const isolatedProgram = async ({
     process.exit(0);
   }
 
-  if (timeSpentExploringTheAbyss >= config.transcendTheAstralPlane) {
+  if (shouldSlingArrowsOfOutrageousFortune(timeSpentExploringTheAbyss)) {
     // we've been exploring the abyss for too long
     console.log("shedding this mortal coil");
     process.exit(RESUME_CODE);

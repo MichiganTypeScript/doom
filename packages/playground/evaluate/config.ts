@@ -46,6 +46,7 @@ export const simpleTypeMode = process.argv.includes('--simple');
 export const statsOnlyMode = process.argv.includes("--stats-only");
 export const reportDiagnosticsMode = process.argv.includes("--report-ts-diagnostics");
 export const resumeMode = process.argv.includes("--resume");
+export const spawnMode = process.argv.includes("--spawn");
 export const RESUME_CODE = 3;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -70,3 +71,4 @@ export const createResultFilePath = (current: number) => join(resultsDirectory, 
 export const STATS_PREFIX = 'stats-';
 export const statsJsonPath = (current: number) => join(statsDirectory, `${STATS_PREFIX}${formatCurrent(current)}.json`);
 export const shouldTakeABreath = (timeSpentUnderwater: number) => timeSpentUnderwater >= config.comeUpForAirEvery;
+export const shouldSlingArrowsOfOutrageousFortune = (timeSpentExploringTheAbyss: number) => spawnMode && (timeSpentExploringTheAbyss >= config.transcendTheAstralPlane)
