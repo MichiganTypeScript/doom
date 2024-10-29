@@ -1,7 +1,7 @@
 import type { Func, LocalsById, Param, ProgramState } from "../types"
 import type { State } from '../state'
 import type { Instruction } from "./instructions"
-import type { Wasm, WasmValue, Satisfies } from 'ts-type-math'
+import type { Wasm, WasmValue, Satisfies, evaluate } from 'ts-type-math'
 
 export type IBlock = {
   kind: "Block"
@@ -269,7 +269,7 @@ type Refresh<T extends Refreshment> =
         }
       }>
     : never // should never happen because the stack should always have at least as many items as there are params
-  : T
+  : evaluate<T>
 
 export type Call<
   instruction extends ICall,
