@@ -492,6 +492,31 @@ export namespace State {
       }
       // >
     >
+
+    export type grow<
+      state extends ProgramState,
+      growBy extends WasmValue,
+    > = Satisfies<ProgramState,
+      {
+        count: state['count']; 
+        stack: state['stack'];
+        activeFuncId: state['activeFuncId'];
+        activeStackDepth: state['activeStackDepth'];
+        activeLocals: state['activeLocals'];
+        instructions: state['instructions'];
+        activeBranches: state['activeBranches'];
+        L1Cache: state['L1Cache'];
+        memory: state['memory'];
+        executionContexts: state['executionContexts'];
+        funcs: state['funcs'];
+        garbageCollection: state['garbageCollection'];
+        globals: state['globals'];
+        memorySize: I32AddBinary<state['memorySize'], growBy>; // increment
+        indirect: state['indirect'];
+        results: state['results'];
+        callHistory: state['callHistory'];
+      }
+    >
   }
 
   export namespace GarbageCollection {

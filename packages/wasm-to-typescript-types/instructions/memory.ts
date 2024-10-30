@@ -81,7 +81,21 @@ export type MemoryGrow<
   instruction extends IMemoryGrow, // unused
   state extends ProgramState
 > = Satisfies<ProgramState,
-  state // noop
+  state['stack'] extends [
+    ...infer remaining extends WasmValue[],
+    infer growBy extends WasmValue
+  ]
+  ? State.Stack.set<
+      [
+        ...remaining,
+        state['memorySize']
+      ],
+      State.Memory.grow<
+        state,
+        growBy
+      >
+    >
+  : State.error<"stack exhausted", instruction, state>
 >
 
 export type Load<
