@@ -110,7 +110,7 @@ export const evaluateType = async (
       `typeString is empty for ${filePath}. was searching for ${searchFor}`,
     );
   }
-  if (/instructions: \[\s*{ kind: "Halt";/.test(typeString)) {
+  if (/instructions: \[\s*{\s*kind: "Halt";/.test(typeString)) {
     // the top instruction is a halt
     fsWorker.writeFile(errorFilePath, typeString, 'ts');
     throw new Error(`sorry, Charlie.  you gotta debug this now.`);
