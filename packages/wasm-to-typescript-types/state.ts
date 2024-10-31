@@ -19,7 +19,7 @@ export type Patch<Source, Update> = evaluate<
   & Update
 >;
 
-export type IDugMyselfANiceBigHoleAndNowIHaveToDebugMyWayOutOfItSomehow = false;
+export type IDugMyselfANiceBigHoleAndNowIHaveToDebugMyWayOutOfItSomehow = true;
 
 export namespace State {
   export type error<
