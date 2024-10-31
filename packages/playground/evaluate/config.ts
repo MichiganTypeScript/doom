@@ -32,8 +32,8 @@ export const config = {
   digits: 8,
   shouldComputeFullStats: false,
   incrementBy: 100,
-  comeUpForAirEvery: 1_000,
-  transcendTheAstralPlane: 10_000,
+  comeUpForAirEvery: 10_000,
+  transcendTheAstralPlane: 50_000,
   readStringFromMemory: true,
 } satisfies Config;
 
