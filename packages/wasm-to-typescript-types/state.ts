@@ -365,8 +365,9 @@ export namespace State {
       }
 
       export namespace Branches {
-        export type set<
-          branches extends BranchesById,
+        export type insert<
+          id extends string,
+          instructions extends Instruction[],
           state extends ProgramState
         > = Satisfies<ProgramState,
           {
@@ -376,7 +377,10 @@ export namespace State {
             activeStackDepth: state['activeStackDepth'];
             activeLocals: state['activeLocals'];
             instructions: state['instructions'];
-            activeBranches: branches; // use new
+            activeBranches: Patch<
+              state['activeBranches'],
+              { [k in id]: instructions }
+            >; // use new
             L1Cache: state['L1Cache'];
             memory: state['memory'];
             executionContexts: state['executionContexts'];
@@ -388,20 +392,6 @@ export namespace State {
             results: state['results'];
             callHistory: state['callHistory'];
           }
-        >
-
-        export type insert<
-          id extends string,
-          instructions extends Instruction[],
-          state extends ProgramState
-        > = Satisfies<ProgramState,
-          set<
-            Patch<
-              state['activeBranches'],
-              { [k in id]: instructions }
-            >,
-            state
-          >
         >
       }
     }

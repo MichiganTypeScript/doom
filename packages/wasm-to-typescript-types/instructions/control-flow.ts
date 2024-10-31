@@ -161,7 +161,11 @@ export type Block<
     // first cache existing instructions (as they are at this moment) in the execution context for when we break to this block later
     State.ExecutionContexts.Active.Branches.insert<
       instruction['id'],
-      state['instructions'],
+      [
+        // this will trigger clearing this block from the activeBranches when we hit the EndBlock instruction
+        { kind: 'EndBlock', id: instruction['id'] },
+        ...state['instructions']
+      ],
 
       state
     >

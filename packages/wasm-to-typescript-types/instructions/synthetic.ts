@@ -20,6 +20,13 @@ export type IEndLoop = {
   instructions: Instruction[]
 }
 
+/** a synthetic instruction for repeating the instructions of a block */
+export type IEndBlock = {
+  kind: "EndBlock"
+
+  id: string
+}
+
 /** not a webassembly instruction. used for debugging: tells the program to immediately Halt */
 export type IHalt = {
   kind: "Halt"
@@ -35,6 +42,7 @@ export type IHalt = {
 
 export type SyntheticInstruction =
   | IEndFunction
+  | IEndBlock
   | IEndLoop
   | IHalt
 
@@ -47,6 +55,9 @@ export type HandleSyntheticInstructions<
 
   : instruction extends IEndFunction
   ? EndFunction<instruction, state>
+
+  : instruction extends IEndBlock
+  ? EndBlock<instruction, state>
   
   : instruction extends IHalt
   ? Halt<instruction, state>
@@ -70,6 +81,21 @@ export type EndLoop<
 > = Satisfies<ProgramState,
   State.Instructions.set<
     instruction['instructions'],
+    State.ExecutionContexts.Active.Branches.insert<
+      instruction['id'],
+      [{ kind: "Halt", reason: `the ${instruction['id']} loop ended, and thus should not be reachable` }],
+      state
+    >
+  >
+>
+
+export type EndBlock<
+  instruction extends IEndBlock,
+  state extends ProgramState
+> = Satisfies<ProgramState,
+  State.ExecutionContexts.Active.Branches.insert<
+    instruction['id'],
+    [{ kind: "Halt", reason: `the ${instruction['id']} block ended, and thus should not be reachable` }],
     state
   >
 >
