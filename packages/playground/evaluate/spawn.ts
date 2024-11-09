@@ -22,8 +22,9 @@ const runCommand = (command: string, args: string[]) => {
 /** loops the runCommand in a new process if we get a RESUME_CODE */
 const runIndefinitely = async () => {
   console.log("I see you've chosen to spawn.  Excellent.  You will fail.")
+  const initialResume = process.argv.includes("--resume");
   try {
-    let code = await runCommand('pnpm', ['eval', '--spawn']);
+    let code = await runCommand('pnpm', ['eval', '--spawn', (initialResume ? ['--resume'] : [])]);
     while (code === RESUME_CODE) {
       code = await runCommand('pnpm', ['eval', '--spawn', '--resume']);
     }
