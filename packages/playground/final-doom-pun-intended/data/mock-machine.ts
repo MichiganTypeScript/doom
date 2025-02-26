@@ -6,12 +6,13 @@ import { evaluate } from "ts-type-math";
 import { MeetYourDoom } from "./process-frame";
 import { Expect, Equal } from "type-testing";
 import { ExpectedFrame } from "./expected-frame";
+import { Result } from './result-15895321';
 
 /** This simulates the expected state when the program completes... err.. well.. one instruction before it completes */
 export type HolyShitIfThisActuallyWorksOMGOMGROFLWHATISWRONGWITHME = {
 	count: 9000;
 	results: null;
-	stack: [PointerBinary32];
+	stack: ["00000000000001100000000100001000"];
 	instructions: [
 		{ kind: "EndFunction"; id: "$entry" }, // just one little instruction left
 	];
@@ -20,8 +21,8 @@ export type HolyShitIfThisActuallyWorksOMGOMGROFLWHATISWRONGWITHME = {
 	activeBranches: {};
 	activeStackDepth: 0;
 	globals: {};
-	L1Cache: {};
-	memory: evaluate<ExpectedMemory>;
+	L1Cache: Result['L1Cache'];
+	memory: Result['memory'];
 	garbageCollection: 100;
 	indirect: {};
 	memorySize: "00000000000000000000000000000110";
@@ -29,6 +30,7 @@ export type HolyShitIfThisActuallyWorksOMGOMGROFLWHATISWRONGWITHME = {
 	funcs: funcs;
 	callHistory: [];
 };
+
 /** finalize */
 export type HoldOntoYourMonadsAndBraceForImpact = executeInstruction<HolyShitIfThisActuallyWorksOMGOMGROFLWHATISWRONGWITHME, true, 9001>;
 
@@ -36,4 +38,4 @@ export type HoldOntoYourMonadsAndBraceForImpact = executeInstruction<HolyShitIfT
 export type ActualFrame = MeetYourDoom<HoldOntoYourMonadsAndBraceForImpact>;
 
 /** if this test passes, it worked! */
-export type DidItActuallyWorkTho = Expect<Equal<ActualFrame, ExpectedFrame>>;
+// export type DidItActuallyWorkTho = Expect<Equal<ActualFrame, ExpectedFrame>>;

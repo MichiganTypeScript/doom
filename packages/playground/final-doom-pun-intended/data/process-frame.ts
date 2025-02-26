@@ -51,7 +51,7 @@ type _GenerateLine<
         memory,
         I32PlusOne<address>,
         S,
-        `${line}${DoomPaletteToAscii[value extends keyof DoomPaletteToAscii ? value : "00000000"]}`
+        `${line}${value extends keyof DoomPaletteToAscii ? DoomPaletteToAscii[value] : "  "}`
       >
 
     : // you fucked up. you. fucked. up... yet again.

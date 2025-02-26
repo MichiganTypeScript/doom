@@ -1478,16 +1478,17 @@ fn main() {
 
         let handle = builder
             .spawn(|| {
+                let file = "pong";
                 let current_dir = std::env::current_dir().unwrap();
-                let doom_dir = "packages/playground/doom/";
-                // let d = read_dir(doom_dir).unwrap().flatten().next().unwrap();
+                let dir = format!("packages/playground/{file}/");
+                // let d = read_dir(dir).unwrap().flatten().next().unwrap();
                 // generate_wat_from_wasm(&d);
-                let wat_file = Path::new(&doom_dir).join("doom.wat");
+                let wat_file = Path::new(&dir).join(format!("{file}.wat"));
                 let wat_path = current_dir.join(wat_file);
                 let wat = fs::read_to_string(wat_path).unwrap();
 
-                let output = wat_to_dts(wat, PathBuf::from(doom_dir).join("doom.dump").to_str().unwrap(), false).to_string();
-                fs::write(PathBuf::from(doom_dir).join("doom.ts"), output).unwrap();
+                let output = wat_to_dts(wat, PathBuf::from(&dir).join(format!("{file}.dump")).to_str().unwrap(), false).to_string();
+                fs::write(PathBuf::from(dir).join(format!("{file}.ts")), output).unwrap();
                 println!("I did the needful, boss.");
             })
             .expect("Thread creation failed");

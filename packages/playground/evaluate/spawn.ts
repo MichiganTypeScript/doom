@@ -24,7 +24,7 @@ const runIndefinitely = async () => {
   console.log("I see you've chosen to spawn.  Excellent.  You will fail.")
   const initialResume = process.argv.includes("--resume");
   try {
-    let code = await runCommand('pnpm', ['eval', '--spawn', (initialResume ? ['--resume'] : [])]);
+    let code = await runCommand('pnpm', ['eval', '--spawn', ...(initialResume ? ['--resume'] : [])]);
     while (code === RESUME_CODE) {
       code = await runCommand('pnpm', ['eval', '--spawn', '--resume']);
     }

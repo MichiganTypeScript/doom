@@ -13,5 +13,6 @@
   "files.associations": {
     "doom dot ts": "plaintext"
   },
+  "editor.hover.hidingDelay": 5000,
   "biome.enabled": false,
 }

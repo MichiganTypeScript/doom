@@ -112,7 +112,6 @@ type AppendCalculationArbitraryReversed<
   >
 }`
 
-
 export type StringAddArbitraryReversed<
   A extends string,
   B extends string,

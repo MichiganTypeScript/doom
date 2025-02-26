@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { entry } from 'conformance-tests/from-wat/return-mid-loop'; import type { ReadStringFromMemory } from 'ts-type-math';
-type e=entry<[393736, 60552], true, 9>// =>
+type e=entry<[393736, 60552], true, 11>// =>
 // import { executeInstruction } from "wasm-to-typescript-types"
 // import { Result } from  "./evaluate/restart/result-02775272.ts"
 // type e = executeInstruction<Result, true, 2775272> // =>
