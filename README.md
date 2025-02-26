@@ -1,247 +1,156 @@
-# Doom but in TypeScript Types
+# A TypeScript-types-only WebAssembly runtime
 
-This is a WebAssembly runtime implemented purely in TypeScript types.  The basic idea is that you can turn C code (or just straight WebAssembly) into a TypeScript type (as in, with no JavaScript runtime code) that will compile the instructions.
+This is a WebAssembly runtime implemented purely in TypeScript types.  The basic idea is that you can turn C code (or just straight WebAssembly) into a TypeScript type (as in, with no JavaScript runtime code) that will compile the instructions and return a result.
 
-## Technical details
+## It can run Doom
 
-Doom's resolution is 320x200.
+This engine was built to service a project that aimed to demonstrate why Doom can't run in TypeScript types.  Well.  The funny thing is.. It can.  There's a video about it on the [MiTS YouTube](https://www.youtube.com/@MichiganTypeScript), and much much more to come soon to give more context on why and how this was made.
 
-It looks like it can be run with 4 MiB which equates to 64 pages.
+## Should I submit a PR to make this even better?
 
-## Progress
+No, probably not.  What you’re viewing in this repo is basically an active crime scene.  There’s blood splattered about and although it’s clear the murder weapon is still in the house… it’s not clear exactly _where_ in the house it might be.
 
-Usage count (in Doom) is the number on the right
+It might sounds strange, but I, @dimitropoulos, have absolutely no emotional attachment to this code and negative-BigInt-zero interest in making it do even more.  It runs Doom.  That's enough.  We can all rest easy now.  If you'd like to get it to run Crysis - I'll happily pass the project off to you, but if you look at the commit history you're going to find I completely stopped working on it it the literal second it completed the mission.  I will, however, gladly spend a few hours on a call or something with anyone that might like to take this to the "next level" in the future, whatever you determine that to be.  It just won't be me.
 
-### Constants
+## I have questions, thoughts, suggestions, ideas, etc.
 
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| I32Const          | 17073 | ✅           |
-| I64Const          | 712   | ✅           |
-
-### Comparison
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| I32Eqz            | 1198  | ✅           |
-| I32Eq             | 823   | ✅           |
-| I32Ne             | 483   | ✅           |
-| I32GtS            | 365   | ✅           |
-| I32LtS            | 298   | ✅           |
-| I32GeS            | 213   | ✅           |
-| I32LeS            | 155   | ✅           |
-| I32LtU            | 139   | ✅           |
-| I32GtU            | 118   | ✅           |
-| I32LeU            | 95    | ✅           |
-| I32GeU            | 74    | ✅           |
-| I64LtU            | 62    | ✅           |
-| I64Eqz            | 57    | ✅           |
-| I64GtU            | 35    | ✅           |
-| I64Ne             | 30    | ✅           |
-| I64Eq             | 26    | ✅           |
-| I64GeS            | 21    | ✅           |
-| I64LtS            | 19    | ✅           |
-| I64LeU            | 8     | ✅           |
-| I64LeS            | 5     | ✅           |
-| I64GtS            | 5     | ✅           |
-| I64GeU            | 5     | ✅           |
-
-### Arithmetic
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| I32Add            | 4175  | ✅           |
-| I32Sub            | 1424  | ✅           |
-| I32Mul            | 478   | ✅           |
-| I32DivS           | 165   | ✅           |
-| I64Add            | 130   | ✅           |
-| I64Sub            | 53    | ✅           |
-| I64Mul            | 46    | ✅           |
-| I32RemS           | 44    | ✅           |
-| I32DivU           | 30    | ✅           |
-| I32RemU           | 13    | ✅           |
-| I64DivU           | 3     | ✅           |
-| I64DivS           | 1     | ✅           |
-
-### Conversion
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| I64ExtendI32U     | 118   | ✅           |
-| I32WrapI64        | 53    | ✅           |
-| I64ExtendI32S     | 29    | ✅           |
-
-### Bitwise
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| I32Shl            | 954   | ✅           |
-| I32And            | 819   | ✅           |
-| I32Or             | 488   | ✅           |
-| I32Xor            | 411   | ✅           |
-| I32Rotl           | 240   | ✅           |
-| I32ShrU           | 234   | ✅           |
-| I32ShrS           | 230   | ✅           |
-| I64Or             | 129   | ✅           |
-| I64ShrU           | 83    | ✅           |
-| I64Shl            | 80    | ✅           |
-| I64And            | 73    | ✅           |
-| I64Xor            | 34    | ✅           |
-| I64Clz            | 7     | ✅           |
-| I32Clz            | 5     | ✅           |
-| I64Rotl           | 1     | ✅           |
-
-### Variable Instructions
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| LocalGet          | 18967 | ✅           |
-| LocalTee          | 4081  | ✅           |
-| LocalSet          | 3602  | ✅           |
-| GlobalSet         | 349   | ✅           |
-| GlobalGet         | 179   | ✅           |
-
-### Memory Instructions
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| I32Load           | 5853  | ✅           |
-| I32Store          | 3413  | ✅           |
-| I32Load8u         | 460   | ✅           |
-| I64Load           | 357   | ✅           |
-| I32Load16s        | 278   | ✅           |
-| I32Store8         | 253   | ✅           |
-| I64Store          | 196   | ✅           |
-| I32Store16        | 188   | ✅           |
-| I32Load16u        | 176   | ✅           |
-| I32Load8s         | 71    | ✅           |
-| I64Load32u        | 6     | ✅           |
-| I64Store32        | 4     | ✅           |
-| I64Store8         | 2     | ✅           |
-| I64Load16s        | 1     | ✅           |
-| I64Load16u        | 1     | ✅           |
-| I64Load8s         | 1     | ✅           |
-| I64Load8u         | 1     | ✅           |
-| I64Load32s        | 1     | ✅           |
-| I64Store16        | 1     | ✅           |
-| MemorySize        | 1     | ✅           |
-
-### Control Flow Instructions
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| End               | 4218  | ✅           |
-| Call              | 3824  | ✅           |
-| BrIf              | 2041  | ✅           |
-| If                | 1888  | ✅           |
-| Block             | 1692  | ✅           |
-| Br                | 1479  | ✅           |
-| Drop              | 504   | ✅           |
-| Loop              | 638   | ✅           |
-| Select            | 637   | ✅           |
-| Return            | 324   | ✅           |
-| Unreachable       | 129   | ✅           |
-| BrTable           | 114   | ✅           |
-| CallIndirect      | 89    | ✅           |
-| Else              | 70    | ✅           |
-| Nop               | 40    | ✅           |
-
-### Floating Point Instructions
-
-Doom itself doesn't need or use floating point.  So it's debatable whether this is actually necessary to implement at all.
-
-| Instruction       | Count | Implemented? |
-| ----------------- | ----- | ------------ |
-| F64Const          | 37    | ❌           |
-| F64Mul            | 18    | ❌           |
-| F64ConvertI32S    | 9     | ❌           |
-| F64Add            | 5     | ❌           |
-| F64Neg            | 5     | ❌           |
-| F64Sub            | 5     | ❌           |
-| F32Const          | 4     | ❌           |
-| F32ConvertI32S    | 4     | ❌           |
-| F64Lt             | 4     | ❌           |
-| F64Ne             | 4     | ❌           |
-| F64Store          | 4     | ❌           |
-| F64Eq             | 3     | ❌           |
-| F64ReinterpretI64 | 3     | ✅           |
-| I64ReinterpretF64 | 3     | ✅           |
-| F32Abs            | 2     | ❌           |
-| F32Div            | 2     | ❌           |
-| F32Load           | 2     | ❌           |
-| F32Mul            | 2     | ❌           |
-| F32Store          | 2     | ❌           |
-| F64Load           | 2     | ❌           |
-| F64PromoteF32     | 2     | ❌           |
-| F32Add            | 1     | ❌           |
-| F32DemoteF64      | 1     | ❌           |
-| F32Lt             | 1     | ❌           |
-| F32ReinterpretI32 | 1     | ✅           |
-| F64Abs            | 1     | ❌           |
-| F64ConvertI32U    | 1     | ❌           |
-| F64Div            | 1     | ❌           |
-| F64Ge             | 1     | ❌           |
-| I32ReinterpretF32 | 1     | ✅           |
-| I32TruncF32S      | 1     | ❌           |
-| I32TruncF64S      | 1     | ❌           |
-| I32TruncF64U      | 1     | ❌           |
-
-<sub>✅ means things are in progress</sub>
-<sub>🐛 means things are known problems</sub>
-<sub>❌ means the work has not yet started</sub>
-
-## Design decisions
-
-EVERY effort has been taken to not support something that Doom doesn't explicitly need.  This project is LASER-FUCKING-FOCUSED on Doom and nothing else (and, at the expense of all else).
-
-1. all instructions not explicitly needed by Doom are not implemented.
-2. multiple returns aren't needed because Doom doesn't use them.  this was actually implemented by accident (under the assumption that Doom needs it) and then removed when it was discovered that it doesn't need it (it is much simpler overall to not need to implement it).
-3. you can technically remove `param` and `result` declarations for a function and use a `type` declaration instead.  while that's a nice optimization, it isn't needed to run Doom and therefore the `type` declarations are all ignored.
-4. module field exports were implemented before I knew that there's an emcc flag to disable them.  so although that code wasn't technically removed (because it's so small) it is not a tested path anymore.
-5. wherever possible, the folded expression variants are used (i.e. `if`, `select`, `block`, etc.).  there may be places where unfolded expressions are supported just because it's identical or almost identical in the parser library (wast), but it's not something being directly tested.
-6. module-level declarations that aren't needed including: recursion groups, start, tag, custom, and more.
-7. unnamed types, funcs, or variables.  it's quite common in .wat files to omit the name (i.e. the thing starting with `$` for a declaration) but it's required for this program.  there's an emcc flag that will force this.
-8. In C, you can't really return anything from a `main` function (just an integer representing an exit code).  That means we need to create our own entry point since we want the program to return some output (rather than, for example, writing to standard out or something, which we have no way to capture).  So we use the convention of creating an `entry` function for the whole program that acts as the entry point.
-9. Because in the case of exported WAT functions there's a bit of an overlap situation happening, both the exported name (e.g. `entry`) and the WAT identifier (always starts with a `$`, e.g. `$entry`) have types created for them.  This prevents a situation where there's an overlap.  Probably a smarter way around this to globally deduplicate, but this project is in no sense focused on generalized solutions -> just Doom.  This also means that there's potential to trick the program into overwriting a type by creating an export that starts with a dollar sign.  So.  Don't do that.  Also the reason the `start` instruction is sorta hard to target from C so that's why that's not used as a start convention: we need to be able to get the result of the function as a return value to avoid the whole song-and-dance with reading from memory outside the context wasm (like you do in JS, typically).  So same reason then that `main` is basically disregarded.
-10. technically multiple function tables are possible, but Doom doesn't use it.  I bet you know what I'm gonna say next. :)  Same for multiple elements.
-11. dynamic dispatch is a fun topic.  in WASM the calling convention means that when you call a function you first pop items off the stack equal to the number of params for that func.  but when you `call_indirect` an element from the function lookup table, you hit the problem of needing to first know _how man_ items you're supposed to pop.  anyone that's tried to do functional programming in languages you shouldn't \*cough cough Go cough cough\* will know that the way most people get around this is to set an upper bound on the number of items you can recursively pop off the stack.  But what number should that limit be set at?? You gotta know what I'm gonna say next at this point.  Doom has a maximum of 7 arguments, so that's the maximum (plus the optional 1 return type, which makes 8).
-12. TypeScript is patched with [a pnpm patch](https://pnpm.io/cli/patch) to set the recursion limit to Number.MAX_SAFE_INTEGER (instead of 100, lol).  Hopefully it's painfully obvious that you can't run a program like Doom without a heck of a lot more than 100 loops (which, loops take up recursion count).
-13. Don't know and don't care if it works anywhere but on Linux.  On the TypeScript side, I mean, it definitely will because it's just regular TypeScript.  But like.. if you have to increase your computer's default stack size to run this: you're on your own on that one (there is a handy script `determine-stack-size.js` you can run to find out).  Like.. this uses a recursive WASM parser and even on the Rust side if you don't increase the stack limit it'll stack-overflow after like 200 loops (lol).
-14. I didn't implement custom memory alignment.  I just force everything to `align=4`.  Why?  Well, because even though Doom does have a few `align=2`, you can delete them and it'll still work.
-
-## Links
-
-- https://diekmann.github.io/wasm-fizzbuzz/doom
-- https://diekmann.github.io/wasm-fizzbuzz/doom/doom.wasm
-- https://doom.fandom.com/wiki/Doom_source_code_files
-- https://github.com/eliben/wasm-wat-samples
-- https://github.com/WebAssembly/testsuite
-
-## Installatioon
-
-This list is a work in progress, you need:
-
-- node 20+
-- [pnpm](https://pnpm.io/installation) (this part is _CRITICAL_)
-- [Rust](https://www.rust-lang.org/tools/install)
-- the [`wabt` toolkit](https://github.com/WebAssembly/wabt)
-  - wasm2wat
-  - wat2wasm
-- `emcc` [Emscripten](https://github.com/emscripten-core/emscripten)
-
-### Editor Configuration
-
-You MUST change the TypeScript version in VSCode to the workspace's version (since it's patched to remove recursion limits).  To do this open the control palette with a TypeScript file active and select `TypeScript: Select TypeScript version...` and then `Use Workspace Version`.
-
-### Commands
-
-- `pnpm install` is important to do first.
-- `pnpm test` will test "all the things" and is the main workflow
-  - `pnpm build` will just run the TypeScript types tests (which also happens in the last step of `pnpm test`)
-- `pnpm playground` will run the playground process
+Please don't open an issue - just come on [the MiTS Discord's `#doom` channel](https://discord.michigantypescript.com) and we'd be glad to chat about it.
 
 ## Tour of Ridiculous Types
 
-> _"we're not in Kansas anymore"_
+In case you're here just heckle, here's some nightmare fuel for you:
 
-- [ShiftRight](./packages/ts-type-math/shift.ts)
+- [ShiftRight](./packages/ts-type-math/shift.ts): this whole file has silly things, but hey, sometimes you gotta do whatcha gotta do.
+- [Add](./packages/ts-type-math/add.ts): this is the cornerstone of the arithmetic in the application.  Upon seeing this for the first time, some people have said "I see TypeScript types on the screen, but I don't quite see where _addition_ is taking place".  Fair.  It's there, though.
+- [Divide](./packages/ts-type-math/divide.ts) was _by far_ the hardest instruction to implement to get it up to 64 bits.  @teamchong gets all the credit for this one.  To get there, we had to build it up one bit at a time to see where it hit performance limitations with [the division playground](./packages/ts-type-math/divide-playground.ts).
+- some of the [binary helpers](./packages/ts-type-math/binary.ts) are sorta artsy to look at fullscreen.
+- [final-doom-pun-intended](./packages/playground/final-doom-pun-intended/) contains the files where the finish line was crossed.  While it was chugging away, we made mockups that demonstrated what it would look like when complete.  As it often goes, the mockups ended up being the real thing in the end, haha.
+- [david-blass-incredibleness](./packages/playground/david-blass-incredibleness.ts), so-named because of a very important bit of insight that @ssalbdivad provided which caused an explosion of progress, is the main dashboard for development of individual tests.
+- [conformance-tests](./packages/conformance-tests/) for the full loop (i.e. from C to WASM to types) as well as from straight WASM to types can be found here.  They're called conformance tests because the same inputs are tested agains the JavaScript built-in WebAssembly runtime, which was the way I made sure this engine's behavior is correct.
+- Many of the instructions were surprisingly straightforward but some of the [control flow instructions](./packages/wasm-to-typescript-types/instructions/control-flow.ts) have some meat on the bone.
+- [bootstrap](./packages/wasm-to-typescript-types/bootstrap.ts) shows how to boot the WebAssembly runtime within TypeScript types.
+- There are probably more fun ones, but the last I'll mention is that you can find some of the core primitive types [here](./packages/wasm-to-typescript-types/types.ts) and the core "how does the state machine actually chug" [here](./packages/wasm-to-typescript-types/program.ts).
+
+## What exact WebAssembly instructions does it implement?
+
+These ones, all written while reading [the WebAssembly Instructions spec](https://webassembly.github.io/spec/core/syntax/instructions.html):
+
+- block
+- br
+- br_if
+- br_table
+- call
+- call_indirect
+- drop
+- else
+- f32.reinterpret_i32
+- f64.reinterpret_i64
+- global.get
+- global.set
+- i32.add
+- i32.and
+- i32.clz
+- i32.const
+- i32.ctz
+- i32.div_s
+- i32.div_u
+- i32.eq
+- i32.eqz
+- i32.extend_16_s
+- i32.extend_8_s
+- i32.ge_s
+- i32.ge_u
+- i32.gt_s
+- i32.gt_u
+- i32.le_u
+- i32.le_s
+- i32.load
+- i32.load16_s
+- i32.load16_u
+- i32.load8_s
+- i32.load8_u
+- i32.lt_s
+- i32.lt_u
+- i32.mul
+- i32.ne
+- i32.or
+- i32.popcnt
+- i32.reinterpret_f32
+- i32.rem_s
+- i32.rem_u
+- i32.rotl
+- i32.rotr
+- i32.shl
+- i32.shr_s
+- i32.shr_u
+- i32.store
+- i32.store_16
+- i32.store_8
+- i32.sub
+- i32.trunc_f32_s
+- i32.trunc_f64_s
+- i32.trunc_f64_u
+- i32.wrap_i64
+- i32.xor
+- i64.add
+- i64.and
+- i64.clz
+- i64.const
+- i64.ctz
+- i64.div_s
+- i64.div_u
+- i64.eq
+- i64.eqz
+- i64.extend_i32_s
+- i64.extend_i32_u
+- i64.ge_s
+- i64.ge_u
+- i64.gt_s
+- i64.gt_u
+- i64.le_s
+- i64.le_u
+- i64.load
+- i64.load16_s
+- i64.load16_u
+- i64.load32_s
+- i64.load32_u
+- i64.load8_s
+- i64.load8_u
+- i64.lt_s
+- i64.lt_u
+- i64.mul
+- i64.ne
+- i64.or
+- i64.popcnt
+- i64.reinterpret_f64
+- i64.rem_s
+- i64.rem_u
+- i64.rotl
+- i64.rotr
+- i64.shl
+- i64.shr_s
+- i64.shr_u
+- i64.store
+- i64.store_16
+- i64.store_32
+- i64.store_8
+- i64.sub
+- i64.xor
+- if
+- local.get
+- local.set
+- local.tee
+- loop
+- memory.grow
+- memory.size
+- nop
+- return
+- select
+- unreachable
+
+Additionally, like many runtimes, a few "synthetic" instructions were created that are not according to any WebAssembly standard, but are sorta convenience features
+
+- synth.end_block
+- synth.end_func
+- synth.end_loop
+- synth.halt
